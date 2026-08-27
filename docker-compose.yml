@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  pati_db:
+    image: postgres:16-alpine
+    container_name: pati_db
+    environment:
+      POSTGRES_USER: pati_user
+      POSTGRES_PASSWORD: pati_password
+      POSTGRES_DB: pati_db
+    ports:
+      - "5436:5432"
+    volumes:
+      - pati_db_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  pati_db_data:
