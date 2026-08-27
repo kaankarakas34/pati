@@ -21,7 +21,7 @@ import {
   initialCorrections,
   initialComplaints
 } from './data/mockData';
-import { findHotelBySlugs, getHotelPath } from '../lib/seo-slugs';
+import { findHotelBySlugs, getHotelPath, slugify } from '../lib/seo-slugs';
 
 async function fetchTable(path, fallback = []) {
   try {
@@ -339,13 +339,20 @@ function App() {
     const hotel = currentView === 'accommodation-detail'
       ? hotels.find(item => item.id === selectedItemId)
       : null;
+    const cityLanding = currentView === 'accommodations' && searchFilters.cityLanding
+      ? searchFilters.destination
+      : null;
     const canonicalPath = hotel ? getHotelPath(hotel) : window.location.pathname;
     const canonicalUrl = `https://www.patiyleseyahat.com${canonicalPath}`;
     const title = hotel
       ? `${hotel.name} | ${hotel.district}, ${hotel.city} Evcil Hayvan Dostu Otel | Patiyle Seyahat`
+      : cityLanding
+      ? `${cityLanding} Evcil Hayvan Dostu Oteller | Patiyle Seyahat`
       : "Patiyle Seyahat | Türkiye'nin Evcil Hayvan Dostu Seyahat Rehberi";
     const description = hotel
       ? `${hotel.name}, ${hotel.district}/${hotel.city} evcil hayvan kabul koşulları, tesis özellikleri ve fotoğrafları.`
+      : cityLanding
+      ? `${cityLanding} ilinde evcil hayvan kabul eden otelleri, pet politikalarını ve tesis özelliklerini karşılaştırın.`
       : 'Türkiye genelindeki evcil hayvan dostu otelleri ve seyahat noktalarını keşfedin.';
 
     document.title = title;
@@ -358,6 +365,16 @@ function App() {
     }
     descriptionMeta.setAttribute('content', description);
 
+    let robotsMeta = document.querySelector('meta[name="robots"]');
+    if (!robotsMeta) {
+      robotsMeta = document.createElement('meta');
+      robotsMeta.setAttribute('name', 'robots');
+      document.head.appendChild(robotsMeta);
+    }
+    robotsMeta.setAttribute('content', currentView === 'admin'
+      ? 'noindex, nofollow'
+      : 'index, follow, max-image-preview:large');
+
     let canonicalLink = document.querySelector('link[rel="canonical"]');
     if (!canonicalLink) {
       canonicalLink = document.createElement('link');
@@ -365,7 +382,7 @@ function App() {
       document.head.appendChild(canonicalLink);
     }
     canonicalLink.setAttribute('href', canonicalUrl);
-  }, [currentView, selectedItemId, hotels]);
+  }, [currentView, selectedItemId, hotels, searchFilters]);
 
   // URL Path Router (supports /otel/il/ilce/otel-ismi and legacy hotel IDs)
   useEffect(() => {
@@ -377,6 +394,24 @@ function App() {
         setCurrentView('admin');
       } else if (path === '/sihirbaz') {
         setCurrentView('wizard');
+      } else if (path.startsWith('/evcil-hayvan-dostu-oteller/')) {
+        const citySlug = path.split('/').filter(Boolean)[1];
+        const cityName = hotels.find(hotel => slugify(hotel.city) === citySlug)?.city
+          || citySlug.split('-').map(part => part.charAt(0).toLocaleUpperCase('tr-TR') + part.slice(1)).join(' ');
+        setSearchFilters({
+          destination: cityName,
+          citySlug,
+          petType: 'all',
+          accType: 'all',
+          suitability: 'all',
+          weightLimit: 'all',
+          extraFeeOnly: false,
+          features: [],
+          customFilter: null,
+          filterTitle: null,
+          cityLanding: true
+        });
+        setCurrentView('accommodations');
       } else if (path.startsWith('/otel/')) {
         const segments = path.split('/').filter(Boolean).map(segment => decodeURIComponent(segment));
         const hotel = segments.length >= 4

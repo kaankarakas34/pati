@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon } from '../components/PetIcons';
+import { slugify } from '../../lib/seo-slugs';
 
 export default function Home({ hotels, boardings, guides, experiences = [], ads = [], onViewChange, setSearchFilters }) {
   const [destination, setDestination] = useState('');
@@ -40,6 +41,18 @@ export default function Home({ hotels, boardings, guides, experiences = [], ads 
   const featuredBoardings = boardings.slice(0, 2);
   const featuredGuides = guides.slice(0, 3);
   const featuredExperiences = experiences.slice(0, 3);
+  const cityLinks = Array.from(hotels.reduce((cities, hotel) => {
+    const citySlug = slugify(hotel.city);
+    if (!citySlug) return cities;
+
+    const current = cities.get(citySlug);
+    cities.set(citySlug, {
+      name: current?.name || hotel.city,
+      slug: citySlug,
+      count: (current?.count || 0) + 1
+    });
+    return cities;
+  }, new Map()).values()).sort((a, b) => a.name.localeCompare(b.name, 'tr'));
 
   return (
     <div className="space-y-16 pb-20">
@@ -224,47 +237,33 @@ export default function Home({ hotels, boardings, guides, experiences = [], ads 
         </div>
       </div>
 
-      {/* Explore by City */}
-      <div className="bg-brand-beige py-16">
+      {/* Crawlable province links */}
+      <section className="border-y border-brand-beige bg-white py-14" aria-labelledby="city-links-title">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-3xl font-bold font-title text-brand-navy">Şehre Göre Keşfet</h2>
-            <p className="text-gray-600 mt-2">Türkiye'nin en popüler evcil hayvan dostu destinasyonlarını listeledik</p>
+          <div className="mb-8 text-left">
+            <h2 id="city-links-title" className="text-2xl font-bold font-title text-brand-navy">
+              İllere Göre Evcil Hayvan Dostu Oteller
+            </h2>
+            <p className="text-gray-600 text-sm mt-2">
+              Konaklama seçeneklerini doğrudan il sayfasında inceleyin.
+            </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              { name: 'Bodrum', count: '45 Tesis', img: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=300&q=80', query: 'Bodrum' },
-              { name: 'Antalya', count: '32 Tesis', img: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=300&q=80', query: 'Antalya' },
-              { name: 'Kapadokya', count: '18 Tesis', img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=300&q=80', query: 'Nevşehir' },
-              { name: 'Fethiye', count: '24 Tesis', img: 'https://images.unsplash.com/photo-1510312305653-8ed496efae75?auto=format&fit=crop&w=300&q=80', query: 'Fethiye' },
-            ].map(city => (
-              <div
-                key={city.name}
-                onClick={() => {
-                  setSearchFilters({
-                    destination: city.query,
-                    petType: 'all',
-                    accType: 'all',
-                    features: [],
-                    suitability: 'all',
-                    weightLimit: 'all',
-                    extraFeeOnly: false
-                  });
-                  onViewChange('accommodations');
-                }}
-                className="relative rounded-3xl overflow-hidden h-40 group cursor-pointer shadow-sm hover:shadow-md transition-shadow"
+          <nav aria-label="İllere göre oteller" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-8 gap-y-1">
+            {cityLinks.map(city => (
+              <a
+                key={city.slug}
+                href={`/evcil-hayvan-dostu-oteller/${city.slug}`}
+                className="group flex items-center justify-between gap-3 border-b border-brand-beige py-3 text-sm text-gray-800 hover:text-brand-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-navy"
+                title={`${city.name} evcil hayvan dostu otelleri`}
               >
-                <img src={city.img} alt={city.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-4 text-white">
-                  <h4 className="font-title font-bold text-lg">{city.name}</h4>
-                  <span className="text-xs text-gray-300 font-light">{city.count} doğrulanmış</span>
-                </div>
-              </div>
+                <span><span aria-hidden="true" className="mr-2 text-brand-earth">•</span>{city.name} Otelleri</span>
+                <span className="text-xs text-gray-400 group-hover:text-brand-navy" aria-label={`${city.count} tesis`}>{city.count}</span>
+              </a>
             ))}
-          </div>
+          </nav>
         </div>
-      </div>
+      </section>
 
       {/* Explore by Pet Type */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -22,7 +22,7 @@ import {
 } from './db.js';
 import axios from 'axios';
 import { initialHotels } from './src/data/mockData.js';
-import { findHotelBySlugs, getHotelPath } from './lib/seo-slugs.js';
+import { findHotelBySlugs, getHotelPath, slugify } from './lib/seo-slugs.js';
 
 dotenv.config();
 
@@ -560,6 +560,135 @@ function renderHotelSeoPage(res, hotel, complaintsList) {
   }
 }
 
+// Indexable province landing pages with unique metadata and structured data.
+app.get('/evcil-hayvan-dostu-oteller/:citySlug', async (req, res) => {
+  const { hotels } = await getHotelSeoData();
+  const cityHotels = hotels.filter(hotel => slugify(hotel.city) === req.params.citySlug);
+
+  if (cityHotels.length === 0) {
+    return res.status(404).send('Bu il için listelenmiş tesis bulunamadı.');
+  }
+
+  const cityName = cityHotels[0].city;
+  const canonicalUrl = `https://www.patiyleseyahat.com/evcil-hayvan-dostu-oteller/${req.params.citySlug}`;
+  const title = escapeHtml(`${cityName} Evcil Hayvan Dostu Oteller | Patiyle Seyahat`);
+  const description = escapeHtml(`${cityName} ilinde evcil hayvan kabul eden ${cityHotels.length} oteli; pet politikaları, tesis özellikleri ve konumlarıyla karşılaştırın.`);
+  let html = getIndexHtmlTemplate();
+
+  html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
+  html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${description}" />`);
+
+  const socialAndCanonicalTags = `
+    <link rel="canonical" href="${canonicalUrl}" />
+    <meta property="og:title" content="${title}" />
+    <meta property="og:description" content="${description}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="${canonicalUrl}" />
+  `;
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'CollectionPage',
+        '@id': canonicalUrl,
+        name: `${cityName} Evcil Hayvan Dostu Oteller`,
+        description,
+        url: canonicalUrl,
+        isPartOf: {
+          '@type': 'WebSite',
+          name: 'Patiyle Seyahat',
+          url: 'https://www.patiyleseyahat.com/'
+        }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Ana Sayfa',
+            item: 'https://www.patiyleseyahat.com/'
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: `${cityName} Evcil Hayvan Dostu Oteller`,
+            item: canonicalUrl
+          }
+        ]
+      },
+      {
+        '@type': 'ItemList',
+        name: `${cityName} Evcil Hayvan Dostu Oteller`,
+        numberOfItems: cityHotels.length,
+        itemListElement: cityHotels.map((hotel, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: hotel.name,
+          url: `https://www.patiyleseyahat.com${getHotelPath(hotel)}`
+        }))
+      }
+    ]
+  };
+
+  html = html.replace('</head>', `${socialAndCanonicalTags}\n<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>\n</head>`);
+  res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+  return res.send(html);
+});
+
+app.get('/sitemap.xml', async (req, res) => {
+  const { hotels } = await getHotelSeoData();
+  const citySlugs = [...new Set(hotels.map(hotel => slugify(hotel.city)).filter(Boolean))];
+  const urls = [
+    { loc: 'https://www.patiyleseyahat.com/', priority: '1.0', frequency: 'daily' },
+    ...citySlugs.map(citySlug => ({
+      loc: `https://www.patiyleseyahat.com/evcil-hayvan-dostu-oteller/${citySlug}`,
+      priority: '0.8',
+      frequency: 'daily'
+    })),
+    ...hotels.map(hotel => ({
+      loc: `https://www.patiyleseyahat.com${getHotelPath(hotel)}`,
+      priority: '0.7',
+      frequency: 'weekly',
+      lastmod: hotel.updatedAt || hotel.lastVerified
+    }))
+  ];
+  const urlNodes = urls.map(url => `
+    <url>
+      <loc>${escapeHtml(url.loc)}</loc>
+      ${url.lastmod ? `<lastmod>${escapeHtml(url.lastmod)}</lastmod>` : ''}
+      <changefreq>${url.frequency}</changefreq>
+      <priority>${url.priority}</priority>
+    </url>`).join('');
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urlNodes}
+</urlset>`;
+
+  res.set('Content-Type', 'application/xml; charset=utf-8');
+  res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+  return res.send(sitemap);
+});
+
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain').send([
+    'User-agent: *',
+    'Allow: /',
+    'Disallow: /yonetici',
+    '',
+    'Sitemap: https://www.patiyleseyahat.com/sitemap.xml'
+  ].join('\n'));
+});
+
+app.get('/yonetici', (req, res) => {
+  let html = getIndexHtmlTemplate();
+  html = html.replace(
+    /<meta name="robots" content=".*?" \/>/,
+    '<meta name="robots" content="noindex, nofollow" />'
+  );
+  return res.send(html);
+});
+
 // SEO-friendly hotel path: /otel/il/ilce/otel-ismi
 app.get('/otel/:city/:district/:hotelSlug', async (req, res) => {
   const { hotels, complaints } = await getHotelSeoData();
@@ -795,12 +924,19 @@ app.get('*', (req, res) => {
 
       const desc = "Türkiye genelinde kedi ve köpek kabul eden oteller, pansiyonlar ve bakım merkezleri. Editör onaylı evcil hayvan politikaları ve 10 üzerinden Pati Güven Endeksi.";
       html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${desc}" />`);
+      html = html.replace('</head>', `
+        <link rel="canonical" href="https://www.patiyleseyahat.com/" />
+        <meta property="og:title" content="${title}" />
+        <meta property="og:description" content="${desc}" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.patiyleseyahat.com/" />
+      </head>`);
 
       const jsonLd = {
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "Patiyle Seyahat",
-        "url": "https://patiyleseyahat.com",
+        "url": "https://www.patiyleseyahat.com/",
         "description": "Evcil hayvan sahipleri için otel arama ve bakım otelleri rehberi.",
         "publisher": {
           "@type": "Organization",

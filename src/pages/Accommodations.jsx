@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon, AlertIcon } from '../components/PetIcons';
 import AdBanner from '../components/AdBanner';
+import { slugify } from '../../lib/seo-slugs';
 
 export default function Accommodations({ hotels, onViewChange, searchFilters, setSearchFilters }) {
   // Filters state
@@ -71,7 +72,9 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
     }
 
     // 2. City Filter
-    if (selectedCity && !hotel.city.toLowerCase().includes(selectedCity.toLowerCase()) && !hotel.district.toLowerCase().includes(selectedCity.toLowerCase())) {
+    if (searchFilters.cityLanding && searchFilters.citySlug) {
+      if (slugify(hotel.city) !== searchFilters.citySlug) return false;
+    } else if (selectedCity && !hotel.city.toLowerCase().includes(selectedCity.toLowerCase()) && !hotel.district.toLowerCase().includes(selectedCity.toLowerCase())) {
       return false;
     }
 
@@ -119,9 +122,15 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Page Header */}
       <div className="border-b border-brand-beige pb-6 mb-8 text-left">
-        <h1 className="text-3xl font-bold font-title text-brand-navy">Patiyle Konakla</h1>
+        <h1 className="text-3xl font-bold font-title text-brand-navy">
+          {searchFilters.cityLanding
+            ? `${searchFilters.destination} Evcil Hayvan Dostu Oteller`
+            : 'Patiyle Konakla'}
+        </h1>
         <p className="text-gray-600 text-sm mt-1.5">
-          {searchFilters.filterTitle 
+          {searchFilters.cityLanding
+            ? `${searchFilters.destination} ilindeki evcil hayvan kabul eden otel, butik otel, bungalov ve diğer konaklama seçenekleri (${filteredHotels.length} tesis listeleniyor)`
+            : searchFilters.filterTitle
             ? `Özel Seçki: ${searchFilters.filterTitle} (${filteredHotels.length} Tesis listeleniyor)`
             : `Dostlarınızla birlikte kalabileceğiniz doğrulanmış konaklama tesisleri (${filteredHotels.length} Tesis listeleniyor)`
           }
