@@ -6,12 +6,11 @@ export default function Layout({ children, currentView, onViewChange }) {
 
   const menuItems = [
     { id: 'home', label: 'Ana Sayfa' },
-    { id: 'accommodations', label: 'Konakla' },
-    { id: 'boardings', label: 'Bırak' },
-    { id: 'experiences', label: 'Gez' },
-    { id: 'taxis', label: 'Pet Taksi' },
+    { id: 'accommodations', label: 'Pet Dostu Oteller' },
     { id: 'vets', label: 'Acil Veteriner' },
     { id: 'guides', label: 'Rehber' },
+    { id: 'boardings', label: 'Pet Otelleri', badge: 'Yakında', disabled: true },
+    { id: 'experiences', label: 'Gezilecek Yerler', badge: 'Yakında', disabled: true },
   ];
 
   return (
@@ -40,20 +39,27 @@ export default function Layout({ children, currentView, onViewChange }) {
               {menuItems.map((item) => (
                 <button
                   key={item.id}
-                  onClick={() => onViewChange(item.id)}
-                  className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${
-                    currentView === item.id || 
-                    (item.id === 'guides' && currentView === 'guide-detail') || 
-                    (item.id === 'accommodations' && currentView === 'accommodation-detail') || 
-                    (item.id === 'boardings' && currentView === 'boarding-detail') ||
-                    (item.id === 'experiences' && currentView === 'experiences') ||
-                    (item.id === 'taxis' && currentView === 'taxi-detail') ||
-                    (item.id === 'vets' && currentView === 'vet-detail')
-                      ? 'bg-brand-navy text-white font-bold'
-                      : 'text-gray-700 hover:text-brand-navy hover:bg-brand-navy-light'
+                  disabled={item.disabled}
+                  onClick={() => !item.disabled && onViewChange(item.id)}
+                  className={`px-3.5 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-1.5 ${
+                    item.disabled 
+                      ? 'text-gray-400 cursor-not-allowed opacity-75'
+                      : currentView === item.id || 
+                        (item.id === 'guides' && currentView === 'guide-detail') || 
+                        (item.id === 'accommodations' && currentView === 'accommodation-detail') || 
+                        (item.id === 'boardings' && currentView === 'boarding-detail') ||
+                        (item.id === 'experiences' && currentView === 'experiences') ||
+                        (item.id === 'vets' && currentView === 'vet-detail')
+                          ? 'bg-brand-navy text-white font-bold'
+                          : 'text-gray-700 hover:text-brand-navy hover:bg-brand-navy-light'
                   }`}
                 >
-                  {item.label}
+                  <span>{item.label}</span>
+                  {item.badge && (
+                    <span className="text-[10px] bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded-md font-semibold">
+                      {item.badge}
+                    </span>
+                  )}
                 </button>
               ))}
             </div>
@@ -86,23 +92,32 @@ export default function Layout({ children, currentView, onViewChange }) {
             {menuItems.map((item) => (
               <button
                 key={item.id}
+                disabled={item.disabled}
                 onClick={() => {
-                  onViewChange(item.id);
-                  setMobileMenuOpen(false);
+                  if (!item.disabled) {
+                    onViewChange(item.id);
+                    setMobileMenuOpen(false);
+                  }
                 }}
-                className={`block w-full text-left px-4 py-3 rounded-full text-base font-bold transition-all ${
-                  currentView === item.id || 
-                  (item.id === 'guides' && currentView === 'guide-detail') || 
-                  (item.id === 'accommodations' && currentView === 'accommodation-detail') || 
-                  (item.id === 'boardings' && currentView === 'boarding-detail') ||
-                  (item.id === 'experiences' && currentView === 'experiences') ||
-                  (item.id === 'taxis' && currentView === 'taxi-detail') ||
-                  (item.id === 'vets' && currentView === 'vet-detail')
-                    ? 'bg-brand-navy text-white'
-                    : 'text-gray-700 hover:text-brand-navy hover:bg-brand-navy-light'
+                className={`w-full text-left px-4 py-3 rounded-full text-base font-bold transition-all flex items-center justify-between ${
+                  item.disabled
+                    ? 'text-gray-400 cursor-not-allowed opacity-75'
+                    : currentView === item.id || 
+                      (item.id === 'guides' && currentView === 'guide-detail') || 
+                      (item.id === 'accommodations' && currentView === 'accommodation-detail') || 
+                      (item.id === 'boardings' && currentView === 'boarding-detail') ||
+                      (item.id === 'experiences' && currentView === 'experiences') ||
+                      (item.id === 'vets' && currentView === 'vet-detail')
+                        ? 'bg-brand-navy text-white'
+                        : 'text-gray-700 hover:text-brand-navy hover:bg-brand-navy-light'
                 }`}
               >
-                {item.label}
+                <span>{item.label}</span>
+                {item.badge && (
+                  <span className="text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-md font-semibold">
+                    {item.badge}
+                  </span>
+                )}
               </button>
             ))}
           </div>

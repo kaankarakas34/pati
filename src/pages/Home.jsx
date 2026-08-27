@@ -59,51 +59,50 @@ export default function Home({ hotels, boardings, guides, experiences = [], ads 
   return (
     <div className="space-y-16 pb-20">
       {/* Hero Section */}
-      <div className="relative bg-brand-navy text-white overflow-hidden py-24 px-4 sm:px-6 lg:px-8">
-        {/* Background Image Overlay */}
-        <div className="absolute inset-0 opacity-20">
-          <img
-            src="https://images.unsplash.com/photo-1544568100-847a948585b9?auto=format&fit=crop&w=1600&q=80"
-            alt="Evcil hayvanla seyahat eden insan"
-            className="w-full h-full object-cover"
-          />
-        </div>
+      <div className="bg-gradient-to-b from-brand-yellow/30 via-brand-beige/50 to-brand-cream py-12 md:py-16 border-b border-brand-navy/10">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white border border-brand-navy/10 rounded-full text-xs font-bold text-brand-navy shadow-sm">
+            <span>🐾 Türkiye'nin İlk Doğrulanmış Pet Seyahat Rehberi</span>
+          </div>
 
-        <div className="relative max-w-4xl mx-auto text-center space-y-6">
-          <h1 className="text-4xl sm:text-5xl font-extrabold font-title leading-tight">
-            Dostunuzla birlikte kalabileceğiniz yerleri keşfedin
+          <h1 className="text-3xl md:text-5xl font-bold font-title text-brand-navy leading-tight">
+            Patili Dostunuzla Yolculuğa Çıkın,<br />
+            <span className="text-brand-navy underline decoration-brand-yellow decoration-4">Kural Sürprizi Yaşamayın</span>
           </h1>
-          <p className="text-lg sm:text-xl text-gray-250 font-light max-w-2xl mx-auto">
-            Kedi, köpek, kuş ve diğer dostlarınızı hangi koşullarda kabul ettiğini açıkça belirten doğrulanmış tesisleri karşılaştırın
+
+          <p className="text-gray-700 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+            Türkiye genelindeki evcil hayvan kabul eden otelleri, kabul şartlarını ve acil nöbetçi veteriner kliniklelerini editör doğrulamasıyla tek adreste keşfedin.
           </p>
 
-          {/* Search Form */}
-          <form onSubmit={handleSearch} className="bg-white p-4 rounded-3xl border-2 border-brand-navy shadow-xl grid grid-cols-1 md:grid-cols-4 gap-3 text-gray-900 mt-10">
-            {/* Destination */}
-            <div className="flex flex-col text-left px-2">
+          {/* Quick Filter Bar */}
+          <form onSubmit={handleSearch} className="bg-white p-4 md:p-6 rounded-3xl shadow-xl border-2 border-brand-navy/10 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-3 items-center">
+            {/* Destination Input */}
+            <div className="flex flex-col text-left px-2 border-b md:border-b-0 md:border-r border-brand-beige pb-2 md:pb-0">
               <label className="text-2xs font-bold text-gray-500 uppercase tracking-wider mb-1">Nereye?</label>
-              <input
-                type="text"
-                placeholder="Şehir veya ilçe girin"
-                value={destination}
-                onChange={(e) => setDestination(e.target.value)}
-                className="bg-transparent border-0 border-b border-transparent hover:border-gray-300 focus:border-brand-navy focus:ring-0 py-1 text-sm font-medium outline-none"
-              />
+              <div className="flex items-center gap-2">
+                <LocationIcon className="w-4 h-4 text-brand-navy flex-shrink-0" />
+                <input
+                  type="text"
+                  placeholder="İl, ilçe veya otel adı..."
+                  value={destination}
+                  onChange={(e) => setDestination(e.target.value)}
+                  className="w-full bg-transparent border-none p-0 text-sm font-medium focus:ring-0 text-brand-navy placeholder-gray-400 outline-none"
+                />
+              </div>
             </div>
 
             {/* Pet Type */}
-            <div className="flex flex-col text-left px-2 border-t md:border-t-0 md:border-l border-brand-beige pt-2 md:pt-0">
-              <label className="text-2xs font-bold text-gray-500 uppercase tracking-wider mb-1">Hangi Dostunuzla?</label>
+            <div className="flex flex-col text-left px-2 border-b md:border-b-0 md:border-r border-brand-beige py-2 md:py-0">
+              <label className="text-2xs font-bold text-gray-500 uppercase tracking-wider mb-1">Patili Dostunuz</label>
               <select
                 value={petType}
                 onChange={(e) => setPetType(e.target.value)}
                 className="bg-transparent border-none py-1 text-sm font-medium outline-none cursor-pointer focus:ring-0 focus:border-brand-navy"
               >
-                <option value="all">Farketmez</option>
+                <option value="all">Tüm Evcil Hayvanlar</option>
                 <option value="dog">Köpek</option>
                 <option value="cat">Kedi</option>
-                <option value="bird">Kuş</option>
-                <option value="other">Diğer Dostlar</option>
+                <option value="bird">Kuş / Diğer</option>
               </select>
             </div>
 
@@ -127,38 +126,92 @@ export default function Home({ hotels, boardings, guides, experiences = [], ads 
             {/* Submit Button */}
             <button
               type="submit"
-              className="bg-brand-yellow hover:bg-brand-yellow-hover text-brand-navy font-bold rounded-full flex items-center justify-center gap-2 py-3 px-6 transition-colors shadow-md mt-2 md:mt-0 font-title border-2 border-brand-navy"
+              className="bg-brand-yellow hover:bg-brand-yellow-hover text-brand-navy font-bold rounded-2xl flex items-center justify-center gap-2 py-3 px-4 transition-colors shadow-md mt-2 md:mt-0 font-title border-2 border-brand-navy"
             >
-              <span>🔍</span> Tesis Ara
+              <span>🔍</span> Ara
             </button>
           </form>
         </div>
       </div>
 
       {/* Main Two Directions Cards */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-5 gap-4">
-        {[
-          { view: 'accommodations', icon: '🏨', title: 'Konakla', text: 'Otel, villa, bungalov ve kamp alanlarını pet politikalarıyla karşılaştır.' },
-          { view: 'boardings', icon: '🏡', title: 'Bırak', text: 'Kedi ve köpek otelleri, gündüz bakım ve ev tipi bakım merkezleri.' },
-          { view: 'experiences', icon: '🌊', title: 'Gez', text: 'Plaj, park, kafe, rota ve şehir içi pet dostu deneyimler.' },
-          { view: 'taxis', icon: '🚕', title: 'Git', text: 'Pet taksi, şehir içi transfer ve veteriner ulaşımı.' },
-          { view: 'vets', icon: '🏥', title: 'Acil', text: '7/24 veteriner, yoğun bakım ve nöbetçi klinik bilgileri.' },
-        ].map(item => (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {/* Active Card 1: Oteller */}
           <div
-            key={item.view}
-            onClick={() => onViewChange(item.view)}
-            className="bg-white border-2 border-brand-navy/10 rounded-3xl p-5 hover:shadow-lg hover:border-brand-navy transition-all duration-300 cursor-pointer flex flex-col justify-between group min-h-[190px]"
+            onClick={() => onViewChange('accommodations')}
+            className="bg-white border-2 border-brand-navy rounded-3xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group md:col-span-2 relative overflow-hidden"
           >
-            <div>
-              <div className="text-3xl mb-3">{item.icon}</div>
-              <h2 className="text-xl font-bold font-title text-brand-navy group-hover:opacity-80 transition-opacity">{item.title}</h2>
-              <p className="text-gray-700 mt-2 leading-relaxed text-xs">{item.text}</p>
+            <div className="absolute top-0 right-0 bg-brand-yellow text-brand-navy text-xs font-bold px-3 py-1 rounded-bl-xl font-title">
+              ⭐ Ana Odak
             </div>
-            <span className="text-brand-navy font-bold flex items-center gap-2 mt-5 group-hover:underline text-xs">
-              Keşfet &rarr;
+            <div>
+              <div className="text-4xl mb-3">🏨</div>
+              <h2 className="text-2xl font-bold font-title text-brand-navy group-hover:opacity-80 transition-opacity">Pati Dostu Oteller</h2>
+              <p className="text-gray-700 mt-2 leading-relaxed text-sm">
+                Türkiye'nin dört bir yanındaki kedi ve köpek kabul eden otelleri; kilo sınırı, pet ücreti ve bahçe imkanlarıyla karşılaştırın.
+              </p>
+            </div>
+            <span className="text-brand-navy font-bold flex items-center gap-2 mt-6 group-hover:underline text-sm">
+              Otelleri İncele &rarr;
             </span>
           </div>
-        ))}
+
+          {/* Active Card 2: Acil Veteriner */}
+          <div
+            onClick={() => onViewChange('vets')}
+            className="bg-white border-2 border-brand-navy/20 hover:border-brand-navy rounded-3xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group md:col-span-2 relative overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 bg-red-100 text-red-700 text-xs font-bold px-3 py-1 rounded-bl-xl font-title">
+              🏥 7/24 Acil
+            </div>
+            <div>
+              <div className="text-4xl mb-3">🏥</div>
+              <h2 className="text-2xl font-bold font-title text-brand-navy group-hover:opacity-80 transition-opacity">7/24 Acil Veterinerler</h2>
+              <p className="text-gray-700 mt-2 leading-relaxed text-sm">
+                Seyahatinizde acil durumlar için nöbetçi veteriner klinikleri, iletişim numaraları ve acil müdahale noktaları.
+              </p>
+            </div>
+            <span className="text-brand-navy font-bold flex items-center gap-2 mt-6 group-hover:underline text-sm">
+              Nöbetçi Klinik Bul &rarr;
+            </span>
+          </div>
+
+          {/* Passive Card 1: Pet Otelleri (Bırak) */}
+          <div
+            className="bg-gray-50 border border-gray-200 rounded-3xl p-5 cursor-not-allowed opacity-75 flex flex-col justify-between md:col-span-2"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-3xl">🏡</span>
+                <span className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded-md font-bold">Yakında</span>
+              </div>
+              <h3 className="text-lg font-bold font-title text-gray-500">Pet Otelleri (Bırak)</h3>
+              <p className="text-gray-600 mt-1 text-xs leading-relaxed">
+                Kedi ve köpek otelleri, gündüz bakım ve ev tipi bakım servisleri yakında aktifleşecektir.
+              </p>
+            </div>
+          </div>
+
+          {/* Passive Card 2: Gezilecek Yerler (Gez) */}
+          <div
+            className="bg-gray-50 border border-gray-200 rounded-3xl p-5 cursor-not-allowed opacity-75 flex flex-col justify-between md:col-span-2"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-3xl">🌊</span>
+                <span className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded-md font-bold">Yakında</span>
+              </div>
+              <h3 className="text-lg font-bold font-title text-gray-500">Evcil Hayvanla Gezilecek Yerler</h3>
+              <p className="text-gray-600 mt-1 text-xs leading-relaxed">
+                Patili dostunuzla gezebileceğiniz plaj, park, kafe ve yürüyüş rotaları yakında aktifleşecektir.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Pet Taksi Reklam Banner Section */}
+        <PetTaxiAdBanner onViewChange={onViewChange} compact={true} />
       </div>
 
       {/* Featured Pet-Friendly Hotels */}
