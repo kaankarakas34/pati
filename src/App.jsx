@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // Pages
 import Home from './pages/Home';
@@ -93,29 +94,29 @@ function App() {
   useEffect(() => {
     async function loadData() {
       try {
-        const [hotelsRes, boardingsRes, guidesRes, correctionsRes, complaintsRes, taxisRes, vetsRes, experiencesRes, adsRes] = await Promise.all([
+        const [hotelsRes, boardingsRes, guidesRes, correctionsRes, complaintsRes, taxisRes, vetsRes, experiencesRes, adsRes] = await Promise.allSettled([
           fetchTable('/api/hotels', initialHotels),
           fetchTable('/api/boardings', initialBoardings),
           fetchTable('/api/guides', initialGuides),
           fetchTable('/api/corrections', initialCorrections),
           fetchTable('/api/complaints', initialComplaints),
-          fetchTable('/api/taxis'),
-          fetchTable('/api/vets'),
-          fetchTable('/api/experiences'),
-          fetchTable('/api/ads')
+          fetchTable('/api/taxis', []),
+          fetchTable('/api/vets', []),
+          fetchTable('/api/experiences', []),
+          fetchTable('/api/ads', [])
         ]);
 
-        setHotels(hotelsRes);
-        setBoardings(boardingsRes);
-        setGuides(guidesRes);
-        setCorrections(correctionsRes);
-        setComplaints(complaintsRes);
-        setTaxis(taxisRes);
-        setVets(vetsRes);
-        setExperiences(experiencesRes);
-        setAds(adsRes);
+        if (hotelsRes.status === 'fulfilled' && Array.isArray(hotelsRes.value)) setHotels(hotelsRes.value);
+        if (boardingsRes.status === 'fulfilled' && Array.isArray(boardingsRes.value)) setBoardings(boardingsRes.value);
+        if (guidesRes.status === 'fulfilled' && Array.isArray(guidesRes.value)) setGuides(guidesRes.value);
+        if (correctionsRes.status === 'fulfilled' && Array.isArray(correctionsRes.value)) setCorrections(correctionsRes.value);
+        if (complaintsRes.status === 'fulfilled' && Array.isArray(complaintsRes.value)) setComplaints(complaintsRes.value);
+        if (taxisRes.status === 'fulfilled' && Array.isArray(taxisRes.value)) setTaxis(taxisRes.value);
+        if (vetsRes.status === 'fulfilled' && Array.isArray(vetsRes.value)) setVets(vetsRes.value);
+        if (experiencesRes.status === 'fulfilled' && Array.isArray(experiencesRes.value)) setExperiences(experiencesRes.value);
+        if (adsRes.status === 'fulfilled' && Array.isArray(adsRes.value)) setAds(adsRes.value);
       } catch (err) {
-        console.error("Failed to load PostgreSQL database tables:", err);
+        console.error("Failed to load database tables:", err);
       } finally {
         setLoading(false);
       }
@@ -780,9 +781,11 @@ function App() {
   }
 
   return (
-    <Layout currentView={currentView} onViewChange={handleViewChange}>
-      {renderActiveView()}
-    </Layout>
+    <ErrorBoundary>
+      <Layout currentView={currentView} onViewChange={handleViewChange}>
+        {renderActiveView()}
+      </Layout>
+    </ErrorBoundary>
   );
 }
 

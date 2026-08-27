@@ -4,10 +4,15 @@ import { slugify } from '../../lib/seo-slugs';
 import SeoContentSection from '../components/SeoContentSection';
 import { seoContent } from '../data/seoContent';
 
-export default function Home({ hotels, boardings, guides, experiences = [], ads = [], onViewChange, setSearchFilters }) {
+export default function Home({ hotels = [], boardings = [], guides = [], experiences = [], ads = [], onViewChange, setSearchFilters }) {
   const [destination, setDestination] = useState('');
   const [petType, setPetType] = useState('all');
   const [accType, setAccType] = useState('all');
+
+  const safeHotels = Array.isArray(hotels) ? hotels : [];
+  const safeBoardings = Array.isArray(boardings) ? boardings : [];
+  const safeGuides = Array.isArray(guides) ? guides : [];
+  const safeExperiences = Array.isArray(experiences) ? experiences : [];
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -39,11 +44,12 @@ export default function Home({ hotels, boardings, guides, experiences = [], ads 
     onViewChange('accommodations');
   };
 
-  const featuredHotels = hotels.slice(0, 3);
-  const featuredBoardings = boardings.slice(0, 2);
-  const featuredGuides = guides.slice(0, 3);
-  const featuredExperiences = experiences.slice(0, 3);
-  const cityLinks = Array.from(hotels.reduce((cities, hotel) => {
+  const featuredHotels = safeHotels.slice(0, 3);
+  const featuredBoardings = safeBoardings.slice(0, 2);
+  const featuredGuides = safeGuides.slice(0, 3);
+  const featuredExperiences = safeExperiences.slice(0, 3);
+  const cityLinks = Array.from(safeHotels.reduce((cities, hotel) => {
+    if (!hotel || !hotel.city) return cities;
     const citySlug = slugify(hotel.city);
     if (!citySlug) return cities;
 
