@@ -3,6 +3,7 @@ import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon } fr
 import { slugify } from '../../lib/seo-slugs';
 import SeoContentSection from '../components/SeoContentSection';
 import { seoContent } from '../data/seoContent';
+import PetTaxiAdBanner from '../components/PetTaxiAdBanner';
 
 export default function Home({ hotels = [], boardings = [], guides = [], experiences = [], ads = [], onViewChange, setSearchFilters }) {
   const [destination, setDestination] = useState('');

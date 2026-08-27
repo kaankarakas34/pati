@@ -105,7 +105,8 @@ app.get('/api/hotels', async (req, res) => {
     const data = await getHotels();
     res.json(data);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.warn("Falling back to initialHotels due to DB error:", err.message);
+    res.json(initialHotels);
   }
 });
 
@@ -133,7 +134,8 @@ app.get('/api/boardings', async (req, res) => {
     const data = await getBoardings();
     res.json(data);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.warn("Falling back to initialBoardings due to DB error:", err.message);
+    res.json(initialBoardings);
   }
 });
 
@@ -161,7 +163,8 @@ app.get('/api/guides', async (req, res) => {
     const data = await getGuides();
     res.json(data);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.warn("Falling back to initialGuides due to DB error:", err.message);
+    res.json(initialGuides);
   }
 });
 
@@ -189,7 +192,8 @@ app.get('/api/corrections', async (req, res) => {
     const data = await getCorrections();
     res.json(data);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.warn("Falling back to initialCorrections due to DB error:", err.message);
+    res.json(initialCorrections);
   }
 });
 
@@ -208,7 +212,8 @@ app.get('/api/complaints', async (req, res) => {
     const data = await getComplaints();
     res.json(data);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.warn("Falling back to initialComplaints due to DB error:", err.message);
+    res.json(initialComplaints);
   }
 });
 
@@ -231,7 +236,7 @@ app.get('/api/reviews', async (req, res) => {
     const data = await getReviews(targetId);
     res.json(data);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.json([]);
   }
 });
 
@@ -250,7 +255,8 @@ app.get('/api/taxis', async (req, res) => {
     const data = await getPetTaxis();
     res.json(data);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.warn("Falling back to [] due to DB error:", err.message);
+    res.json([]);
   }
 });
 
@@ -278,7 +284,8 @@ app.get('/api/vets', async (req, res) => {
     const data = await getVets();
     res.json(data);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.warn("Falling back to [] due to DB error:", err.message);
+    res.json([]);
   }
 });
 
@@ -306,7 +313,8 @@ app.get('/api/experiences', async (req, res) => {
     const data = await getExperiences();
     res.json(data);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.warn("Falling back to [] due to DB error:", err.message);
+    res.json([]);
   }
 });
 
