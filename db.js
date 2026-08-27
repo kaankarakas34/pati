@@ -593,44 +593,49 @@ export async function initDatabase() {
 
 // Database Helpers
 export async function getHotels() {
-  const result = await pool.query("SELECT * FROM hotels ORDER BY id DESC");
-  return result.rows.map(h => ({
-    id: h.id,
-    name: h.name,
-    city: h.city,
-    district: h.district,
-    type: h.type,
-    allowedPets: h.allowed_pets,
-    suitability: h.suitability,
-    weightLimit: h.weight_limit,
-    extraFee: h.extra_fee,
-    features: h.features,
-    quizTags: h.quiz_tags,
-    baseTrustScore: parseFloat(h.base_trust_score),
-    verified: h.verified,
-    lastVerified: h.last_verified,
-    imageUrl: h.image_url,
-    galleryImages: h.gallery_images || [],
-    description: h.description,
-    whySelected: h.why_selected,
-    suitableFor: h.suitable_for,
-    notSuitableFor: h.not_suitable_for,
-    disallowedPets: h.disallowed_pets,
-    breedRestrictions: h.breed_restrictions,
-    maxPetsPerRoom: h.max_pets_per_room,
-    depositInfo: h.deposit_info,
-    requiredDocs: h.required_docs,
-    canLeaveInRoomAlone: h.can_leave_in_room_alone,
-    rules: h.rules,
-    veterinarySupport: h.veterinary_support,
-    phone: h.phone,
-    email: h.email,
-    website: h.website,
-    bookingLinks: h.booking_links || { enuygun: '', otelz: '', booking: '' },
-    editorNote: h.editor_note,
-    infoSource: h.info_source,
-    faq: h.faq
-  }));
+  try {
+    const result = await pool.query("SELECT * FROM hotels ORDER BY id DESC");
+    return result.rows.map(h => ({
+      id: h.id,
+      name: h.name,
+      city: h.city,
+      district: h.district,
+      type: h.type,
+      allowedPets: h.allowed_pets,
+      suitability: h.suitability,
+      weightLimit: h.weight_limit,
+      extraFee: h.extra_fee,
+      features: h.features,
+      quizTags: h.quiz_tags,
+      baseTrustScore: parseFloat(h.base_trust_score),
+      verified: h.verified,
+      lastVerified: h.last_verified,
+      imageUrl: h.image_url,
+      galleryImages: h.gallery_images || [],
+      description: h.description,
+      whySelected: h.why_selected,
+      suitableFor: h.suitable_for,
+      notSuitableFor: h.not_suitable_for,
+      disallowedPets: h.disallowed_pets,
+      breedRestrictions: h.breed_restrictions,
+      maxPetsPerRoom: h.max_pets_per_room,
+      depositInfo: h.deposit_info,
+      requiredDocs: h.required_docs,
+      canLeaveInRoomAlone: h.can_leave_in_room_alone,
+      rules: h.rules,
+      veterinarySupport: h.veterinary_support,
+      phone: h.phone,
+      email: h.email,
+      website: h.website,
+      bookingLinks: h.booking_links || { enuygun: '', otelz: '', booking: '' },
+      editorNote: h.editor_note,
+      infoSource: h.info_source,
+      faq: h.faq
+    }));
+  } catch (err) {
+    console.warn("getHotels DB error, returning initialHotels:", err.message);
+    return initialHotels;
+  }
 }
 
 export async function saveHotel(h) {
