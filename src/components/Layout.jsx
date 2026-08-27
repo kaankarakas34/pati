@@ -8,9 +8,7 @@ export default function Layout({ children, currentView, onViewChange }) {
     { id: 'home', label: 'Ana Sayfa' },
     { id: 'accommodations', label: 'Pet Dostu Oteller' },
     { id: 'vets', label: 'Acil Veteriner' },
-    { id: 'guides', label: 'Rehber' },
-    { id: 'boardings', label: 'Pet Otelleri', badge: 'Yakında', disabled: true },
-    { id: 'experiences', label: 'Gezilecek Yerler', badge: 'Yakında', disabled: true },
+    { id: 'guides', label: 'Seyahat Rehberi' },
   ];
 
   return (
@@ -39,27 +37,17 @@ export default function Layout({ children, currentView, onViewChange }) {
               {menuItems.map((item) => (
                 <button
                   key={item.id}
-                  disabled={item.disabled}
-                  onClick={() => !item.disabled && onViewChange(item.id)}
-                  className={`px-3.5 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-1.5 ${
-                    item.disabled 
-                      ? 'text-gray-400 cursor-not-allowed opacity-75'
-                      : currentView === item.id || 
-                        (item.id === 'guides' && currentView === 'guide-detail') || 
-                        (item.id === 'accommodations' && currentView === 'accommodation-detail') || 
-                        (item.id === 'boardings' && currentView === 'boarding-detail') ||
-                        (item.id === 'experiences' && currentView === 'experiences') ||
-                        (item.id === 'vets' && currentView === 'vet-detail')
-                          ? 'bg-brand-navy text-white font-bold'
-                          : 'text-gray-700 hover:text-brand-navy hover:bg-brand-navy-light'
+                  onClick={() => onViewChange(item.id)}
+                  className={`px-4 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-1.5 ${
+                    currentView === item.id || 
+                    (item.id === 'guides' && currentView === 'guide-detail') || 
+                    (item.id === 'accommodations' && currentView === 'accommodation-detail') || 
+                    (item.id === 'vets' && currentView === 'vet-detail')
+                      ? 'bg-brand-navy text-white font-bold'
+                      : 'text-gray-700 hover:text-brand-navy hover:bg-brand-navy-light'
                   }`}
                 >
                   <span>{item.label}</span>
-                  {item.badge && (
-                    <span className="text-[10px] bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded-md font-semibold">
-                      {item.badge}
-                    </span>
-                  )}
                 </button>
               ))}
             </div>
@@ -92,32 +80,17 @@ export default function Layout({ children, currentView, onViewChange }) {
             {menuItems.map((item) => (
               <button
                 key={item.id}
-                disabled={item.disabled}
                 onClick={() => {
-                  if (!item.disabled) {
-                    onViewChange(item.id);
-                    setMobileMenuOpen(false);
-                  }
+                  onViewChange(item.id);
+                  setMobileMenuOpen(false);
                 }}
-                className={`w-full text-left px-4 py-3 rounded-full text-base font-bold transition-all flex items-center justify-between ${
-                  item.disabled
-                    ? 'text-gray-400 cursor-not-allowed opacity-75'
-                    : currentView === item.id || 
-                      (item.id === 'guides' && currentView === 'guide-detail') || 
-                      (item.id === 'accommodations' && currentView === 'accommodation-detail') || 
-                      (item.id === 'boardings' && currentView === 'boarding-detail') ||
-                      (item.id === 'experiences' && currentView === 'experiences') ||
-                      (item.id === 'vets' && currentView === 'vet-detail')
-                        ? 'bg-brand-navy text-white'
-                        : 'text-gray-700 hover:text-brand-navy hover:bg-brand-navy-light'
+                className={`w-full text-left px-4 py-2.5 rounded-xl text-base font-bold transition-all flex items-center justify-between ${
+                  currentView === item.id
+                    ? 'bg-brand-navy text-white font-bold'
+                    : 'text-gray-700 hover:bg-brand-navy-light'
                 }`}
               >
                 <span>{item.label}</span>
-                {item.badge && (
-                  <span className="text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-md font-semibold">
-                    {item.badge}
-                  </span>
-                )}
               </button>
             ))}
           </div>
@@ -130,23 +103,21 @@ export default function Layout({ children, currentView, onViewChange }) {
       </main>
 
       {/* Footer */}
-      <footer className="bg-brand-navy text-white border-t-4 border-brand-yellow mt-auto">
-        {/* Newsletter Section */}
-        <div className="bg-[#0b2f47] border-b border-brand-navy/30 py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="max-w-md text-center md:text-left">
-              <h3 className="font-title text-xl font-bold text-brand-yellow">Birlikte çıkılan her yol daha güzel</h3>
-              <p className="text-gray-300 text-sm mt-2">
-                En güncel evcil hayvan dostu oteller, plajlar ve seyahat rotalarından haberdar olmak için e-bültenimize kaydolun.
-              </p>
-            </div>
-            <div className="w-full max-w-md">
-              <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); alert('Bültene kaydınız başarıyla alındı!'); }}>
+      <footer className="bg-brand-navy text-white mt-20">
+        {/* Newsletter Promo Box */}
+        <div className="border-b border-brand-navy/30 bg-[#072438]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+              <div>
+                <h3 className="text-xl font-bold font-title text-white">Yeni Pet-Friendly Otellerden İlk Siz Haberdar Olun</h3>
+                <p className="text-gray-300 text-sm mt-1">Haftalık editör bültenimizle gizli kalmış patili seyahat noktalarını keşfedin.</p>
+              </div>
+              <form onSubmit={(e) => { e.preventDefault(); alert("Bülten kaydınız başarıyla alındı!"); }} className="flex w-full md:w-auto gap-2">
                 <input
                   type="email"
                   placeholder="E-posta adresiniz"
                   required
-                  className="px-6 py-3 rounded-full flex-grow text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-yellow border-2 border-brand-navy"
+                  className="bg-white text-gray-800 px-4 py-3 rounded-full text-sm outline-none w-full md:w-64 focus:ring-2 focus:ring-brand-yellow"
                 />
                 <button
                   type="submit"
@@ -181,22 +152,22 @@ export default function Layout({ children, currentView, onViewChange }) {
             <ul className="space-y-2 text-sm text-gray-300">
               <li>
                 <button onClick={() => onViewChange('accommodations')} className="hover:text-white transition-colors">
-                  Patiyle Konakla (Pet Dostu Oteller)
+                  Pati Dostu Oteller
                 </button>
               </li>
               <li>
-                <button onClick={() => onViewChange('boardings')} className="hover:text-white transition-colors">
-                  Güvenle Bırak (Kedi & Köpek Otelleri)
-                </button>
-              </li>
-              <li>
-                <button onClick={() => onViewChange('methodology')} className="hover:text-white transition-colors">
-                  Değerlendirme Kriterleri
+                <button onClick={() => onViewChange('vets')} className="hover:text-white transition-colors">
+                  7/24 Acil Veterinerler
                 </button>
               </li>
               <li>
                 <button onClick={() => onViewChange('guides')} className="hover:text-white transition-colors">
                   Seyahat Rehberleri
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onViewChange('methodology')} className="hover:text-white transition-colors">
+                  Değerlendirme Kriterleri
                 </button>
               </li>
             </ul>

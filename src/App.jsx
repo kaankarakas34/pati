@@ -624,24 +624,16 @@ function App() {
         );
 
       case 'boardings':
-        return (
-          <Boardings
-            boardings={boardings}
-            onViewChange={handleViewChange}
-          />
-        );
-
       case 'boarding-detail':
         return (
-          <DetailView
-            id={selectedItemId}
-            isBoarding={true}
+          <Home
             hotels={hotels}
             boardings={boardings}
-            complaints={complaints}
-            addComplaint={addComplaint}
+            guides={guides}
+            experiences={experiences}
+            ads={ads}
             onViewChange={handleViewChange}
-            addCorrection={addCorrection}
+            setSearchFilters={setSearchFilters}
           />
         );
 
@@ -687,23 +679,17 @@ function App() {
         );
 
       case 'taxis':
-        return (
-          <Taxis
-            taxis={taxis}
-            onViewChange={handleViewChange}
-          />
-        );
-
       case 'taxi-detail':
+      case 'experiences':
         return (
-          <DetailView
-            id={selectedItemId}
-            isTaxi={true}
-            taxis={taxis}
-            complaints={complaints}
-            addComplaint={addComplaint}
+          <Home
+            hotels={hotels}
+            boardings={boardings}
+            guides={guides}
+            experiences={experiences}
+            ads={ads}
             onViewChange={handleViewChange}
-            addCorrection={addCorrection}
+            setSearchFilters={setSearchFilters}
           />
         );
 
@@ -711,14 +697,6 @@ function App() {
         return (
           <Vets
             vets={vets}
-            onViewChange={handleViewChange}
-          />
-        );
-
-      case 'experiences':
-        return (
-          <Experiences
-            experiences={experiences}
             onViewChange={handleViewChange}
           />
         );

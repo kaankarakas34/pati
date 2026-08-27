@@ -142,24 +142,25 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
       </div>
 
       {/* Main Two Directions Cards */}
+      {/* Category Cards - Clean 2-Col Active Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Active Card 1: Oteller */}
           <div
             onClick={() => onViewChange('accommodations')}
-            className="bg-white border-2 border-brand-navy rounded-3xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group md:col-span-2 relative overflow-hidden"
+            className="bg-white border-2 border-brand-navy rounded-3xl p-7 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group relative overflow-hidden"
           >
-            <div className="absolute top-0 right-0 bg-brand-yellow text-brand-navy text-xs font-bold px-3 py-1 rounded-bl-xl font-title">
+            <div className="absolute top-0 right-0 bg-brand-yellow text-brand-navy text-xs font-bold px-3.5 py-1.5 rounded-bl-xl font-title">
               ⭐ Ana Odak
             </div>
             <div>
-              <div className="text-4xl mb-3">🏨</div>
-              <h2 className="text-2xl font-bold font-title text-brand-navy group-hover:opacity-80 transition-opacity">Pati Dostu Oteller</h2>
-              <p className="text-gray-700 mt-2 leading-relaxed text-sm">
+              <div className="text-5xl mb-4">🏨</div>
+              <h2 className="text-2xl sm:text-3xl font-bold font-title text-brand-navy group-hover:opacity-80 transition-opacity">Pati Dostu Oteller</h2>
+              <p className="text-gray-700 mt-2 leading-relaxed text-sm sm:text-base">
                 Türkiye'nin dört bir yanındaki kedi ve köpek kabul eden otelleri; kilo sınırı, pet ücreti ve bahçe imkanlarıyla karşılaştırın.
               </p>
             </div>
-            <span className="text-brand-navy font-bold flex items-center gap-2 mt-6 group-hover:underline text-sm">
+            <span className="text-brand-navy font-bold flex items-center gap-2 mt-6 group-hover:underline text-sm sm:text-base">
               Otelleri İncele &rarr;
             </span>
           </div>
@@ -167,53 +168,21 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
           {/* Active Card 2: Acil Veteriner */}
           <div
             onClick={() => onViewChange('vets')}
-            className="bg-white border-2 border-brand-navy/20 hover:border-brand-navy rounded-3xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group md:col-span-2 relative overflow-hidden"
+            className="bg-white border-2 border-brand-navy/20 hover:border-brand-navy rounded-3xl p-7 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group relative overflow-hidden"
           >
-            <div className="absolute top-0 right-0 bg-red-100 text-red-700 text-xs font-bold px-3 py-1 rounded-bl-xl font-title">
+            <div className="absolute top-0 right-0 bg-red-100 text-red-700 text-xs font-bold px-3.5 py-1.5 rounded-bl-xl font-title">
               🏥 7/24 Acil
             </div>
             <div>
-              <div className="text-4xl mb-3">🏥</div>
-              <h2 className="text-2xl font-bold font-title text-brand-navy group-hover:opacity-80 transition-opacity">7/24 Acil Veterinerler</h2>
-              <p className="text-gray-700 mt-2 leading-relaxed text-sm">
+              <div className="text-5xl mb-4">🏥</div>
+              <h2 className="text-2xl sm:text-3xl font-bold font-title text-brand-navy group-hover:opacity-80 transition-opacity">7/24 Acil Veterinerler</h2>
+              <p className="text-gray-700 mt-2 leading-relaxed text-sm sm:text-base">
                 Seyahatinizde acil durumlar için nöbetçi veteriner klinikleri, iletişim numaraları ve acil müdahale noktaları.
               </p>
             </div>
-            <span className="text-brand-navy font-bold flex items-center gap-2 mt-6 group-hover:underline text-sm">
+            <span className="text-brand-navy font-bold flex items-center gap-2 mt-6 group-hover:underline text-sm sm:text-base">
               Nöbetçi Klinik Bul &rarr;
             </span>
-          </div>
-
-          {/* Passive Card 1: Pet Otelleri (Bırak) */}
-          <div
-            className="bg-gray-50 border border-gray-200 rounded-3xl p-5 cursor-not-allowed opacity-75 flex flex-col justify-between md:col-span-2"
-          >
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-3xl">🏡</span>
-                <span className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded-md font-bold">Yakında</span>
-              </div>
-              <h3 className="text-lg font-bold font-title text-gray-500">Pet Otelleri (Bırak)</h3>
-              <p className="text-gray-600 mt-1 text-xs leading-relaxed">
-                Kedi ve köpek otelleri, gündüz bakım ve ev tipi bakım servisleri yakında aktifleşecektir.
-              </p>
-            </div>
-          </div>
-
-          {/* Passive Card 2: Gezilecek Yerler (Gez) */}
-          <div
-            className="bg-gray-50 border border-gray-200 rounded-3xl p-5 cursor-not-allowed opacity-75 flex flex-col justify-between md:col-span-2"
-          >
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-3xl">🌊</span>
-                <span className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded-md font-bold">Yakında</span>
-              </div>
-              <h3 className="text-lg font-bold font-title text-gray-500">Evcil Hayvanla Gezilecek Yerler</h3>
-              <p className="text-gray-600 mt-1 text-xs leading-relaxed">
-                Patili dostunuzla gezebileceğiniz plaj, park, kafe ve yürüyüş rotaları yakında aktifleşecektir.
-              </p>
-            </div>
           </div>
         </div>
 
@@ -587,7 +556,7 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
           </p>
           <button
             onClick={() => {
-              alert("Otel önerme formu yakında aktif olacaktır! İlginiz için teşekkürler.");
+              alert("Otel önerme talebiniz editör ekibimize iletildi. İlginiz için teşekkür ederiz!");
             }}
             className="w-full bg-brand-navy hover:bg-brand-navy-hover text-white py-3 rounded-full text-sm font-bold transition-colors font-title shadow-sm border border-brand-navy/10"
           >
