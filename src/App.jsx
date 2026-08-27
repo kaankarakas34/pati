@@ -39,6 +39,39 @@ async function fetchTable(path, fallback = []) {
   }
 }
 
+const CATEGORY_SEO = {
+  accommodations: {
+    path: '/evcil-hayvan-dostu-oteller',
+    title: 'Evcil Hayvan Dostu Oteller | Patiyle Seyahat',
+    description: 'Köpek, kedi ve diğer evcil hayvanları kabul eden otelleri; kilo sınırı, ek ücret ve tesis kurallarıyla karşılaştırın.'
+  },
+  boardings: {
+    path: '/kedi-kopek-otelleri',
+    title: 'Kedi ve Köpek Otelleri | Güvenli Pet Bakımı',
+    description: 'Kedi oteli, köpek oteli, gündüz bakım ve ev tipi pet bakım merkezlerini özellikleri ve kabul şartlarıyla inceleyin.'
+  },
+  taxis: {
+    path: '/pet-taksi',
+    title: 'Pet Taksi ve Evcil Hayvan Transferi | Patiyle Seyahat',
+    description: 'Veteriner, havaalanı, otel ve bakım merkezi ulaşımı için pet taksi ve güvenli evcil hayvan transfer seçeneklerini karşılaştırın.'
+  },
+  vets: {
+    path: '/veterinerler',
+    title: '7/24 Acil Veteriner Klinikleri | Patiyle Seyahat',
+    description: 'Yakınınızdaki 7/24 açık acil veteriner kliniklerini, adres ve hizmet olanaklarıyla inceleyin.'
+  },
+  experiences: {
+    path: '/evcil-hayvanla-gezilecek-yerler',
+    title: 'Evcil Hayvanla Gezilecek Yerler | Patiyle Seyahat',
+    description: 'Köpekle gezilecek park, plaj, yürüyüş rotası ve evcil hayvan kabul eden mekanları keşfedin.'
+  },
+  guides: {
+    path: '/evcil-hayvan-seyahat-rehberi',
+    title: 'Evcil Hayvan Seyahat Rehberi | Patiyle Seyahat',
+    description: 'Kedi ve köpekle yolculuk, sağlık belgeleri, otel seçimi ve destinasyon hazırlığı için güncel seyahat rehberleri.'
+  }
+};
+
 function App() {
   // 1. Initialize DB states from PostgreSQL Backend API
   const [hotels, setHotels] = useState(initialHotels);
@@ -342,17 +375,22 @@ function App() {
     const cityLanding = currentView === 'accommodations' && searchFilters.cityLanding
       ? searchFilters.destination
       : null;
-    const canonicalPath = hotel ? getHotelPath(hotel) : window.location.pathname;
+    const categoryMeta = CATEGORY_SEO[currentView];
+    const canonicalPath = hotel ? getHotelPath(hotel) : cityLanding ? window.location.pathname : categoryMeta?.path || window.location.pathname;
     const canonicalUrl = `https://www.patiyleseyahat.com${canonicalPath}`;
     const title = hotel
       ? `${hotel.name} | ${hotel.district}, ${hotel.city} Evcil Hayvan Dostu Otel | Patiyle Seyahat`
       : cityLanding
       ? `${cityLanding} Evcil Hayvan Dostu Oteller | Patiyle Seyahat`
+      : categoryMeta?.title
+      ? categoryMeta.title
       : "Patiyle Seyahat | Türkiye'nin Evcil Hayvan Dostu Seyahat Rehberi";
     const description = hotel
       ? `${hotel.name}, ${hotel.district}/${hotel.city} evcil hayvan kabul koşulları, tesis özellikleri ve fotoğrafları.`
       : cityLanding
       ? `${cityLanding} ilinde evcil hayvan kabul eden otelleri, pet politikalarını ve tesis özelliklerini karşılaştırın.`
+      : categoryMeta?.description
+      ? categoryMeta.description
       : 'Türkiye genelindeki evcil hayvan dostu otelleri ve seyahat noktalarını keşfedin.';
 
     document.title = title;
@@ -394,6 +432,19 @@ function App() {
         setCurrentView('admin');
       } else if (path === '/sihirbaz') {
         setCurrentView('wizard');
+      } else if (path === '/evcil-hayvan-dostu-oteller' || path === '/accommodations') {
+        setSearchFilters(current => ({ ...current, destination: '', cityLanding: false, citySlug: null }));
+        setCurrentView('accommodations');
+        if (path !== CATEGORY_SEO.accommodations.path) window.history.replaceState(null, '', CATEGORY_SEO.accommodations.path);
+      } else if (path === '/kedi-kopek-otelleri' || path === '/boardings') {
+        setCurrentView('boardings');
+        if (path !== CATEGORY_SEO.boardings.path) window.history.replaceState(null, '', CATEGORY_SEO.boardings.path);
+      } else if (path === '/evcil-hayvan-seyahat-rehberi' || path === '/guides') {
+        setCurrentView('guides');
+        if (path !== CATEGORY_SEO.guides.path) window.history.replaceState(null, '', CATEGORY_SEO.guides.path);
+      } else if (path === '/evcil-hayvanla-gezilecek-yerler' || path === '/gezilecek-yerler') {
+        setCurrentView('experiences');
+        if (path !== CATEGORY_SEO.experiences.path) window.history.replaceState(null, '', CATEGORY_SEO.experiences.path);
       } else if (path.startsWith('/evcil-hayvan-dostu-oteller/')) {
         const citySlug = path.split('/').filter(Boolean)[1];
         const cityName = hotels.find(hotel => slugify(hotel.city) === citySlug)?.city
@@ -446,8 +497,6 @@ function App() {
         setCurrentView('taxis');
       } else if (path === '/veterinerler') {
         setCurrentView('vets');
-      } else if (path === '/gezilecek-yerler') {
-        setCurrentView('experiences');
       } else {
         const view = path.replace('/', '');
         setCurrentView(view || 'home');
@@ -480,17 +529,14 @@ function App() {
                       : `/${view}`;
       window.history.pushState(null, '', cleanPath);
     } else {
-      let cleanPath = view === 'home' ? '/' : `/${view}`;
+      let cleanPath = view === 'home' ? '/' : CATEGORY_SEO[view]?.path || `/${view}`;
+      if (view === 'accommodations' && searchFilters.cityLanding) {
+        setSearchFilters(current => ({ ...current, destination: '', cityLanding: false, citySlug: null }));
+      }
       if (view === 'admin') {
         cleanPath = '/yonetici';
       } else if (view === 'wizard') {
         cleanPath = '/sihirbaz';
-      } else if (view === 'taxis') {
-        cleanPath = '/pet-taksi';
-      } else if (view === 'vets') {
-        cleanPath = '/veterinerler';
-      } else if (view === 'experiences') {
-        cleanPath = '/gezilecek-yerler';
       }
       window.history.pushState(null, '', cleanPath);
     }

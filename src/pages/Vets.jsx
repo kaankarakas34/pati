@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { VerifiedBadge, LocationIcon } from '../components/PetIcons';
+import SeoContentSection from '../components/SeoContentSection';
+import { seoContent } from '../data/seoContent';
 
 export default function Vets({ vets, onViewChange }) {
   const [selectedCity, setSelectedCity] = useState('');
@@ -146,6 +148,7 @@ export default function Vets({ vets, onViewChange }) {
           )}
         </section>
       </div>
+      <SeoContentSection content={seoContent.vets} />
     </div>
   );
 }

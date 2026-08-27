@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon } from '../components/PetIcons';
 import { slugify } from '../../lib/seo-slugs';
+import SeoContentSection from '../components/SeoContentSection';
+import { seoContent } from '../data/seoContent';
 
 export default function Home({ hotels, boardings, guides, experiences = [], ads = [], onViewChange, setSearchFilters }) {
   const [destination, setDestination] = useState('');
@@ -532,6 +534,10 @@ export default function Home({ hotels, boardings, guides, experiences = [], ads 
             Tesis Önerisinde Bulun
           </button>
         </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SeoContentSection content={seoContent.home} />
       </div>
     </div>
   );

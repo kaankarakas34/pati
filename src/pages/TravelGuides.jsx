@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import SeoContentSection from '../components/SeoContentSection';
+import { seoContent } from '../data/seoContent';
 
 export default function TravelGuides({ guides, onViewChange }) {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -27,7 +29,7 @@ export default function TravelGuides({ guides, onViewChange }) {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-left">
       {/* Header */}
       <div className="border-b border-brand-beige pb-6 mb-8">
-        <h1 className="text-3xl font-bold font-title text-brand-navy">Seyahat Rehberi</h1>
+        <h1 className="text-3xl font-bold font-title text-brand-navy">Evcil Hayvan Seyahat Rehberi</h1>
         <p className="text-gray-600 text-sm mt-1.5">
           Evcil hayvanlarınızla sorunsuz seyahat etmeniz için hazırlanan uzman onaylı seyahat rehberleri, kontrol listeleri ve kurallar.
         </p>
@@ -114,6 +116,7 @@ export default function TravelGuides({ guides, onViewChange }) {
           ))}
         </div>
       )}
+      <SeoContentSection content={seoContent.guides} />
     </div>
   );
 }

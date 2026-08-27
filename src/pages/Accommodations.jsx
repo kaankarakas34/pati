@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon, AlertIcon } from '../components/PetIcons';
 import AdBanner from '../components/AdBanner';
 import { slugify } from '../../lib/seo-slugs';
+import SeoContentSection from '../components/SeoContentSection';
+import { seoContent } from '../data/seoContent';
 
 export default function Accommodations({ hotels, onViewChange, searchFilters, setSearchFilters }) {
   // Filters state
@@ -118,6 +120,34 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
     return true;
   });
 
+  const verifiedCityHotels = filteredHotels.filter(hotel => hotel.verified);
+  const confirmedDogHotels = filteredHotels.filter(hotel => hotel.allowedPets?.includes('dog'));
+  const confirmedNoFeeHotels = verifiedCityHotels.filter(hotel => hotel.extraFee === 'no');
+  const confirmedNoLimitHotels = verifiedCityHotels.filter(hotel => hotel.weightLimit === 0);
+
+  const pageSeoContent = searchFilters.cityLanding
+    ? {
+        id: `${searchFilters.citySlug}-hotel-seo`,
+        title: `${searchFilters.destination}'da Evcil Hayvanla Konaklama`,
+        paragraphs: [
+          `${searchFilters.destination} ilinde keşfedilen ${filteredHotels.length} evcil hayvan dostu tesis adayının konum ve tesis bilgilerini karşılaştırabilirsiniz. ${verifiedCityHotels.length} tesisin pet politikası işletme veya editör doğrulamasına sahiptir; diğer tesislerin ayrıntıları teyit sürecindedir.`,
+          `Tesis seçerken yalnızca konuma değil; kilo sınırı, ek ücret, oda kuralları ve ortak alan kullanımına da bakın. ${searchFilters.destination} seyahatinizden önce güncel pet politikasını işletmeden yazılı olarak teyit edin.`
+        ],
+        highlights: [
+          verifiedCityHotels.length > 0 ? `${verifiedCityHotels.length} tesisin pet politikası doğrulandı` : 'Tesislerin ayrıntılı pet politikaları teyit sürecinde',
+          confirmedNoFeeHotels.length > 0 ? `${confirmedNoFeeHotels.length} doğrulanmış tesis ek pet ücreti almıyor` : 'Ek pet ücreti bilgileri işletmelerden teyit ediliyor',
+          `${new Set(filteredHotels.map(hotel => hotel.district).filter(Boolean)).size} ilçede konaklama seçeneği`,
+          confirmedNoLimitHotels.length > 0 ? `${confirmedNoLimitHotels.length} doğrulanmış tesiste kilo sınırı bulunmuyor` : 'Kilo ve ırk koşulları tesis bazında teyit ediliyor'
+        ],
+        faqs: [
+          { question: `${searchFilters.destination}'da köpek kabul eden otel var mı?`, answer: confirmedDogHotels.length > 0 ? `Köpek kabulü doğrulanan ${confirmedDogHotels.length} tesis bulunuyor. Kilo ve ırk sınırını tesis detayından kontrol edin.` : 'Listelenen aday tesislerin köpek kabul koşulları teyit sürecindedir. Rezervasyondan önce işletmeden yazılı onay alın.' },
+          { question: `${searchFilters.destination}'daki oteller evcil hayvan için ücret alıyor mu?`, answer: confirmedNoFeeHotels.length > 0 ? `${confirmedNoFeeHotels.length} doğrulanmış tesis ek pet ücreti almıyor. Diğer tesislerde ücret ve depozito koşullarını rezervasyon öncesinde doğrulayın.` : 'Pet ücreti tesislere göre değişir ve aday tesislerin ücret bilgileri teyit sürecindedir. Güncel tutarı işletmeden öğrenin.' },
+          { question: `${searchFilters.destination}'da büyük ırk köpek kabul eden tesis bulunur mu?`, answer: confirmedNoLimitHotels.length > 0 ? `${confirmedNoLimitHotels.length} doğrulanmış tesiste kilo sınırı bulunmuyor. Irk kısıtlamalarını ayrıca kontrol edin.` : 'Kilo ve ırk koşulları tesis bazında değişir. Büyük ırk köpeğiniz için rezervasyondan önce doğrudan onay alın.' }
+        ],
+        links: seoContent.accommodations.links
+      }
+    : seoContent.accommodations;
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Page Header */}
@@ -125,7 +155,7 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
         <h1 className="text-3xl font-bold font-title text-brand-navy">
           {searchFilters.cityLanding
             ? `${searchFilters.destination} Evcil Hayvan Dostu Oteller`
-            : 'Patiyle Konakla'}
+            : 'Evcil Hayvan Dostu Oteller'}
         </h1>
         <p className="text-gray-600 text-sm mt-1.5">
           {searchFilters.cityLanding
@@ -546,6 +576,7 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
           )}
         </section>
       </div>
+      <SeoContentSection content={pageSeoContent} />
     </div>
   );
 }

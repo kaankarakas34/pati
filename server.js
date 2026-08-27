@@ -22,6 +22,7 @@ import {
 } from './db.js';
 import axios from 'axios';
 import { initialHotels } from './src/data/mockData.js';
+import { seoContent } from './src/data/seoContent.js';
 import { findHotelBySlugs, getHotelPath, slugify } from './lib/seo-slugs.js';
 
 dotenv.config();
@@ -560,6 +561,76 @@ function renderHotelSeoPage(res, hotel, complaintsList) {
   }
 }
 
+const categorySeoPages = {
+  '/evcil-hayvan-dostu-oteller': { title: 'Evcil Hayvan Dostu Oteller | Patiyle Seyahat', description: 'Köpek, kedi ve diğer evcil hayvanları kabul eden otelleri; kilo sınırı, ek ücret ve tesis kurallarıyla karşılaştırın.', content: seoContent.accommodations },
+  '/kedi-kopek-otelleri': { title: 'Kedi ve Köpek Otelleri | Güvenli Pet Bakımı', description: 'Kedi oteli, köpek oteli, gündüz bakım ve ev tipi pet bakım merkezlerini özellikleri ve kabul şartlarıyla inceleyin.', content: seoContent.boardings },
+  '/pet-taksi': { title: 'Pet Taksi ve Evcil Hayvan Transferi | Patiyle Seyahat', description: 'Veteriner, havaalanı, otel ve bakım merkezi ulaşımı için pet taksi ve güvenli evcil hayvan transfer seçeneklerini karşılaştırın.', content: seoContent.taxis },
+  '/veterinerler': { title: '7/24 Acil Veteriner Klinikleri | Patiyle Seyahat', description: 'Yakınınızdaki 7/24 açık acil veteriner kliniklerini, adres ve hizmet olanaklarıyla inceleyin.', content: seoContent.vets },
+  '/evcil-hayvanla-gezilecek-yerler': { title: 'Evcil Hayvanla Gezilecek Yerler | Patiyle Seyahat', description: 'Köpekle gezilecek park, plaj, yürüyüş rotası ve evcil hayvan kabul eden mekanları keşfedin.', content: seoContent.experiences },
+  '/evcil-hayvan-seyahat-rehberi': { title: 'Evcil Hayvan Seyahat Rehberi | Patiyle Seyahat', description: 'Kedi ve köpekle yolculuk, sağlık belgeleri, otel seçimi ve destinasyon hazırlığı için güncel seyahat rehberleri.', content: seoContent.guides }
+};
+
+app.get(Object.keys(categorySeoPages), (req, res) => {
+  const page = categorySeoPages[req.path];
+  const canonicalUrl = `https://www.patiyleseyahat.com${req.path}`;
+  const description = page.description;
+  const escapedTitle = escapeHtml(page.title);
+  const escapedDescription = escapeHtml(description);
+  let html = getIndexHtmlTemplate();
+
+  html = html.replace(/<title>.*?<\/title>/, `<title>${escapedTitle}</title>`);
+  html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${escapedDescription}" />`);
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'CollectionPage',
+        '@id': canonicalUrl,
+        name: page.content.title,
+        description,
+        url: canonicalUrl,
+        isPartOf: { '@type': 'WebSite', name: 'Patiyle Seyahat', url: 'https://www.patiyleseyahat.com/' }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: 'https://www.patiyleseyahat.com/' },
+          { '@type': 'ListItem', position: 2, name: page.content.title, item: canonicalUrl }
+        ]
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: page.content.faqs.map(faq => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: { '@type': 'Answer', text: faq.answer }
+        }))
+      }
+    ]
+  };
+
+  html = html.replace('</head>', `
+    <link rel="canonical" href="${canonicalUrl}" />
+    <meta property="og:title" content="${escapedTitle}" />
+    <meta property="og:description" content="${escapedDescription}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="${canonicalUrl}" />
+    <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+  </head>`);
+  res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+  return res.send(html);
+});
+
+const legacyCategoryRedirects = {
+  '/accommodations': '/evcil-hayvan-dostu-oteller',
+  '/boardings': '/kedi-kopek-otelleri',
+  '/guides': '/evcil-hayvan-seyahat-rehberi',
+  '/gezilecek-yerler': '/evcil-hayvanla-gezilecek-yerler'
+};
+
+app.get(Object.keys(legacyCategoryRedirects), (req, res) => res.redirect(301, legacyCategoryRedirects[req.path]));
+
 // Indexable province landing pages with unique metadata and structured data.
 app.get('/evcil-hayvan-dostu-oteller/:citySlug', async (req, res) => {
   const { hotels } = await getHotelSeoData();
@@ -570,6 +641,7 @@ app.get('/evcil-hayvan-dostu-oteller/:citySlug', async (req, res) => {
   }
 
   const cityName = cityHotels[0].city;
+  const verifiedHotelCount = cityHotels.filter(hotel => hotel.verified).length;
   const canonicalUrl = `https://www.patiyleseyahat.com/evcil-hayvan-dostu-oteller/${req.params.citySlug}`;
   const title = escapeHtml(`${cityName} Evcil Hayvan Dostu Oteller | Patiyle Seyahat`);
   const description = escapeHtml(`${cityName} ilinde evcil hayvan kabul eden ${cityHotels.length} oteli; pet politikaları, tesis özellikleri ve konumlarıyla karşılaştırın.`);
@@ -628,6 +700,35 @@ app.get('/evcil-hayvan-dostu-oteller/:citySlug', async (req, res) => {
           name: hotel.name,
           url: `https://www.patiyleseyahat.com${getHotelPath(hotel)}`
         }))
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: `${cityName}'da evcil hayvan dostu otel var mı?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: `${cityName} ilinde ${cityHotels.length} tesis adayı listeleniyor. ${verifiedHotelCount} tesisin ayrıntılı pet politikası doğrulanmıştır; diğer tesisler için rezervasyon öncesinde işletmeden yazılı onay alınmalıdır.`
+            }
+          },
+          {
+            '@type': 'Question',
+            name: `${cityName}'daki oteller evcil hayvan için ücret alıyor mu?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Pet ücreti ve depozito koşulları tesise göre değişir. Güncel tutar rezervasyon öncesinde doğrudan işletmeden doğrulanmalıdır.'
+            }
+          },
+          {
+            '@type': 'Question',
+            name: `${cityName}'da büyük ırk köpek kabul eden otel bulunur mu?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Kilo ve ırk kısıtlamaları tesis bazında değişir. Büyük ırk köpek için rezervasyondan önce tesisten açık onay alınmalıdır.'
+            }
+          }
+        ]
       }
     ]
   };
@@ -642,6 +743,11 @@ app.get('/sitemap.xml', async (req, res) => {
   const citySlugs = [...new Set(hotels.map(hotel => slugify(hotel.city)).filter(Boolean))];
   const urls = [
     { loc: 'https://www.patiyleseyahat.com/', priority: '1.0', frequency: 'daily' },
+    ...Object.keys(categorySeoPages).map(categoryPath => ({
+      loc: `https://www.patiyleseyahat.com${categoryPath}`,
+      priority: '0.9',
+      frequency: 'weekly'
+    })),
     ...citySlugs.map(citySlug => ({
       loc: `https://www.patiyleseyahat.com/evcil-hayvan-dostu-oteller/${citySlug}`,
       priority: '0.8',
@@ -934,18 +1040,30 @@ app.get('*', (req, res) => {
 
       const jsonLd = {
         "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "Patiyle Seyahat",
-        "url": "https://www.patiyleseyahat.com/",
-        "description": "Evcil hayvan sahipleri için otel arama ve bakım otelleri rehberi.",
-        "publisher": {
-          "@type": "Organization",
-          "name": "Patiyle Seyahat",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://images.unsplash.com/photo-1544568100-847a948585b9?auto=format&fit=crop&w=80&q=80"
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "name": "Patiyle Seyahat",
+            "url": "https://www.patiyleseyahat.com/",
+            "description": "Evcil hayvan sahipleri için otel arama ve bakım otelleri rehberi.",
+            "publisher": {
+              "@type": "Organization",
+              "name": "Patiyle Seyahat",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://images.unsplash.com/photo-1544568100-847a948585b9?auto=format&fit=crop&w=80&q=80"
+              }
+            }
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": seoContent.home.faqs.map(faq => ({
+              "@type": "Question",
+              "name": faq.question,
+              "acceptedAnswer": { "@type": "Answer", "text": faq.answer }
+            }))
           }
-        }
+        ]
       };
 
       const schemaScript = `<script type="application/ld+json">\n${JSON.stringify(jsonLd, null, 2)}\n</script>`;

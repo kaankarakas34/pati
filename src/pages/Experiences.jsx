@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { DogIcon, CatIcon, BirdIcon, OtherIcon, LocationIcon, VerifiedBadge } from '../components/PetIcons';
+import SeoContentSection from '../components/SeoContentSection';
+import { seoContent } from '../data/seoContent';
 
 export default function Experiences({ experiences = [] }) {
   const [selectedCity, setSelectedCity] = useState('');
@@ -42,7 +44,7 @@ export default function Experiences({ experiences = [] }) {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div className="border-b border-brand-beige pb-6 mb-8 text-left">
-        <h1 className="text-3xl font-bold font-title text-brand-navy">Gidilecek Yerler ve Pet Dostu Deneyimler</h1>
+        <h1 className="text-3xl font-bold font-title text-brand-navy">Evcil Hayvanla Gezilecek Yerler</h1>
         <p className="text-gray-600 text-sm mt-1.5 max-w-3xl">
           Tatilde sadece nerede kalacağınızı değil, dostunuzla nerede yürüyebileceğinizi, kahve içebileceğinizi, denize girebileceğinizi ve acil durumda nereye yakın olduğunuzu keşfedin.
         </p>
@@ -166,6 +168,7 @@ export default function Experiences({ experiences = [] }) {
           )}
         </section>
       </div>
+      <SeoContentSection content={seoContent.experiences} />
     </div>
   );
 }

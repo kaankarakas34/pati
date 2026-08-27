@@ -17,6 +17,46 @@
       "destination": "/api/index"
     },
     {
+      "source": "/evcil-hayvan-dostu-oteller",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/kedi-kopek-otelleri",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/pet-taksi",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/veterinerler",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/evcil-hayvanla-gezilecek-yerler",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/evcil-hayvan-seyahat-rehberi",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/accommodations",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/boardings",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/guides",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/gezilecek-yerler",
+      "destination": "/api/index"
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/api/index"
     },
