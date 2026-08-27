@@ -21,7 +21,17 @@ import {
   getAds, saveAd, deleteAd
 } from './db.js';
 import axios from 'axios';
-import { initialHotels } from './src/data/mockData.js';
+import { 
+  initialHotels, 
+  initialBoardings, 
+  initialGuides, 
+  initialCorrections, 
+  initialComplaints,
+  initialVets,
+  initialTaxis,
+  initialExperiences,
+  initialAds
+} from './src/data/mockData.js';
 import { seoContent } from './src/data/seoContent.js';
 import { findHotelBySlugs, getHotelPath, slugify } from './lib/seo-slugs.js';
 
@@ -342,7 +352,8 @@ app.get('/api/ads', async (req, res) => {
     const data = await getAds();
     res.json(data);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.warn("Falling back to initialAds due to DB error:", err.message);
+    res.json(initialAds || []);
   }
 });
 

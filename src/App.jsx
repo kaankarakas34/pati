@@ -20,7 +20,11 @@ import {
   initialBoardings,
   initialGuides,
   initialCorrections,
-  initialComplaints
+  initialComplaints,
+  initialVets,
+  initialTaxis,
+  initialExperiences,
+  initialAds
 } from './data/mockData';
 import { findHotelBySlugs, getHotelPath, slugify } from '../lib/seo-slugs';
 
@@ -74,23 +78,23 @@ const CATEGORY_SEO = {
 };
 
 function App() {
-  // 1. Initialize DB states from PostgreSQL Backend API
+  // 1. Initialize DB states with instant local fallbacks
   const [hotels, setHotels] = useState(initialHotels);
   const [boardings, setBoardings] = useState(initialBoardings);
   const [guides, setGuides] = useState(initialGuides);
   const [corrections, setCorrections] = useState(initialCorrections);
   const [complaints, setComplaints] = useState(initialComplaints);
-  const [taxis, setTaxis] = useState([]);
-  const [vets, setVets] = useState([]);
-  const [experiences, setExperiences] = useState([]);
-  const [ads, setAds] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [taxis, setTaxis] = useState(initialTaxis);
+  const [vets, setVets] = useState(initialVets);
+  const [experiences, setExperiences] = useState(initialExperiences);
+  const [ads, setAds] = useState(initialAds);
+  const [loading, setLoading] = useState(false);
 
   // 2. Routing state
   const [currentView, setCurrentView] = useState('home');
   const [selectedItemId, setSelectedItemId] = useState(null);
 
-  // Load database on mount
+  // Load database on mount (background sync)
   useEffect(() => {
     async function loadData() {
       try {
@@ -100,25 +104,23 @@ function App() {
           fetchTable('/api/guides', initialGuides),
           fetchTable('/api/corrections', initialCorrections),
           fetchTable('/api/complaints', initialComplaints),
-          fetchTable('/api/taxis', []),
-          fetchTable('/api/vets', []),
-          fetchTable('/api/experiences', []),
-          fetchTable('/api/ads', [])
+          fetchTable('/api/taxis', initialTaxis),
+          fetchTable('/api/vets', initialVets),
+          fetchTable('/api/experiences', initialExperiences),
+          fetchTable('/api/ads', initialAds)
         ]);
 
-        if (hotelsRes.status === 'fulfilled' && Array.isArray(hotelsRes.value)) setHotels(hotelsRes.value);
-        if (boardingsRes.status === 'fulfilled' && Array.isArray(boardingsRes.value)) setBoardings(boardingsRes.value);
-        if (guidesRes.status === 'fulfilled' && Array.isArray(guidesRes.value)) setGuides(guidesRes.value);
+        if (hotelsRes.status === 'fulfilled' && Array.isArray(hotelsRes.value) && hotelsRes.value.length > 0) setHotels(hotelsRes.value);
+        if (boardingsRes.status === 'fulfilled' && Array.isArray(boardingsRes.value) && boardingsRes.value.length > 0) setBoardings(boardingsRes.value);
+        if (guidesRes.status === 'fulfilled' && Array.isArray(guidesRes.value) && guidesRes.value.length > 0) setGuides(guidesRes.value);
         if (correctionsRes.status === 'fulfilled' && Array.isArray(correctionsRes.value)) setCorrections(correctionsRes.value);
         if (complaintsRes.status === 'fulfilled' && Array.isArray(complaintsRes.value)) setComplaints(complaintsRes.value);
-        if (taxisRes.status === 'fulfilled' && Array.isArray(taxisRes.value)) setTaxis(taxisRes.value);
-        if (vetsRes.status === 'fulfilled' && Array.isArray(vetsRes.value)) setVets(vetsRes.value);
-        if (experiencesRes.status === 'fulfilled' && Array.isArray(experiencesRes.value)) setExperiences(experiencesRes.value);
-        if (adsRes.status === 'fulfilled' && Array.isArray(adsRes.value)) setAds(adsRes.value);
+        if (taxisRes.status === 'fulfilled' && Array.isArray(taxisRes.value) && taxisRes.value.length > 0) setTaxis(taxisRes.value);
+        if (vetsRes.status === 'fulfilled' && Array.isArray(vetsRes.value) && vetsRes.value.length > 0) setVets(vetsRes.value);
+        if (experiencesRes.status === 'fulfilled' && Array.isArray(experiencesRes.value) && experiencesRes.value.length > 0) setExperiences(experiencesRes.value);
+        if (adsRes.status === 'fulfilled' && Array.isArray(adsRes.value) && adsRes.value.length > 0) setAds(adsRes.value);
       } catch (err) {
-        console.error("Failed to load database tables:", err);
-      } finally {
-        setLoading(false);
+        console.warn("Background data sync notice:", err);
       }
     }
 

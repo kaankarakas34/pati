@@ -684,6 +684,173 @@ export const initialComplaints = [
   }
 ];
 
+export const initialExperiences = [
+  {
+    id: "exp-1",
+    name: "Bitez Sahil Sabah Yürüyüş Rotası",
+    category: "Plaj & Sahil",
+    city: "Muğla",
+    district: "Bodrum",
+    imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+    petPolicy: "Sabah erken ve akşam saatlerinde tasmalı köpeklerle yürüyüş için uygundur.",
+    allowedPets: ["dog"],
+    features: ["Sahil yürüyüşü", "Gölgelik alan", "Su noktası", "Yakın veteriner"],
+    description: "Bitez sahil şeridi, özellikle sabah erken saatlerde köpekle yürüyüş ve kısa deniz molaları için Bodrum'un en rahat noktalarından biridir.",
+    address: "Bitez Sahili, Bodrum",
+    phone: "",
+    website: "",
+    mapUrl: "https://maps.google.com/?q=Bitez+Sahili+Bodrum",
+    bestTime: "07:00-09:00 ve 19:00 sonrası",
+    rules: "Yoğun saatlerde tasma kullanılmalı, plaj işletmelerinin özel alan kuralları ayrıca sorulmalıdır.",
+    verified: true,
+    baseTrustScore: 9.2,
+    lastVerified: "2026-08-24"
+  },
+  {
+    id: "exp-2",
+    name: "Moda Sahil Pet Dostu Kafe Hattı",
+    category: "Kafe & Restoran",
+    city: "İstanbul",
+    district: "Kadıköy",
+    imageUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80",
+    petPolicy: "Açık alanlarda kedi ve köpek kabul eden çok sayıda kafe bulunur.",
+    allowedPets: ["dog", "cat"],
+    features: ["Açık alan", "Mama kabı", "Yürüyüş rotası", "Toplu taşıma yakın"],
+    description: "Moda sahil hattı, kısa şehir kaçamaklarında evcil hayvanla kahve molası ve yürüyüşü birleştirmek isteyenler için güçlü bir rotadır.",
+    address: "Moda Sahili, Kadıköy",
+    phone: "",
+    website: "",
+    mapUrl: "https://maps.google.com/?q=Moda+Sahili+Kadikoy",
+    bestTime: "Hafta içi gündüz ve gün batımı",
+    rules: "Kapalı alan kabulü işletmeden işletmeye değişir; yoğun saatlerde rezervasyon önerilir.",
+    verified: true,
+    baseTrustScore: 9.4,
+    lastVerified: "2026-08-22"
+  },
+  {
+    id: "exp-3",
+    name: "Göreme Gün Doğumu Seyir Noktası",
+    category: "Rota & Aktivite",
+    city: "Nevşehir",
+    district: "Göreme",
+    imageUrl: "https://images.unsplash.com/photo-1641128324972-af3212f0f6bd?auto=format&fit=crop&w=800&q=80",
+    petPolicy: "Tasmalı köpeklerle kısa yürüyüş ve fotoğraf molası için uygundur.",
+    allowedPets: ["dog"],
+    features: ["Manzara", "Kısa yürüyüş", "Fotoğraf noktası", "Araçla erişim"],
+    description: "Kapadokya'da balonları izlemek isteyen köpek sahipleri için düşük tempolu, kısa süreli ve unutulmaz bir sabah aktivitesi.",
+    address: "Göreme Seyir Tepesi",
+    phone: "",
+    website: "",
+    mapUrl: "https://maps.google.com/?q=Goreme+Sunset+Point",
+    bestTime: "Gün doğumu",
+    rules: "Soğuk havalarda köpek montu, yaz aylarında su kabı önerilir. Kalabalıkta kısa tasma kullanılmalıdır.",
+    verified: true,
+    baseTrustScore: 9.1,
+    lastVerified: "2026-08-18"
+  }
+];
+
+export const initialAds = [
+  {
+    id: "ad-1",
+    title: "Bodrum'da pet dostu transfer kampanyası",
+    sponsor: "Bodrum Pet Transfer",
+    placement: "home-hero",
+    targetUrl: "https://www.enuygun.com",
+    imageUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80",
+    city: "Muğla",
+    category: "Pet Taksi",
+    startsAt: "2026-08-01",
+    endsAt: "2026-09-30",
+    status: "active",
+    impressions: 1240,
+    clicks: 86
+  },
+  {
+    id: "ad-2",
+    title: "Kedi oteli erken rezervasyon avantajı",
+    sponsor: "Pati Sarayı Kedi Oteli",
+    placement: "listing-sidebar",
+    targetUrl: "https://www.enuygun.com",
+    imageUrl: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=800&q=80",
+    city: "İstanbul",
+    category: "Bakım",
+    startsAt: "2026-08-15",
+    endsAt: "2026-10-15",
+    status: "active",
+    impressions: 890,
+    clicks: 42
+  }
+];
+
+export const initialVets = [
+  {
+    id: "vet-1",
+    name: "Bodrum Acil Veteriner Kliniği",
+    city: "Muğla",
+    district: "Bodrum",
+    imageUrl: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=400&q=80",
+    address: "Konacık Mh. Atatürk Cd. No: 12 Bodrum",
+    features: ["7/24 Acil Servis", "Yoğun Bakım Ünitesi", "Cerrahi Müdahale", "Laboratuvar Hizmeti"],
+    description: "Bodrum genelinde 24 saat kesintisiz hizmet veren, tam teşekküllü ameliyathane, dijital röntgen ve acil tıp uzmanı veteriner kadrosuna sahip kliniktir. Acil vakalar için ambulans hizmetimiz de mevcuttur.",
+    phone: "+90 252 319 0000",
+    email: "acilvet@bodrumveteriner.com",
+    website: "https://www.enuygun.com",
+    baseTrustScore: 9.8,
+    lastVerified: "2026-08-22"
+  },
+  {
+    id: "vet-2",
+    name: "Karaköy Pati 24 Veteriner Tıp Merkezi",
+    city: "İstanbul",
+    district: "Beyoğlu",
+    imageUrl: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=400&q=80",
+    address: "Kemeraltı Cd. No: 44 Karaköy/İstanbul",
+    features: ["7/24 Nöbetçi Hekim", "Yoğun Bakım", "Röntgen & Ultrason", "Pet Oteli & Kan Bankası"],
+    description: "İstanbul Avrupa yakasında kedi ve köpek acil durumları için kesintisiz cerrahi, dahiliye, yoğun bakım ve ambulans desteği sunan tam donanımlı hayvan tıp merkezi.",
+    phone: "+90 212 244 0000",
+    email: "karakoy24@patitip.com",
+    website: "https://www.enuygun.com",
+    baseTrustScore: 9.7,
+    lastVerified: "2026-08-25"
+  }
+];
+
+export const initialTaxis = [
+  {
+    id: "taxi-1",
+    name: "Pati Dostu VIP Taksi",
+    city: "İstanbul",
+    district: "Kadıköy",
+    imageUrl: "https://images.unsplash.com/photo-1544568100-847a948585b9?auto=format&fit=crop&w=400&q=80",
+    allowedPets: ["dog", "cat"],
+    features: ["Şehirlerarası Taşıma", "Klima Kontrolü", "Evcil Hayvan Yatağı", "7/24 Aktif"],
+    price: "KM başına 20 TL",
+    description: "İstanbul genelinde ve şehirlerarası yolculuklarda patili dostlarınız için özel tasarlanmış lüks ve güvenli pet taksi hizmeti. Taşımalarımızda özel dezenfekte edilmiş pet koltukları ve emniyet kemerleri kullanılmaktadır.",
+    phone: "+90 532 123 4567",
+    email: "vippati@pettaksi.com",
+    website: "https://www.enuygun.com",
+    baseTrustScore: 9.6,
+    lastVerified: "2026-08-24"
+  },
+  {
+    id: "taxi-2",
+    name: "Bodrum Pet Transfer",
+    city: "Muğla",
+    district: "Bodrum",
+    imageUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80",
+    allowedPets: ["dog", "cat", "bird"],
+    features: ["Şehir içi Sabit Fiyat", "Kafes Sağlama", "Veteriner Refakati"],
+    price: "Şehir içi sabit 400 TL",
+    description: "Bodrum yarımadasında kedi, köpek ve kuşlarınızın veteriner, otel, plaj ve havalimanı transferlerini güvenle sağlıyoruz. Klimalı araçlarımız her sürüş sonrası sterilize edilmektedir.",
+    phone: "+90 542 765 4321",
+    email: "bodrum@pettaksi.com",
+    website: "https://www.enuygun.com",
+    baseTrustScore: 9.3,
+    lastVerified: "2026-08-20"
+  }
+];
+
 export const methodologyContent = {
   title: "Değerlendirme Metodolojimiz ve Sınıflandırma Kriterleri",
   description: "patiyleseyahat.com olarak listelediğimiz her tesisin evcil hayvan dostu olma düzeyini objektif ve doğrulanabilir kriterlerle belirliyoruz. Amacımız sadece tesislerin beyanlarına dayanmak değil, hayvan sahiplerine net beklentiler sunmaktır.",

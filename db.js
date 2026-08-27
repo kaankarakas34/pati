@@ -1,5 +1,15 @@
 import pg from 'pg';
-import { initialHotels, initialBoardings, initialGuides, initialCorrections, initialComplaints } from './src/data/mockData.js';
+import { 
+  initialHotels, 
+  initialBoardings, 
+  initialGuides, 
+  initialCorrections, 
+  initialComplaints,
+  initialVets,
+  initialTaxis,
+  initialExperiences,
+  initialAds
+} from './src/data/mockData.js';
 
 const { Pool } = pg;
 
@@ -679,35 +689,40 @@ export async function deleteHotel(id) {
 }
 
 export async function getBoardings() {
-  const result = await pool.query("SELECT * FROM boardings ORDER BY id DESC");
-  return result.rows.map(b => ({
-    id: b.id,
-    name: b.name,
-    category: b.category,
-    city: b.city,
-    district: b.district,
-    imageUrl: b.image_url,
-    galleryImages: b.gallery_images || [],
-    allowedPets: b.allowed_pets,
-    features: b.features,
-    quizTags: b.quiz_tags,
-    price: b.price,
-    description: b.description,
-    boardingModel: b.boarding_model,
-    dailyProgram: b.daily_program,
-    accreditedVet: b.accredited_vet,
-    phone: b.phone,
-    email: b.email,
-    website: b.website,
-    bookingLinks: b.booking_links || { enuygun: '', otelz: '', booking: '' },
-    cameraSupport: b.camera_support,
-    requiredDocs: b.required_docs,
-    neuteringRequired: b.neutering_required,
-    aggressionPolicy: b.aggression_policy,
-    infoSource: b.info_source,
-    baseTrustScore: parseFloat(b.base_trust_score),
-    lastVerified: b.last_verified
-  }));
+  try {
+    const result = await pool.query("SELECT * FROM boardings ORDER BY id DESC");
+    return result.rows.map(b => ({
+      id: b.id,
+      name: b.name,
+      category: b.category,
+      city: b.city,
+      district: b.district,
+      imageUrl: b.image_url,
+      galleryImages: b.gallery_images || [],
+      allowedPets: b.allowed_pets,
+      features: b.features,
+      quizTags: b.quiz_tags,
+      price: b.price,
+      description: b.description,
+      boardingModel: b.boarding_model,
+      dailyProgram: b.daily_program,
+      accreditedVet: b.accredited_vet,
+      phone: b.phone,
+      email: b.email,
+      website: b.website,
+      bookingLinks: b.booking_links || { enuygun: '', otelz: '', booking: '' },
+      cameraSupport: b.camera_support,
+      requiredDocs: b.required_docs,
+      neuteringRequired: b.neutering_required,
+      aggressionPolicy: b.aggression_policy,
+      infoSource: b.info_source,
+      baseTrustScore: parseFloat(b.base_trust_score),
+      lastVerified: b.last_verified
+    }));
+  } catch (err) {
+    console.warn("getBoardings DB error, returning initialBoardings:", err.message);
+    return initialBoardings;
+  }
 }
 
 export async function saveBoarding(b) {
@@ -743,25 +758,30 @@ export async function deleteBoarding(id) {
 }
 
 export async function getGuides() {
-  const result = await pool.query("SELECT * FROM guides ORDER BY id DESC");
-  return result.rows.map(g => ({
-    id: g.id,
-    slug: g.slug,
-    title: g.title,
-    category: g.category,
-    shortAnswer: g.short_answer,
-    summary: g.summary,
-    publishedAt: g.published_at,
-    updatedAt: g.updated_at,
-    author: g.author,
-    vetChecked: g.vet_checked,
-    vetName: g.vet_name,
-    content: g.content,
-    checklist: g.checklist,
-    faq: g.faq,
-    seoTitle: g.seo_title,
-    seoDesc: g.seo_desc
-  }));
+  try {
+    const result = await pool.query("SELECT * FROM guides ORDER BY id DESC");
+    return result.rows.map(g => ({
+      id: g.id,
+      slug: g.slug,
+      title: g.title,
+      category: g.category,
+      shortAnswer: g.short_answer,
+      summary: g.summary,
+      publishedAt: g.published_at,
+      updatedAt: g.updated_at,
+      author: g.author,
+      vetChecked: g.vet_checked,
+      vetName: g.vet_name,
+      content: g.content,
+      checklist: g.checklist,
+      faq: g.faq,
+      seoTitle: g.seo_title,
+      seoDesc: g.seo_desc
+    }));
+  } catch (err) {
+    console.warn("getGuides DB error, returning initialGuides:", err.message);
+    return initialGuides;
+  }
 }
 
 export async function saveGuide(g) {
@@ -791,15 +811,20 @@ export async function deleteGuide(id) {
 }
 
 export async function getCorrections() {
-  const result = await pool.query("SELECT * FROM corrections ORDER BY id DESC");
-  return result.rows.map(c => ({
-    id: c.id,
-    hotelId: c.hotel_id,
-    hotelName: c.hotel_name,
-    text: c.text,
-    date: c.date,
-    status: c.status
-  }));
+  try {
+    const result = await pool.query("SELECT * FROM corrections ORDER BY id DESC");
+    return result.rows.map(c => ({
+      id: c.id,
+      hotelId: c.hotel_id,
+      hotelName: c.hotel_name,
+      text: c.text,
+      date: c.date,
+      status: c.status
+    }));
+  } catch (err) {
+    console.warn("getCorrections DB error, returning initialCorrections:", err.message);
+    return initialCorrections;
+  }
 }
 
 export async function saveCorrection(c) {
@@ -815,16 +840,21 @@ export async function saveCorrection(c) {
 }
 
 export async function getComplaints() {
-  const result = await pool.query("SELECT * FROM complaints ORDER BY id DESC");
-  return result.rows.map(c => ({
-    id: c.id,
-    targetId: c.target_id,
-    targetName: c.target_name,
-    author: c.author,
-    text: c.text,
-    date: c.date,
-    status: c.status
-  }));
+  try {
+    const result = await pool.query("SELECT * FROM complaints ORDER BY id DESC");
+    return result.rows.map(c => ({
+      id: c.id,
+      targetId: c.target_id,
+      targetName: c.target_name,
+      author: c.author,
+      text: c.text,
+      date: c.date,
+      status: c.status
+    }));
+  } catch (err) {
+    console.warn("getComplaints DB error, returning initialComplaints:", err.message);
+    return initialComplaints;
+  }
 }
 
 export async function saveComplaint(c) {
@@ -841,19 +871,23 @@ export async function saveComplaint(c) {
 
 // Reviews Helpers
 export async function getReviews(targetId) {
-  const result = await pool.query(
-    "SELECT * FROM reviews WHERE target_id = $1 AND status = 'approved' ORDER BY date DESC",
-    [targetId]
-  );
-  return result.rows.map(r => ({
-    id: r.id,
-    targetId: r.target_id,
-    author: r.author,
-    rating: parseInt(r.rating),
-    text: r.text,
-    date: r.date,
-    status: r.status
-  }));
+  try {
+    const result = await pool.query(
+      "SELECT * FROM reviews WHERE target_id = $1 AND status = 'approved' ORDER BY date DESC",
+      [targetId]
+    );
+    return result.rows.map(r => ({
+      id: r.id,
+      targetId: r.target_id,
+      author: r.author,
+      rating: parseInt(r.rating),
+      text: r.text,
+      date: r.date,
+      status: r.status
+    }));
+  } catch (err) {
+    return [];
+  }
 }
 
 export async function saveReview(r) {
@@ -873,23 +907,28 @@ export async function saveReview(r) {
 
 // Pet Taxis Helpers
 export async function getPetTaxis() {
-  const result = await pool.query("SELECT * FROM pet_taxis ORDER BY id DESC");
-  return result.rows.map(t => ({
-    id: t.id,
-    name: t.name,
-    city: t.city,
-    district: t.district,
-    imageUrl: t.image_url,
-    allowedPets: t.allowed_pets,
-    features: t.features,
-    price: t.price,
-    description: t.description,
-    phone: t.phone,
-    email: t.email,
-    website: t.website,
-    baseTrustScore: parseFloat(t.base_trust_score),
-    lastVerified: t.last_verified
-  }));
+  try {
+    const result = await pool.query("SELECT * FROM pet_taxis ORDER BY id DESC");
+    return result.rows.map(t => ({
+      id: t.id,
+      name: t.name,
+      city: t.city,
+      district: t.district,
+      imageUrl: t.image_url,
+      allowedPets: t.allowed_pets,
+      features: t.features,
+      price: t.price,
+      description: t.description,
+      phone: t.phone,
+      email: t.email,
+      website: t.website,
+      baseTrustScore: parseFloat(t.base_trust_score),
+      lastVerified: t.last_verified
+    }));
+  } catch (err) {
+    console.warn("getPetTaxis DB error, returning initialTaxis:", err.message);
+    return initialTaxis;
+  }
 }
 
 export async function savePetTaxi(t) {
@@ -916,22 +955,27 @@ export async function deletePetTaxi(id) {
 
 // Vets Helpers
 export async function getVets() {
-  const result = await pool.query("SELECT * FROM vets ORDER BY id DESC");
-  return result.rows.map(v => ({
-    id: v.id,
-    name: v.name,
-    city: v.city,
-    district: v.district,
-    imageUrl: v.image_url,
-    address: v.address,
-    features: v.features,
-    description: v.description,
-    phone: v.phone,
-    email: v.email,
-    website: v.website,
-    baseTrustScore: parseFloat(v.base_trust_score),
-    lastVerified: v.last_verified
-  }));
+  try {
+    const result = await pool.query("SELECT * FROM vets ORDER BY id DESC");
+    return result.rows.map(v => ({
+      id: v.id,
+      name: v.name,
+      city: v.city,
+      district: v.district,
+      imageUrl: v.image_url,
+      address: v.address,
+      features: v.features,
+      description: v.description,
+      phone: v.phone,
+      email: v.email,
+      website: v.website,
+      baseTrustScore: parseFloat(v.base_trust_score),
+      lastVerified: v.last_verified
+    }));
+  } catch (err) {
+    console.warn("getVets DB error, returning initialVets:", err.message);
+    return initialVets;
+  }
 }
 
 export async function saveVet(v) {
@@ -958,28 +1002,33 @@ export async function deleteVet(id) {
 
 // Experiences / Places Helpers
 export async function getExperiences() {
-  const result = await pool.query("SELECT * FROM experiences ORDER BY id DESC");
-  return result.rows.map(e => ({
-    id: e.id,
-    name: e.name,
-    category: e.category,
-    city: e.city,
-    district: e.district,
-    imageUrl: e.image_url,
-    petPolicy: e.pet_policy,
-    allowedPets: e.allowed_pets,
-    features: e.features,
-    description: e.description,
-    address: e.address,
-    phone: e.phone,
-    website: e.website,
-    mapUrl: e.map_url,
-    bestTime: e.best_time,
-    rules: e.rules,
-    verified: e.verified,
-    baseTrustScore: parseFloat(e.base_trust_score),
-    lastVerified: e.last_verified
-  }));
+  try {
+    const result = await pool.query("SELECT * FROM experiences ORDER BY id DESC");
+    return result.rows.map(e => ({
+      id: e.id,
+      name: e.name,
+      category: e.category,
+      city: e.city,
+      district: e.district,
+      imageUrl: e.image_url,
+      petPolicy: e.pet_policy,
+      allowedPets: e.allowed_pets,
+      features: e.features,
+      description: e.description,
+      address: e.address,
+      phone: e.phone,
+      website: e.website,
+      mapUrl: e.map_url,
+      bestTime: e.best_time,
+      rules: e.rules,
+      verified: e.verified,
+      baseTrustScore: parseFloat(e.base_trust_score),
+      lastVerified: e.last_verified
+    }));
+  } catch (err) {
+    console.warn("getExperiences DB error, returning initialExperiences:", err.message);
+    return initialExperiences;
+  }
 }
 
 export async function saveExperience(e) {
@@ -1012,22 +1061,27 @@ export async function deleteExperience(id) {
 
 // Advertising Helpers
 export async function getAds() {
-  const result = await pool.query("SELECT * FROM ads ORDER BY id DESC");
-  return result.rows.map(ad => ({
-    id: ad.id,
-    title: ad.title,
-    sponsor: ad.sponsor,
-    placement: ad.placement,
-    targetUrl: ad.target_url,
-    imageUrl: ad.image_url,
-    city: ad.city,
-    category: ad.category,
-    startsAt: ad.starts_at,
-    endsAt: ad.ends_at,
-    status: ad.status,
-    impressions: ad.impressions,
-    clicks: ad.clicks
-  }));
+  try {
+    const result = await pool.query("SELECT * FROM ads ORDER BY id DESC");
+    return result.rows.map(ad => ({
+      id: ad.id,
+      title: ad.title,
+      sponsor: ad.sponsor,
+      placement: ad.placement,
+      targetUrl: ad.target_url,
+      imageUrl: ad.image_url,
+      city: ad.city,
+      category: ad.category,
+      startsAt: ad.starts_at,
+      endsAt: ad.ends_at,
+      status: ad.status,
+      impressions: ad.impressions,
+      clicks: ad.clicks
+    }));
+  } catch (err) {
+    console.warn("getAds DB error, returning initialAds:", err.message);
+    return initialAds;
+  }
 }
 
 export async function saveAd(ad) {
