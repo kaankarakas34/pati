@@ -46,12 +46,27 @@ const ADMIN_TOKEN = process.env.ADMIN_TOKEN;
 app.use(cors());
 app.use(express.json());
 
+// Normalize Vercel serverless request path
+app.use((req, res, next) => {
+  if (req.query && req.query.path) {
+    const subPath = Array.isArray(req.query.path) ? req.query.path.join('/') : req.query.path;
+    req.url = `/api/${subPath}`;
+  } else if (req.url.startsWith('/api/index')) {
+    req.url = req.url.replace('/api/index', '/api');
+  }
+  next();
+});
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Local development initializes automatically. Production schema changes are explicit.
 if (process.env.VERCEL !== '1' || process.env.AUTO_INIT_DATABASE === 'true') {
-  await initDatabase();
+  try {
+    await initDatabase();
+  } catch (err) {
+    console.warn("Database initialization skipped / failed:", err.message);
+  }
 }
 
 function requireAdmin(req, res, next) {
@@ -139,7 +154,7 @@ app.delete('/api/hotels/:id', requireAdmin, async (req, res) => {
 });
 
 // Boardings API
-app.get('/api/boardings', async (req, res) => {
+app.get(['/api/boardings', '/boardings'], async (req, res) => {
   try {
     const data = await getBoardings();
     res.json(data);
@@ -168,7 +183,7 @@ app.delete('/api/boardings/:id', requireAdmin, async (req, res) => {
 });
 
 // Guides API
-app.get('/api/guides', async (req, res) => {
+app.get(['/api/guides', '/guides'], async (req, res) => {
   try {
     const data = await getGuides();
     res.json(data);
@@ -197,7 +212,7 @@ app.delete('/api/guides/:id', requireAdmin, async (req, res) => {
 });
 
 // Corrections API
-app.get('/api/corrections', async (req, res) => {
+app.get(['/api/corrections', '/corrections'], async (req, res) => {
   try {
     const data = await getCorrections();
     res.json(data);
@@ -217,7 +232,7 @@ app.post('/api/corrections', async (req, res) => {
 });
 
 // Complaints API
-app.get('/api/complaints', async (req, res) => {
+app.get(['/api/complaints', '/complaints'], async (req, res) => {
   try {
     const data = await getComplaints();
     res.json(data);
@@ -237,7 +252,7 @@ app.post('/api/complaints', async (req, res) => {
 });
 
 // Reviews API
-app.get('/api/reviews', async (req, res) => {
+app.get(['/api/reviews', '/reviews'], async (req, res) => {
   try {
     const targetId = req.query.targetId;
     if (!targetId) {
@@ -260,13 +275,13 @@ app.post('/api/reviews', async (req, res) => {
 });
 
 // Pet Taxis API
-app.get('/api/taxis', async (req, res) => {
+app.get(['/api/taxis', '/taxis'], async (req, res) => {
   try {
     const data = await getPetTaxis();
     res.json(data);
   } catch (err) {
     console.warn("Falling back to [] due to DB error:", err.message);
-    res.json([]);
+    res.json(initialTaxis || []);
   }
 });
 
@@ -289,13 +304,13 @@ app.delete('/api/taxis/:id', requireAdmin, async (req, res) => {
 });
 
 // Vets API
-app.get('/api/vets', async (req, res) => {
+app.get(['/api/vets', '/vets'], async (req, res) => {
   try {
     const data = await getVets();
     res.json(data);
   } catch (err) {
     console.warn("Falling back to [] due to DB error:", err.message);
-    res.json([]);
+    res.json(initialVets || []);
   }
 });
 
@@ -318,13 +333,13 @@ app.delete('/api/vets/:id', requireAdmin, async (req, res) => {
 });
 
 // Experiences / Places API
-app.get('/api/experiences', async (req, res) => {
+app.get(['/api/experiences', '/experiences'], async (req, res) => {
   try {
     const data = await getExperiences();
     res.json(data);
   } catch (err) {
     console.warn("Falling back to [] due to DB error:", err.message);
-    res.json([]);
+    res.json(initialExperiences || []);
   }
 });
 
@@ -347,7 +362,7 @@ app.delete('/api/experiences/:id', requireAdmin, async (req, res) => {
 });
 
 // Advertising API
-app.get('/api/ads', async (req, res) => {
+app.get(['/api/ads', '/ads'], async (req, res) => {
   try {
     const data = await getAds();
     res.json(data);

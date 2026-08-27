@@ -13,13 +13,20 @@ import {
 
 const { Pool } = pg;
 
+const hasDatabaseUrl = Boolean(process.env.DATABASE_URL);
+const isVercelWithoutDb = Boolean(process.env.VERCEL === '1' && !hasDatabaseUrl);
+
 const connectionString = process.env.DATABASE_URL || 'postgresql://pati_user:pati_password@localhost:5436/pati_db';
 const isLocalDatabase = /(?:localhost|127\.0\.0\.1|pati_db)(?::|\/)/i.test(connectionString);
 const poolConnectionString = (() => {
   if (isLocalDatabase) return connectionString;
-  const parsed = new URL(connectionString);
-  parsed.searchParams.delete('sslmode');
-  return parsed.toString();
+  try {
+    const parsed = new URL(connectionString);
+    parsed.searchParams.delete('sslmode');
+    return parsed.toString();
+  } catch {
+    return connectionString;
+  }
 })();
 
 const pool = new Pool({
@@ -27,12 +34,23 @@ const pool = new Pool({
   ssl: isLocalDatabase ? false : { rejectUnauthorized: false },
   max: isLocalDatabase ? 10 : 3,
   idleTimeoutMillis: 10000,
-  connectionTimeoutMillis: 15000
+  connectionTimeoutMillis: 5000
+});
+
+pool.on('error', (err) => {
+  console.warn('Postgres connection pool notice:', err.message);
 });
 
 export async function checkDatabaseConnection() {
-  const result = await pool.query('SELECT current_database() AS database, current_user AS user, NOW() AS checked_at');
-  return result.rows[0];
+  if (isVercelWithoutDb) {
+    return { database: 'mock_fallback', user: 'guest', checked_at: new Date().toISOString() };
+  }
+  try {
+    const result = await pool.query('SELECT current_database() AS database, current_user AS user, NOW() AS checked_at');
+    return result.rows[0];
+  } catch (err) {
+    return { database: 'offline', user: 'offline', checked_at: new Date().toISOString() };
+  }
 }
 
 const initialExperiences = [

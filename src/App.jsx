@@ -31,15 +31,19 @@ import { findHotelBySlugs, getHotelPath, slugify } from '../lib/seo-slugs';
 async function fetchTable(path, fallback = []) {
   try {
     const response = await fetch(path);
-    const data = await response.json();
-
-    if (!response.ok || !Array.isArray(data)) {
-      throw new Error(data?.error || `${path} gecersiz yanit dondu`);
+    if (!response.ok) {
+      return fallback;
     }
-
+    const contentType = response.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+      return fallback;
+    }
+    const data = await response.json();
+    if (!Array.isArray(data)) {
+      return fallback;
+    }
     return data;
-  } catch (error) {
-    console.error(`Failed to load ${path}:`, error);
+  } catch {
     return fallback;
   }
 }
