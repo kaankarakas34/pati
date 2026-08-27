@@ -168,7 +168,7 @@ export default function DetailView({
       try {
         const res = await fetch(`/api/reviews?targetId=${id}`);
         const data = await res.json();
-        setReviews(data);
+        setReviews(res.ok && Array.isArray(data) ? data : []);
       } catch (err) {
         console.error("Failed to load reviews:", err);
       } finally {

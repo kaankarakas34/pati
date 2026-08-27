@@ -21,6 +21,8 @@ import {
   getAds, saveAd, deleteAd
 } from './db.js';
 import axios from 'axios';
+import { initialHotels } from './src/data/mockData.js';
+import { findHotelBySlugs, getHotelPath } from './lib/seo-slugs.js';
 
 dotenv.config();
 
@@ -471,21 +473,22 @@ function getIndexHtmlTemplate() {
   return fs.readFileSync(devPath, 'utf8');
 }
 
-// Intercept Hotel Detail page request for SEO & GEO crawling injection
-app.get('/otel/:id', async (req, res) => {
+async function getHotelSeoData() {
   try {
-    const hotelId = req.params.id;
-    const hotels = await getHotels();
-    const complaintsList = await getComplaints();
-    const hotel = hotels.find(h => h.id === hotelId);
+    const [hotels, complaints] = await Promise.all([getHotels(), getComplaints()]);
+    return { hotels, complaints };
+  } catch (error) {
+    console.error('SEO database fallback:', error.message);
+    return { hotels: initialHotels, complaints: [] };
+  }
+}
 
-    if (!hotel) {
-      return res.status(404).send("Tesis bulunamadı.");
-    }
-
+function renderHotelSeoPage(res, hotel, complaintsList) {
+  try {
     // Approved complaints count check
     const approvedComplaints = complaintsList.filter(c => c.targetId === hotel.id && c.status === 'approved');
-    const trustScore = Math.max(1.0, hotel.baseTrustScore - approvedComplaints.length * 0.5).toFixed(1);
+    const trustScore = Math.max(1.0, (hotel.baseTrustScore || 8) - approvedComplaints.length * 0.5).toFixed(1);
+    const canonicalUrl = `https://www.patiyleseyahat.com${getHotelPath(hotel)}`;
 
     let html = getIndexHtmlTemplate();
 
@@ -494,7 +497,7 @@ app.get('/otel/:id', async (req, res) => {
     html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
 
     // 2. Inject custom meta description
-    const desc = escapeHtml(`${hotel.name} evcil hayvan kuralları: ${hotel.weightLimit > 0 ? `${hotel.weightLimit} kg kilo sınırı` : 'kilo sınırı yok'}, ${hotel.extraFee === 'no' ? 'ek ücret yok' : 'ek ücret uygulanır'}. ${hotel.description.slice(0, 130)}...`);
+    const desc = escapeHtml(`${hotel.name} evcil hayvan kuralları: ${hotel.weightLimit > 0 ? `${hotel.weightLimit} kg kilo sınırı` : 'kilo sınırı yok'}, ${hotel.extraFee === 'no' ? 'ek ücret yok' : 'ek ücret uygulanır'}. ${(hotel.description || '').slice(0, 130)}...`);
     html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${desc}" />`);
     
     // Inject OpenGraph social tags dynamically
@@ -503,6 +506,8 @@ app.get('/otel/:id', async (req, res) => {
       <meta property="og:description" content="${desc}" />
       <meta property="og:image" content="${escapeHtml(hotel.imageUrl)}" />
       <meta property="og:type" content="place" />
+      <meta property="og:url" content="${canonicalUrl}" />
+      <link rel="canonical" href="${canonicalUrl}" />
     `;
     html = html.replace('</head>', `${ogTags}\n</head>`);
 
@@ -536,7 +541,8 @@ app.get('/otel/:id', async (req, res) => {
         "worstRating": "1",
         "ratingCount": approvedComplaints.length + 1
       },
-      "amenityFeature": hotel.features.map(feat => ({
+      "url": canonicalUrl,
+      "amenityFeature": (hotel.features || []).map(feat => ({
         "@type": "LocationFeatureSpecification",
         "name": feat,
         "value": true
@@ -548,11 +554,34 @@ app.get('/otel/:id', async (req, res) => {
     html = html.replace('</head>', `${schemaScript}\n</head>`);
 
     res.send(html);
-
   } catch (err) {
     console.error("SEO Prerender Error:", err);
     res.status(500).send("Bir hata oluştu.");
   }
+}
+
+// SEO-friendly hotel path: /otel/il/ilce/otel-ismi
+app.get('/otel/:city/:district/:hotelSlug', async (req, res) => {
+  const { hotels, complaints } = await getHotelSeoData();
+  const hotel = findHotelBySlugs(hotels, req.params.city, req.params.district, req.params.hotelSlug);
+
+  if (!hotel) {
+    return res.status(404).send("Tesis bulunamadı.");
+  }
+
+  return renderHotelSeoPage(res, hotel, complaints);
+});
+
+// Preserve old links and consolidate SEO signals on the canonical URL.
+app.get('/otel/:id', async (req, res) => {
+  const { hotels } = await getHotelSeoData();
+  const hotel = hotels.find(item => item.id === req.params.id);
+
+  if (!hotel) {
+    return res.status(404).send("Tesis bulunamadı.");
+  }
+
+  return res.redirect(301, getHotelPath(hotel));
 });
 
 // Intercept Boarding Detail page request for SEO & GEO

@@ -21,6 +21,7 @@ import {
   initialCorrections,
   initialComplaints
 } from './data/mockData';
+import { findHotelBySlugs, getHotelPath } from '../lib/seo-slugs';
 
 async function fetchTable(path, fallback = []) {
   try {
@@ -334,7 +335,39 @@ function App() {
     window.scrollTo(0, 0);
   }, [currentView, selectedItemId]);
 
-  // URL Path Router (supports clean SEO URLs like /otel/1 & hidden routes like /yonetici)
+  useEffect(() => {
+    const hotel = currentView === 'accommodation-detail'
+      ? hotels.find(item => item.id === selectedItemId)
+      : null;
+    const canonicalPath = hotel ? getHotelPath(hotel) : window.location.pathname;
+    const canonicalUrl = `https://www.patiyleseyahat.com${canonicalPath}`;
+    const title = hotel
+      ? `${hotel.name} | ${hotel.district}, ${hotel.city} Evcil Hayvan Dostu Otel | Patiyle Seyahat`
+      : "Patiyle Seyahat | Türkiye'nin Evcil Hayvan Dostu Seyahat Rehberi";
+    const description = hotel
+      ? `${hotel.name}, ${hotel.district}/${hotel.city} evcil hayvan kabul koşulları, tesis özellikleri ve fotoğrafları.`
+      : 'Türkiye genelindeki evcil hayvan dostu otelleri ve seyahat noktalarını keşfedin.';
+
+    document.title = title;
+
+    let descriptionMeta = document.querySelector('meta[name="description"]');
+    if (!descriptionMeta) {
+      descriptionMeta = document.createElement('meta');
+      descriptionMeta.setAttribute('name', 'description');
+      document.head.appendChild(descriptionMeta);
+    }
+    descriptionMeta.setAttribute('content', description);
+
+    let canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (!canonicalLink) {
+      canonicalLink = document.createElement('link');
+      canonicalLink.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonicalLink);
+    }
+    canonicalLink.setAttribute('href', canonicalUrl);
+  }, [currentView, selectedItemId, hotels]);
+
+  // URL Path Router (supports /otel/il/ilce/otel-ismi and legacy hotel IDs)
   useEffect(() => {
     const handleLocationRouting = () => {
       const path = window.location.pathname;
@@ -345,9 +378,19 @@ function App() {
       } else if (path === '/sihirbaz') {
         setCurrentView('wizard');
       } else if (path.startsWith('/otel/')) {
-        const id = path.split('/otel/')[1];
+        const segments = path.split('/').filter(Boolean).map(segment => decodeURIComponent(segment));
+        const hotel = segments.length >= 4
+          ? findHotelBySlugs(hotels, segments[1], segments[2], segments[3])
+          : hotels.find(item => item.id === segments[1]);
+        const id = hotel?.id || segments.at(-1);
         setCurrentView('accommodation-detail');
         setSelectedItemId(id);
+        if (hotel) {
+          const canonicalPath = getHotelPath(hotel);
+          if (path !== canonicalPath) {
+            window.history.replaceState(null, '', canonicalPath);
+          }
+        }
       } else if (path.startsWith('/bakim/')) {
         const id = path.split('/bakim/')[1];
         setCurrentView('boarding-detail');
@@ -386,14 +429,15 @@ function App() {
       window.removeEventListener('popstate', handleLocationRouting);
       window.removeEventListener('hashchange', handleLocationRouting);
     };
-  }, []);
+  }, [hotels]);
 
   // Navigation controller helper
   const handleViewChange = (view, id = null) => {
     setCurrentView(view);
     if (id) {
       setSelectedItemId(id);
-      const cleanPath = view === 'accommodation-detail' ? `/otel/${id}` 
+      const hotel = view === 'accommodation-detail' ? hotels.find(item => item.id === id) : null;
+      const cleanPath = view === 'accommodation-detail' ? getHotelPath(hotel)
                       : view === 'boarding-detail' ? `/bakim/${id}` 
                       : view === 'taxi-detail' ? `/taksi/${id}` 
                       : view === 'vet-detail' ? `/veteriner/${id}` 
