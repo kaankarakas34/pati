@@ -727,6 +727,30 @@ app.get('/evcil-hayvan-dostu-oteller/:citySlug', async (req, res) => {
               '@type': 'Answer',
               text: 'Kilo ve ırk kısıtlamaları tesis bazında değişir. Büyük ırk köpek için rezervasyondan önce tesisten açık onay alınmalıdır.'
             }
+          },
+          {
+            '@type': 'Question',
+            name: `${cityName}'da kedi kabul eden oteller nasıl bulunur?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Kedi kabulü, taşıma çantası ve odada yalnız kalma kuralları tesis bazında değişir. Tesis detayını inceleyin ve rezervasyon öncesinde yazılı onay alın.'
+            }
+          },
+          {
+            '@type': 'Question',
+            name: `${cityName}'da evcil hayvan dostu bungalov var mı?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Konaklama türü filtresinden bungalov seçilerek mevcut seçenekler ayrılabilir. Müstakil tesislerde de kilo, ırk ve ek ücret koşulları uygulanabilir.'
+            }
+          },
+          {
+            '@type': 'Question',
+            name: `${cityName}'daki pet friendly oteller hangi belgeleri ister?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Güncel aşı karnesi, mikroçip bilgisi veya veteriner sağlık kaydı istenebilir. Belge şartı seyahatten önce doğrudan tesisten doğrulanmalıdır.'
+            }
           }
         ]
       }

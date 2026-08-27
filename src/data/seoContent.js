@@ -15,7 +15,12 @@ export const seoContent = {
     faqs: [
       { question: 'Evcil hayvan dostu otel ne demektir?', answer: 'Evcil hayvan dostu otel, belirlediği tür, ağırlık, oda ve ortak alan kuralları çerçevesinde misafirlerin evcil hayvanlarıyla konaklamasına izin veren tesistir.' },
       { question: 'Otele gitmeden önce hangi bilgiler doğrulanmalı?', answer: 'Kabul edilen hayvan türü, kilo ve ırk sınırı, oda başına hayvan sayısı, gecelik ücret, aşı belgesi ve hayvanın odada yalnız kalıp kalamayacağı teyit edilmelidir.' },
-      { question: 'Tesisteki pet politikaları güncel mi?', answer: 'Politikalar değişebildiği için sayfadaki son doğrulama tarihini kontrol edin ve kesin rezervasyondan önce tesisten yazılı onay alın.' }
+      { question: 'Tesisteki pet politikaları güncel mi?', answer: 'Politikalar değişebildiği için sayfadaki son doğrulama tarihini kontrol edin ve kesin rezervasyondan önce tesisten yazılı onay alın.' },
+      { question: 'Köpek kabul eden oteller nasıl bulunur?', answer: 'Konaklama listesindeki kabul edilen hayvan filtresinden köpek seçeneğini kullanın; ardından kilo sınırı, ırk kısıtlaması ve ek ücret bilgilerini tesis detayında karşılaştırın.' },
+      { question: 'Kedi kabul eden otellerde hangi kurallar uygulanır?', answer: 'Kediler için taşıma çantası, aşı karnesi, odada yalnız kalma ve ortak alan kullanımı kuralları tesise göre değişebilir.' },
+      { question: 'Evcil hayvanla tatil planına ne zaman başlanmalı?', answer: 'Özellikle yaz ve bayram dönemlerinde pet kontenjanı sınırlı olabileceğinden otel ve ulaşım koşullarını birkaç hafta önceden doğrulamak yararlıdır.' },
+      { question: 'Pet friendly otel ile evcil hayvan kabul eden otel aynı mı?', answer: 'Her iki ifade de kabulü anlatabilir; ancak gerçek hizmet düzeyi farklıdır. Mama kabı, yatak, bahçe veya pet menüsü gibi olanakları ayrıca inceleyin.' },
+      { question: 'Evcil hayvanla seyahatte aşı karnesi gerekli mi?', answer: 'Birçok otel, bakım merkezi ve taşıma firması güncel aşı karnesi isteyebilir. Yola çıkmadan önce gerekli belgeleri işletmeyle teyit edin.' }
     ],
     links: [
       { href: '/evcil-hayvan-dostu-oteller', label: 'Evcil Hayvan Dostu Oteller' },
@@ -40,7 +45,12 @@ export const seoContent = {
     faqs: [
       { question: 'Her evcil hayvan dostu otel büyük köpek kabul eder mi?', answer: 'Hayır. Bazı tesisler kilo veya ırk sınırı uygular. Büyük ırk köpekle seyahat ederken “kilo sınırı yok” bilgisini ve ırk politikasını ayrıca kontrol edin.' },
       { question: 'Evcil hayvan için oteller ek ücret alır mı?', answer: 'Bazı oteller ücretsiz kabul ederken bazıları gecelik veya konaklama başına temizlik ücreti ister. Tutar ve ödeme şekli rezervasyondan önce teyit edilmelidir.' },
-      { question: 'Evcil hayvan odada yalnız bırakılabilir mi?', answer: 'Bu kural tesise göre değişir. Bazı oteller kafes şartıyla izin verirken bazıları hayvanın odada yalnız kalmasını tamamen yasaklar.' }
+      { question: 'Evcil hayvan odada yalnız bırakılabilir mi?', answer: 'Bu kural tesise göre değişir. Bazı oteller kafes şartıyla izin verirken bazıları hayvanın odada yalnız kalmasını tamamen yasaklar.' },
+      { question: 'Köpek kabul eden oteller rezervasyonda hangi bilgileri ister?', answer: 'Köpeğin ırkı, kilosu, yaşı, aşı durumu ve oda başına hayvan sayısı sorulabilir. Bu bilgileri rezervasyon notuna yazılı olarak ekleyin.' },
+      { question: 'Kedi kabul eden oteller taşıma çantası şartı koyar mı?', answer: 'Bazı tesisler giriş ve ortak alan geçişlerinde kapalı taşıma çantası isteyebilir. Oda içindeki serbestlik kuralını ayrıca öğrenin.' },
+      { question: 'Ek ücret almayan evcil hayvan dostu oteller nasıl seçilir?', answer: 'Ek ücret filtresini kullanın ve temizlik bedeli, depozito veya hasar teminatı gibi başka ücretlerin bulunmadığını rezervasyondan önce doğrulayın.' },
+      { question: 'Bahçeli pet friendly otellerin avantajı nedir?', answer: 'Bahçeli tesisler tuvalet ve kısa egzersiz ihtiyaçlarını kolaylaştırabilir; ancak tasma, çit güvenliği ve ortak alan kuralları yine kontrol edilmelidir.' },
+      { question: 'Evcil hayvan dostu bungalovlarda kilo sınırı olur mu?', answer: 'Bungalov tipi konaklamalarda da kilo ve ırk sınırı uygulanabilir. Müstakil yapı olması sınırsız kabul anlamına gelmez.' }
     ],
     links: [
       { href: '/kedi-kopek-otelleri', label: 'Kedi ve Köpek Bakım Otelleri' },
@@ -59,7 +69,12 @@ export const seoContent = {
     faqs: [
       { question: 'Kedi oteli ile köpek oteli aynı alanda olabilir mi?', answer: 'Karma tesislerde kedi ve köpek bölümlerinin ses, koku ve temas açısından güvenli biçimde ayrılması gerekir. Hassas kediler için ayrı ve sakin bir bölüm tercih edilmelidir.' },
       { question: 'Bakım oteline hangi eşyalar bırakılmalı?', answer: 'Tesis izin veriyorsa alışık olduğu mama, ilaç, tasma, yatak veya kokunuzu taşıyan küçük bir eşya uyum sürecini kolaylaştırabilir.' },
-      { question: 'İlk konaklamadan önce deneme yapılmalı mı?', answer: 'Özellikle ayrılık kaygısı yaşayan hayvanlarda birkaç saatlik gündüz bakım veya tek gecelik deneme konaklaması faydalı olabilir.' }
+      { question: 'İlk konaklamadan önce deneme yapılmalı mı?', answer: 'Özellikle ayrılık kaygısı yaşayan hayvanlarda birkaç saatlik gündüz bakım veya tek gecelik deneme konaklaması faydalı olabilir.' },
+      { question: 'Köpek oteli fiyatları nasıl belirlenir?', answer: 'Köpeğin boyutu, oda tipi, konaklama süresi, günlük yürüyüş, eğitim, mama ve özel bakım hizmetleri toplam fiyatı etkileyebilir.' },
+      { question: 'Kedi oteli fiyatlarına mama dahil midir?', answer: 'Bazı kedi otelleri mamayı fiyata dahil ederken bazıları kedinin alışık olduğu mamanın sahibi tarafından getirilmesini ister.' },
+      { question: 'Kamera izleme özelliği olan köpek oteli seçilmeli mi?', answer: 'Canlı kamera şeffaflık sağlayabilir; fakat tek başına bakım kalitesini göstermez. Personel sayısı, gece gözetimi ve acil durum planı da incelenmelidir.' },
+      { question: 'Kedi ve köpek otellerinde aşı zorunlu mu?', answer: 'Çoğu bakım merkezi kuduz ve karma aşıların güncel olmasını, ayrıca iç ve dış parazit uygulamasını şart koşar.' },
+      { question: 'Uzun süreli pet oteli konaklamasında nelere dikkat edilmeli?', answer: 'Mama stoğu, ilaç takibi, veteriner yetkilendirmesi, düzenli fotoğraf bilgilendirmesi ve acil durumda aranacak kişi yazılı olarak belirlenmelidir.' }
     ],
     links: [{ href: '/evcil-hayvan-dostu-oteller', label: 'Evcil Hayvan Dostu Oteller' }, { href: '/veterinerler', label: 'Acil Veteriner Klinikleri' }]
   },
@@ -74,7 +89,12 @@ export const seoContent = {
     faqs: [
       { question: 'Pet takside sahibi de yolculuk yapabilir mi?', answer: 'Refakatçi kabulü aracın kapasitesine ve işletmenin politikasına göre değişir. Rezervasyon sırasında mutlaka belirtilmelidir.' },
       { question: 'Kediler taşıma çantasında mı olmalı?', answer: 'Güvenlik nedeniyle kedilerin uygun ölçülü, kilitli ve havalandırmalı taşıma çantasında yolculuk etmesi önerilir.' },
-      { question: 'Pet taksi fiyatı nasıl belirlenir?', answer: 'Mesafe, bekleme süresi, otoyol geçişleri, gece hizmeti ve şehirler arası rota toplam fiyatı etkileyebilir.' }
+      { question: 'Pet taksi fiyatı nasıl belirlenir?', answer: 'Mesafe, bekleme süresi, otoyol geçişleri, gece hizmeti ve şehirler arası rota toplam fiyatı etkileyebilir.' },
+      { question: 'Şehirler arası pet taksi hizmeti var mı?', answer: 'Bazı firmalar şehirler arası evcil hayvan transferi sunar. Uzun yol için mola, su, refakatçi ve gece sürüşü planı önceden konuşulmalıdır.' },
+      { question: 'Havaalanı pet transferi nasıl planlanır?', answer: 'Uçuş saati, terminal, taşıma çantası ölçüsü ve havayolunun teslim prosedürü pet taksi firmasıyla paylaşılmalıdır.' },
+      { question: 'Veterinere acil pet taksi çağrılabilir mi?', answer: 'Acil transfer sunan firmalar olabilir; ancak yaşamı tehdit eden durumda önce veteriner kliniğini arayın ve uygun ulaşım yönlendirmesi isteyin.' },
+      { question: 'Büyük köpekler pet taksiye binebilir mi?', answer: 'Araç kapasitesi ve güvenli sabitleme ekipmanı uygunsa büyük köpek taşınabilir. Kilo ve ırk bilgisi rezervasyon sırasında verilmelidir.' },
+      { question: 'Pet taksi araçları nasıl temizlenir?', answer: 'Taşımalar arasında yüzeylerin temizlenmesi, havalandırma ve güvenli dezenfektan kullanımı beklenir; firmadan hijyen prosedürünü sorabilirsiniz.' }
     ],
     links: [{ href: '/veterinerler', label: '7/24 Veterinerler' }, { href: '/kedi-kopek-otelleri', label: 'Kedi ve Köpek Otelleri' }]
   },
@@ -89,7 +109,12 @@ export const seoContent = {
     faqs: [
       { question: 'Hangi durumlar veteriner acili sayılır?', answer: 'Solunum güçlüğü, bilinç kaybı, nöbet, trafik kazası, ciddi kanama, zehirlenme şüphesi ve idrar yapamama gibi belirtiler acil değerlendirme gerektirir.' },
       { question: 'Yola çıkmadan kliniği aramak gerekir mi?', answer: 'Evet. Kliniğin açık olduğunu, vakayı kabul edebileceğini ve gerekli uzmanlık veya ekipmana sahip olduğunu telefonla teyit edin.' },
-      { question: 'Acil durumda hangi bilgiler hazırlanmalı?', answer: 'Hayvanın yaşı, kilosu, mevcut hastalıkları, kullandığı ilaçlar, belirtilerin başlangıç zamanı ve varsa temas ettiği madde paylaşılmalıdır.' }
+      { question: 'Acil durumda hangi bilgiler hazırlanmalı?', answer: 'Hayvanın yaşı, kilosu, mevcut hastalıkları, kullandığı ilaçlar, belirtilerin başlangıç zamanı ve varsa temas ettiği madde paylaşılmalıdır.' },
+      { question: 'En yakın 7/24 açık veteriner nasıl bulunur?', answer: 'Konumunuza göre klinikleri listeleyin, telefonla gerçekten açık olduklarını ve vakayı kabul edebildiklerini doğrulayın.' },
+      { question: 'Gece açık veteriner ile nöbetçi veteriner aynı mı?', answer: 'Her klinik kesintisiz 24 saat hizmet vermeyebilir. Nöbet sistemi veya çağrı üzerine hizmet uygulanabileceği için yola çıkmadan arayın.' },
+      { question: 'Pazar günü açık veteriner klinikleri nasıl doğrulanır?', answer: 'İnternet çalışma saatleri güncel olmayabilir. Pazar ve resmi tatil hizmetini doğrudan klinik telefonundan teyit edin.' },
+      { question: 'Veteriner ambulansı veya pet taksi ne zaman kullanılmalı?', answer: 'Hayvanın hareket ettirilmesi riskliyse klinikten taşıma önerisi alın. Uygun ekipmanlı veteriner ambulansı veya pet taksi gerekebilir.' },
+      { question: 'Köpek veya kedi zehirlenmesinde ne yapılmalı?', answer: 'Kusturmaya çalışmadan en yakın acil veterineri arayın; temas edilen maddeyi, ambalajı ve yaklaşık zamanı bildirin.' }
     ],
     links: [{ href: '/pet-taksi', label: 'Pet Taksi ile Ulaşım' }, { href: '/evcil-hayvan-seyahat-rehberi', label: 'Evcil Hayvan Sağlık Rehberleri' }]
   },
@@ -104,7 +129,12 @@ export const seoContent = {
     faqs: [
       { question: 'Her halk plajına köpekle girilebilir mi?', answer: 'Hayır. Yerel yönetim ve işletme kuralları farklıdır. Yalnızca evcil hayvan girişine açık olduğu teyit edilen alanları kullanın.' },
       { question: 'Sıcak havada yürüyüş ne zaman yapılmalı?', answer: 'Sabah erken veya akşam serin saatler tercih edilmeli; sıcak asfalt patiler için kontrol edilmeli ve yeterli su taşınmalıdır.' },
-      { question: 'Pet dostu kafelerde hangi kurallar geçerlidir?', answer: 'Bazı işletmeler yalnızca açık alanda kabul eder. Tasma, taşıma çantası ve masa çevresinde kalma kuralları işletmeye göre değişebilir.' }
+      { question: 'Pet dostu kafelerde hangi kurallar geçerlidir?', answer: 'Bazı işletmeler yalnızca açık alanda kabul eder. Tasma, taşıma çantası ve masa çevresinde kalma kuralları işletmeye göre değişebilir.' },
+      { question: 'Köpekle gezilecek parklar nasıl seçilir?', answer: 'Tasma kuralları, çit güvenliği, gölgelik, su noktası, zemin ve yoğunluk bilgilerini kontrol edin.' },
+      { question: 'Köpek kabul eden plajlarda tasma zorunlu mu?', answer: 'Plajın işletme ve belediye kuralları geçerlidir. Serbest alan belirtilmedikçe tasma kullanmak en güvenli yaklaşımdır.' },
+      { question: 'Evcil hayvanla gidilebilen kafeler kapalı alana kabul eder mi?', answer: 'Birçok pet dostu kafe yalnızca bahçe veya terasta kabul eder. Kapalı alan politikasını gitmeden önce sorun.' },
+      { question: 'Köpekle doğa yürüyüşünde neler götürülmeli?', answer: 'Su, katlanır kap, tasma, dışkı poşeti, kene koruması, temel ilk yardım malzemesi ve kimlik etiketi bulundurulmalıdır.' },
+      { question: 'Kedilerle gezilecek yer seçerken nelere dikkat edilmeli?', answer: 'Kediler için sakin, kaçış riski düşük alanlar; güvenli göğüs tasması veya havalandırmalı taşıma çantası tercih edilmelidir.' }
     ],
     links: [{ href: '/evcil-hayvan-dostu-oteller', label: 'Yakındaki Evcil Hayvan Dostu Oteller' }, { href: '/evcil-hayvan-seyahat-rehberi', label: 'Seyahat Rehberleri' }]
   },
@@ -119,7 +149,12 @@ export const seoContent = {
     faqs: [
       { question: 'Evcil hayvanla seyahat için hangi belgeler gerekir?', answer: 'Gidilecek yere ve ulaşım yöntemine göre aşı karnesi, mikroçip kaydı, veteriner sağlık raporu veya pet pasaportu gerekebilir.' },
       { question: 'Yolculuk öncesi veteriner kontrolü gerekli mi?', answer: 'Özellikle uzun yol, uçuş, kronik hastalık veya ilk seyahat durumunda veteriner muayenesi önerilir.' },
-      { question: 'Seyahat kuralları ne sıklıkla değişir?', answer: 'Havayolu, ülke, belediye ve tesis politikaları değişebilir. Rezervasyon ve hareket tarihinden kısa süre önce resmi kaynakları yeniden kontrol edin.' }
+      { question: 'Seyahat kuralları ne sıklıkla değişir?', answer: 'Havayolu, ülke, belediye ve tesis politikaları değişebilir. Rezervasyon ve hareket tarihinden kısa süre önce resmi kaynakları yeniden kontrol edin.' },
+      { question: 'Köpekle araba yolculuğu nasıl güvenli yapılır?', answer: 'Köpek arka koltukta uygun emniyet kemeri veya sabitlenmiş taşıma kafesiyle yolculuk etmeli, düzenli su ve tuvalet molası verilmelidir.' },
+      { question: 'Kediyle uzun yolculuk için nasıl hazırlanılır?', answer: 'Kediyi önceden taşıma çantasına alıştırın, veteriner önerisi olmadan sakinleştirici kullanmayın ve çantayı araçta sabitleyin.' },
+      { question: 'Uçakta evcil hayvan taşıma kuralları nelerdir?', answer: 'Kabin veya kargo kabulü; hayvanın ağırlığına, çanta ölçüsüne, ırkına ve havayolu politikasına göre değişir. Resmi havayolu kurallarını kontrol edin.' },
+      { question: 'Evcil hayvanla yurt dışına çıkarken pet pasaportu gerekir mi?', answer: 'Gidilecek ülkeye göre pet pasaportu, mikroçip, kuduz titrasyon testi ve sağlık sertifikası istenebilir.' },
+      { question: 'Evcil hayvan dostu otel rezervasyonu nasıl yapılmalı?', answer: 'Hayvanın türü, ırkı, kilosu ve sayısını rezervasyon öncesinde yazılı olarak bildirin; ek ücret ve oda kurallarının onayını saklayın.' }
     ],
     links: [{ href: '/evcil-hayvan-dostu-oteller', label: 'Evcil Hayvan Dostu Oteller' }, { href: '/evcil-hayvanla-gezilecek-yerler', label: 'Evcil Hayvanla Gezilecek Yerler' }]
   }
