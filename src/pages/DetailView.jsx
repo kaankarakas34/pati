@@ -238,10 +238,12 @@ export default function DetailView({
 
   // Calculate dynamic Trust Score
   const approvedComplaints = complaints.filter(c => c.targetId === item.id && c.status === 'approved');
-  const trustScore = Math.max(1.0, (item.baseTrustScore || 9.5) - (approvedComplaints.length * 0.5)).toFixed(1);
+  const trustScore = item.verified === false
+    ? null
+    : Math.max(1.0, (item.baseTrustScore ?? 9.5) - (approvedComplaints.length * 0.5)).toFixed(1);
   const shouldShowGallery = !isTaxi && !isVet;
   const galleryFallbacks = isBoarding ? boardingGalleryFallbacks : hotelGalleryFallbacks;
-  const galleryImages = Array.from(new Set([item.imageUrl, ...(item.galleryImages || []), ...galleryFallbacks].filter(Boolean))).slice(0, 5);
+  const galleryImages = Array.from(new Set([item.imageUrl, ...(item.galleryImages || []), ...galleryFallbacks].filter(Boolean))).slice(0, 6);
   const selectedGalleryImage = galleryImages[Math.min(selectedGalleryIndex, galleryImages.length - 1)] || item.imageUrl;
   const amenityGroups = makeAmenityGroups(item, isBoarding);
 
@@ -396,9 +398,9 @@ export default function DetailView({
           <div className="h-72 md:h-[450px] bg-gray-200 rounded-3xl overflow-hidden shadow-sm relative">
             <img src={shouldShowGallery ? selectedGalleryImage : item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
           
-            <div className="absolute top-4 left-4 bg-brand-navy text-white text-xs px-3.5 py-1.5 rounded-full font-bold flex items-center gap-1 shadow-md">
-              <VerifiedBadge className="w-4 h-4 text-white" />
-              <span>Doğrulanmış Tesis</span>
+            <div className={`absolute top-4 left-4 text-white text-xs px-3.5 py-1.5 rounded-full font-bold flex items-center gap-1 shadow-md ${item.verified === false ? 'bg-amber-600' : 'bg-brand-navy'}`}>
+              {item.verified === false ? <AlertIcon className="w-4 h-4 text-white" /> : <VerifiedBadge className="w-4 h-4 text-white" />}
+              <span>{item.verified === false ? 'Doğrulama Bekliyor' : 'Doğrulanmış Tesis'}</span>
             </div>
 
             {/* Dynamic Badge for Suitability or Boarding category */}
@@ -445,14 +447,20 @@ export default function DetailView({
               <div className="text-left">
                 <span className="text-4xs font-extrabold text-gray-400 block uppercase tracking-wider">Pati Güven Endeksi</span>
                 <div className="flex items-center gap-2 mt-0.5">
-                  <span className={`text-sm font-black px-2 py-0.5 rounded text-white shadow-xs ${
-                    trustScore >= 9.0 ? 'bg-brand-green' : trustScore >= 7.0 ? 'bg-amber-500' : 'bg-red-650'
-                  }`}>
-                    {trustScore} / 10
-                  </span>
-                  <span className="text-2xs font-bold text-gray-700">
-                    {trustScore >= 9.0 ? 'Tam Güvenilir' : trustScore >= 7.0 ? 'Doğrulanmış' : 'Dikkat Gerekli'}
-                  </span>
+                  {trustScore === null ? (
+                    <span className="text-2xs font-bold text-amber-700">İşletme teyidi bekleniyor</span>
+                  ) : (
+                    <>
+                      <span className={`text-sm font-black px-2 py-0.5 rounded text-white shadow-xs ${
+                        trustScore >= 9.0 ? 'bg-brand-green' : trustScore >= 7.0 ? 'bg-amber-500' : 'bg-red-650'
+                      }`}>
+                        {trustScore} / 10
+                      </span>
+                      <span className="text-2xs font-bold text-gray-700">
+                        {trustScore >= 9.0 ? 'Tam Güvenilir' : trustScore >= 7.0 ? 'Doğrulanmış' : 'Dikkat Gerekli'}
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

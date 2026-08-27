@@ -4,11 +4,20 @@ import { initialHotels, initialBoardings, initialGuides, initialCorrections, ini
 const { Pool } = pg;
 
 const connectionString = process.env.DATABASE_URL || 'postgresql://pati_user:pati_password@localhost:5436/pati_db';
+const isLocalDatabase = /(?:localhost|127\.0\.0\.1|pati_db)(?::|\/)/i.test(connectionString);
 
 const pool = new Pool({
   connectionString,
-  ssl: false
+  ssl: isLocalDatabase ? false : { rejectUnauthorized: false },
+  max: isLocalDatabase ? 10 : 3,
+  idleTimeoutMillis: 10000,
+  connectionTimeoutMillis: 15000
 });
+
+export async function checkDatabaseConnection() {
+  const result = await pool.query('SELECT current_database() AS database, current_user AS user, NOW() AS checked_at');
+  return result.rows[0];
+}
 
 const initialExperiences = [
   {
@@ -644,7 +653,7 @@ export async function saveHotel(h) {
   `;
   const result = await pool.query(query, [
     h.id, h.name, h.city, h.district, h.type, JSON.stringify(h.allowedPets), h.suitability, h.weightLimit, h.extraFee,
-    JSON.stringify(h.features), JSON.stringify(h.quizTags || []), h.baseTrustScore || 9.5, h.verified, h.lastVerified, h.imageUrl,
+    JSON.stringify(h.features), JSON.stringify(h.quizTags || []), h.baseTrustScore ?? 9.5, h.verified, h.lastVerified, h.imageUrl,
     JSON.stringify(h.galleryImages || []), h.description, h.whySelected, JSON.stringify(h.suitableFor || []), JSON.stringify(h.notSuitableFor || []),
     JSON.stringify(h.disallowedPets || []), h.breedRestrictions, h.maxPetsPerRoom, h.depositInfo, h.requiredDocs,
     h.canLeaveInRoomAlone, JSON.stringify(h.rules || {}), h.veterinarySupport, h.phone, h.email, h.website,

@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 // Import database helpers
 import { 
   initDatabase,
+  checkDatabaseConnection,
   getHotels, saveHotel, deleteHotel,
   getBoardings, saveBoarding, deleteBoarding,
   getGuides, saveGuide, deleteGuide,
@@ -35,8 +36,10 @@ app.use(express.json());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Initialize PostgreSQL Database on Startup
-await initDatabase();
+// Local development initializes automatically. Production schema changes are explicit.
+if (process.env.VERCEL !== '1' || process.env.AUTO_INIT_DATABASE === 'true') {
+  await initDatabase();
+}
 
 function requireAdmin(req, res, next) {
   const token = req.headers['x-admin-token'];
@@ -83,6 +86,15 @@ app.post('/api/admin/login', (req, res) => {
 // ----------------------------------------------------
 // REST API ENDPOINTS
 // ----------------------------------------------------
+
+app.get('/api/health/database', async (req, res) => {
+  try {
+    const status = await checkDatabaseConnection();
+    res.json({ ok: true, database: status.database, checkedAt: status.checked_at });
+  } catch (err) {
+    res.status(503).json({ ok: false, error: err.message });
+  }
+});
 
 // Hotels API
 app.get('/api/hotels', async (req, res) => {
@@ -781,10 +793,14 @@ app.get('*', (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`==================================================`);
-  console.log(`Patiyle Seyahat Full-Stack REST API & Server listening on port ${PORT}`);
-  console.log(`Database connected: PostgreSQL running in Docker (Port 5436)`);
-  console.log(`Dynamic HTML Prerender SEO/GEO engine started.`);
-  console.log(`==================================================`);
-});
+export default app;
+
+if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
+  app.listen(PORT, () => {
+    console.log(`==================================================`);
+    console.log(`Patiyle Seyahat Full-Stack REST API & Server listening on port ${PORT}`);
+    console.log(`Database connected: ${process.env.DATABASE_URL ? 'DATABASE_URL' : 'local PostgreSQL (Port 5436)'}`);
+    console.log(`Dynamic HTML Prerender SEO/GEO engine started.`);
+    console.log(`==================================================`);
+  });
+}

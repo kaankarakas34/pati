@@ -27,3 +27,4 @@ scratch/
 # Local database settings / credentials
 .env
 data/db.json
+data/scraper-results/

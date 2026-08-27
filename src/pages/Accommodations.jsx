@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon } from '../components/PetIcons';
+import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon, AlertIcon } from '../components/PetIcons';
 import AdBanner from '../components/AdBanner';
 
 export default function Accommodations({ hotels, onViewChange, searchFilters, setSearchFilters }) {
@@ -462,9 +462,9 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
                       <img src={hotel.imageUrl} alt={hotel.name} className="w-full h-full object-cover" />
                       
                       {/* Verification Badge */}
-                      <div className="absolute top-3 left-3 bg-brand-navy text-white text-3xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1 shadow-sm">
-                        <VerifiedBadge className="w-4 h-4 text-white" />
-                        <span>Doğrulandı</span>
+                      <div className={`absolute top-3 left-3 text-white text-3xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1 shadow-sm ${hotel.verified === false ? 'bg-amber-600' : 'bg-brand-navy'}`}>
+                        {hotel.verified === false ? <AlertIcon className="w-4 h-4 text-white" /> : <VerifiedBadge className="w-4 h-4 text-white" />}
+                        <span>{hotel.verified === false ? 'Doğrulama Bekliyor' : 'Doğrulandı'}</span>
                       </div>
                       
                       {/* Suitability Level */}
@@ -501,7 +501,7 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
                       {/* Important highlights */}
                       <div className="flex flex-wrap gap-1.5 pt-2">
                         <span className="text-2xs bg-brand-navy-light px-2.5 py-1 rounded-full text-brand-navy font-bold text-3xs">
-                          ⚖️ {hotel.weightLimit > 0 ? `Limit: ${hotel.weightLimit} kg` : 'Kilo Sınırı Yok'}
+                          ⚖️ {hotel.extraFee === 'Teyit bekliyor' ? 'Kilo Bilgisi Bekleniyor' : hotel.weightLimit > 0 ? `Limit: ${hotel.weightLimit} kg` : 'Kilo Sınırı Yok'}
                         </span>
                         <span className="text-2xs bg-brand-navy-light px-2.5 py-1 rounded-full text-brand-navy font-bold text-3xs">
                           💰 {hotel.extraFee === 'no' ? 'Ek Ücret Yok' : `Ek Ücret: ${hotel.extraFee}`}
