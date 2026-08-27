@@ -12,9 +12,11 @@
     "preview": "vite preview",
     "import:enuygun:test": "node scripts/import-enuygun-test.js",
     "scrape:hotels": "node scripts/scrape-hotels.js",
-    "dedupe:hotels": "node scripts/dedupe-hotels.js"
+    "dedupe:hotels": "node scripts/dedupe-hotels.js",
+    "migrate:supabase": "node scripts/migrate-to-supabase.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.112.4",
     "axios": "^1.7.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

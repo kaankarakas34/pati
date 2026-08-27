@@ -5,9 +5,15 @@ const { Pool } = pg;
 
 const connectionString = process.env.DATABASE_URL || 'postgresql://pati_user:pati_password@localhost:5436/pati_db';
 const isLocalDatabase = /(?:localhost|127\.0\.0\.1|pati_db)(?::|\/)/i.test(connectionString);
+const poolConnectionString = (() => {
+  if (isLocalDatabase) return connectionString;
+  const parsed = new URL(connectionString);
+  parsed.searchParams.delete('sslmode');
+  return parsed.toString();
+})();
 
 const pool = new Pool({
-  connectionString,
+  connectionString: poolConnectionString,
   ssl: isLocalDatabase ? false : { rejectUnauthorized: false },
   max: isLocalDatabase ? 10 : 3,
   idleTimeoutMillis: 10000,

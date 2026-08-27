@@ -26,6 +26,15 @@ try {
   const write = await pool.query('select value from codex_connection_test where id = 1');
   await pool.query('rollback');
   const tables = await pool.query("select count(*)::int as count from information_schema.tables where table_schema = 'public'");
+  const hotelCount = tables.rows[0].count > 0
+    ? (await pool.query('select count(*)::int as count from public.hotels')).rows[0].count
+    : 0;
+  const rls = await pool.query(`
+    select count(*)::int as total,
+           count(*) filter (where relrowsecurity)::int as enabled
+    from pg_class
+    where relnamespace = 'public'::regnamespace and relkind = 'r'
+  `);
 
   console.log(JSON.stringify({
     connected: true,
@@ -33,7 +42,9 @@ try {
     user: identity.rows[0].user,
     postgres: identity.rows[0].version.split(' ').slice(0, 2).join(' '),
     transactionWrite: write.rows[0].value,
-    publicTables: tables.rows[0].count
+    publicTables: tables.rows[0].count,
+    hotels: hotelCount,
+    rlsTables: rls.rows[0]
   }));
 } catch (error) {
   console.error(JSON.stringify({ connected: false, error: error.message, code: error.code }));
