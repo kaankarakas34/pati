@@ -14,14 +14,37 @@ import Wizard from './pages/Wizard';
 import Taxis from './pages/Taxis';
 import Vets from './pages/Vets';
 import Experiences from './pages/Experiences';
+import {
+  initialHotels,
+  initialBoardings,
+  initialGuides,
+  initialCorrections,
+  initialComplaints
+} from './data/mockData';
+
+async function fetchTable(path, fallback = []) {
+  try {
+    const response = await fetch(path);
+    const data = await response.json();
+
+    if (!response.ok || !Array.isArray(data)) {
+      throw new Error(data?.error || `${path} gecersiz yanit dondu`);
+    }
+
+    return data;
+  } catch (error) {
+    console.error(`Failed to load ${path}:`, error);
+    return fallback;
+  }
+}
 
 function App() {
   // 1. Initialize DB states from PostgreSQL Backend API
-  const [hotels, setHotels] = useState([]);
-  const [boardings, setBoardings] = useState([]);
-  const [guides, setGuides] = useState([]);
-  const [corrections, setCorrections] = useState([]);
-  const [complaints, setComplaints] = useState([]);
+  const [hotels, setHotels] = useState(initialHotels);
+  const [boardings, setBoardings] = useState(initialBoardings);
+  const [guides, setGuides] = useState(initialGuides);
+  const [corrections, setCorrections] = useState(initialCorrections);
+  const [complaints, setComplaints] = useState(initialComplaints);
   const [taxis, setTaxis] = useState([]);
   const [vets, setVets] = useState([]);
   const [experiences, setExperiences] = useState([]);
@@ -37,15 +60,15 @@ function App() {
     async function loadData() {
       try {
         const [hotelsRes, boardingsRes, guidesRes, correctionsRes, complaintsRes, taxisRes, vetsRes, experiencesRes, adsRes] = await Promise.all([
-          fetch('/api/hotels').then(r => r.json()),
-          fetch('/api/boardings').then(r => r.json()),
-          fetch('/api/guides').then(r => r.json()),
-          fetch('/api/corrections').then(r => r.json()),
-          fetch('/api/complaints').then(r => r.json()),
-          fetch('/api/taxis').then(r => r.json()),
-          fetch('/api/vets').then(r => r.json()),
-          fetch('/api/experiences').then(r => r.json()),
-          fetch('/api/ads').then(r => r.json())
+          fetchTable('/api/hotels', initialHotels),
+          fetchTable('/api/boardings', initialBoardings),
+          fetchTable('/api/guides', initialGuides),
+          fetchTable('/api/corrections', initialCorrections),
+          fetchTable('/api/complaints', initialComplaints),
+          fetchTable('/api/taxis'),
+          fetchTable('/api/vets'),
+          fetchTable('/api/experiences'),
+          fetchTable('/api/ads')
         ]);
 
         setHotels(hotelsRes);
