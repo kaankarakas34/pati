@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { EditIcon, PlusIcon, CheckIcon } from '../components/PetIcons';
 
 export default function AdminPanel({
@@ -23,6 +23,30 @@ export default function AdminPanel({
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
+  const [adApplications, setAdApplications] = useState([]);
+  const [applicationsLoading, setApplicationsLoading] = useState(false);
+  const [applicationsError, setApplicationsError] = useState('');
+
+  const loadAdApplications = async () => {
+    const token = sessionStorage.getItem('admin_token');
+    if (!token) return;
+    setApplicationsLoading(true);
+    setApplicationsError('');
+    try {
+      const response = await fetch('/api/ad-applications', { headers: { 'x-admin-token': token } });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Başvurular yüklenemedi.');
+      setAdApplications(Array.isArray(data) ? data : []);
+    } catch (error) {
+      setApplicationsError(error.message);
+    } finally {
+      setApplicationsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthenticated) loadAdApplications();
+  }, [isAuthenticated]);
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -404,6 +428,9 @@ export default function AdminPanel({
         <button onClick={() => { setActiveSubTab('guides'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'guides' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Rehberler</button>
         <button onClick={() => { setActiveSubTab('experiences'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'experiences' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Gezilecek Yerler</button>
         <button onClick={() => { setActiveSubTab('ads'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'ads' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Reklamlar</button>
+        <button onClick={() => { setActiveSubTab('ad-applications'); setIsAdding(false); loadAdApplications(); }} className={`pb-3 border-b-2 relative whitespace-nowrap ${activeSubTab === 'ad-applications' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
+          Reklam Başvuruları
+        </button>
         <button onClick={() => { setActiveSubTab('corrections'); setIsAdding(false); }} className={`pb-3 border-b-2 relative whitespace-nowrap ${activeSubTab === 'corrections' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
           Düzeltmeler
           {pendingCorrectionsCount > 0 && <span className="ml-1 bg-brand-orange text-white text-4xs rounded-full px-1.5 py-0.5 font-bold">{pendingCorrectionsCount}</span>}
@@ -1057,6 +1084,47 @@ export default function AdminPanel({
                   ))}
                 </tbody>
               </table>
+            </div>
+          )}
+
+          {activeSubTab === 'ad-applications' && (
+            <div>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+                <div>
+                  <h3 className="font-title font-bold text-lg text-gray-950">Reklam ve Sponsorluk Başvuruları</h3>
+                  <p className="text-xs text-gray-500 mt-1">Reklam formundan gönderilen işletme ve iletişim bilgileri.</p>
+                </div>
+                <button type="button" onClick={loadAdApplications} className="border border-brand-navy text-brand-navy px-4 py-2 rounded-lg text-xs font-bold hover:bg-brand-navy-light">
+                  Listeyi yenile
+                </button>
+              </div>
+
+              {applicationsError && <p className="mb-4 text-xs text-red-700 bg-red-50 border border-red-200 rounded-lg p-3">{applicationsError}</p>}
+              {applicationsLoading ? (
+                <p className="text-center py-10 text-sm text-gray-500">Başvurular yükleniyor...</p>
+              ) : adApplications.length === 0 ? (
+                <p className="text-center py-10 text-sm text-gray-500 italic">Henüz reklam başvurusu bulunmuyor.</p>
+              ) : (
+                <div className="space-y-4">
+                  {adApplications.map(application => (
+                    <article key={application.id} className="border border-brand-beige rounded-lg bg-white p-5 shadow-2xs">
+                      <div>
+                        <h4 className="font-title font-bold text-base text-brand-navy">{application.businessName}</h4>
+                        <p className="text-xs text-gray-500 mt-1">{application.businessType} · {application.city} · {new Date(application.createdAt).toLocaleDateString('tr-TR')}</p>
+
+                        <dl className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-2 mt-4 text-xs">
+                          <div><dt className="text-gray-500">Yetkili</dt><dd className="font-semibold text-gray-800">{application.contactName}</dd></div>
+                          <div><dt className="text-gray-500">E-posta</dt><dd><a className="font-semibold text-brand-navy hover:underline break-all" href={`mailto:${application.email}`}>{application.email}</a></dd></div>
+                          <div><dt className="text-gray-500">Telefon</dt><dd><a className="font-semibold text-brand-navy hover:underline" href={`tel:${application.phone}`}>{application.phone}</a></dd></div>
+                        </dl>
+
+                        {application.website && <a href={application.website} target="_blank" rel="noreferrer" className="inline-block text-xs font-bold text-brand-green hover:underline mt-3 break-all">{application.website}</a>}
+                        {application.message && <p className="text-sm text-gray-700 bg-brand-cream/45 border border-brand-beige rounded-lg p-3 mt-4 leading-relaxed">{application.message}</p>}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 

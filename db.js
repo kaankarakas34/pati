@@ -6,9 +6,7 @@ import {
   initialCorrections, 
   initialComplaints,
   initialVets,
-  initialTaxis,
-  initialExperiences,
-  initialAds
+  initialTaxis
 } from './src/data/mockData.js';
 
 const { Pool } = pg;
@@ -409,6 +407,23 @@ export async function initDatabase() {
         clicks INT DEFAULT 0
       );
     `);
+
+    // 11. Create Advertising Applications Table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS ad_applications (
+        id UUID PRIMARY KEY,
+        business_name VARCHAR(160) NOT NULL,
+        business_type VARCHAR(100) NOT NULL,
+        contact_name VARCHAR(120) NOT NULL,
+        email VARCHAR(180) NOT NULL,
+        phone VARCHAR(40) NOT NULL,
+        website VARCHAR(500),
+        city VARCHAR(100) NOT NULL,
+        message TEXT,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+    `);
+    await client.query(`CREATE INDEX IF NOT EXISTS ad_applications_created_idx ON ad_applications (created_at DESC);`);
 
     console.log("PostgreSQL tables successfully verified.");
 
@@ -1123,4 +1138,34 @@ export async function saveAd(ad) {
 
 export async function deleteAd(id) {
   await pool.query("DELETE FROM ads WHERE id = $1", [id]);
+}
+
+export async function getAdApplications() {
+  const result = await pool.query("SELECT * FROM ad_applications ORDER BY created_at DESC");
+  return result.rows.map(row => ({
+    id: row.id,
+    businessName: row.business_name,
+    businessType: row.business_type,
+    contactName: row.contact_name,
+    email: row.email,
+    phone: row.phone,
+    website: row.website,
+    city: row.city,
+    message: row.message,
+    createdAt: row.created_at
+  }));
+}
+
+export async function saveAdApplication(application) {
+  const result = await pool.query(`
+    INSERT INTO ad_applications (
+      id, business_name, business_type, contact_name, email, phone, website, city, message
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    RETURNING id, created_at
+  `, [
+    application.id, application.businessName, application.businessType, application.contactName,
+    application.email, application.phone, application.website || null, application.city,
+    application.message || null
+  ]);
+  return result.rows[0];
 }

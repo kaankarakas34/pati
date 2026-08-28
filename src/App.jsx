@@ -15,6 +15,7 @@ import Wizard from './pages/Wizard';
 import Taxis from './pages/Taxis';
 import Vets from './pages/Vets';
 import Experiences from './pages/Experiences';
+import AdApplication from './pages/AdApplication';
 import {
   initialHotels,
   initialBoardings,
@@ -78,6 +79,11 @@ const CATEGORY_SEO = {
     path: '/evcil-hayvan-seyahat-rehberi',
     title: 'Evcil Hayvan Seyahat Rehberi | Patiyle Seyahat',
     description: 'Kedi ve köpekle yolculuk, sağlık belgeleri, otel seçimi ve destinasyon hazırlığı için güncel seyahat rehberleri.'
+  },
+  'trust-ads': {
+    path: '/trust-ads',
+    title: 'Reklam Başvurusu ve Sponsorluk | Patiyle Seyahat',
+    description: 'Patiyle Seyahat reklam ve sponsorluk başvurusu yapın; otel, pet oteli, veteriner, pet taksi ve evcil hayvan markanızı doğru kitleyle buluşturun.'
   }
 };
 
@@ -669,7 +675,6 @@ function App() {
       case 'trust-how':
       case 'trust-editorial':
       case 'trust-correction':
-      case 'trust-ads':
       case 'legal-kvkk':
       case 'legal-terms':
       case 'legal-privacy':
@@ -677,6 +682,9 @@ function App() {
         return (
           <Methodology activeSubView={currentView} />
         );
+
+      case 'trust-ads':
+        return <AdApplication />;
 
       case 'taxis':
       case 'taxi-detail':

@@ -73,6 +73,10 @@
       "destination": "/api/index"
     },
     {
+      "source": "/trust-ads",
+      "destination": "/api/index"
+    },
+    {
       "source": "/:path*",
       "destination": "/index.html"
     }

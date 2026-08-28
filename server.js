@@ -3,6 +3,7 @@ import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { randomUUID } from 'crypto';
 import dotenv from 'dotenv';
 
 // Import database helpers
@@ -18,7 +19,8 @@ import {
   getPetTaxis, savePetTaxi, deletePetTaxi,
   getVets, saveVet, deleteVet,
   getExperiences, saveExperience, deleteExperience,
-  getAds, saveAd, deleteAd
+  getAds, saveAd, deleteAd,
+  getAdApplications, saveAdApplication
 } from './db.js';
 import axios from 'axios';
 import { 
@@ -42,6 +44,7 @@ const PORT = process.env.PORT || 3000;
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN;
+const adApplicationAttempts = new Map();
 
 app.use(cors());
 app.use(express.json());
@@ -98,6 +101,29 @@ function isAllowedScrapeUrl(rawUrl) {
   } catch {
     return false;
   }
+}
+
+function normalizeText(value, maxLength) {
+  return String(value || '').trim().slice(0, maxLength);
+}
+
+function isValidHttpUrl(value) {
+  if (!value) return true;
+  try {
+    return ['http:', 'https:'].includes(new URL(value).protocol);
+  } catch {
+    return false;
+  }
+}
+
+function allowAdApplication(req) {
+  const key = String(req.headers['x-forwarded-for'] || req.ip || 'unknown').split(',')[0].trim();
+  const now = Date.now();
+  const recent = (adApplicationAttempts.get(key) || []).filter(timestamp => now - timestamp < 60 * 60 * 1000);
+  if (recent.length >= 5) return false;
+  recent.push(now);
+  adApplicationAttempts.set(key, recent);
+  return true;
 }
 
 app.post('/api/admin/login', (req, res) => {
@@ -387,6 +413,54 @@ app.delete('/api/ads/:id', requireAdmin, async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// Advertising Applications API
+app.post('/api/ad-applications', async (req, res) => {
+  try {
+    if (req.body?.company) return res.status(201).json({ success: true });
+    if (!allowAdApplication(req)) {
+      return res.status(429).json({ error: 'Çok fazla başvuru gönderildi. Lütfen daha sonra tekrar deneyin.' });
+    }
+
+    const application = {
+      id: randomUUID(),
+      businessName: normalizeText(req.body?.businessName, 160),
+      businessType: normalizeText(req.body?.businessType, 100),
+      contactName: normalizeText(req.body?.contactName, 120),
+      email: normalizeText(req.body?.email, 180).toLowerCase(),
+      phone: normalizeText(req.body?.phone, 40),
+      website: normalizeText(req.body?.website, 500),
+      city: normalizeText(req.body?.city, 100),
+      message: normalizeText(req.body?.message, 1500)
+    };
+
+    if (!application.businessName || !application.businessType || !application.contactName ||
+        !application.email || !application.phone || !application.city ||
+        req.body?.kvkkConsent !== true) {
+      return res.status(400).json({ error: 'Zorunlu alanları ve iletişim iznini kontrol edin.' });
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(application.email)) {
+      return res.status(400).json({ error: 'Geçerli bir e-posta adresi girin.' });
+    }
+    if (!isValidHttpUrl(application.website)) {
+      return res.status(400).json({ error: 'Web sitesi adresi http:// veya https:// ile başlamalıdır.' });
+    }
+
+    const data = await saveAdApplication(application);
+    res.status(201).json({ success: true, id: data.id });
+  } catch (err) {
+    console.error('Ad application create error:', err.message);
+    res.status(500).json({ error: 'Başvuru şu anda kaydedilemedi. Lütfen daha sonra tekrar deneyin.' });
+  }
+});
+
+app.get('/api/ad-applications', requireAdmin, async (req, res) => {
+  try {
+    res.json(await getAdApplications());
+  } catch (err) {
+    res.status(500).json({ error: 'Başvurular yüklenemedi.' });
   }
 });
 
@@ -801,6 +875,7 @@ app.get('/sitemap.xml', async (req, res) => {
   const citySlugs = [...new Set(hotels.map(hotel => slugify(hotel.city)).filter(Boolean))];
   const urls = [
     { loc: 'https://www.patiyleseyahat.com/', priority: '1.0', frequency: 'daily' },
+    { loc: 'https://www.patiyleseyahat.com/trust-ads', priority: '0.5', frequency: 'monthly' },
     ...Object.keys(categorySeoPages).map(categoryPath => ({
       loc: `https://www.patiyleseyahat.com${categoryPath}`,
       priority: '0.9',
@@ -850,6 +925,23 @@ app.get('/yonetici', (req, res) => {
     /<meta name="robots" content=".*?" \/>/,
     '<meta name="robots" content="noindex, nofollow" />'
   );
+  return res.send(html);
+});
+
+app.get('/trust-ads', (req, res) => {
+  let html = getIndexHtmlTemplate();
+  const title = 'Reklam Başvurusu ve Sponsorluk | Patiyle Seyahat';
+  const description = 'Otel, pet oteli, veteriner, pet taksi ve evcil hayvan markaları için Patiyle Seyahat reklam ve sponsorluk başvurusu.';
+  html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
+  html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${description}" />`);
+  html = html.replace('</head>', `
+    <link rel="canonical" href="https://www.patiyleseyahat.com/trust-ads" />
+    <meta property="og:title" content="${title}" />
+    <meta property="og:description" content="${description}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.patiyleseyahat.com/trust-ads" />
+  </head>`);
+  res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
   return res.send(html);
 });
 
