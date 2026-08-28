@@ -28,3 +28,5 @@ scratch/
 .env
 data/db.json
 data/scraper-results/
+
+.vercel
