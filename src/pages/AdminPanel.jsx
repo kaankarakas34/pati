@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { EditIcon, PlusIcon, CheckIcon } from '../components/PetIcons';
 
 export default function AdminPanel({
@@ -15,6 +15,9 @@ export default function AdminPanel({
   // Edit states
   const [editingItem, setEditingItem] = useState(null); // { type: 'hotel'|'boarding'|'guide', id }
   const [isAdding, setIsAdding] = useState(false);
+  const [hotelSearch, setHotelSearch] = useState('');
+  const [hotelVerificationFilter, setHotelVerificationFilter] = useState('all');
+  const [hotelPage, setHotelPage] = useState(1);
 
   // Authentication states
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -122,7 +125,7 @@ export default function AdminPanel({
 
   // Form fields
   const [hotelForm, setHotelForm] = useState({
-    name: '', city: '', district: '', type: 'Otel', suitability: 1, weightLimit: 0,
+    name: '', city: '', district: '', type: 'Otel', suitability: 1, weightLimit: 0, verified: false,
     extraFee: 'no', allowedPets: ['dog'], features: [], quizTags: [], imageUrl: '', galleryImages: '', description: '',
     whySelected: '', suitableFor: '', notSuitableFor: '', disallowedPets: '',
     breedRestrictions: '', maxPetsPerRoom: 1, depositInfo: 'Alınmıyor',
@@ -166,6 +169,30 @@ export default function AdminPanel({
   // Stats calculations
   const pendingCorrectionsCount = corrections.filter(c => c.status === 'pending').length;
   const pendingComplaintsCount = complaints.filter(c => c.status === 'pending').length;
+  const verifiedHotelsCount = hotels.filter(hotel => hotel.verified === true).length;
+  const unverifiedHotelsCount = hotels.length - verifiedHotelsCount;
+  const filteredHotels = useMemo(() => {
+    const query = hotelSearch.trim().toLocaleLowerCase('tr-TR');
+    return hotels.filter(hotel => {
+      const matchesQuery = !query || [hotel.name, hotel.city, hotel.district]
+        .some(value => String(value || '').toLocaleLowerCase('tr-TR').includes(query));
+      const matchesVerification = hotelVerificationFilter === 'all'
+        || (hotelVerificationFilter === 'verified' && hotel.verified === true)
+        || (hotelVerificationFilter === 'unverified' && hotel.verified !== true);
+      return matchesQuery && matchesVerification;
+    });
+  }, [hotels, hotelSearch, hotelVerificationFilter]);
+  const hotelsPerPage = 25;
+  const hotelPageCount = Math.max(1, Math.ceil(filteredHotels.length / hotelsPerPage));
+  const visibleHotels = filteredHotels.slice((hotelPage - 1) * hotelsPerPage, hotelPage * hotelsPerPage);
+
+  useEffect(() => {
+    setHotelPage(1);
+  }, [hotelSearch, hotelVerificationFilter]);
+
+  useEffect(() => {
+    setHotelPage(current => Math.min(current, hotelPageCount));
+  }, [hotelPageCount]);
 
   const handleEditHotel = (hotel) => {
     setEditingItem({ type: 'hotel', id: hotel.id });
@@ -228,7 +255,7 @@ export default function AdminPanel({
       features: hotelForm.features,
       quizTags: hotelForm.quizTags,
       baseTrustScore: parseFloat(hotelForm.baseTrustScore || 9.5),
-      verified: true
+      verified: hotelForm.verified === true || hotelForm.verified === 'true'
     };
 
     if (editingItem) {
@@ -528,6 +555,13 @@ export default function AdminPanel({
                     <input type="number" step="0.1" max="10" min="1" value={hotelForm.baseTrustScore} onChange={(e) => setHotelForm({...hotelForm, baseTrustScore: e.target.value})} className="w-full border rounded-lg p-2.5 outline-none" />
                   </div>
                 </div>
+                <label className="flex items-start gap-3 border border-brand-beige rounded-lg p-3 bg-brand-cream/40 cursor-pointer">
+                  <input type="checkbox" checked={hotelForm.verified === true} onChange={(e) => setHotelForm({...hotelForm, verified: e.target.checked})} className="w-4 h-4 mt-0.5 accent-brand-green" />
+                  <span>
+                    <strong className="block text-xs text-gray-800">İşletme bilgileri doğrulandı</strong>
+                    <span className="block text-3xs text-gray-500 mt-1">Yalnızca tesisle doğrudan iletişim kurup bilgileri teyit ettiyseniz işaretleyin.</span>
+                  </span>
+                </label>
                 <div>
                   <label className="text-3xs font-bold text-gray-500 uppercase tracking-wider block mb-1">Görsel URL</label>
                   <input type="text" placeholder="https://..." value={hotelForm.imageUrl} onChange={(e) => setHotelForm({...hotelForm, imageUrl: e.target.value})} className="w-full border rounded-lg p-2.5 outline-none" />
@@ -869,12 +903,26 @@ export default function AdminPanel({
         <div className="bg-white border border-brand-beige rounded-3xl p-6 shadow-sm overflow-x-auto">
           {activeSubTab === 'hotels' && (
             <div>
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="font-title font-bold text-lg text-gray-950">Doğrulanmış Oteller</h3>
-                <button onClick={() => { setIsAdding(true); setEditingItem(null); setHotelForm({ name: '', city: '', district: '', type: 'Otel', suitability: 1, weightLimit: 0, extraFee: 'no', allowedPets: ['dog'], features: [], quizTags: [], imageUrl: '', galleryImages: '', description: '', whySelected: '', suitableFor: '', notSuitableFor: '', disallowedPets: '', breedRestrictions: '', maxPetsPerRoom: 1, depositInfo: 'Alınmıyor', requiredDocs: 'Aşı karnesi', canLeaveInRoomAlone: true, rules: { pool: '', beach: '', restaurant: '' }, bookingLinks: { enuygun: '', otelz: '', booking: '' }, veterinarySupport: '', phone: '', email: '', website: '', editorNote: '', infoSource: '', faq: [{ q: '', a: '' }], lastVerified: new Date().toISOString().split('T')[0], baseTrustScore: 9.5 }); }} className="bg-brand-green text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-5">
+                <div>
+                  <h3 className="font-title font-bold text-lg text-gray-950">Tüm Oteller</h3>
+                  <p className="text-xs text-gray-500 mt-1">Toplam {hotels.length} tesis · {verifiedHotelsCount} doğrulanmış · {unverifiedHotelsCount} doğrulanmamış</p>
+                </div>
+                <button onClick={() => { setIsAdding(true); setEditingItem(null); setHotelForm({ name: '', city: '', district: '', type: 'Otel', suitability: 1, weightLimit: 0, verified: false, extraFee: 'no', allowedPets: ['dog'], features: [], quizTags: [], imageUrl: '', galleryImages: '', description: '', whySelected: '', suitableFor: '', notSuitableFor: '', disallowedPets: '', breedRestrictions: '', maxPetsPerRoom: 1, depositInfo: 'Alınmıyor', requiredDocs: 'Aşı karnesi', canLeaveInRoomAlone: true, rules: { pool: '', beach: '', restaurant: '' }, bookingLinks: { enuygun: '', otelz: '', booking: '' }, veterinarySupport: '', phone: '', email: '', website: '', editorNote: '', infoSource: '', faq: [{ q: '', a: '' }], lastVerified: new Date().toISOString().split('T')[0], baseTrustScore: 9.5 }); }} className="bg-brand-green text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1 self-start lg:self-auto">
                   <PlusIcon className="w-4 h-4" /> Yeni Otel Ekle
                 </button>
               </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_220px] gap-3 mb-5">
+                <input type="search" value={hotelSearch} onChange={(e) => setHotelSearch(e.target.value)} className="form-input" placeholder="Otel adı, şehir veya ilçe ara" />
+                <select value={hotelVerificationFilter} onChange={(e) => setHotelVerificationFilter(e.target.value)} className="form-input bg-white">
+                  <option value="all">Tüm doğrulama durumları</option>
+                  <option value="unverified">Doğrulanmamış</option>
+                  <option value="verified">Doğrulanmış</option>
+                </select>
+              </div>
+
+              <p className="text-xs text-gray-500 mb-3">{filteredHotels.length} kayıt bulundu · Sayfa {hotelPage}/{hotelPageCount}</p>
               <table className="w-full text-left text-sm border-collapse">
                 <thead>
                   <tr className="border-b border-brand-beige text-gray-500 font-medium text-xs">
@@ -882,17 +930,23 @@ export default function AdminPanel({
                     <th className="py-3 px-2">Konum</th>
                     <th className="py-3 px-2">Tür</th>
                     <th className="py-3 px-2">Dost Seviyesi</th>
+                    <th className="py-3 px-2">Doğrulama</th>
                     <th className="py-3 px-2">Güven Puanı</th>
                     <th className="py-3 px-2 text-right">İşlemler</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-brand-beige/55">
-                  {hotels.map(h => (
+                  {visibleHotels.map(h => (
                     <tr key={h.id} className="hover:bg-brand-cream/30">
                       <td className="py-3.5 px-2 font-semibold text-gray-900">{h.name}</td>
                       <td className="py-3.5 px-2 text-xs text-gray-600">{h.city}, {h.district}</td>
                       <td className="py-3.5 px-2 text-xs">{h.type}</td>
                       <td className="py-3.5 px-2 text-xs font-bold text-brand-green">Seviye {h.suitability}</td>
+                      <td className="py-3.5 px-2 text-xs">
+                        <span className={`inline-flex px-2 py-1 rounded font-bold ${h.verified === true ? 'bg-brand-green-light text-brand-green' : 'bg-amber-100 text-amber-800'}`}>
+                          {h.verified === true ? 'Doğrulanmış' : 'Doğrulanmamış'}
+                        </span>
+                      </td>
                       <td className="py-3.5 px-2 text-xs font-bold text-brand-earth-dark">{h.baseTrustScore || 9.5}/10</td>
                       <td className="py-3.5 px-2 text-right space-x-2 whitespace-nowrap">
                         <button onClick={() => handleEditHotel(h)} className="text-brand-green hover:underline text-xs font-bold">Düzenle</button>
@@ -902,6 +956,14 @@ export default function AdminPanel({
                   ))}
                 </tbody>
               </table>
+              {filteredHotels.length === 0 && <p className="text-center py-10 text-sm text-gray-500">Aramanızla eşleşen otel bulunamadı.</p>}
+              {hotelPageCount > 1 && (
+                <div className="flex items-center justify-between gap-3 border-t border-brand-beige mt-4 pt-4">
+                  <button type="button" disabled={hotelPage === 1} onClick={() => setHotelPage(page => Math.max(1, page - 1))} className="border border-gray-300 px-4 py-2 rounded-lg text-xs font-bold disabled:opacity-40">Önceki</button>
+                  <span className="text-xs text-gray-500">{(hotelPage - 1) * hotelsPerPage + 1}-{Math.min(hotelPage * hotelsPerPage, filteredHotels.length)} / {filteredHotels.length}</span>
+                  <button type="button" disabled={hotelPage === hotelPageCount} onClick={() => setHotelPage(page => Math.min(hotelPageCount, page + 1))} className="border border-gray-300 px-4 py-2 rounded-lg text-xs font-bold disabled:opacity-40">Sonraki</button>
+                </div>
+              )}
             </div>
           )}
 
