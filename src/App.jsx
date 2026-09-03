@@ -84,6 +84,11 @@ const CATEGORY_SEO = {
     path: '/trust-ads',
     title: 'Reklam Başvurusu ve Sponsorluk | Patiyle Seyahat',
     description: 'Patiyle Seyahat reklam ve sponsorluk başvurusu yapın; otel, pet oteli, veteriner, pet taksi ve evcil hayvan markanızı doğru kitleyle buluşturun.'
+  },
+  chains: {
+    path: '/otel-zincirleri',
+    title: 'Türkiye Evcil Hayvan Dostu Otel Zincirleri (Hilton, Radisson vb.) | Patiyle Seyahat',
+    description: 'Hilton, Radisson, Akra, Swissotel gibi otel zincirlerinin evcil hayvan politikaları, kilo sınırları ve aile dostu konaklama imkanları.'
   }
 };
 
@@ -561,6 +566,9 @@ function App() {
         setCurrentView('accommodations');
       } else if (path === '/kopek-kabul-eden-oteller') {
         setSearchFilters(current => ({ ...current, destination: '', petType: 'dog', cityLanding: false, filterTitle: 'Köpek Kabul Eden Oteller' }));
+        setCurrentView('accommodations');
+      } else if (path === '/otel-zincirleri') {
+        setSearchFilters(current => ({ ...current, destination: '', cityLanding: false, filterTitle: 'Otel Zincirleri ve Pet Politikaları' }));
         setCurrentView('accommodations');
       } else if (path.startsWith('/otel/')) {
         const segments = path.split('/').filter(Boolean).map(segment => decodeURIComponent(segment));

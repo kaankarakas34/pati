@@ -157,6 +157,28 @@ export const seoContent = {
       { question: 'Evcil hayvan dostu otel rezervasyonu nasıl yapılmalı?', answer: 'Hayvanın türü, ırkı, kilosu ve sayısını rezervasyon öncesinde yazılı olarak bildirin; ek ücret ve oda kurallarının onayını saklayın.' }
     ],
     links: [{ href: '/evcil-hayvan-dostu-oteller', label: 'Evcil Hayvan Dostu Oteller' }, { href: '/evcil-hayvanla-gezilecek-yerler', label: 'Evcil Hayvanla Gezilecek Yerler' }]
+  },
+  chains: {
+    id: 'chains-seo',
+    title: 'Türkiye Evcil Hayvan Dostu Otel Zincirleri ve Politikaları (Hilton, Radisson, Akra vb.)',
+    paragraphs: [
+      'Türkiye genelinde aileniz ve evcil hayvanlarınızla (kedi, köpek) güvenle konaklayabileceğiniz en popüler uluslararası ve yerel otel zincirlerinin (Hilton, Radisson, Akra, Swissotel, Wyndham) pet politikalarını karşılaştırın. Her otel grubunun maksimum kilo sınırı, gecelik temizlik bedeli ve ortak alan kuralları farklılık göstermektedir.',
+      'Özellikle ailece yapılan seyahatlerde hem çocuklar hem de patili dostlar için güvenli, geniş bahçeli ve oda içi evcil hayvan konforu sunan otel zincirleri tercih edilmektedir. Hilton Grubu (DoubleTree, Canopy, Curio) gibi markalar odalarda pet yatağı ve mama kabı sunarken; Radisson ve Akra grubu geniş bahçe ve plaj erişimleriyle öne çıkmaktadır.'
+    ],
+    highlights: [
+      'Hilton, Radisson, Akra, Swissotel pet politikaları karşılaştırması',
+      'Aile dostu ve güvenli kedi/köpek konaklama standartları',
+      'Otel zincirlerinin kilo sınırı ve gecelik ek ücret detayları',
+      'Restoran, bahçe ve ortak alan pet izin durumları'
+    ],
+    faqs: [
+      { question: 'Hilton otelleri evcil hayvan kabul ediyor mu?', answer: 'Evet. Türkiye’deki birçok Hilton, DoubleTree ve Hilton Garden Inn tesisi belirli kilo sınırları (genellikle 15-25 kg) dahilinde kedi ve köpek kabul etmektedir.' },
+      { question: 'Evcil hayvan dostu otel zincirleri hangileridir?', answer: 'Hilton, Radisson Blu, Akra Hotels, Swissotel, Wyndham ve Mercure gibi küresel ve yerel zincirler pet friendly konaklama politikalarına sahiptir.' },
+      { question: 'Aile ve çocukla seyahatte pet friendly otel seçerken nelere dikkat edilmeli?', answer: 'Geniş bahçe alanı, 24 saat nöbetçi veteriner yakınlığı, çocuk oyun alanları ile pet alanlarının ayrımı ve odadaki ses yalıtımı öncelikle incelenmelidir.' }
+    ],
+    links: [
+      { href: '/evcil-hayvan-dostu-oteller', label: 'Tüm Evcil Hayvan Dostu Oteller' }
+    ]
   }
 };
 
