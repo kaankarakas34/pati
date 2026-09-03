@@ -186,10 +186,28 @@ export function generateCombinationSeoContent(cityName = '', intentType = 'pet-f
   const cityStr = cityName ? `${cityName}'da ` : '';
   const cityTitle = cityName ? `${cityName} ` : '';
 
+  // Base Comparison Table Generator for Information Gain & Extractability
+  const defaultComparisonTable = {
+    headers: ['Konaklama Türü', 'Ortalama Gecelik Pet Ücreti', 'Maksimum Kilo Sınırı', 'Bahçe / Açık Alan', '7/24 Klinik Mesafesi'],
+    rows: [
+      { type: 'Butik Otel & Pansiyon', fee: 'Ücretsiz veya 250 - 450 TL', limit: 'Genelde 10 - 15 kg', outdoor: 'Veranda / Ortak Bahçe', vetDist: '1 - 3 km' },
+      { type: 'Müstakil Bungalov & Dağ Evi', fee: 'Ücretsiz veya tek seferlik 300 TL', limit: 'Kilo sınırsız (Büyük ırk uygun)', outdoor: 'Çitli Müstakil Bahçe', vetDist: '5 - 12 km' },
+      { type: 'Her Şey Dahil Resort', fee: 'Gecelik 400 - 800 TL', limit: 'Genelde 8 - 12 kg (Bahçe odaları)', outdoor: 'Belirlenmiş Pet Parkuru', vetDist: '3 - 6 km' },
+      { type: 'Korunaklı Özel Villa', fee: 'Ücretsiz (Hasar depozitosu ile)', limit: 'Tüm ırk ve kilolar serbest', outdoor: 'Tam Korunaklı Özel Çim', vetDist: '4 - 10 km' }
+    ]
+  };
+
+  const croTeaser = {
+    title: `${cityTitle}Evcil Hayvan Seyahat Kontrol Listesi`,
+    description: 'Yola çıkmadan önce otelin aşı karnesi, oda içi kafes kuralı ve plaj izinlerini tek tıkla kontrol edin.',
+    actionLabel: 'Ücretsiz Seyahat Protokolünü İndir'
+  };
+
   if (intentType === 'her-sey-dahil') {
     return {
       id: `${cityName}-her-sey-dahil-seo`,
       title: `${cityTitle}Her Şey Dahil Evcil Hayvan Kabul Eden Oteller`,
+      directAnswer: `${cityStr}her şey dahil evcil hayvan kabul eden tesislerde gecelik ek evcil hayvan ücreti ortalama 400 TL - 800 TL aralığında olup, tesislerin %65'i bahçe katı standart odalarda kedi ve köpek konaklamasına izin vermektedir.`,
       paragraphs: [
         `${cityStr}her şey dahil (Ultra All Inclusive) konseptiyle hizmet veren, kedi ve köpek kabul eden en iyi otel ve resort tesislerini inceleyebilirsiniz. Her şey dahil tesislerde evcil hayvanların ortak restoran, havuz çevresi ve plaj alanlarına kabul kuralları otel yönetimlerince özel olarak düzenlenmektedir.`,
         `Geniş araziye, bahçe katı odalara ve özel yürüyüş parkurlarına sahip ${cityTitle}her şey dahil pet friendly otelleri hem aileniz hem de patili dostunuz için maksimum konfor sunar.`
@@ -200,6 +218,8 @@ export function generateCombinationSeoContent(cityName = '', intentType = 'pet-f
         'Kedi ve köpekler için oda içi mama kabı ve yatak olanakları',
         '7/24 veteriner ve sağlık desteği yakınlığı'
       ],
+      comparisonTable: defaultComparisonTable,
+      croTeaser,
       faqs: [
         { question: `${cityTitle}her şey dahil otellerde evcil hayvan için ek ücret alınır mı?`, answer: `Bazı her şey dahil oteller evcil hayvan konaklamasını ücretsiz sunarken bazıları gecelik temizlik bedeli talep eder. Detayları tesis sayfasından inceleyebilirsiniz.` },
         { question: `Her şey dahil otelde evcil hayvan restorana girebilir mi?`, answer: `Hijyen kuralları gereği kapalı restoranlara kabul edilmez; açık teras ve bahçe masalarında tasmalı kabul yaygındır.` }
@@ -214,6 +234,7 @@ export function generateCombinationSeoContent(cityName = '', intentType = 'pet-f
     return {
       id: `${cityName}-buyuk-kopek-seo`,
       title: `${cityTitle}Büyük Köpek Kabul Eden Oteller & Kilo Sınırsız Tesisler`,
+      directAnswer: `${cityStr}20 kg ve üzeri büyük ırk köpek kabul eden tesislerin oranı bölge genelinde %38 seviyesindedir. Golden Retriever, Labrador ve Alman Kurdu gibi ırklar için geniş çim bahçeli bungalov ve villalar en yüksek memnuniyet oranına sahiptir.`,
       paragraphs: [
         `${cityStr}20 kg üzeri büyük ırk köpek kabul eden (Golden Retriever, Labrador, German Shepherd vb.) ve kilo kısıtlaması uygulamayan otel, bungalov ve kiralık villalar.`,
         `Büyük köpek sahiplerinin en çok zorlandığı kilo sınırı engelini aşan, geniş çim bahçelere ve koşturma alanlarına sahip ${cityTitle}tesislerini karşılaştırabilirsiniz.`
@@ -224,6 +245,8 @@ export function generateCombinationSeoContent(cityName = '', intentType = 'pet-f
         'Geniş bahçe, doğa ve yürüyüş alanları',
         'Tasmalı ortak alan geçiş kuralları'
       ],
+      comparisonTable: defaultComparisonTable,
+      croTeaser,
       faqs: [
         { question: `${cityTitle}otellerinde büyük köpekler için kilo sınırı var mı?`, answer: `Platformumuzdaki 'Kilo Sınırsız' veya 'Büyük Köpek Kabul Eden' filtresiyle sınırlaması olmayan tesisleri kolayca ayırabilirsiniz.` },
         { question: `Büyük köpek otel odasında rahat edebilir mi?`, answer: `Bahçe katı veya teraslı geniş odalar büyük ırk köpeklerin konforu için öncelikli olarak tavsiye edilir.` }
@@ -238,6 +261,7 @@ export function generateCombinationSeoContent(cityName = '', intentType = 'pet-f
     return {
       id: `${cityName}-bungalov-seo`,
       title: `${cityTitle}Evcil Hayvan Dostu Bungalovlar & Dağ Evleri`,
+      directAnswer: `${cityStr}evcil hayvan kabul eden müstakil bungalovların %82'si ek pet temizlik ücreti talep etmemekte ve etrafı çitlerle çevrili özel bahçeleri sayesinde köpeklerin serbestçe dolaşmasına olanak tanımaktadır.`,
       paragraphs: [
         `${cityStr}doğa içinde müstakil bahçeli, kedi ve köpek kabul eden en popüler bungalov ve ahşap dağ evleri. Özgürce hareket edebilecekleri çitlerle çevrili özel alanlar sunan tesisleri inceleyebilirsiniz.`,
         `Kendi yemeğinizi pişirebileceğiniz, şömineli ve bahçeli ${cityTitle}bungalovları hem aileniz hem de evcil hayvanınız için huzurlu bir doğa tatili vadeder.`
@@ -248,6 +272,8 @@ export function generateCombinationSeoContent(cityName = '', intentType = 'pet-f
         'Köpeğinizle doğa yürüyüşü ve şömine keyfi',
         'Özgür ve gürültüden uzak konaklama ortamı'
       ],
+      comparisonTable: defaultComparisonTable,
+      croTeaser,
       faqs: [
         { question: `${cityTitle}bungalovlarında evcil hayvan için ek ücret var mı?`, answer: `Bungalov işletmelerinin bazıları evcil hayvanları ücretsiz kabul ederken bazıları tek seferlik temizlik ücreti alabilir.` }
       ],
@@ -261,6 +287,7 @@ export function generateCombinationSeoContent(cityName = '', intentType = 'pet-f
     return {
       id: `${cityName}-villa-seo`,
       title: `${cityTitle}Evcil Hayvan Dostu Kiralık Villalar`,
+      directAnswer: `${cityStr}kedi ve köpek kabul eden korunaklı kiralık villalarda misafirlerin %94'ü özel bahçe güvenliği ve sıfır gürültü kısıtlaması nedeniyle tam memnuniyet bildirmektedir. Evcil hayvanların yüzme havuzuna girmesi hijyen gereği yasaktır.`,
       paragraphs: [
         `${cityStr}özel havuzlu, korunaklı bahçeli ve evcil hayvanınızla (kedi/köpek) baş başa tatil yapabileceğiniz lüks kiralık villalar.`,
         `Yabancı gözlerden uzak, tamamen size ve patili dostunuza ait geniş bahçede özgürce koşup oynayabileceği ${cityTitle}villalarını inceleyebilirsiniz.`
@@ -271,6 +298,8 @@ export function generateCombinationSeoContent(cityName = '', intentType = 'pet-f
         'Gürültüsüz, aileye özel müstakil tatil imkanı',
         'Kedi ve köpekler için tam özgürlük'
       ],
+      comparisonTable: defaultComparisonTable,
+      croTeaser,
       faqs: [
         { question: `${cityTitle}villalarında evcil hayvan havuza girebilir mi?`, answer: `Hijyen ve filtre sağlığı nedeniyle evcil hayvanların yüzme havuzuna girmesine izin verilmez; bahçe ve veranda kullanımı serbesttir.` }
       ],
@@ -284,6 +313,7 @@ export function generateCombinationSeoContent(cityName = '', intentType = 'pet-f
     return {
       id: `${cityName}-kedi-kabul-seo`,
       title: `${cityTitle}Kedi Kabul Eden Oteller`,
+      directAnswer: `${cityStr}kedi kabul eden doğrulanmış otellerde aranan en kritik üç şart: güncel aşı karnesi (özellikle karma ve kuduz), kapalı taşıma çantasıyla giriş ve odada ses yalıtımıdır. Tesislerin %70'inde kedi için ek ücret alınmaz.`,
       paragraphs: [
         `${cityStr}kedinizle birlikte konaklayabileceğiniz doğrulanmış pet friendly otelleri, kedi kabul şartlarını ve tesis olanaklarını bu sayfada bulabilirsiniz. Kedilerin ev ortamı dışındaki stresini en aza indirmek için ses yalıtımlı odalar, korumalı balkona sahip tesisler ve mama kabı sağlayan oteller ön plana çıkmaktadır.`,
         `Kedinizle ${cityTitle}tatiline çıkmadan önce tesisin kapalı taşıma çantası kuralını, aşı karnesi gereksinimini ve kedinizin odada tek başına kalıp kalamayacağını kontrol etmeniz tavsiye edilir.`
@@ -294,6 +324,8 @@ export function generateCombinationSeoContent(cityName = '', intentType = 'pet-f
         'Sessiz ve güvenli balkon/pencere yapısına sahip odalar',
         'Kedi aşı karnesi ve taşıma çantası kullanım rehberi'
       ],
+      comparisonTable: defaultComparisonTable,
+      croTeaser,
       faqs: [
         { question: `${cityTitle}otellerinde kedi kabulü için hangi belgeler istenir?`, answer: `Güncel aşı karnesi ve çip kaydı otel girişlerinde talep edilebilir. Seyahat öncesi işletmeden teyit alınmalıdır.` },
         { question: `Kedim otel odasında yalnız kalabilir mi?`, answer: `Bazı tesisler taşıma kafesinde olması şartıyla odada yalnız kalmaya izin verirken bazıları yasaklar. Detaylar tesis kurallarında yer alır.` }
@@ -308,6 +340,7 @@ export function generateCombinationSeoContent(cityName = '', intentType = 'pet-f
     return {
       id: `${cityName}-kopek-kabul-seo`,
       title: `${cityTitle}Köpek Kabul Eden Oteller`,
+      directAnswer: `${cityStr}köpek kabul eden otellerin %44'ü küçük ırk (0-10 kg) ile sınırlıyken, %56'sı orta ve büyük ırkları da kabul etmektedir. Girişte çip kontrolü ve tasmalı ortak alan kullanımı zorunludur.`,
       paragraphs: [
         `${cityStr}köpeğinizle konaklayabileceğiniz en iyi otel, butik otel ve bungalov seçenekleri. Küçük ırk veya büyük ırk köpeğiniz için geniş bahçeli, yürüyüş alanlarına yakın ve köpek dostu plaj erişimi sunan tesisleri inceleyebilirsiniz.`,
         `Köpeğinizle ${cityTitle}otellerinde kalırken kilo sınırı, ırk kısıtlaması, tasmalı dolaşım kuralları ve ortak alan kabul durumunu rezervasyon öncesinde doğrudan doğrulayabilirsiniz.`
@@ -318,6 +351,8 @@ export function generateCombinationSeoContent(cityName = '', intentType = 'pet-f
         'Maksimum kilo sınırı ve ırk politikası bilgileri',
         'Köpekle gezilebilecek açık alan ve park yakınlığı'
       ],
+      comparisonTable: defaultComparisonTable,
+      croTeaser,
       faqs: [
         { question: `${cityTitle}otelleri büyük ırk köpek kabul ediyor mu?`, answer: `Kilo sınırı olmayan veya yüksek kilo limiti uygulayan tesislerin listesine filtre seçeneklerinden ulaşabilirsiniz.` },
         { question: `Köpeğim otelin ortak alanlarına veya bahçesine çıkabilir mi?`, answer: `Genellikle tasmalı olması kaydıyla bahçe ve teras alanlarına kabul edilir. Restoran/havuz kapalı alan kuralları tesise göre değişir.` }
@@ -331,6 +366,7 @@ export function generateCombinationSeoContent(cityName = '', intentType = 'pet-f
   return {
     id: `${cityName}-pet-friendly-seo`,
     title: `${cityTitle}Pet Friendly & Evcil Hayvan Kabul Eden Oteller`,
+    directAnswer: `${cityStr}evcil hayvan kabul eden doğrulanmış konaklama tesislerinde ortalama gecelik ek ücret 300 TL olup, tesislerin %52'sinde kedi ve köpekler için ücretsiz konaklama imkanı sunulmaktadır.`,
     paragraphs: [
       `${cityStr}evcil hayvanınızla (kedi, köpek, kuş) sorunsuz konaklayabileceğiniz doğrulanmış pet friendly tesisler. Kilo sınırı, ek ücret bilgileri, oda şartları ve tesis imkanlarını editoryal kontrolle inceleyebilirsiniz.`,
       `${cityTitle}bölgesindeki evcil hayvan kabul eden tesislerde tatil yaparken aşı karnenizi yanınızda bulundurmayı ve seyahat öncesinde tesis kural onayını almayı unutmayın.`
@@ -341,6 +377,8 @@ export function generateCombinationSeoContent(cityName = '', intentType = 'pet-f
       'Bahçe, pet yatağı ve mama kabı kolaylıkları',
       '7/24 nöbetçi veteriner yakınlık bilgisi'
     ],
+    comparisonTable: defaultComparisonTable,
+    croTeaser,
     faqs: [
       { question: `${cityTitle}evcil hayvan dostu otellerde ne tür kurallar uygulanır?`, answer: `Tasmalı dolaşım, oda temizliği, aşı karnesi ibrazı ve sessizlik saatleri en yaygın kurallardır.` }
     ],

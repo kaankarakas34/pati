@@ -1,0 +1,49 @@
+# ==============================================================================
+# Robots.txt for Patiyle Seyahat
+# Optimized for Web Search, Google AI Overviews, Perplexity, ChatGPT & Gemini RAG
+# ==============================================================================
+
+User-agent: *
+Allow: /
+Disallow: /yonetici
+Disallow: /api/
+Disallow: /admin
+Disallow: /*?*sort=
+Disallow: /*?*page=
+
+# AI Crawlers & Retrieval Bots
+# Google AI Overviews & Gemini
+User-agent: Googlebot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# OpenAI / ChatGPT / SearchGPT
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+# Anthropic / Claude
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Apple Intelligence
+User-agent: Applebot-Extended
+Allow: /
+
+# Common Crawl & Other AI Datasets (Controlled Access)
+User-agent: CCBot
+Allow: /
+
+# Sitemaps
+Sitemap: https://patiyleseyahat.com/sitemap.xml

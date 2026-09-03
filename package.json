@@ -13,7 +13,8 @@
     "import:enuygun:test": "node scripts/import-enuygun-test.js",
     "scrape:hotels": "node scripts/scrape-hotels.js",
     "dedupe:hotels": "node scripts/dedupe-hotels.js",
-    "migrate:supabase": "node scripts/migrate-to-supabase.js"
+    "migrate:supabase": "node scripts/migrate-to-supabase.js",
+    "geo:audit": "node scripts/geo-agents/run-geo-audit.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.4",
