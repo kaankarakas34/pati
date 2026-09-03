@@ -872,7 +872,27 @@ app.get('/evcil-hayvan-dostu-oteller/:citySlug', async (req, res) => {
 
 app.get('/sitemap.xml', async (req, res) => {
   const { hotels } = await getHotelSeoData();
+  const vets = await getVets().catch(() => initialVets || []);
+  const boardings = await getBoardings().catch(() => initialBoardings || []);
+  const taxis = await getPetTaxis().catch(() => initialTaxis || []);
+
   const citySlugs = [...new Set(hotels.map(hotel => slugify(hotel.city)).filter(Boolean))];
+  
+  // District combinations
+  const districtUrls = [];
+  hotels.forEach(hotel => {
+    if (hotel.city && hotel.district) {
+      const citySlug = slugify(hotel.city);
+      const districtSlug = slugify(hotel.district);
+      if (citySlug && districtSlug) {
+        const url = `https://www.patiyleseyahat.com/evcil-hayvan-dostu-oteller/${citySlug}/${districtSlug}`;
+        if (!districtUrls.includes(url)) {
+          districtUrls.push(url);
+        }
+      }
+    }
+  });
+
   const urls = [
     { loc: 'https://www.patiyleseyahat.com/', priority: '1.0', frequency: 'daily' },
     { loc: 'https://www.patiyleseyahat.com/trust-ads', priority: '0.5', frequency: 'monthly' },
@@ -883,16 +903,40 @@ app.get('/sitemap.xml', async (req, res) => {
     })),
     ...citySlugs.map(citySlug => ({
       loc: `https://www.patiyleseyahat.com/evcil-hayvan-dostu-oteller/${citySlug}`,
-      priority: '0.8',
+      priority: '0.9',
       frequency: 'daily'
+    })),
+    ...districtUrls.map(url => ({
+      loc: url,
+      priority: '0.8',
+      frequency: 'weekly'
     })),
     ...hotels.map(hotel => ({
       loc: `https://www.patiyleseyahat.com${getHotelPath(hotel)}`,
-      priority: '0.7',
+      priority: '0.8',
       frequency: 'weekly',
       lastmod: hotel.updatedAt || hotel.lastVerified
+    })),
+    ...vets.map(vet => ({
+      loc: `https://www.patiyleseyahat.com/veteriner/${vet.id}`,
+      priority: '0.8',
+      frequency: 'monthly',
+      lastmod: vet.lastVerified
+    })),
+    ...boardings.map(boarding => ({
+      loc: `https://www.patiyleseyahat.com/bakim/${boarding.id}`,
+      priority: '0.7',
+      frequency: 'monthly',
+      lastmod: boarding.lastVerified
+    })),
+    ...taxis.map(taxi => ({
+      loc: `https://www.patiyleseyahat.com/taksi/${taxi.id}`,
+      priority: '0.7',
+      frequency: 'monthly',
+      lastmod: taxi.lastVerified
     }))
   ];
+
   const urlNodes = urls.map(url => `
     <url>
       <loc>${escapeHtml(url.loc)}</loc>
@@ -900,6 +944,7 @@ app.get('/sitemap.xml', async (req, res) => {
       <changefreq>${url.frequency}</changefreq>
       <priority>${url.priority}</priority>
     </url>`).join('');
+
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urlNodes}
 </urlset>`;

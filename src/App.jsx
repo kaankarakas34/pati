@@ -385,21 +385,51 @@ function App() {
     const hotel = currentView === 'accommodation-detail'
       ? hotels.find(item => item.id === selectedItemId)
       : null;
+    const vet = currentView === 'vet-detail'
+      ? vets.find(item => item.id === selectedItemId)
+      : null;
+    const boarding = currentView === 'boarding-detail'
+      ? boardings.find(item => item.id === selectedItemId)
+      : null;
+    const taxi = currentView === 'taxi-detail'
+      ? taxis.find(item => item.id === selectedItemId)
+      : null;
+
     const cityLanding = currentView === 'accommodations' && searchFilters.cityLanding
       ? searchFilters.destination
       : null;
     const categoryMeta = CATEGORY_SEO[currentView];
-    const canonicalPath = hotel ? getHotelPath(hotel) : cityLanding ? window.location.pathname : categoryMeta?.path || window.location.pathname;
+    const canonicalPath = hotel ? getHotelPath(hotel)
+      : vet ? `/veteriner/${vet.id}`
+      : boarding ? `/bakim/${boarding.id}`
+      : taxi ? `/taksi/${taxi.id}`
+      : cityLanding ? window.location.pathname
+      : categoryMeta?.path || window.location.pathname;
+
     const canonicalUrl = `https://www.patiyleseyahat.com${canonicalPath}`;
+
     const title = hotel
       ? `${hotel.name} | ${hotel.district}, ${hotel.city} Evcil Hayvan Dostu Otel | Patiyle Seyahat`
+      : vet
+      ? `${vet.name} - 7/24 Acil Nöbetçi Veteriner ${vet.district}, ${vet.city} | Patiyle Seyahat`
+      : boarding
+      ? `${boarding.name} - Kedi & Köpek Oteli ${boarding.district}, ${boarding.city} | Patiyle Seyahat`
+      : taxi
+      ? `${taxi.name} - Evcil Hayvan Taksi ${taxi.city} | Patiyle Seyahat`
       : cityLanding
       ? `${cityLanding} Evcil Hayvan Dostu Oteller | Patiyle Seyahat`
       : categoryMeta?.title
       ? categoryMeta.title
       : "Patiyle Seyahat | Türkiye'nin Evcil Hayvan Dostu Seyahat Rehberi";
+
     const description = hotel
       ? `${hotel.name}, ${hotel.district}/${hotel.city} evcil hayvan kabul koşulları, tesis özellikleri ve fotoğrafları.`
+      : vet
+      ? `${vet.name}, ${vet.district}/${vet.city} bölgesinde 7/24 acil servis ve veteriner desteği sunmaktadır. Adres: ${vet.address}.`
+      : boarding
+      ? `${boarding.name}, ${boarding.district}/${boarding.city} kedi ve köpek bakım konaklama hizmetleri.`
+      : taxi
+      ? `${taxi.name}, ${taxi.city} şehir içi ve şehirler arası pet transfer hizmetleri.`
       : cityLanding
       ? `${cityLanding} ilinde evcil hayvan kabul eden otelleri, pet politikalarını ve tesis özelliklerini karşılaştırın.`
       : categoryMeta?.description
@@ -408,6 +438,7 @@ function App() {
 
     document.title = title;
 
+    // Meta Description
     let descriptionMeta = document.querySelector('meta[name="description"]');
     if (!descriptionMeta) {
       descriptionMeta = document.createElement('meta');
@@ -416,6 +447,34 @@ function App() {
     }
     descriptionMeta.setAttribute('content', description);
 
+    // OpenGraph Title
+    let ogTitleMeta = document.querySelector('meta[property="og:title"]');
+    if (!ogTitleMeta) {
+      ogTitleMeta = document.createElement('meta');
+      ogTitleMeta.setAttribute('property', 'og:title');
+      document.head.appendChild(ogTitleMeta);
+    }
+    ogTitleMeta.setAttribute('content', title);
+
+    // OpenGraph Description
+    let ogDescMeta = document.querySelector('meta[property="og:description"]');
+    if (!ogDescMeta) {
+      ogDescMeta = document.createElement('meta');
+      ogDescMeta.setAttribute('property', 'og:description');
+      document.head.appendChild(ogDescMeta);
+    }
+    ogDescMeta.setAttribute('content', description);
+
+    // OpenGraph URL
+    let ogUrlMeta = document.querySelector('meta[property="og:url"]');
+    if (!ogUrlMeta) {
+      ogUrlMeta = document.createElement('meta');
+      ogUrlMeta.setAttribute('property', 'og:url');
+      document.head.appendChild(ogUrlMeta);
+    }
+    ogUrlMeta.setAttribute('content', canonicalUrl);
+
+    // Robots Meta
     let robotsMeta = document.querySelector('meta[name="robots"]');
     if (!robotsMeta) {
       robotsMeta = document.createElement('meta');
@@ -426,6 +485,7 @@ function App() {
       ? 'noindex, nofollow'
       : 'index, follow, max-image-preview:large');
 
+    // Canonical Link
     let canonicalLink = document.querySelector('link[rel="canonical"]');
     if (!canonicalLink) {
       canonicalLink = document.createElement('link');
@@ -433,7 +493,7 @@ function App() {
       document.head.appendChild(canonicalLink);
     }
     canonicalLink.setAttribute('href', canonicalUrl);
-  }, [currentView, selectedItemId, hotels, searchFilters]);
+  }, [currentView, selectedItemId, hotels, vets, boardings, taxis, searchFilters]);
 
   // URL Path Router (supports /otel/il/ilce/otel-ismi and legacy hotel IDs)
   useEffect(() => {

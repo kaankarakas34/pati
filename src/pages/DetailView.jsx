@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon, StarIcon, CheckIcon, XIcon, GlobeIcon, PhoneIcon, MailIcon, AlertIcon } from '../components/PetIcons';
 import AdBanner from '../components/AdBanner';
+import Breadcrumbs from '../components/Breadcrumbs';
+import { slugify, getHotelPath } from '../../lib/seo-slugs';
 
 const hotelGalleryFallbacks = [
   "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=900&q=80",
@@ -421,18 +423,19 @@ export default function DetailView({
     }, 2500);
   };
 
+  const breadcrumbItems = [
+    { label: 'Ana Sayfa', view: 'home', id: null, url: '/' },
+    isVet ? { label: '7/24 Acil Veterinerler', view: 'vets', id: null, url: '/veterinerler' }
+    : isBoarding ? { label: 'Kedi & Köpek Otelleri', view: 'boardings', id: null, url: '/kedi-kopek-otelleri' }
+    : { label: 'Pet Dostu Oteller', view: 'accommodations', id: null, url: '/evcil-hayvan-dostu-oteller' },
+    item.city && !isVet && !isBoarding ? { label: `${item.city} Otelleri`, view: 'accommodations', id: null, url: `/evcil-hayvan-dostu-oteller/${slugify(item.city)}` } : null,
+    { label: item.name, view: null, id: item.id, url: getHotelPath(item) }
+  ].filter(Boolean);
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-left">
-      {/* Breadcrumb */}
-      <div className="text-xs text-gray-500 mb-6 flex items-center gap-1.5 font-medium">
-        <span className="cursor-pointer hover:text-brand-navy" onClick={() => onViewChange('home')}>Ana Sayfa</span>
-        <span>/</span>
-        <span className="cursor-pointer hover:text-brand-navy" onClick={() => onViewChange(isBoarding ? 'boardings' : 'accommodations')}>
-          {isBoarding ? 'Güvenle Bırak' : 'Patiyle Konakla'}
-        </span>
-        <span>/</span>
-        <span className="text-gray-900 font-semibold">{item.name}</span>
-      </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-left">
+      {/* Breadcrumb Navigation */}
+      <Breadcrumbs items={breadcrumbItems} onViewChange={onViewChange} />
 
       {/* Hero Banner Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -965,6 +968,52 @@ export default function DetailView({
 
       {/* Horizontal Banner ad spacer */}
       <AdBanner type="banner" className="mt-8" />
+
+      {/* Cross-Vertical Nearby Emergency Vets Internal Link Block */}
+      {!isVet && item.city && (
+        <div className="mt-10 bg-gradient-to-br from-red-50/80 to-brand-cream border-2 border-red-200 rounded-3xl p-6 md:p-8 text-left shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+            <div>
+              <span className="text-3xs font-extrabold text-red-700 bg-red-100 border border-red-200 px-3 py-1 rounded-full uppercase tracking-wider">
+                🚨 Acil Durum Desteği
+              </span>
+              <h3 className="font-title text-xl font-bold text-gray-950 mt-2">
+                📍 {item.city} Bölgesindeki 7/24 Acil Veterinerler
+              </h3>
+              <p className="text-xs text-gray-600 mt-1">
+                Seyahatiniz sırasında acil durumlar için 24 saat nöbetçi veteriner ve cerrahi destek klinikleri
+              </p>
+            </div>
+            <button
+              onClick={() => onViewChange('vets')}
+              className="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-5 py-2.5 rounded-full whitespace-nowrap hidden sm:block font-title shadow-xs transition-colors"
+            >
+              Tüm Klinikleri İncele &rarr;
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {(vets || []).filter(v => v.city === item.city || v.district === item.district).slice(0, 2).map(v => (
+              <div key={v.id} className="bg-white p-4 rounded-2xl border-2 border-red-100 shadow-xs flex flex-col justify-between space-y-3">
+                <div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-4xs bg-red-600 text-white font-black px-2.5 py-0.5 rounded-full">🔴 7/24 ACİL</span>
+                    <span className="text-3xs text-gray-400 font-bold">{v.city}, {v.district}</span>
+                  </div>
+                  <h4 className="font-title text-sm font-bold text-gray-900 mt-1.5 line-clamp-1">{v.name}</h4>
+                  <p className="text-3xs text-gray-500 mt-0.5 line-clamp-1">📍 {v.address}</p>
+                </div>
+                <a
+                  href={v.phone ? `tel:${v.phone.replace(/\s+/g, '')}` : '#'}
+                  className="bg-red-600 hover:bg-red-700 text-white text-3xs font-extrabold px-3 py-2 rounded-xl text-center block font-title transition-colors"
+                >
+                  📞 Klinik Ara: {v.phone}
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Interlinked Travel Guides box */}
       {!isBoarding && guides && guides.length > 0 && (
