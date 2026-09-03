@@ -233,13 +233,13 @@ export default function DetailView({
   // Retrieve correct item
   let item = null;
   if (isBoarding) {
-    item = boardings.find(b => b.id === id);
+    item = (boardings || []).find(b => b.id === id || slugify(b.name) === id);
   } else if (isTaxi) {
-    item = taxis.find(t => t.id === id);
+    item = (taxis || []).find(t => t.id === id || slugify(t.name) === id);
   } else if (isVet) {
-    item = vets.find(v => v.id === id);
+    item = (vets || []).find(v => v.id === id || slugify(v.name) === id);
   } else {
-    item = hotels.find(h => h.id === id);
+    item = (hotels || []).find(h => h.id === id || slugify(h.name) === id || (getHotelPath(h) && getHotelPath(h).endsWith(`/${id}`)));
   }
 
   const isUtility = isTaxi || isVet;
