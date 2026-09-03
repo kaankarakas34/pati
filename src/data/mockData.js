@@ -2,16 +2,19 @@
 
 export const initialHotels = [
   {
-    id: "hotel-1",
-    name: "The Marmara Bodrum",
-    city: "Muğla",
-    district: "Bodrum",
-    type: "Butik Otel",
-    allowedPets: ["dog", "cat"],
-    suitability: 3, // Evcil Hayvan Deneyimi Sunuyor
-    weightLimit: 15, // 15 kg
-    extraFee: "no", // Ek ücret yok
-    features: [
+    "id": "hotel-1",
+    "name": "The Marmara Bodrum",
+    "city": "Muğla",
+    "district": "Bodrum",
+    "type": "Butik Otel",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "suitability": 3,
+    "weightLimit": 15,
+    "extraFee": "no",
+    "features": [
       "Bahçesi bulunan",
       "Mama ve su kabı sağlayan",
       "Evcil hayvan yatağı sağlayan",
@@ -19,125 +22,166 @@ export const initialHotels = [
       "Veteriner desteği bulunan",
       "Evcil hayvanların restoran veya kahvaltı alanına girmesine izin veren"
     ],
-    quizTags: ["birlikte", "kopek", "kedi", "kucuk-irk", "ucretsiz-pet", "bahceli", "pet-menusu", "restoran-izni", "odada-yalniz"],
-    baseTrustScore: 9.8,
-    verified: false,
-    lastVerified: "2026-08-15",
-    imageUrl: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
-    description: "Bodrum Kalesi manzarasına hakim, tepe konumda bulunan The Marmara Bodrum, evcil hayvanların sadece 'kabul edildiği' değil, özel olarak ağırlandığı bir tesistir. Editör ekibimizin bizzat ziyaret ederek doğruladığı bu tesiste, dostunuzla birlikte lüks ve konforlu bir tatil geçirebilirsiniz. Bahçe katı odalarında evcil hayvanınızın rahatça çimlerde vakit geçirmesi sağlanır.",
-    whySelected: "Ege Bölgesi'nde evcil hayvanlara özel gurme menü (Pet Menü) sunan, odalarda özel tasarım yatak ve mama kabı bulunduran ve restoranın açık alanında evcil hayvanınızla birlikte oturmanıza izin veren ender 5 yıldızlı butik otellerden biridir.",
-    suitableFor: [
+    "quizTags": [
+      "birlikte",
+      "kopek",
+      "kedi",
+      "kucuk-irk",
+      "ucretsiz-pet",
+      "bahceli",
+      "pet-menusu",
+      "restoran-izni",
+      "odada-yalniz"
+    ],
+    "baseTrustScore": 9.8,
+    "verified": false,
+    "lastVerified": "2026-08-15",
+    "imageUrl": "http://cdn.patiyleseyahat.com/oteller/the-marmara-bodrum-1.jpg",
+    "description": "Bodrum Kalesi manzarasına hakim, tepe konumda bulunan The Marmara Bodrum, evcil hayvanların sadece 'kabul edildiği' değil, özel olarak ağırlandığı bir tesistir. Editör ekibimizin bizzat ziyaret ederek doğruladığı bu tesiste, dostunuzla birlikte lüks ve konforlu bir tatil geçirebilirsiniz. Bahçe katı odalarında evcil hayvanınızın rahatça çimlerde vakit geçirmesi sağlanır.",
+    "whySelected": "Ege Bölgesi'nde evcil hayvanlara özel gurme menü (Pet Menü) sunan, odalarda özel tasarım yatak ve mama kabı bulunduran ve restoranın açık alanında evcil hayvanınızla birlikte oturmanıza izin veren ender 5 yıldızlı butik otellerden biridir.",
+    "suitableFor": [
       "Bahçeli odada kalmak isteyen kedi ve küçük-orta ırk köpek sahipleri",
       "Dostu için gurme beslenme ve özel yatak arayanlar",
       "Tesis ortak alanlarında köpeğini tasmalı olarak gezdirmek isteyenler"
     ],
-    notSuitableFor: [
+    "notSuitableFor": [
       "15 kg üzeri büyük ırk köpek sahipleri (Tesis politikası gereği 15 kg üstü kabul edilmemektedir)",
       "Kafessiz kuş veya kemirgen sahipleri (Yalnızca kedi ve köpek kabul edilmektedir)"
     ],
-    disallowedPets: ["Kuş", "Tavşan", "Sürüngenler"],
-    breedRestrictions: "Tehlike arz eden ırklar (Pitbull, Dogo Argentino vb.) yerel kanunlar gereği kabul edilememektedir.",
-    maxPetsPerRoom: 2,
-    depositInfo: "Depozito talep edilmemektedir. Ancak odada oluşabilecek fiziksel hasarlar misafirin sorumluluğundadır.",
-    requiredDocs: "Girişte aşı karnesi, kuduz aşısı kaydı ve parazit aşılarının güncel olduğunu gösteren veteriner pasaportunun ibrazı zorunludur.",
-    canLeaveInRoomAlone: true, // Odada yalnız kalabilir
-    rules: {
-      pool: "Havuz alanına ve havuz suyuna girmesi hijyen kuralları gereği yasaktır.",
-      beach: "Plaj alanında özel ayrılmış çim bölgede tasmalı olarak bulunabilir.",
-      restaurant: "Restoranın dış teras alanında, tasmalı olmak kaydıyla kahvaltı ve akşam yemeklerinde sahibine eşlik edebilir."
+    "disallowedPets": [
+      "Kuş",
+      "Tavşan",
+      "Sürüngenler"
+    ],
+    "breedRestrictions": "Tehlike arz eden ırklar (Pitbull, Dogo Argentino vb.) yerel kanunlar gereği kabul edilememektedir.",
+    "maxPetsPerRoom": 2,
+    "depositInfo": "Depozito talep edilmemektedir. Ancak odada oluşabilecek fiziksel hasarlar misafirin sorumluluğundadır.",
+    "requiredDocs": "Girişte aşı karnesi, kuduz aşısı kaydı ve parazit aşılarının güncel olduğunu gösteren veteriner pasaportunun ibrazı zorunludur.",
+    "canLeaveInRoomAlone": true,
+    "rules": {
+      "pool": "Havuz alanına ve havuz suyuna girmesi hijyen kuralları gereği yasaktır.",
+      "beach": "Plaj alanında özel ayrılmış çim bölgede tasmalı olarak bulunabilir.",
+      "restaurant": "Restoranın dış teras alanında, tasmalı olmak kaydıyla kahvaltı ve akşam yemeklerinde sahibine eşlik edebilir."
     },
-    veterinarySupport: "Anlaşmalı 7/24 nöbetçi veteriner kliniği mevcuttur. Olası acil durumlarda resepsiyon üzerinden 5 dakika içinde transfer sağlanır.",
-    phone: "+90 252 313 8130",
-    email: "bodrum@themarmarahotels.com",
-    website: "https://www.themarmarahotels.com/the-marmara-bodrum.aspx",
-    editorNote: "Özellikle bahçe katı delüks odaları tercih etmenizi öneririz. Bu odalar doğrudan ortak çim alana açılmakta ve köpeklerin sabah yürüyüşünü son derece kolaylaştırmaktadır. Girişte sunulan 'Pati Karşılama Paketi' içerisindeki organik ödül mamaları editörümüzün köpeği tarafından çok beğenildi.",
-    infoSource: "Otel Yönetimi & Yerinde Editör Denetimi",
-    faq: [
+    "veterinarySupport": "Anlaşmalı 7/24 nöbetçi veteriner kliniği mevcuttur. Olası acil durumlarda resepsiyon üzerinden 5 dakika içinde transfer sağlanır.",
+    "phone": "+90 252 313 8130",
+    "email": "bodrum@themarmarahotels.com",
+    "website": "https://www.themarmarahotels.com/the-marmara-bodrum.aspx",
+    "editorNote": "Özellikle bahçe katı delüks odaları tercih etmenizi öneririz. Bu odalar doğrudan ortak çim alana açılmakta ve köpeklerin sabah yürüyüşünü son derece kolaylaştırmaktadır. Girişte sunulan 'Pati Karşılama Paketi' içerisindeki organik ödül mamaları editörümüzün köpeği tarafından çok beğenildi.",
+    "infoSource": "Otel Yönetimi & Yerinde Editör Denetimi",
+    "faq": [
       {
-        q: "The Marmara Bodrum'da büyük ırk köpekler kalabilir mi?",
-        a: "Maalesef hayır. Otelde evcil hayvanlar için 15 kg ağırlık sınırı uygulanmaktadır. 15 kg üzerindeki köpekler kabul edilmemektedir."
+        "q": "The Marmara Bodrum'da büyük ırk köpekler kalabilir mi?",
+        "a": "Maalesef hayır. Otelde evcil hayvanlar için 15 kg ağırlık sınırı uygulanmaktadır. 15 kg üzerindeki köpekler kabul edilmemektedir."
       },
       {
-        q: "Evcil hayvan için ek bir konaklama ücreti alınıyor mu?",
-        a: "Hayır, The Marmara Bodrum'da doğrulanmış politikaya göre evcil hayvan konaklaması tamamen ücretsizdir."
+        "q": "Evcil hayvan için ek bir konaklama ücreti alınıyor mu?",
+        "a": "Hayır, The Marmara Bodrum'da doğrulanmış politikaya göre evcil hayvan konaklaması tamamen ücretsizdir."
       },
       {
-        q: "Köpeğimi odada yalnız bırakabilir miyim?",
-        a: "Evet, köpeğinizin oda içerisinde yalnız kalmasına izin verilmektedir. Ancak otel yönetimi, temizlik görevlilerinin odaya girdiği esnada köpeğin strese girmemesi için kapıya özel 'İçeride Pati Var' asacağının takılmasını rica etmektedir."
+        "q": "Köpeğimi odada yalnız bırakabilir miyim?",
+        "a": "Evet, köpeğinizin oda içerisinde yalnız kalmasına izin verilmektedir. Ancak otel yönetimi, temizlik görevlilerinin odaya girdiği esnada köpeğin strese girmemesi için kapıya özel 'İçeride Pati Var' asacağının takılmasını rica etmektedir."
       }
+    ],
+    "galleryImages": [
+      "http://cdn.patiyleseyahat.com/oteller/the-marmara-bodrum-1.jpg"
     ]
   },
   {
-    id: "hotel-2",
-    name: "Kapadokya Cave Suites",
-    city: "Nevşehir",
-    district: "Göreme",
-    type: "Butik Otel",
-    allowedPets: ["dog", "cat", "bird"],
-    suitability: 2, // Evcil Hayvan Dostu
-    weightLimit: 0, // Kilo sınırı yok
-    extraFee: "Gecelik 250 TL",
-    features: [
+    "id": "hotel-2",
+    "name": "Kapadokya Cave Suites",
+    "city": "Nevşehir",
+    "district": "Göreme",
+    "type": "Butik Otel",
+    "allowedPets": [
+      "dog",
+      "cat",
+      "bird"
+    ],
+    "suitability": 2,
+    "weightLimit": 0,
+    "extraFee": "Gecelik 250 TL",
+    "features": [
       "Bahçesi bulunan",
       "Mama ve su kabı sağlayan",
       "Kilo sınırı olmayan",
       "Kuş kabul eden"
     ],
-    quizTags: ["birlikte", "kopek", "kedi", "kus", "buyuk-irk", "kucuk-irk", "bahceli", "ek-ucretli", "oda-servisi"],
-    baseTrustScore: 9.1,
-    verified: false,
-    lastVerified: "2026-07-28",
-    imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
-    description: "Kapadokya'nın kalbi Göreme'de, geleneksel mağara odalarında otantik bir konaklama sunan Kapadokya Cave Suites, evcil hayvan dostu politikasıyla öne çıkıyor. Kilo sınırı olmaksızın köpek, kedi ve kafesinde olmak kaydıyla kuş kabul eden tesiste, geniş taş avlu ve bahçe alanları patili dostlarınızın dolaşması için idealdir.",
-    whySelected: "Kapadokya bölgesinde mağara konseptli oteller arasında kilo sınırı uygulamayan ve büyük ırk köpekleri de kabul eden nadir işletmelerdendir. Ayrıca kuş severler için de uygundur.",
-    suitableFor: [
+    "quizTags": [
+      "birlikte",
+      "kopek",
+      "kedi",
+      "kus",
+      "buyuk-irk",
+      "kucuk-irk",
+      "bahceli",
+      "ek-ucretli",
+      "oda-servisi"
+    ],
+    "baseTrustScore": 9.1,
+    "verified": false,
+    "lastVerified": "2026-07-28",
+    "imageUrl": "http://cdn.patiyleseyahat.com/oteller/kapadokya-cave-suites-1.jpg",
+    "description": "Kapadokya'nın kalbi Göreme'de, geleneksel mağara odalarında otantik bir konaklama sunan Kapadokya Cave Suites, evcil hayvan dostu politikasıyla öne çıkıyor. Kilo sınırı olmaksızın köpek, kedi ve kafesinde olmak kaydıyla kuş kabul eden tesiste, geniş taş avlu ve bahçe alanları patili dostlarınızın dolaşması için idealdir.",
+    "whySelected": "Kapadokya bölgesinde mağara konseptli oteller arasında kilo sınırı uygulamayan ve büyük ırk köpekleri de kabul eden nadir işletmelerdendir. Ayrıca kuş severler için de uygundur.",
+    "suitableFor": [
       "Büyük ırk köpek sahipleri (Golden Retriever, Labrador, Pointer vb. sınırı yoktur)",
       "Kafes kuşlarıyla birlikte seyahat eden doğaseverler",
       "Tarihi ve taş mimaride dostuyla vakit geçirmek isteyenler"
     ],
-    notSuitableFor: [
+    "notSuitableFor": [
       "Mağara odaların nemli havasına karşı solunum hassasiyeti olan evcil hayvanlar",
       "Otelde ek ücret ödemek istemeyen bütçe odaklı seyahat edenler"
     ],
-    disallowedPets: ["Sürüngenler", "Tavşan ve kemirgenler (Kablolara zarar verme riski nedeniyle oda içinde serbest bırakılamaz)"],
-    breedRestrictions: "Agresif tavır sergilemeyen tüm ırklar kabul edilir.",
-    maxPetsPerRoom: 1,
-    depositInfo: "Girişte hasar durumunda iade edilmek üzere 1.000 TL depozito alınır veya kredi kartı provizyonu bloke edilir.",
-    requiredDocs: "Güncel aşı karnesi zorunludur. Özellikle iç-dış parazit aşılarının son 3 ay içinde yapılmış olması istenir.",
-    canLeaveInRoomAlone: false, // Odada yalnız kalamaz
-    rules: {
-      pool: "Tesiste havuz bulunmamaktadır.",
-      beach: "Denize kıyısı bulunmamaktadır.",
-      restaurant: "Kahvaltı salonunun kapalı alanına evcil hayvan kabul edilmez ancak taş avludaki açık kahvaltı masalarında yanınızda bulunabilir."
+    "disallowedPets": [
+      "Sürüngenler",
+      "Tavşan ve kemirgenler (Kablolara zarar verme riski nedeniyle oda içinde serbest bırakılamaz)"
+    ],
+    "breedRestrictions": "Agresif tavır sergilemeyen tüm ırklar kabul edilir.",
+    "maxPetsPerRoom": 1,
+    "depositInfo": "Girişte hasar durumunda iade edilmek üzere 1.000 TL depozito alınır veya kredi kartı provizyonu bloke edilir.",
+    "requiredDocs": "Güncel aşı karnesi zorunludur. Özellikle iç-dış parazit aşılarının son 3 ay içinde yapılmış olması istenir.",
+    "canLeaveInRoomAlone": false,
+    "rules": {
+      "pool": "Tesiste havuz bulunmamaktadır.",
+      "beach": "Denize kıyısı bulunmamaktadır.",
+      "restaurant": "Kahvaltı salonunun kapalı alanına evcil hayvan kabul edilmez ancak taş avludaki açık kahvaltı masalarında yanınızda bulunabilir."
     },
-    veterinarySupport: "Göreme merkezde bulunan anlaşmalı klinik ile acil veteriner desteği sağlanır.",
-    phone: "+90 384 271 2800",
-    email: "info@kapadokyacavesuites.com",
-    website: "https://www.kapadokyacavesuites.com",
-    editorNote: "Kaya odalar doğal olarak izole ve sessiz olduğu için dış seslerden korkan köpekler burada çok rahat ediyor. Kilo sınırının olmaması harika bir avantaj. Ancak otel içerisinde dik merdivenler bulunduğundan eklem rahatsızlığı olan yaşlı köpekler için düz ayak olan avlu odalarını talep etmeniz önem taşır.",
-    infoSource: "İşletme Beyanı",
-    faq: [
+    "veterinarySupport": "Göreme merkezde bulunan anlaşmalı klinik ile acil veteriner desteği sağlanır.",
+    "phone": "+90 384 271 2800",
+    "email": "info@kapadokyacavesuites.com",
+    "website": "https://www.kapadokyacavesuites.com",
+    "editorNote": "Kaya odalar doğal olarak izole ve sessiz olduğu için dış seslerden korkan köpekler burada çok rahat ediyor. Kilo sınırının olmaması harika bir avantaj. Ancak otel içerisinde dik merdivenler bulunduğundan eklem rahatsızlığı olan yaşlı köpekler için düz ayak olan avlu odalarını talep etmeniz önem taşır.",
+    "infoSource": "İşletme Beyanı",
+    "faq": [
       {
-        q: "Kapadokya Cave Suites'te köpekler için kilo limiti var mı?",
-        a: "Hayır. Otelde herhangi bir kilo veya boy sınırı bulunmamaktadır. Büyük ırk köpekler de konaklayabilir."
+        "q": "Kapadokya Cave Suites'te köpekler için kilo limiti var mı?",
+        "a": "Hayır. Otelde herhangi bir kilo veya boy sınırı bulunmamaktadır. Büyük ırk köpekler de konaklayabilir."
       },
       {
-        q: "Evcil hayvan ücreti nedir?",
-        a: "Evcil hayvanlar için temizlik ve ekstra dezenfeksiyon bedeli olarak gecelik 250 TL ek ücret alınmaktadır."
+        "q": "Evcil hayvan ücreti nedir?",
+        "a": "Evcil hayvanlar için temizlik ve ekstra dezenfeksiyon bedeli olarak gecelik 250 TL ek ücret alınmaktadır."
       }
+    ],
+    "galleryImages": [
+      "http://cdn.patiyleseyahat.com/oteller/kapadokya-cave-suites-1.jpg"
     ]
   },
   {
-    id: "hotel-3",
-    name: "Kabak Dome Suites & Glamping",
-    city: "Muğla",
-    district: "Fethiye",
-    type: "Glamping tesisi",
-    allowedPets: ["dog", "cat", "other"],
-    suitability: 3, // Evcil Hayvan Deneyimi Sunuyor
-    weightLimit: 0,
-    extraFee: "no",
-    features: [
+    "id": "hotel-3",
+    "name": "Kabak Dome Suites & Glamping",
+    "city": "Muğla",
+    "district": "Fethiye",
+    "type": "Glamping tesisi",
+    "allowedPets": [
+      "dog",
+      "cat",
+      "other"
+    ],
+    "suitability": 3,
+    "weightLimit": 0,
+    "extraFee": "no",
+    "features": [
       "Bahçesi bulunan",
       "Doğa içinde",
       "Kilo sınırı olmayan",
@@ -145,61 +189,78 @@ export const initialHotels = [
       "Ek ücret almayan",
       "Mama ve su kabı sağlayan"
     ],
-    quizTags: ["birlikte", "kopek", "kedi", "buyuk-irk", "kucuk-irk", "ucretsiz-pet", "bahceli", "doga-icinde", "coklu-pet"],
-    baseTrustScore: 9.7,
-    verified: false,
-    lastVerified: "2026-08-01",
-    imageUrl: "https://images.unsplash.com/photo-1510312305653-8ed496efae75?auto=format&fit=crop&w=800&q=80",
-    description: "Fethiye'nin meşhur Kabak Koyu'nda doğayla baş başa lüks kubbe çadırlarda (glamping) hizmet veren tesis, adeta patili dostlarımızın cennetidir. Etrafı çam ormanlarıyla çevrili olan ve ek ücret almayan Kabak Dome, birden fazla evcil hayvan kabul etmesi ve sınırsız özgürlük alanıyla öne çıkıyor.",
-    whySelected: "Glamping kategorisinde hiçbir kilo sınırı koymadan, oda başı 3 hayvana kadar izin veren ve tamamen ek ücretsiz olan ekolojik bir yaklaşımı benimsediği için listemizin gözdesidir.",
-    suitableFor: [
+    "quizTags": [
+      "birlikte",
+      "kopek",
+      "kedi",
+      "buyuk-irk",
+      "kucuk-irk",
+      "ucretsiz-pet",
+      "bahceli",
+      "doga-icinde",
+      "coklu-pet"
+    ],
+    "baseTrustScore": 9.7,
+    "verified": false,
+    "lastVerified": "2026-08-01",
+    "imageUrl": "http://cdn.patiyleseyahat.com/oteller/kabak-dome-suites-glamping-1.jpg",
+    "description": "Fethiye'nin meşhur Kabak Koyu'nda doğayla baş başa lüks kubbe çadırlarda (glamping) hizmet veren tesis, adeta patili dostlarımızın cennetidir. Etrafı çam ormanlarıyla çevrili olan ve ek ücret almayan Kabak Dome, birden fazla evcil hayvan kabul etmesi ve sınırsız özgürlük alanıyla öne çıkıyor.",
+    "whySelected": "Glamping kategorisinde hiçbir kilo sınırı koymadan, oda başı 3 hayvana kadar izin veren ve tamamen ek ücretsiz olan ekolojik bir yaklaşımı benimsediği için listemizin gözdesidir.",
+    "suitableFor": [
       "Doğa yürüyüşü yapmayı seven enerjik köpekler ve sahipleri",
       "Aynı anda 2 veya daha fazla evcil hayvanla seyahat edenler",
       "Glamping lüksünü doğada yaşamak isteyen kedi sahipleri"
     ],
-    notSuitableFor: [
+    "notSuitableFor": [
       "Açık arazide serbest dolaşan yerel hayvanlardan (köy köpekleri, keçiler) rahatsız olan veya avlanma içgüdüsü yüksek olan evcil dostlar",
       "Dik yamaçta kurulu olduğu için sürekli tırmanma gerektiren yollardan rahatsız olacak yaşlı hayvanlar"
     ],
-    disallowedPets: ["Yok. Tüm evcil hayvanlar (hamster, tavşan dahil) kendi kafes ve güvenlik önlemleri alınarak kalabilir."],
-    breedRestrictions: "Hiçbir ırk kısıtlaması bulunmamaktadır. Ancak çevreye aşırı havlama veya saldırganlık gösteren hayvanlar için tasmalı gezinme şartı katıdır.",
-    maxPetsPerRoom: 3,
-    depositInfo: "Depozito alınmamaktadır.",
-    requiredDocs: "Temel aşı kartı beyanı yeterlidir.",
-    canLeaveInRoomAlone: false,
-    rules: {
-      pool: "Ortak jakuzi/havuz alanına evcil hayvanların girmesi yasaktır.",
-      beach: "Kabak koyu plajına inişte köpekler tamamen serbesttir ve denize girebilir.",
-      restaurant: "Açık hava restoran alanında evcil hayvanınızla dilediğiniz gibi oturabilirsiniz, hiçbir kısıtlama yoktur."
+    "disallowedPets": [
+      "Yok. Tüm evcil hayvanlar (hamster, tavşan dahil) kendi kafes ve güvenlik önlemleri alınarak kalabilir."
+    ],
+    "breedRestrictions": "Hiçbir ırk kısıtlaması bulunmamaktadır. Ancak çevreye aşırı havlama veya saldırganlık gösteren hayvanlar için tasmalı gezinme şartı katıdır.",
+    "maxPetsPerRoom": 3,
+    "depositInfo": "Depozito alınmamaktadır.",
+    "requiredDocs": "Temel aşı kartı beyanı yeterlidir.",
+    "canLeaveInRoomAlone": false,
+    "rules": {
+      "pool": "Ortak jakuzi/havuz alanına evcil hayvanların girmesi yasaktır.",
+      "beach": "Kabak koyu plajına inişte köpekler tamamen serbesttir ve denize girebilir.",
+      "restaurant": "Açık hava restoran alanında evcil hayvanınızla dilediğiniz gibi oturabilirsiniz, hiçbir kısıtlama yoktur."
     },
-    veterinarySupport: "Fethiye merkezde 24 saat açık veteriner kliniği ile irtibat halindedir (Yaklaşık 35 km mesafede).",
-    phone: "+90 252 642 1122",
-    email: "contact@kabakdome.com",
-    website: "https://www.kabakdome.com",
-    editorNote: "Kabak Koyu yolu biraz virajlı ve sarsıcı olabilir, arabada mide bulantısı yaşayan patili dostlarınız için yola çıkmadan önce veterinerinizden bulantı önleyici tablet almanızı öneririz. Kubbe çadırların içi oldukça geniştir. Akşamları serinleyen havada çadır önü terasında dostunuzla yıldızları izlemek paha biçilemez.",
-    infoSource: "Yerinde Editör Denetimi",
-    faq: [
+    "veterinarySupport": "Fethiye merkezde 24 saat açık veteriner kliniği ile irtibat halindedir (Yaklaşık 35 km mesafede).",
+    "phone": "+90 252 642 1122",
+    "email": "contact@kabakdome.com",
+    "website": "https://www.kabakdome.com",
+    "editorNote": "Kabak Koyu yolu biraz virajlı ve sarsıcı olabilir, arabada mide bulantısı yaşayan patili dostlarınız için yola çıkmadan önce veterinerinizden bulantı önleyici tablet almanızı öneririz. Kubbe çadırların içi oldukça geniştir. Akşamları serinleyen havada çadır önü terasında dostunuzla yıldızları izlemek paha biçilemez.",
+    "infoSource": "Yerinde Editör Denetimi",
+    "faq": [
       {
-        q: "Kabak Dome'da aynı odada 2 köpek kalabilir miyiz?",
-        a: "Evet, bu otelde oda başına en fazla 3 evcil hayvana kadar izin verilmektedir ve ek ücret talep edilmez."
+        "q": "Kabak Dome'da aynı odada 2 köpek kalabilir miyiz?",
+        "a": "Evet, bu otelde oda başına en fazla 3 evcil hayvana kadar izin verilmektedir ve ek ücret talep edilmez."
       },
       {
-        q: "Köpeğimi odada yalnız bırakıp Kabak koyuna inebilir miyim?",
-        a: "Kubbe çadırlarda (glamping) ses yalıtımı çadır bezi nedeniyle az olduğundan ve dostunuzun yalnız kaldığında havlayarak çevreyi rahatsız etme riski olduğundan odada yalnız bırakılmasına izin verilmemektedir."
+        "q": "Köpeğimi odada yalnız bırakıp Kabak koyuna inebilir miyim?",
+        "a": "Kubbe çadırlarda (glamping) ses yalıtımı çadır bezi nedeniyle az olduğundan ve dostunuzun yalnız kaldığında havlayarak çevreyi rahatsız etme riski olduğundan odada yalnız bırakılmasına izin verilmemektedir."
       }
+    ],
+    "galleryImages": [
+      "http://cdn.patiyleseyahat.com/oteller/kabak-dome-suites-glamping-1.jpg"
     ]
   },
   {
-    id: "hotel-4",
-    name: "Club Marvy",
-    city: "İzmir",
-    district: "Menderes",
-    type: "Tatil köyü",
-    allowedPets: ["dog"],
-    suitability: 3, // Evcil Hayvan Deneyimi Sunuyor
-    weightLimit: 20, // 20 kg
-    extraFee: "Gecelik 450 TL",
-    features: [
+    "id": "hotel-4",
+    "name": "Club Marvy",
+    "city": "İzmir",
+    "district": "Menderes",
+    "type": "Tatil köyü",
+    "allowedPets": [
+      "dog"
+    ],
+    "suitability": 3,
+    "weightLimit": 20,
+    "extraFee": "Gecelik 450 TL",
+    "features": [
       "Pet plajı bulunan",
       "Evcil hayvan yatağı sağlayan",
       "Mama ve su kabı sağlayan",
@@ -207,119 +268,156 @@ export const initialHotels = [
       "Denize sıfır",
       "Veteriner desteği bulunan"
     ],
-    quizTags: ["birlikte", "kopek", "kucuk-irk", "ek-ucretli", "denize-sifir", "pet-plaji", "bahceli"],
-    baseTrustScore: 9.6,
-    verified: false,
-    lastVerified: "2026-08-10",
-    imageUrl: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
-    description: "Özdere'de konumlanan lüks Club Marvy, Türkiye'de 'Pet Plajı' konseptine sahip az sayıdaki seçkin tatil köyünden biridir. Doğanın kalbinde konumlanan bu modern tesiste, köpek misafirler için özel ayrılmış koyda patili dostunuzla beraber Akdeniz sularının keyfini çıkarabilirsiniz.",
-    whySelected: "Türkiye genelinde 5 yıldızlı ultra her şey dahil tatil köyleri arasında, köpeklere özel tasmayla girilebilen kum plaj sunan ve özel yürüyüş parkurları hazırlayan öncü tesislerden biridir.",
-    suitableFor: [
+    "quizTags": [
+      "birlikte",
+      "kopek",
+      "kucuk-irk",
+      "ek-ucretli",
+      "denize-sifir",
+      "pet-plaji",
+      "bahceli"
+    ],
+    "baseTrustScore": 9.6,
+    "verified": false,
+    "lastVerified": "2026-08-10",
+    "imageUrl": "http://cdn.patiyleseyahat.com/oteller/club-marvy-1.jpg",
+    "description": "Özdere'de konumlanan lüks Club Marvy, Türkiye'de 'Pet Plajı' konseptine sahip az sayıdaki seçkin tatil köyünden biridir. Doğanın kalbinde konumlanan bu modern tesiste, köpek misafirler için özel ayrılmış koyda patili dostunuzla beraber Akdeniz sularının keyfini çıkarabilirsiniz.",
+    "whySelected": "Türkiye genelinde 5 yıldızlı ultra her şey dahil tatil köyleri arasında, köpeklere özel tasmayla girilebilen kum plaj sunan ve özel yürüyüş parkurları hazırlayan öncü tesislerden biridir.",
+    "suitableFor": [
       "Denizde yüzmeyi çok seven ve plajda sahibiyle güneşlenmek isteyen köpekler",
       "Lüks tatil köyü konforundan ödün vermeden patili dostuyla seyahat etmek isteyenler"
     ],
-    notSuitableFor: [
+    "notSuitableFor": [
       "Kedi sahipleri (Otel sadece köpek misafirleri kabul etmektedir)",
       "20 kg'dan büyük ırk köpek sahipleri"
     ],
-    disallowedPets: ["Kedi", "Kuş", "Kemirgenler", "Tüm diğer hayvanlar (Yalnızca köpek kabul edilir)"],
-    breedRestrictions: "Türk kanunlarına göre yasaklı ırklar dışındaki tüm uysal köpekler kabul edilmektedir.",
-    maxPetsPerRoom: 1,
-    depositInfo: "Girişte hasar taahhütnamesi imzalatılır, depozito alınmaz.",
-    requiredDocs: "Karne, aşı kartı, kuduz aşısının son 1 yıl içinde yapılmış olması ve mikroçip kaydı.",
-    canLeaveInRoomAlone: false,
-    rules: {
-      pool: "Ortak havuzlar ve Aqua Park alanına köpeklerin girmesi kesinlikle yasaktır.",
-      beach: "Tesiste köpeklerin denize girmesi için özel tabelalarla işaretlenmiş 'Marvy Pet Beach' mevcuttur. Diğer ana plajlara köpek sokulamaz.",
-      restaurant: "Ana restoran kapalı alanına kabul edilmez. Açık büfe dış terasında özel ayrılmış masalarda bulunabilir."
+    "disallowedPets": [
+      "Kedi",
+      "Kuş",
+      "Kemirgenler",
+      "Tüm diğer hayvanlar (Yalnızca köpek kabul edilir)"
+    ],
+    "breedRestrictions": "Türk kanunlarına göre yasaklı ırklar dışındaki tüm uysal köpekler kabul edilmektedir.",
+    "maxPetsPerRoom": 1,
+    "depositInfo": "Girişte hasar taahhütnamesi imzalatılır, depozito alınmaz.",
+    "requiredDocs": "Karne, aşı kartı, kuduz aşısının son 1 yıl içinde yapılmış olması ve mikroçip kaydı.",
+    "canLeaveInRoomAlone": false,
+    "rules": {
+      "pool": "Ortak havuzlar ve Aqua Park alanına köpeklerin girmesi kesinlikle yasaktır.",
+      "beach": "Tesiste köpeklerin denize girmesi için özel tabelalarla işaretlenmiş 'Marvy Pet Beach' mevcuttur. Diğer ana plajlara köpek sokulamaz.",
+      "restaurant": "Ana restoran kapalı alanına kabul edilmez. Açık büfe dış terasında özel ayrılmış masalarda bulunabilir."
     },
-    veterinarySupport: "Menderes ilçesindeki tam donanımlı hayvan hastanesi ile 24 saat acil ambulans anlaşması bulunmaktadır.",
-    phone: "+90 232 797 1000",
-    email: "marvy@clubmarvy.com",
-    website: "https://www.clubmarvy.com",
-    editorNote: "Club Marvy'nin pet plajı muazzam temizlikte. Plajda köpekler için tatlı su duş alanı bulunması, deniz tuzuyla cildin tahriş olmasını engellemek için mükemmel bir detay. Gecelik 450 TL ücret yüksek görünse de sunulan plaj imkanı ve odadaki ortopedik yatak hizmeti bu bedeli karşılıyor.",
-    infoSource: "Resmi Web Sitesi ve Yönetim Doğrulaması",
-    faq: [
+    "veterinarySupport": "Menderes ilçesindeki tam donanımlı hayvan hastanesi ile 24 saat acil ambulans anlaşması bulunmaktadır.",
+    "phone": "+90 232 797 1000",
+    "email": "marvy@clubmarvy.com",
+    "website": "https://www.clubmarvy.com",
+    "editorNote": "Club Marvy'nin pet plajı muazzam temizlikte. Plajda köpekler için tatlı su duş alanı bulunması, deniz tuzuyla cildin tahriş olmasını engellemek için mükemmel bir detay. Gecelik 450 TL ücret yüksek görünse de sunulan plaj imkanı ve odadaki ortopedik yatak hizmeti bu bedeli karşılıyor.",
+    "infoSource": "Resmi Web Sitesi ve Yönetim Doğrulaması",
+    "faq": [
       {
-        q: "Club Marvy'de köpekler plaja girebilir mi?",
-        a: "Evet. Otelde sadece köpeklerin girmesi ve denizde yüzmesi için ayrılmış özel 'Marvy Pet Beach' adlı plaj bulunmaktadır."
+        "q": "Club Marvy'de köpekler plaja girebilir mi?",
+        "a": "Evet. Otelde sadece köpeklerin girmesi ve denizde yüzmesi için ayrılmış özel 'Marvy Pet Beach' adlı plaj bulunmaktadır."
       },
       {
-        q: "Otelde kedi kabul ediliyor mu?",
-        a: "Hayır. Club Marvy sadece köpek misafirleri kabul etmektedir; kedi, kuş ve diğer hayvanlar tesise kabul edilmemektedir."
+        "q": "Otelde kedi kabul ediliyor mu?",
+        "a": "Hayır. Club Marvy sadece köpek misafirleri kabul etmektedir; kedi, kuş ve diğer hayvanlar tesise kabul edilmemektedir."
       }
+    ],
+    "galleryImages": [
+      "http://cdn.patiyleseyahat.com/oteller/club-marvy-1.jpg"
     ]
   },
   {
-    id: "hotel-5",
-    name: "Kozak Bungalov",
-    city: "Bursa",
-    district: "İznik",
-    type: "Bungalov",
-    allowedPets: ["dog", "cat", "bird", "other"],
-    suitability: 1, // Evcil Hayvan Kabul Ediyor
-    weightLimit: 10, // 10 kg sınırı
-    extraFee: "no",
-    features: [
+    "id": "hotel-5",
+    "name": "Kozak Bungalov",
+    "city": "Bursa",
+    "district": "İznik",
+    "type": "Bungalov",
+    "allowedPets": [
+      "dog",
+      "cat",
+      "bird",
+      "other"
+    ],
+    "suitability": 1,
+    "weightLimit": 10,
+    "extraFee": "no",
+    "features": [
       "Bahçesi bulunan",
       "Doğa içinde",
       "Ek ücret almayan"
     ],
-    quizTags: ["birlikte", "kopek", "kedi", "kus", "kucuk-irk", "ucretsiz-pet", "bahceli", "doga-icinde"],
-    baseTrustScore: 8.9,
-    verified: false,
-    lastVerified: "2026-06-15",
-    imageUrl: "https://images.unsplash.com/photo-1587061949409-02df41d5e562?auto=format&fit=crop&w=800&q=80",
-    description: "İznik Gölü kıyısına yakın, zeytin ağaçları arasında yer alan Kozak Bungalov, sakin ve mütevazı bir tatil arayan patili dostu ailelere kapılarını açıyor. Bütçe dostu bungalov odaları ve yeşil bahçesi ile evcil hayvanlarınız için huzurlu bir dinlenme köşesidir.",
-    whySelected: "İznik bölgesinde ek ücret talep etmeyen, temel düzeyde evcil hayvan kabulü (Pet-Allowed) sağlayan güvenilir ve temiz bir doğa işletmesidir.",
-    suitableFor: [
+    "quizTags": [
+      "birlikte",
+      "kopek",
+      "kedi",
+      "kus",
+      "kucuk-irk",
+      "ucretsiz-pet",
+      "bahceli",
+      "doga-icinde"
+    ],
+    "baseTrustScore": 8.9,
+    "verified": false,
+    "lastVerified": "2026-06-15",
+    "imageUrl": "http://cdn.patiyleseyahat.com/oteller/kozak-bungalov-1.jpg",
+    "description": "İznik Gölü kıyısına yakın, zeytin ağaçları arasında yer alan Kozak Bungalov, sakin ve mütevazı bir tatil arayan patili dostu ailelere kapılarını açıyor. Bütçe dostu bungalov odaları ve yeşil bahçesi ile evcil hayvanlarınız için huzurlu bir dinlenme köşesidir.",
+    "whySelected": "İznik bölgesinde ek ücret talep etmeyen, temel düzeyde evcil hayvan kabulü (Pet-Allowed) sağlayan güvenilir ve temiz bir doğa işletmesidir.",
+    "suitableFor": [
       "Sakin ve doğa içinde küçük ırk köpek veya kedisiyle kafa dinlemek isteyenler",
       "Bölgede bütçe dostu bungalov konaklaması arayanlar"
     ],
-    notSuitableFor: [
+    "notSuitableFor": [
       "Ortopedik yatak, özel mama kapları veya pet menüsü gibi yüksek beklentileri olanlar",
       "10 kg'dan ağır büyük ırk köpekler"
     ],
-    disallowedPets: ["Yok (10 kg sınırına uyulduğu takdirde hamster, papağan vb. kalabilir)"],
-    breedRestrictions: "Yok.",
-    maxPetsPerRoom: 1,
-    depositInfo: "Alınmıyor.",
-    requiredDocs: "Genel aşı takvimi kontrolü için karne ibrazı istenir.",
-    canLeaveInRoomAlone: true,
-    rules: {
-      pool: "Havuz bulunmamaktadır.",
-      beach: "Göl kıyısı halka açık alanlarda tasmalı gezdirilebilir.",
-      restaurant: "Kahvaltı alanında tasmalı olarak masanın yanında bulunabilir."
+    "disallowedPets": [
+      "Yok (10 kg sınırına uyulduğu takdirde hamster, papağan vb. kalabilir)"
+    ],
+    "breedRestrictions": "Yok.",
+    "maxPetsPerRoom": 1,
+    "depositInfo": "Alınmıyor.",
+    "requiredDocs": "Genel aşı takvimi kontrolü için karne ibrazı istenir.",
+    "canLeaveInRoomAlone": true,
+    "rules": {
+      "pool": "Havuz bulunmamaktadır.",
+      "beach": "Göl kıyısı halka açık alanlarda tasmalı gezdirilebilir.",
+      "restaurant": "Kahvaltı alanında tasmalı olarak masanın yanında bulunabilir."
     },
-    veterinarySupport: "İznik ilçe merkezindeki veteriner hekimlerle iletişim bilgileri odalarda sunulmaktadır.",
-    phone: "+90 224 757 4545",
-    email: "info@kozakiznik.com",
-    website: "https://www.kozakbungaloviznik.com",
-    editorNote: "Bu tesis 'Evcil Hayvan Kabul Ediyor' seviyesindedir. Yani mama kabı, yatak veya pet havuzu gibi ek lüks hizmetler sunmazlar. Ancak herhangi bir ek ücret almamaları ve sakin bahçesiyle evcil hayvanların kendi ekipmanlarıyla rahatça konaklamasına izin vermeleri oldukça olumludur.",
-    infoSource: "İşletme İletişim Hattı",
-    faq: [
+    "veterinarySupport": "İznik ilçe merkezindeki veteriner hekimlerle iletişim bilgileri odalarda sunulmaktadır.",
+    "phone": "+90 224 757 4545",
+    "email": "info@kozakiznik.com",
+    "website": "https://www.kozakbungaloviznik.com",
+    "editorNote": "Bu tesis 'Evcil Hayvan Kabul Ediyor' seviyesindedir. Yani mama kabı, yatak veya pet havuzu gibi ek lüks hizmetler sunmazlar. Ancak herhangi bir ek ücret almamaları ve sakin bahçesiyle evcil hayvanların kendi ekipmanlarıyla rahatça konaklamasına izin vermeleri oldukça olumludur.",
+    "infoSource": "İşletme İletişim Hattı",
+    "faq": [
       {
-        q: "Kozak Bungalov'da köpek yatağı veriliyor mu?",
-        a: "Hayır. Tesisimiz evcil hayvan kabul etmektedir ancak yatak, mama kabı gibi ekipmanları misafirlerimizin kendi yanlarında getirmesi gerekmektedir."
+        "q": "Kozak Bungalov'da köpek yatağı veriliyor mu?",
+        "a": "Hayır. Tesisimiz evcil hayvan kabul etmektedir ancak yatak, mama kabı gibi ekipmanları misafirlerimizin kendi yanlarında getirmesi gerekmektedir."
       },
       {
-        q: "Kozak Bungalov İznik gölüne yakın mı?",
-        a: "Evet, tesis İznik Gölü'ne yaklaşık 5 dakikalık yürüyüş mesafesinde konumlanmaktadır."
+        "q": "Kozak Bungalov İznik gölüne yakın mı?",
+        "a": "Evet, tesis İznik Gölü'ne yaklaşık 5 dakikalık yürüyüş mesafesinde konumlanmaktadır."
       }
+    ],
+    "galleryImages": [
+      "http://cdn.patiyleseyahat.com/oteller/kozak-bungalov-1.jpg"
     ]
   }
 ];
 
 export const initialBoardings = [
   {
-    id: "boarding-1",
-    name: "Pati Sarayı Kedi Oteli",
-    category: "Kedi otelleri",
-    city: "İstanbul",
-    district: "Kadıköy",
-    imageUrl: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=800&q=80",
-    allowedPets: ["cat"],
-    features: [
+    "id": "boarding-1",
+    "name": "Pati Sarayı Kedi Oteli",
+    "category": "Kedi otelleri",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "http://cdn.patiyleseyahat.com/oteller/pati-sarayi-kedi-oteli-1.jpg",
+    "allowedPets": [
+      "cat"
+    ],
+    "features": [
       "Bireysel oda",
       "Canlı kamera",
       "7/24 personel",
@@ -328,33 +426,45 @@ export const initialBoardings = [
       "Özel mama uygulaması",
       "İlaç uygulama"
     ],
-    quizTags: ["birak", "kedi", "cam-oda", "724-gozetim", "canli-yayin", "ilac-takip"],
-    baseTrustScore: 9.7,
-    verified: true,
-    lastVerified: "2026-08-20",
-    price: "Günlük 400 TL",
-    description: "Kadıköy'de tamamen kedilerin konforu ve psikolojisi düşünülerek tasarlanmış lüks bir butik otel. Kafes sisteminin kesinlikle kullanılmadığı tesiste, her kedinin tırmanma alanları, tırmalama tahtaları ve oyuncaklarla dolu kendi özel şeffaf odası bulunur. 7/24 görevli personel ve canlı HD kameralarla kedinizi her an cep telefonunuzdan izleyebilirsiniz.",
-    boardingModel: "Bireysel Cam Odalar (Her kediye 3 metrekarelik özel tırmanma alanlı alan)",
-    dailyProgram: "Günde 3 kez mama kontrolü, taze su değişimi, günde 2 kez yarımşar saatlik gözetimli bireysel oyun odası aktivitesi, tüylerin taranması.",
-    accreditedVet: "Kadıköy VetArt 24 Saat Açık Hayvan Hastanesi ile anlaşmalı",
-    phone: "+90 216 444 7284",
-    email: "iletisim@patisarayikedi.com",
-    website: "https://www.patisarayikedi.com",
-    cameraSupport: true,
-    requiredDocs: "Karma aşı (son 1 yıl içinde), Lösemi aşısı, iç-dış parazit uygulamasının üzerinden en fazla 2 ay geçmiş olması ve aşı karnesi teslimi.",
-    neuteringRequired: "6 aylıktan büyük kedilerde kısırlaştırma şartı aranmaktadır. Kısırlaştırılmamış kediler diğer kedilerle ortak oyun alanlarına çıkartılamaz.",
-    aggressionPolicy: "Sadece kendi odasında kalacağı için diğer kedilerle temas etmez. Agresif kediler için ilaç takibi ve sakinleştirici oyunlar hekim gözetiminde uygulanır.",
-    infoSource: "Yerinde Editör Denetimi"
+    "quizTags": [
+      "birak",
+      "kedi",
+      "cam-oda",
+      "724-gozetim",
+      "canli-yayin",
+      "ilac-takip"
+    ],
+    "baseTrustScore": 9.7,
+    "verified": true,
+    "lastVerified": "2026-08-20",
+    "price": "Günlük 400 TL",
+    "description": "Kadıköy'de tamamen kedilerin konforu ve psikolojisi düşünülerek tasarlanmış lüks bir butik otel. Kafes sisteminin kesinlikle kullanılmadığı tesiste, her kedinin tırmanma alanları, tırmalama tahtaları ve oyuncaklarla dolu kendi özel şeffaf odası bulunur. 7/24 görevli personel ve canlı HD kameralarla kedinizi her an cep telefonunuzdan izleyebilirsiniz.",
+    "boardingModel": "Bireysel Cam Odalar (Her kediye 3 metrekarelik özel tırmanma alanlı alan)",
+    "dailyProgram": "Günde 3 kez mama kontrolü, taze su değişimi, günde 2 kez yarımşar saatlik gözetimli bireysel oyun odası aktivitesi, tüylerin taranması.",
+    "accreditedVet": "Kadıköy VetArt 24 Saat Açık Hayvan Hastanesi ile anlaşmalı",
+    "phone": "+90 216 444 7284",
+    "email": "iletisim@patisarayikedi.com",
+    "website": "https://www.patisarayikedi.com",
+    "cameraSupport": true,
+    "requiredDocs": "Karma aşı (son 1 yıl içinde), Lösemi aşısı, iç-dış parazit uygulamasının üzerinden en fazla 2 ay geçmiş olması ve aşı karnesi teslimi.",
+    "neuteringRequired": "6 aylıktan büyük kedilerde kısırlaştırma şartı aranmaktadır. Kısırlaştırılmamış kediler diğer kedilerle ortak oyun alanlarına çıkartılamaz.",
+    "aggressionPolicy": "Sadece kendi odasında kalacağı için diğer kedilerle temas etmez. Agresif kediler için ilaç takibi ve sakinleştirici oyunlar hekim gözetiminde uygulanır.",
+    "infoSource": "Yerinde Editör Denetimi",
+    "galleryImages": [
+      "http://cdn.patiyleseyahat.com/oteller/pati-sarayi-kedi-oteli-1.jpg"
+    ]
   },
   {
-    id: "boarding-2",
-    name: "Lolipop Köpek Akademisi ve Oteli",
-    category: "Köpek otelleri",
-    city: "İstanbul",
-    district: "Göktürk",
-    imageUrl: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=800&q=80",
-    allowedPets: ["dog"],
-    features: [
+    "id": "boarding-2",
+    "name": "Lolipop Köpek Akademisi ve Oteli",
+    "category": "Köpek otelleri",
+    "city": "İstanbul",
+    "district": "Göktürk",
+    "imageUrl": "http://cdn.patiyleseyahat.com/oteller/lolipop-kopek-akademisi-ve-oteli-1.jpg",
+    "allowedPets": [
+      "dog"
+    ],
+    "features": [
       "Kafessiz konaklama",
       "Büyük ırk kabulü",
       "7/24 personel",
@@ -365,33 +475,47 @@ export const initialBoardings = [
       "Günlük gezdirme",
       "Transfer hizmeti"
     ],
-    quizTags: ["birak", "kopek", "kafessiz", "724-gozetim", "bahceli-oyun", "buyuk-irk", "transfer-var"],
-    baseTrustScore: 9.5,
-    verified: true,
-    lastVerified: "2026-08-18",
-    price: "Günlük 650 TL",
-    description: "Göktürk ormanının sınırında, 2 dönüm yeşil arazi üzerine kurulu olan Lolipop Köpek Oteli, köpeğinize adeta bir tatil kampı deneyimi sunar. Kafeslerin bulunmadığı tesiste, sosyal köpekler gün boyu uzman gözetmenler eşliğinde bahçede koşup oynar. Gece ise ısıtmalı/klimalı kapalı konaklama alanlarında kendilerine özel ortopedik yataklarda uyurlar.",
-    boardingModel: "Grup halinde serbest konaklama veya sosyal olmayan köpekler için özel bölmeler.",
-    dailyProgram: "Sabah 08:00 uyanma, bahçeye çıkış ve serbest oyun, 10:00 sabah maması ve dinlenme, 14:00 temel itaat tazeleyici oyunlar ve orman yürüyüşü, 17:00 akşam maması, 20:00 gece tuvalet çıkışı ve uyku.",
-    accreditedVet: "Göktürk PetHospital (5 dakika mesafede)",
-    phone: "+90 212 322 9090",
-    email: "gokturk@lolipoppet.com",
-    website: "https://www.lolipoppet.com",
-    cameraSupport: false,
-    requiredDocs: "Karma, Kuduz, Bronchine (Barınak Öksürüğü) aşıları güncel olmalı. Mikroçip zorunludur.",
-    neuteringRequired: "Erkek köpeklerde kısırlaştırma şartı aranır. Dişi köpeklerin kızgınlık döneminde olması durumunda kabul edilemezler.",
-    aggressionPolicy: "Girişte 2 saatlik 'sosyalleşme testi' uygulanır. Agresif veya aşırı korkak köpekler otel bölümüne kabul edilmez, bireysel eğitime yönlendirilir.",
-    infoSource: "İşletme Beyanı & Editör Gözlemi"
+    "quizTags": [
+      "birak",
+      "kopek",
+      "kafessiz",
+      "724-gozetim",
+      "bahceli-oyun",
+      "buyuk-irk",
+      "transfer-var"
+    ],
+    "baseTrustScore": 9.5,
+    "verified": true,
+    "lastVerified": "2026-08-18",
+    "price": "Günlük 650 TL",
+    "description": "Göktürk ormanının sınırında, 2 dönüm yeşil arazi üzerine kurulu olan Lolipop Köpek Oteli, köpeğinize adeta bir tatil kampı deneyimi sunar. Kafeslerin bulunmadığı tesiste, sosyal köpekler gün boyu uzman gözetmenler eşliğinde bahçede koşup oynar. Gece ise ısıtmalı/klimalı kapalı konaklama alanlarında kendilerine özel ortopedik yataklarda uyurlar.",
+    "boardingModel": "Grup halinde serbest konaklama veya sosyal olmayan köpekler için özel bölmeler.",
+    "dailyProgram": "Sabah 08:00 uyanma, bahçeye çıkış ve serbest oyun, 10:00 sabah maması ve dinlenme, 14:00 temel itaat tazeleyici oyunlar ve orman yürüyüşü, 17:00 akşam maması, 20:00 gece tuvalet çıkışı ve uyku.",
+    "accreditedVet": "Göktürk PetHospital (5 dakika mesafede)",
+    "phone": "+90 212 322 9090",
+    "email": "gokturk@lolipoppet.com",
+    "website": "https://www.lolipoppet.com",
+    "cameraSupport": false,
+    "requiredDocs": "Karma, Kuduz, Bronchine (Barınak Öksürüğü) aşıları güncel olmalı. Mikroçip zorunludur.",
+    "neuteringRequired": "Erkek köpeklerde kısırlaştırma şartı aranır. Dişi köpeklerin kızgınlık döneminde olması durumunda kabul edilemezler.",
+    "aggressionPolicy": "Girişte 2 saatlik 'sosyalleşme testi' uygulanır. Agresif veya aşırı korkak köpekler otel bölümüne kabul edilmez, bireysel eğitime yönlendirilir.",
+    "infoSource": "İşletme Beyanı & Editör Gözlemi",
+    "galleryImages": [
+      "http://cdn.patiyleseyahat.com/oteller/lolipop-kopek-akademisi-ve-oteli-1.jpg"
+    ]
   },
   {
-    id: "boarding-3",
-    name: "Happy Paws Ev Tipi Bakım Merkezi",
-    category: "Ev tipi bakım merkezleri",
-    city: "Ankara",
-    district: "Çankaya",
-    imageUrl: "https://images.unsplash.com/photo-1534361960057-19889db9621e?auto=format&fit=crop&w=800&q=80",
-    allowedPets: ["dog", "cat"],
-    features: [
+    "id": "boarding-3",
+    "name": "Happy Paws Ev Tipi Bakım Merkezi",
+    "category": "Ev tipi bakım merkezleri",
+    "city": "Ankara",
+    "district": "Çankaya",
+    "imageUrl": "http://cdn.patiyleseyahat.com/oteller/happy-paws-ev-tipi-bakim-merkezi-1.jpg",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
       "Kafessiz konaklama",
       "7/24 personel",
       "Günlük fotoğraf ve video",
@@ -399,33 +523,46 @@ export const initialBoardings = [
       "Özel mama uygulaması",
       "İlaç uygulama"
     ],
-    quizTags: ["birak", "kedi", "kopek", "kafessiz", "724-gozetim", "ev-ortami"],
-    baseTrustScore: 9.3,
-    verified: true,
-    lastVerified: "2026-07-15",
-    price: "Günlük 350 TL",
-    description: "Büyük, bahçeli bir villada aile sıcaklığında ev tipi bakım hizmeti veren Happy Paws, kafes ve benzeri sınırlamalardan tamamen uzaktır. Ev ortamına alışkın, koltukta uyumayı seven, sürekli insan ilgisi arayan hassas kedi ve köpekler için idealdir. Ev sahibi kendisi de profesyonel hayvan davranış uzmanıdır.",
-    boardingModel: "Ev ortamında serbest dolaşım (Aynı anda en fazla 3 misafir kabul edilir).",
-    dailyProgram: "Ev rutinine uygun beslenme, günde 3 kez Çankaya parklarında yürüyüş, akşam koltukta tarama ve sevgi saati.",
-    accreditedVet: "Ankara Çankaya Veteriner Polikliniği",
-    phone: "+90 532 999 8877",
-    email: "happypawsankara@gmail.com",
-    website: "https://www.instagram.com/happypawsankara",
-    cameraSupport: false,
-    requiredDocs: "Aşı karnesi fotoğrafı ve parazit damlalarının güncelliği.",
-    neuteringRequired: "Ev ortamında karma kaldıkları için kısırlaştırma zorunludur.",
-    aggressionPolicy: "Diğer evcil hayvanlara veya insanlara karşı en ufak agresyon gösteren canlılar kabul edilmez.",
-    infoSource: "Editör Aile Referansları"
+    "quizTags": [
+      "birak",
+      "kedi",
+      "kopek",
+      "kafessiz",
+      "724-gozetim",
+      "ev-ortami"
+    ],
+    "baseTrustScore": 9.3,
+    "verified": true,
+    "lastVerified": "2026-07-15",
+    "price": "Günlük 350 TL",
+    "description": "Büyük, bahçeli bir villada aile sıcaklığında ev tipi bakım hizmeti veren Happy Paws, kafes ve benzeri sınırlamalardan tamamen uzaktır. Ev ortamına alışkın, koltukta uyumayı seven, sürekli insan ilgisi arayan hassas kedi ve köpekler için idealdir. Ev sahibi kendisi de profesyonel hayvan davranış uzmanıdır.",
+    "boardingModel": "Ev ortamında serbest dolaşım (Aynı anda en fazla 3 misafir kabul edilir).",
+    "dailyProgram": "Ev rutinine uygun beslenme, günde 3 kez Çankaya parklarında yürüyüş, akşam koltukta tarama ve sevgi saati.",
+    "accreditedVet": "Ankara Çankaya Veteriner Polikliniği",
+    "phone": "+90 532 999 8877",
+    "email": "happypawsankara@gmail.com",
+    "website": "https://www.instagram.com/happypawsankara",
+    "cameraSupport": false,
+    "requiredDocs": "Aşı karnesi fotoğrafı ve parazit damlalarının güncelliği.",
+    "neuteringRequired": "Ev ortamında karma kaldıkları için kısırlaştırma zorunludur.",
+    "aggressionPolicy": "Diğer evcil hayvanlara veya insanlara karşı en ufak agresyon gösteren canlılar kabul edilmez.",
+    "infoSource": "Editör Aile Referansları",
+    "galleryImages": [
+      "http://cdn.patiyleseyahat.com/oteller/happy-paws-ev-tipi-bakim-merkezi-1.jpg"
+    ]
   },
   {
-    id: "boarding-4",
-    name: "VetLine Karma Pet Otel & Gündüz Bakım",
-    category: "Kedi ve köpek kabul eden karma tesisler",
-    city: "İzmir",
-    district: "Karşıyaka",
-    imageUrl: "https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=800&q=80",
-    allowedPets: ["dog", "cat"],
-    features: [
+    "id": "boarding-4",
+    "name": "VetLine Karma Pet Otel & Gündüz Bakım",
+    "category": "Kedi ve köpek kabul eden karma tesisler",
+    "city": "İzmir",
+    "district": "Karşıyaka",
+    "imageUrl": "http://cdn.patiyleseyahat.com/oteller/vetline-karma-pet-otel-gunduz-bakim-1.jpg",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
       "Bireysel oda",
       "7/24 personel",
       "Günlük fotoğraf ve video",
@@ -434,23 +571,34 @@ export const initialBoardings = [
       "Açık bahçe",
       "Günlük gezdirme"
     ],
-    quizTags: ["birak", "kedi", "kopek", "724-gozetim", "vet-gozetim", "ilac-takip", "transfer-var"],
-    baseTrustScore: 9.4,
-    verified: true,
-    lastVerified: "2026-05-10",
-    price: "Günlük 500 TL",
-    description: "Bünyesindeki veteriner kliniği ile entegre çalışan VetLine Pet Oteli, özellikle tıbbi takibe ihtiyacı olan, düzenli ilaç alması gereken veya yaşlı patili dostlar için en güvenli adrestir. Kediler ve köpekler için tamamen ayrı katlarda, ses yalıtımlı odalar tasarlanmıştır.",
-    boardingModel: "Veteriner kliniğine bağlı ses yalıtımlı bireysel bölmeler and bahçe oyun alanları.",
-    dailyProgram: "Veteriner hekim kontrolünde sabah viziti, ilaç ve tedavi uygulamaları, günde 2 kez bireysel egzersiz saati.",
-    accreditedVet: "VetLine Veteriner Kliniği (Bünyesinde)",
-    phone: "+90 232 369 1234",
-    email: "otel@vetlineizmir.com",
-    website: "https://www.vetlineizmir.com",
-    cameraSupport: false,
-    requiredDocs: "Tüm aşıların eksiksiz olması şarttır. Kronik hastalık raporları girişte teslim alınır.",
-    neuteringRequired: "Zorunlu değil (Bireysel odalarda tecrit sağlandığı için kısır olmayan hayvanlar da kabul edilir).",
-    aggressionPolicy: "Veteriner teknisyenleri gözetiminde bireysel bakım uygulandığı için agresif hayvanlar da güvenle kabul edilip tıbbi bakımı sürdürülür.",
-    infoSource: "Klinik Yönetimi Doğrulaması"
+    "quizTags": [
+      "birak",
+      "kedi",
+      "kopek",
+      "724-gozetim",
+      "vet-gozetim",
+      "ilac-takip",
+      "transfer-var"
+    ],
+    "baseTrustScore": 9.4,
+    "verified": true,
+    "lastVerified": "2026-05-10",
+    "price": "Günlük 500 TL",
+    "description": "Bünyesindeki veteriner kliniği ile entegre çalışan VetLine Pet Oteli, özellikle tıbbi takibe ihtiyacı olan, düzenli ilaç alması gereken veya yaşlı patili dostlar için en güvenli adrestir. Kediler ve köpekler için tamamen ayrı katlarda, ses yalıtımlı odalar tasarlanmıştır.",
+    "boardingModel": "Veteriner kliniğine bağlı ses yalıtımlı bireysel bölmeler and bahçe oyun alanları.",
+    "dailyProgram": "Veteriner hekim kontrolünde sabah viziti, ilaç ve tedavi uygulamaları, günde 2 kez bireysel egzersiz saati.",
+    "accreditedVet": "VetLine Veteriner Kliniği (Bünyesinde)",
+    "phone": "+90 232 369 1234",
+    "email": "otel@vetlineizmir.com",
+    "website": "https://www.vetlineizmir.com",
+    "cameraSupport": false,
+    "requiredDocs": "Tüm aşıların eksiksiz olması şarttır. Kronik hastalık raporları girişte teslim alınır.",
+    "neuteringRequired": "Zorunlu değil (Bireysel odalarda tecrit sağlandığı için kısır olmayan hayvanlar da kabul edilir).",
+    "aggressionPolicy": "Veteriner teknisyenleri gözetiminde bireysel bakım uygulandığı için agresif hayvanlar da güvenle kabul edilip tıbbi bakımı sürdürülür.",
+    "infoSource": "Klinik Yönetimi Doğrulaması",
+    "galleryImages": [
+      "http://cdn.patiyleseyahat.com/oteller/vetline-karma-pet-otel-gunduz-bakim-1.jpg"
+    ]
   }
 ];
 
