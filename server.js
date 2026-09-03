@@ -913,6 +913,15 @@ app.get('/sitemap.xml', async (req, res) => {
     { loc: 'https://www.patiyleseyahat.com/trust-ads', priority: '0.5', frequency: 'monthly', lastmod: '2026-09-03' },
     { loc: 'https://www.patiyleseyahat.com/kedi-kabul-eden-oteller', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
     { loc: 'https://www.patiyleseyahat.com/kopek-kabul-eden-oteller', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
+    { loc: 'https://www.patiyleseyahat.com/her-sey-dahil-evcil-hayvan-dostu-oteller', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
+    { loc: 'https://www.patiyleseyahat.com/buyuk-kopek-kabul-eden-oteller', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
+    { loc: 'https://www.patiyleseyahat.com/ucretsiz-evcil-hayvan-kabul-eden-oteller', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
+    { loc: 'https://www.patiyleseyahat.com/bahceli-evcil-hayvan-dostu-oteller', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
+    { loc: 'https://www.patiyleseyahat.com/evcil-hayvan-dostu-bungalovlar', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
+    { loc: 'https://www.patiyleseyahat.com/kopek-kabul-eden-bungalovlar', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
+    { loc: 'https://www.patiyleseyahat.com/evcil-hayvan-dostu-villalar', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
+    { loc: 'https://www.patiyleseyahat.com/evcil-hayvan-dostu-butik-oteller', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
+    { loc: 'https://www.patiyleseyahat.com/evcil-hayvan-dostu-tatil-koyleri', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
     ...Object.keys(categorySeoPages).map(categoryPath => ({
       loc: `https://www.patiyleseyahat.com${categoryPath}`,
       priority: '0.9',
@@ -945,6 +954,30 @@ app.get('/sitemap.xml', async (req, res) => {
     })),
     ...citySlugs.map(citySlug => ({
       loc: `https://www.patiyleseyahat.com/pet-friendly-oteller/${citySlug}`,
+      priority: '0.9',
+      frequency: 'daily',
+      lastmod: '2026-09-03'
+    })),
+    ...citySlugs.map(citySlug => ({
+      loc: `https://www.patiyleseyahat.com/her-sey-dahil-evcil-hayvan-dostu-oteller/${citySlug}`,
+      priority: '0.9',
+      frequency: 'daily',
+      lastmod: '2026-09-03'
+    })),
+    ...citySlugs.map(citySlug => ({
+      loc: `https://www.patiyleseyahat.com/buyuk-kopek-kabul-eden-oteller/${citySlug}`,
+      priority: '0.9',
+      frequency: 'daily',
+      lastmod: '2026-09-03'
+    })),
+    ...citySlugs.map(citySlug => ({
+      loc: `https://www.patiyleseyahat.com/evcil-hayvan-dostu-bungalovlar/${citySlug}`,
+      priority: '0.9',
+      frequency: 'daily',
+      lastmod: '2026-09-03'
+    })),
+    ...citySlugs.map(citySlug => ({
+      loc: `https://www.patiyleseyahat.com/evcil-hayvan-dostu-villalar/${citySlug}`,
       priority: '0.9',
       frequency: 'daily',
       lastmod: '2026-09-03'

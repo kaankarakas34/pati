@@ -186,6 +186,100 @@ export function generateCombinationSeoContent(cityName = '', intentType = 'pet-f
   const cityStr = cityName ? `${cityName}'da ` : '';
   const cityTitle = cityName ? `${cityName} ` : '';
 
+  if (intentType === 'her-sey-dahil') {
+    return {
+      id: `${cityName}-her-sey-dahil-seo`,
+      title: `${cityTitle}Her Şey Dahil Evcil Hayvan Kabul Eden Oteller`,
+      paragraphs: [
+        `${cityStr}her şey dahil (Ultra All Inclusive) konseptiyle hizmet veren, kedi ve köpek kabul eden en iyi otel ve resort tesislerini inceleyebilirsiniz. Her şey dahil tesislerde evcil hayvanların ortak restoran, havuz çevresi ve plaj alanlarına kabul kuralları otel yönetimlerince özel olarak düzenlenmektedir.`,
+        `Geniş araziye, bahçe katı odalara ve özel yürüyüş parkurlarına sahip ${cityTitle}her şey dahil pet friendly otelleri hem aileniz hem de patili dostunuz için maksimum konfor sunar.`
+      ],
+      highlights: [
+        `${cityTitle}her şey dahil pet friendly oteller`,
+        'Açık büfe, plaj ve bahçe pet izin kuralları',
+        'Kedi ve köpekler için oda içi mama kabı ve yatak olanakları',
+        '7/24 veteriner ve sağlık desteği yakınlığı'
+      ],
+      faqs: [
+        { question: `${cityTitle}her şey dahil otellerde evcil hayvan için ek ücret alınır mı?`, answer: `Bazı her şey dahil oteller evcil hayvan konaklamasını ücretsiz sunarken bazıları gecelik temizlik bedeli talep eder. Detayları tesis sayfasından inceleyebilirsiniz.` },
+        { question: `Her şey dahil otelde evcil hayvan restorana girebilir mi?`, answer: `Hijyen kuralları gereği kapalı restoranlara kabul edilmez; açık teras ve bahçe masalarında tasmalı kabul yaygındır.` }
+      ],
+      links: [
+        { href: `/evcil-hayvan-dostu-oteller`, label: `Tüm Evcil Hayvan Dostu Oteller` }
+      ]
+    };
+  }
+
+  if (intentType === 'buyuk-kopek') {
+    return {
+      id: `${cityName}-buyuk-kopek-seo`,
+      title: `${cityTitle}Büyük Köpek Kabul Eden Oteller & Kilo Sınırsız Tesisler`,
+      paragraphs: [
+        `${cityStr}20 kg üzeri büyük ırk köpek kabul eden (Golden Retriever, Labrador, German Shepherd vb.) ve kilo kısıtlaması uygulamayan otel, bungalov ve kiralık villalar.`,
+        `Büyük köpek sahiplerinin en çok zorlandığı kilo sınırı engelini aşan, geniş çim bahçelere ve koşturma alanlarına sahip ${cityTitle}tesislerini karşılaştırabilirsiniz.`
+      ],
+      highlights: [
+        `${cityTitle}bölgesi büyük ırk köpek kabul eden oteller`,
+        '20 kg, 30 kg üzeri ve kilo sınırsız tesisler',
+        'Geniş bahçe, doğa ve yürüyüş alanları',
+        'Tasmalı ortak alan geçiş kuralları'
+      ],
+      faqs: [
+        { question: `${cityTitle}otellerinde büyük köpekler için kilo sınırı var mı?`, answer: `Platformumuzdaki 'Kilo Sınırsız' veya 'Büyük Köpek Kabul Eden' filtresiyle sınırlaması olmayan tesisleri kolayca ayırabilirsiniz.` },
+        { question: `Büyük köpek otel odasında rahat edebilir mi?`, answer: `Bahçe katı veya teraslı geniş odalar büyük ırk köpeklerin konforu için öncelikli olarak tavsiye edilir.` }
+      ],
+      links: [
+        { href: `/evcil-hayvan-dostu-oteller`, label: `Tüm Evcil Hayvan Dostu Oteller` }
+      ]
+    };
+  }
+
+  if (intentType === 'bungalov') {
+    return {
+      id: `${cityName}-bungalov-seo`,
+      title: `${cityTitle}Evcil Hayvan Dostu Bungalovlar & Dağ Evleri`,
+      paragraphs: [
+        `${cityStr}doğa içinde müstakil bahçeli, kedi ve köpek kabul eden en popüler bungalov ve ahşap dağ evleri. Özgürce hareket edebilecekleri çitlerle çevrili özel alanlar sunan tesisleri inceleyebilirsiniz.`,
+        `Kendi yemeğinizi pişirebileceğiniz, şömineli ve bahçeli ${cityTitle}bungalovları hem aileniz hem de evcil hayvanınız için huzurlu bir doğa tatili vadeder.`
+      ],
+      highlights: [
+        `${cityTitle}doğasında evcil hayvan kabul eden bungalovlar`,
+        'Müstakil korunaklı bahçe ve çitli alanlar',
+        'Köpeğinizle doğa yürüyüşü ve şömine keyfi',
+        'Özgür ve gürültüden uzak konaklama ortamı'
+      ],
+      faqs: [
+        { question: `${cityTitle}bungalovlarında evcil hayvan için ek ücret var mı?`, answer: `Bungalov işletmelerinin bazıları evcil hayvanları ücretsiz kabul ederken bazıları tek seferlik temizlik ücreti alabilir.` }
+      ],
+      links: [
+        { href: `/evcil-hayvan-dostu-oteller`, label: `Tüm Evcil Hayvan Dostu Oteller` }
+      ]
+    };
+  }
+
+  if (intentType === 'villa') {
+    return {
+      id: `${cityName}-villa-seo`,
+      title: `${cityTitle}Evcil Hayvan Dostu Kiralık Villalar`,
+      paragraphs: [
+        `${cityStr}özel havuzlu, korunaklı bahçeli ve evcil hayvanınızla (kedi/köpek) baş başa tatil yapabileceğiniz lüks kiralık villalar.`,
+        `Yabancı gözlerden uzak, tamamen size ve patili dostunuza ait geniş bahçede özgürce koşup oynayabileceği ${cityTitle}villalarını inceleyebilirsiniz.`
+      ],
+      highlights: [
+        `${cityTitle}korunaklı bahçeli pet friendly villalar`,
+        'Özel havuz ve geniş çim çit alanları',
+        'Gürültüsüz, aileye özel müstakil tatil imkanı',
+        'Kedi ve köpekler için tam özgürlük'
+      ],
+      faqs: [
+        { question: `${cityTitle}villalarında evcil hayvan havuza girebilir mi?`, answer: `Hijyen ve filtre sağlığı nedeniyle evcil hayvanların yüzme havuzuna girmesine izin verilmez; bahçe ve veranda kullanımı serbesttir.` }
+      ],
+      links: [
+        { href: `/evcil-hayvan-dostu-oteller`, label: `Tüm Evcil Hayvan Dostu Oteller` }
+      ]
+    };
+  }
+
   if (intentType === 'kedi-kabul') {
     return {
       id: `${cityName}-kedi-kabul-seo`,

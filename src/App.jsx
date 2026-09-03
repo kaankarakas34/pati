@@ -528,13 +528,23 @@ function App() {
         path.startsWith('/evcil-hayvan-kabul-eden-oteller/') ||
         path.startsWith('/pet-friendly-oteller/') ||
         path.startsWith('/kedi-kabul-eden-oteller/') ||
-        path.startsWith('/kopek-kabul-eden-oteller/')
+        path.startsWith('/kopek-kabul-eden-oteller/') ||
+        path.startsWith('/her-sey-dahil-evcil-hayvan-dostu-oteller/') ||
+        path.startsWith('/buyuk-kopek-kabul-eden-oteller/') ||
+        path.startsWith('/ucretsiz-evcil-hayvan-kabul-eden-oteller/') ||
+        path.startsWith('/bahceli-evcil-hayvan-dostu-oteller/') ||
+        path.startsWith('/evcil-hayvan-dostu-bungalovlar/') ||
+        path.startsWith('/kopek-kabul-eden-bungalovlar/') ||
+        path.startsWith('/evcil-hayvan-dostu-villalar/') ||
+        path.startsWith('/evcil-hayvan-dostu-butik-oteller/') ||
+        path.startsWith('/evcil-hayvan-dostu-tatil-koyleri/')
       ) {
         const segments = path.split('/').filter(Boolean);
         const prefix = segments[0];
         const citySlug = segments[1];
 
         let petType = 'all';
+        let accType = 'all';
         let filterTitle = null;
 
         if (prefix.includes('kedi')) {
@@ -543,6 +553,22 @@ function App() {
         } else if (prefix.includes('kopek')) {
           petType = 'dog';
           filterTitle = 'Köpek Kabul Eden Oteller';
+        } else if (prefix.includes('her-sey-dahil')) {
+          filterTitle = 'Her Şey Dahil Evcil Hayvan Kabul Eden Oteller';
+        } else if (prefix.includes('buyuk-kopek')) {
+          filterTitle = 'Büyük Köpek Kabul Eden Oteller';
+        } else if (prefix.includes('bungalov')) {
+          accType = 'Bungalov';
+          filterTitle = 'Evcil Hayvan Dostu Bungalovlar';
+        } else if (prefix.includes('villa')) {
+          accType = 'Villa';
+          filterTitle = 'Evcil Hayvan Dostu Villalar';
+        } else if (prefix.includes('butik')) {
+          accType = 'Butik Otel';
+          filterTitle = 'Evcil Hayvan Dostu Butik Oteller';
+        } else if (prefix.includes('tatil-koy')) {
+          accType = 'Tatil Köyü';
+          filterTitle = 'Evcil Hayvan Dostu Tatil Köyleri';
         }
 
         const cityName = hotels.find(hotel => slugify(hotel.city) === citySlug)?.city
@@ -551,8 +577,8 @@ function App() {
         setSearchFilters({
           destination: cityName,
           citySlug,
-          petType: petType,
-          accType: 'all',
+          petType,
+          accType,
           suitability: 'all',
           weightLimit: 'all',
           extraFeeOnly: false,
@@ -561,6 +587,34 @@ function App() {
           filterTitle: filterTitle ? `${cityName} ${filterTitle}` : null,
           cityLanding: true
         });
+        setCurrentView('accommodations');
+      } else if (path === '/her-sey-dahil-evcil-hayvan-dostu-oteller') {
+        setSearchFilters(current => ({ ...current, destination: '', petType: 'all', accType: 'all', cityLanding: false, filterTitle: 'Her Şey Dahil Evcil Hayvan Kabul Eden Oteller' }));
+        setCurrentView('accommodations');
+      } else if (path === '/buyuk-kopek-kabul-eden-oteller') {
+        setSearchFilters(current => ({ ...current, destination: '', petType: 'dog', accType: 'all', cityLanding: false, filterTitle: 'Büyük Köpek Kabul Eden Oteller' }));
+        setCurrentView('accommodations');
+      } else if (path === '/ucretsiz-evcil-hayvan-kabul-eden-oteller') {
+        setSearchFilters(current => ({ ...current, destination: '', extraFeeOnly: true, cityLanding: false, filterTitle: 'Ek Ücret Almayan Evcil Hayvan Dostu Oteller' }));
+        setCurrentView('accommodations');
+      } else if (path === '/bahceli-evcil-hayvan-dostu-oteller') {
+        setSearchFilters(current => ({ ...current, destination: '', features: ['Bahçesi bulunan'], cityLanding: false, filterTitle: 'Bahçeli Evcil Hayvan Dostu Oteller' }));
+        setCurrentView('accommodations');
+      } else if (path === '/evcil-hayvan-dostu-bungalovlar') {
+        setSearchFilters(current => ({ ...current, destination: '', accType: 'Bungalov', cityLanding: false, filterTitle: 'Evcil Hayvan Dostu Bungalovlar' }));
+        setCurrentView('accommodations');
+      } else if (path === '/kopek-kabul-eden-bungalovlar') {
+        setSearchFilters(current => ({ ...current, destination: '', petType: 'dog', accType: 'Bungalov', cityLanding: false, filterTitle: 'Köpek Kabul Eden Bungalovlar' }));
+        setCurrentView('accommodations');
+      } else if (path === '/evcil-hayvan-dostu-villalar') {
+        setSearchFilters(current => ({ ...current, destination: '', accType: 'Villa', cityLanding: false, filterTitle: 'Evcil Hayvan Dostu Villalar' }));
+        setCurrentView('accommodations');
+      } else if (path === '/evcil-hayvan-dostu-butik-oteller') {
+        setSearchFilters(current => ({ ...current, destination: '', accType: 'Butik Otel', cityLanding: false, filterTitle: 'Evcil Hayvan Dostu Butik Oteller' }));
+        setCurrentView('accommodations');
+      } else if (path === '/evcil-hayvan-dostu-tatil-koyleri') {
+        setSearchFilters(current => ({ ...current, destination: '', accType: 'Tatil Köyü', cityLanding: false, filterTitle: 'Evcil Hayvan Dostu Tatil Köyleri' }));
+        setCurrentView('accommodations');
       } else if (path === '/kedi-kabul-eden-oteller') {
         setSearchFilters(current => ({ ...current, destination: '', petType: 'cat', cityLanding: false, filterTitle: 'Kedi Kabul Eden Oteller' }));
         setCurrentView('accommodations');
