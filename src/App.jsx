@@ -770,6 +770,9 @@ function App() {
             isBoarding={false}
             hotels={hotels}
             boardings={boardings}
+            guides={guides}
+            vets={vets}
+            taxis={taxis}
             complaints={complaints}
             addComplaint={addComplaint}
             onViewChange={handleViewChange}
@@ -862,7 +865,11 @@ function App() {
           <DetailView
             id={selectedItemId}
             isVet={true}
+            hotels={hotels}
+            boardings={boardings}
+            guides={guides}
             vets={vets}
+            taxis={taxis}
             complaints={complaints}
             addComplaint={addComplaint}
             onViewChange={handleViewChange}

@@ -36,7 +36,7 @@ export const initialHotels = [
     "baseTrustScore": 9.8,
     "verified": false,
     "lastVerified": "2026-08-15",
-    "imageUrl": "http://cdn.patiyleseyahat.com/oteller/the-marmara-bodrum-1.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
     "description": "Bodrum Kalesi manzarasına hakim, tepe konumda bulunan The Marmara Bodrum, evcil hayvanların sadece 'kabul edildiği' değil, özel olarak ağırlandığı bir tesistir. Editör ekibimizin bizzat ziyaret ederek doğruladığı bu tesiste, dostunuzla birlikte lüks ve konforlu bir tatil geçirebilirsiniz. Bahçe katı odalarında evcil hayvanınızın rahatça çimlerde vakit geçirmesi sağlanır.",
     "whySelected": "Ege Bölgesi'nde evcil hayvanlara özel gurme menü (Pet Menü) sunan, odalarda özel tasarım yatak ve mama kabı bulunduran ve restoranın açık alanında evcil hayvanınızla birlikte oturmanıza izin veren ender 5 yıldızlı butik otellerden biridir.",
     "suitableFor": [
@@ -84,7 +84,7 @@ export const initialHotels = [
       }
     ],
     "galleryImages": [
-      "http://cdn.patiyleseyahat.com/oteller/the-marmara-bodrum-1.jpg"
+      "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80"
     ]
   },
   {
@@ -121,7 +121,7 @@ export const initialHotels = [
     "baseTrustScore": 9.1,
     "verified": false,
     "lastVerified": "2026-07-28",
-    "imageUrl": "http://cdn.patiyleseyahat.com/oteller/kapadokya-cave-suites-1.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80",
     "description": "Kapadokya'nın kalbi Göreme'de, geleneksel mağara odalarında otantik bir konaklama sunan Kapadokya Cave Suites, evcil hayvan dostu politikasıyla öne çıkıyor. Kilo sınırı olmaksızın köpek, kedi ve kafesinde olmak kaydıyla kuş kabul eden tesiste, geniş taş avlu ve bahçe alanları patili dostlarınızın dolaşması için idealdir.",
     "whySelected": "Kapadokya bölgesinde mağara konseptli oteller arasında kilo sınırı uygulamayan ve büyük ırk köpekleri de kabul eden nadir işletmelerdendir. Ayrıca kuş severler için de uygundur.",
     "suitableFor": [
@@ -164,7 +164,7 @@ export const initialHotels = [
       }
     ],
     "galleryImages": [
-      "http://cdn.patiyleseyahat.com/oteller/kapadokya-cave-suites-1.jpg"
+      "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80"
     ]
   },
   {
@@ -203,7 +203,7 @@ export const initialHotels = [
     "baseTrustScore": 9.7,
     "verified": false,
     "lastVerified": "2026-08-01",
-    "imageUrl": "http://cdn.patiyleseyahat.com/oteller/kabak-dome-suites-glamping-1.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1587061949409-02df41d5e562?auto=format&fit=crop&w=800&q=80",
     "description": "Fethiye'nin meşhur Kabak Koyu'nda doğayla baş başa lüks kubbe çadırlarda (glamping) hizmet veren tesis, adeta patili dostlarımızın cennetidir. Etrafı çam ormanlarıyla çevrili olan ve ek ücret almayan Kabak Dome, birden fazla evcil hayvan kabul etmesi ve sınırsız özgürlük alanıyla öne çıkıyor.",
     "whySelected": "Glamping kategorisinde hiçbir kilo sınırı koymadan, oda başı 3 hayvana kadar izin veren ve tamamen ek ücretsiz olan ekolojik bir yaklaşımı benimsediği için listemizin gözdesidir.",
     "suitableFor": [
@@ -245,7 +245,7 @@ export const initialHotels = [
       }
     ],
     "galleryImages": [
-      "http://cdn.patiyleseyahat.com/oteller/kabak-dome-suites-glamping-1.jpg"
+      "https://images.unsplash.com/photo-1587061949409-02df41d5e562?auto=format&fit=crop&w=800&q=80"
     ]
   },
   {
@@ -280,7 +280,7 @@ export const initialHotels = [
     "baseTrustScore": 9.6,
     "verified": false,
     "lastVerified": "2026-08-10",
-    "imageUrl": "http://cdn.patiyleseyahat.com/oteller/club-marvy-1.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
     "description": "Özdere'de konumlanan lüks Club Marvy, Türkiye'de 'Pet Plajı' konseptine sahip az sayıdaki seçkin tatil köyünden biridir. Doğanın kalbinde konumlanan bu modern tesiste, köpek misafirler için özel ayrılmış koyda patili dostunuzla beraber Akdeniz sularının keyfini çıkarabilirsiniz.",
     "whySelected": "Türkiye genelinde 5 yıldızlı ultra her şey dahil tatil köyleri arasında, köpeklere özel tasmayla girilebilen kum plaj sunan ve özel yürüyüş parkurları hazırlayan öncü tesislerden biridir.",
     "suitableFor": [
@@ -324,7 +324,7 @@ export const initialHotels = [
       }
     ],
     "galleryImages": [
-      "http://cdn.patiyleseyahat.com/oteller/club-marvy-1.jpg"
+      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80"
     ]
   },
   {
@@ -360,7 +360,7 @@ export const initialHotels = [
     "baseTrustScore": 8.9,
     "verified": false,
     "lastVerified": "2026-06-15",
-    "imageUrl": "http://cdn.patiyleseyahat.com/oteller/kozak-bungalov-1.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=800&q=80",
     "description": "İznik Gölü kıyısına yakın, zeytin ağaçları arasında yer alan Kozak Bungalov, sakin ve mütevazı bir tatil arayan patili dostu ailelere kapılarını açıyor. Bütçe dostu bungalov odaları ve yeşil bahçesi ile evcil hayvanlarınız için huzurlu bir dinlenme köşesidir.",
     "whySelected": "İznik bölgesinde ek ücret talep etmeyen, temel düzeyde evcil hayvan kabulü (Pet-Allowed) sağlayan güvenilir ve temiz bir doğa işletmesidir.",
     "suitableFor": [
@@ -401,7 +401,7 @@ export const initialHotels = [
       }
     ],
     "galleryImages": [
-      "http://cdn.patiyleseyahat.com/oteller/kozak-bungalov-1.jpg"
+      "https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=800&q=80"
     ]
   }
 ];
@@ -413,7 +413,7 @@ export const initialBoardings = [
     "category": "Kedi otelleri",
     "city": "İstanbul",
     "district": "Kadıköy",
-    "imageUrl": "http://cdn.patiyleseyahat.com/oteller/pati-sarayi-kedi-oteli-1.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=800&q=80",
     "allowedPets": [
       "cat"
     ],
@@ -451,7 +451,7 @@ export const initialBoardings = [
     "aggressionPolicy": "Sadece kendi odasında kalacağı için diğer kedilerle temas etmez. Agresif kediler için ilaç takibi ve sakinleştirici oyunlar hekim gözetiminde uygulanır.",
     "infoSource": "Yerinde Editör Denetimi",
     "galleryImages": [
-      "http://cdn.patiyleseyahat.com/oteller/pati-sarayi-kedi-oteli-1.jpg"
+      "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=800&q=80"
     ]
   },
   {
@@ -460,7 +460,7 @@ export const initialBoardings = [
     "category": "Köpek otelleri",
     "city": "İstanbul",
     "district": "Göktürk",
-    "imageUrl": "http://cdn.patiyleseyahat.com/oteller/lolipop-kopek-akademisi-ve-oteli-1.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=800&q=80",
     "allowedPets": [
       "dog"
     ],
@@ -501,7 +501,7 @@ export const initialBoardings = [
     "aggressionPolicy": "Girişte 2 saatlik 'sosyalleşme testi' uygulanır. Agresif veya aşırı korkak köpekler otel bölümüne kabul edilmez, bireysel eğitime yönlendirilir.",
     "infoSource": "İşletme Beyanı & Editör Gözlemi",
     "galleryImages": [
-      "http://cdn.patiyleseyahat.com/oteller/lolipop-kopek-akademisi-ve-oteli-1.jpg"
+      "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=800&q=80"
     ]
   },
   {
@@ -510,7 +510,7 @@ export const initialBoardings = [
     "category": "Ev tipi bakım merkezleri",
     "city": "Ankara",
     "district": "Çankaya",
-    "imageUrl": "http://cdn.patiyleseyahat.com/oteller/happy-paws-ev-tipi-bakim-merkezi-1.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=800&q=80",
     "allowedPets": [
       "dog",
       "cat"
@@ -548,7 +548,7 @@ export const initialBoardings = [
     "aggressionPolicy": "Diğer evcil hayvanlara veya insanlara karşı en ufak agresyon gösteren canlılar kabul edilmez.",
     "infoSource": "Editör Aile Referansları",
     "galleryImages": [
-      "http://cdn.patiyleseyahat.com/oteller/happy-paws-ev-tipi-bakim-merkezi-1.jpg"
+      "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=800&q=80"
     ]
   },
   {
@@ -557,7 +557,7 @@ export const initialBoardings = [
     "category": "Kedi ve köpek kabul eden karma tesisler",
     "city": "İzmir",
     "district": "Karşıyaka",
-    "imageUrl": "http://cdn.patiyleseyahat.com/oteller/vetline-karma-pet-otel-gunduz-bakim-1.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=800&q=80",
     "allowedPets": [
       "dog",
       "cat"
@@ -597,7 +597,7 @@ export const initialBoardings = [
     "aggressionPolicy": "Veteriner teknisyenleri gözetiminde bireysel bakım uygulandığı için agresif hayvanlar da güvenle kabul edilip tıbbi bakımı sürdürülür.",
     "infoSource": "Klinik Yönetimi Doğrulaması",
     "galleryImages": [
-      "http://cdn.patiyleseyahat.com/oteller/vetline-karma-pet-otel-gunduz-bakim-1.jpg"
+      "https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=800&q=80"
     ]
   }
 ];

@@ -611,6 +611,19 @@ export async function initDatabase() {
   }
 }
 
+const DEFAULT_FALLBACK_IMG = "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80";
+
+function fixImageUrl(url, fallback = DEFAULT_FALLBACK_IMG) {
+  if (!url || typeof url !== 'string') return fallback;
+  if (url.includes('cdn.patiyleseyahat.com')) {
+    return fallback;
+  }
+  if (url.startsWith('http://')) {
+    return url.replace('http://', 'https://');
+  }
+  return url;
+}
+
 // Database Helpers
 export async function getHotels() {
   try {
@@ -630,8 +643,8 @@ export async function getHotels() {
       baseTrustScore: parseFloat(h.base_trust_score),
       verified: h.verified,
       lastVerified: h.last_verified,
-      imageUrl: h.image_url,
-      galleryImages: h.gallery_images || [],
+      imageUrl: fixImageUrl(h.image_url),
+      galleryImages: (h.gallery_images || []).map(img => fixImageUrl(img)),
       description: h.description,
       whySelected: h.why_selected,
       suitableFor: h.suitable_for,

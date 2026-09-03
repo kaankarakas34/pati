@@ -151,6 +151,7 @@ export default function DetailView({
   isVet,
   hotels,
   boardings,
+  guides = [],
   taxis = [],
   vets = [],
   complaints = [],
@@ -486,7 +487,15 @@ export default function DetailView({
             </div>
           ) : (
             <div className="h-72 md:h-[450px] bg-gray-200 rounded-3xl overflow-hidden shadow-sm relative">
-              <img src={shouldShowGallery ? selectedGalleryImage : item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
+              <img
+                src={shouldShowGallery ? selectedGalleryImage : item.imageUrl}
+                alt={item.name}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80';
+                }}
+              />
             
               <div className="absolute top-4 left-4 bg-brand-navy text-white text-xs px-3.5 py-1.5 rounded-full font-bold flex items-center gap-1 shadow-md">
                 <VerifiedBadge className="w-4 h-4 text-white" />
@@ -512,7 +521,15 @@ export default function DetailView({
                   }`}
                   aria-label={`${item.name} galeri görseli ${index + 1}`}
                 >
-                  <img src={image} alt={`${item.name} galeri ${index + 1}`} className="w-full h-full object-cover" />
+                  <img
+                    src={image}
+                    alt={`${item.name} galeri ${index + 1}`}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80';
+                    }}
+                  />
                 </button>
               ))}
             </div>
