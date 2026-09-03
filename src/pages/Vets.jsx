@@ -11,7 +11,7 @@ function trNormalize(str) {
     .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c');
 }
 
-export default function Vets({ vets = [] }) {
+export default function Vets({ vets = [], onViewChange }) {
   const [selectedCity, setSelectedCity] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [hasICU, setHasICU] = useState(false);
@@ -159,7 +159,12 @@ export default function Vets({ vets = [] }) {
 
                     {/* Clinic Name & Location */}
                     <div>
-                      <h3 className="font-title text-lg font-bold text-gray-950">{vet.name}</h3>
+                      <h3
+                        onClick={() => onViewChange && onViewChange('vet-detail', vet.id)}
+                        className="font-title text-lg font-bold text-gray-950 hover:text-brand-navy cursor-pointer transition-colors"
+                      >
+                        {vet.name}
+                      </h3>
                       <p className="text-xs text-gray-500 mt-1 flex items-center gap-1 font-semibold">
                         <LocationIcon className="w-3.5 h-3.5 text-brand-earth flex-shrink-0" />
                         <span>{vet.city}, {vet.district}</span>

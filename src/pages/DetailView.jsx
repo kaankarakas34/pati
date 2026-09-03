@@ -22,7 +22,22 @@ function uniqueItems(items) {
   return Array.from(new Set(items.filter(Boolean)));
 }
 
-function makeAmenityGroups(item, isBoarding) {
+function makeAmenityGroups(item, isBoarding, isVet) {
+  if (isVet) {
+    return [
+      {
+        title: 'Acil Servis & Nöbetçi Hizmetler',
+        icon: '🚨',
+        items: uniqueItems(['7/24 Kesintisiz Acil Müdahale ve Nöbetçi Hekim', ...(item.features || [])])
+      },
+      {
+        title: 'Klinik İletişim & Konum',
+        icon: '📍',
+        items: uniqueItems([item.address, item.phone ? `Telefon: ${item.phone}` : '', item.website ? `Web sitesi: ${item.website}` : ''])
+      }
+    ].filter(group => group.items.length > 0);
+  }
+
   if (isBoarding) {
     return [
       {
@@ -245,7 +260,7 @@ export default function DetailView({
   const galleryFallbacks = isBoarding ? boardingGalleryFallbacks : hotelGalleryFallbacks;
   const galleryImages = Array.from(new Set([item.imageUrl, ...(item.galleryImages || []), ...galleryFallbacks].filter(Boolean))).slice(0, 6);
   const selectedGalleryImage = galleryImages[Math.min(selectedGalleryIndex, galleryImages.length - 1)] || item.imageUrl;
-  const amenityGroups = makeAmenityGroups(item, isBoarding);
+  const amenityGroups = makeAmenityGroups(item, isBoarding, isVet);
 
   // SEO/GEO/VEO JSON-LD Schema Generator
   useEffect(() => {
@@ -258,7 +273,34 @@ export default function DetailView({
     // Generate JSON-LD object
     let jsonLd = {};
 
-    if (isBoarding) {
+    if (isVet) {
+      jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "VeterinaryCare",
+        "name": item.name,
+        "image": item.imageUrl || "https://patiyleseyahat.com/assets/vet-placeholder.jpg",
+        "telephone": item.phone,
+        "email": item.email || "",
+        "url": item.website || "https://patiyleseyahat.com",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": item.address,
+          "addressLocality": item.district,
+          "addressRegion": item.city,
+          "addressCountry": "TR"
+        },
+        "description": item.description,
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            "opens": "00:00",
+            "closes": "23:59"
+          }
+        ],
+        "priceRange": "$$"
+      };
+    } else if (isBoarding) {
       jsonLd = {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
@@ -298,7 +340,7 @@ export default function DetailView({
           "@type": "Rating",
           "ratingValue": item.suitability === 3 ? "5" : item.suitability === 2 ? "4" : "3"
         },
-        "amenityFeature": item.features.map(feat => ({
+        "amenityFeature": (item.features || []).map(feat => ({
           "@type": "LocationFeatureSpecification",
           "name": feat,
           "value": true
