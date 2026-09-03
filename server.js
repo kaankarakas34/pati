@@ -870,6 +870,20 @@ app.get('/evcil-hayvan-dostu-oteller/:citySlug', async (req, res) => {
   return res.send(html);
 });
 
+function formatW3CDate(rawDate) {
+  const fallback = '2026-09-03';
+  if (!rawDate) return fallback;
+  const str = String(rawDate).trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+    return str;
+  }
+  const d = new Date(str);
+  if (!isNaN(d.getTime())) {
+    return d.toISOString().split('T')[0];
+  }
+  return fallback;
+}
+
 app.get('/sitemap.xml', async (req, res) => {
   const { hotels } = await getHotelSeoData();
   const vets = await getVets().catch(() => initialVets || []);
@@ -894,44 +908,51 @@ app.get('/sitemap.xml', async (req, res) => {
   });
 
   const urls = [
-    { loc: 'https://www.patiyleseyahat.com/', priority: '1.0', frequency: 'daily' },
-    { loc: 'https://www.patiyleseyahat.com/trust-ads', priority: '0.5', frequency: 'monthly' },
-    { loc: 'https://www.patiyleseyahat.com/kedi-kabul-eden-oteller', priority: '0.9', frequency: 'daily' },
-    { loc: 'https://www.patiyleseyahat.com/kopek-kabul-eden-oteller', priority: '0.9', frequency: 'daily' },
+    { loc: 'https://www.patiyleseyahat.com/', priority: '1.0', frequency: 'daily', lastmod: '2026-09-03' },
+    { loc: 'https://www.patiyleseyahat.com/trust-ads', priority: '0.5', frequency: 'monthly', lastmod: '2026-09-03' },
+    { loc: 'https://www.patiyleseyahat.com/kedi-kabul-eden-oteller', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
+    { loc: 'https://www.patiyleseyahat.com/kopek-kabul-eden-oteller', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
     ...Object.keys(categorySeoPages).map(categoryPath => ({
       loc: `https://www.patiyleseyahat.com${categoryPath}`,
       priority: '0.9',
-      frequency: 'weekly'
+      frequency: 'weekly',
+      lastmod: '2026-09-03'
     })),
     ...citySlugs.map(citySlug => ({
       loc: `https://www.patiyleseyahat.com/evcil-hayvan-dostu-oteller/${citySlug}`,
       priority: '0.9',
-      frequency: 'daily'
+      frequency: 'daily',
+      lastmod: '2026-09-03'
     })),
     ...citySlugs.map(citySlug => ({
       loc: `https://www.patiyleseyahat.com/evcil-hayvan-kabul-eden-oteller/${citySlug}`,
       priority: '0.9',
-      frequency: 'daily'
+      frequency: 'daily',
+      lastmod: '2026-09-03'
     })),
     ...citySlugs.map(citySlug => ({
       loc: `https://www.patiyleseyahat.com/kedi-kabul-eden-oteller/${citySlug}`,
       priority: '0.9',
-      frequency: 'daily'
+      frequency: 'daily',
+      lastmod: '2026-09-03'
     })),
     ...citySlugs.map(citySlug => ({
       loc: `https://www.patiyleseyahat.com/kopek-kabul-eden-oteller/${citySlug}`,
       priority: '0.9',
-      frequency: 'daily'
+      frequency: 'daily',
+      lastmod: '2026-09-03'
     })),
     ...citySlugs.map(citySlug => ({
       loc: `https://www.patiyleseyahat.com/pet-friendly-oteller/${citySlug}`,
       priority: '0.9',
-      frequency: 'daily'
+      frequency: 'daily',
+      lastmod: '2026-09-03'
     })),
     ...districtUrls.map(url => ({
       loc: url,
       priority: '0.8',
-      frequency: 'weekly'
+      frequency: 'weekly',
+      lastmod: '2026-09-03'
     })),
     ...hotels.map(hotel => ({
       loc: `https://www.patiyleseyahat.com${getHotelPath(hotel)}`,
@@ -962,7 +983,7 @@ app.get('/sitemap.xml', async (req, res) => {
   const urlNodes = urls.map(url => `
     <url>
       <loc>${escapeHtml(url.loc)}</loc>
-      ${url.lastmod ? `<lastmod>${escapeHtml(url.lastmod)}</lastmod>` : ''}
+      <lastmod>${formatW3CDate(url.lastmod)}</lastmod>
       <changefreq>${url.frequency}</changefreq>
       <priority>${url.priority}</priority>
     </url>`).join('');
