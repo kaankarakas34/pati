@@ -90,56 +90,70 @@ export default function Vets({ vets, onViewChange }) {
                 <div
                   key={vet.id}
                   onClick={() => onViewChange('vet-detail', vet.id)}
-                  className="bg-white rounded-3xl overflow-hidden shadow-xs border-2 border-brand-navy/10 hover:border-brand-navy hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col justify-between"
+                  className="bg-white rounded-3xl p-5 shadow-xs border-2 border-brand-navy/10 hover:border-brand-navy hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col justify-between"
                 >
-                  <div>
-                    {/* Image Area */}
-                    <div className="relative h-48 bg-gray-200">
-                      <img src={vet.imageUrl} alt={vet.name} className="w-full h-full object-cover" />
-                      
-                      {/* Verification Badge */}
-                      <div className="absolute top-3 left-3 bg-brand-navy text-white text-3xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1 shadow-sm">
-                        <VerifiedBadge className="w-4 h-4 text-white" />
-                        <span>Doğrulandı</span>
-                      </div>
-
-                      {/* 24/7 Red Badge */}
-                      <span className="absolute bottom-3 right-3 bg-red-600 text-white text-3xs font-extrabold px-3 py-1.5 rounded-full shadow-md animate-pulse">
-                        🔴 7/24 AÇIK ACİL
-                      </span>
-                    </div>
-
-                    {/* Specs content */}
-                    <div className="p-5 text-left space-y-3">
-                      <div className="flex justify-between items-center text-xs text-gray-500 font-medium">
-                        <span>Veteriner Kliniği</span>
-                        <span className="flex items-center gap-1">
-                          <LocationIcon className="w-3.5 h-3.5 text-brand-navy" /> {vet.city}, {vet.district}
+                  <div className="space-y-3 text-left">
+                    {/* Header Row with Badges */}
+                    <div className="flex items-center justify-between gap-2 border-b border-brand-beige pb-3">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="bg-red-600 text-white text-3xs font-black px-2.5 py-1 rounded-full shadow-xs flex items-center gap-1 animate-pulse">
+                          🔴 7/24 ACİL
+                        </span>
+                        <span className="bg-brand-navy text-white text-3xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1">
+                          <VerifiedBadge className="w-3.5 h-3.5 text-white" />
+                          <span>Doğrulandı</span>
                         </span>
                       </div>
 
-                      <h3 className="font-title text-lg font-bold text-gray-900 line-clamp-1">{vet.name}</h3>
-                      <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">{vet.description}</p>
-                      <p className="text-3xs text-gray-500 font-medium flex items-start gap-0.5">
-                        📍 <strong>Adres:</strong> {vet.address}
-                      </p>
+                      {vet.baseTrustScore && (
+                        <span className="text-3xs font-extrabold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200/80">
+                          ⭐ {((vet.baseTrustScore / 2).toFixed(1))} / 5
+                        </span>
+                      )}
+                    </div>
 
-                      {/* Features tags */}
-                      <div className="flex flex-wrap gap-1 pt-2 border-t border-brand-beige">
-                        {vet.features.slice(0, 3).map((feat, idx) => (
-                          <span key={idx} className="text-3xs bg-brand-beige text-brand-navy px-2.5 py-1 rounded-full font-bold">
-                            {feat}
-                          </span>
-                        ))}
+                    {/* Clinic Name & Location */}
+                    <div>
+                      <div className="flex items-center gap-1 text-xs text-gray-500 font-medium mb-1">
+                        <LocationIcon className="w-3.5 h-3.5 text-brand-navy" />
+                        <span>{vet.city}, {vet.district}</span>
                       </div>
+                      <h3 className="font-title text-lg font-bold text-gray-900 line-clamp-1">{vet.name}</h3>
+                    </div>
+
+                    <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">{vet.description}</p>
+
+                    {/* Address & Phone Box */}
+                    <div className="bg-brand-cream/30 p-3 rounded-2xl border border-brand-beige text-xs space-y-1">
+                      <p className="text-gray-700 font-medium line-clamp-2 flex items-start gap-1">
+                        <span className="shrink-0">📍</span>
+                        <span>{vet.address}</span>
+                      </p>
+                      {vet.phone && (
+                        <p className="text-brand-navy font-bold flex items-center gap-1">
+                          <span>📞</span>
+                          <a href={`tel:${vet.phone}`} onClick={(e) => e.stopPropagation()} className="hover:underline">
+                            {vet.phone}
+                          </a>
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Features tags */}
+                    <div className="flex flex-wrap gap-1 pt-1">
+                      {vet.features.slice(0, 4).map((feat, idx) => (
+                        <span key={idx} className="text-3xs bg-brand-beige text-brand-navy px-2.5 py-1 rounded-full font-bold">
+                          {feat}
+                        </span>
+                      ))}
                     </div>
                   </div>
 
                   {/* Footer */}
-                  <div className="p-5 pt-0 text-left flex justify-between items-center border-t border-brand-beige/50 mt-4 bg-brand-cream/20">
+                  <div className="pt-4 text-left flex justify-between items-center border-t border-brand-beige/50 mt-4">
                     <span className="text-3xs text-gray-400">Son Doğrulama: {vet.lastVerified}</span>
-                    <button className="bg-brand-navy hover:bg-brand-navy-hover text-white transition-colors px-5 py-2.5 rounded-full text-xs font-bold font-title border border-brand-navy/10">
-                      Detay & Yorumlar &rarr;
+                    <button className="bg-brand-navy hover:bg-brand-navy-hover text-white transition-colors px-4 py-2 rounded-full text-xs font-bold font-title border border-brand-navy/10">
+                      Detay Gör &rarr;
                     </button>
                   </div>
                 </div>

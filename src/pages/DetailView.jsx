@@ -395,19 +395,65 @@ export default function DetailView({
       {/* Hero Banner Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="md:col-span-2 space-y-3">
-          <div className="h-72 md:h-[450px] bg-gray-200 rounded-3xl overflow-hidden shadow-sm relative">
-            <img src={shouldShowGallery ? selectedGalleryImage : item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
-          
-            <div className={`absolute top-4 left-4 text-white text-xs px-3.5 py-1.5 rounded-full font-bold flex items-center gap-1 shadow-md ${item.verified === false ? 'bg-amber-600' : 'bg-brand-navy'}`}>
-              {item.verified === false ? <AlertIcon className="w-4 h-4 text-white" /> : <VerifiedBadge className="w-4 h-4 text-white" />}
-              <span>{item.verified === false ? 'Doğrulama Bekliyor' : 'Doğrulanmış Tesis'}</span>
-            </div>
+          {isVet ? (
+            <div className="bg-gradient-to-br from-brand-navy/5 via-brand-cream/30 to-red-50/40 border-2 border-brand-navy/15 rounded-3xl p-6 md:p-8 flex flex-col justify-between space-y-6 h-full min-h-[380px]">
+              <div>
+                <div className="flex items-center gap-2 mb-4 flex-wrap">
+                  <span className="bg-red-600 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-xs animate-pulse flex items-center gap-1">
+                    🚨 7/24 ACİL SERVİS
+                  </span>
+                  <span className="bg-brand-navy text-white text-xs px-3 py-1.5 rounded-full font-bold flex items-center gap-1">
+                    <VerifiedBadge className="w-4 h-4 text-white" />
+                    <span>Doğrulanmış Klinik</span>
+                  </span>
+                </div>
 
-            {/* Dynamic Badge for Suitability or Boarding category */}
-            <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-sm text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md">
-              {isBoarding ? item.category : `Dost Uygunluk Seviyesi: Seviye ${item.suitability}`}
+                <h2 className="font-title text-2xl md:text-3xl font-bold text-gray-950 mb-2">{item.name}</h2>
+                <p className="text-gray-600 text-sm leading-relaxed mb-6">{item.description}</p>
+
+                <div className="space-y-3 bg-white p-5 rounded-2xl border border-brand-navy/10 shadow-xs">
+                  <div className="flex items-start gap-2.5 text-sm">
+                    <span className="text-lg">📍</span>
+                    <div>
+                      <strong className="text-gray-900 block text-xs uppercase tracking-wider font-bold">Klinik Adresi:</strong>
+                      <span className="text-gray-700 font-medium">{item.address}</span>
+                    </div>
+                  </div>
+                  {item.phone && (
+                    <div className="flex items-center gap-2.5 text-sm pt-2.5 border-t border-brand-beige">
+                      <span className="text-lg">📞</span>
+                      <div>
+                        <strong className="text-gray-900 block text-xs uppercase tracking-wider font-bold">Acil İletişim:</strong>
+                        <a href={`tel:${item.phone}`} className="text-brand-navy font-bold text-base hover:underline">{item.phone}</a>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2 pt-2 border-t border-brand-beige/50">
+                {item.features?.map((feat, idx) => (
+                  <span key={idx} className="text-xs bg-brand-beige text-brand-navy px-3 py-1 rounded-full font-bold">
+                    ✓ {feat}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="h-72 md:h-[450px] bg-gray-200 rounded-3xl overflow-hidden shadow-sm relative">
+              <img src={shouldShowGallery ? selectedGalleryImage : item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
+            
+              <div className={`absolute top-4 left-4 text-white text-xs px-3.5 py-1.5 rounded-full font-bold flex items-center gap-1 shadow-md ${item.verified === false ? 'bg-amber-600' : 'bg-brand-navy'}`}>
+                {item.verified === false ? <AlertIcon className="w-4 h-4 text-white" /> : <VerifiedBadge className="w-4 h-4 text-white" />}
+                <span>{item.verified === false ? 'Doğrulama Bekliyor' : 'Doğrulanmış Tesis'}</span>
+              </div>
+
+              {/* Dynamic Badge for Suitability or Boarding category */}
+              <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-sm text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md">
+                {isBoarding ? item.category : `Dost Uygunluk Seviyesi: Seviye ${item.suitability}`}
+              </div>
+            </div>
+          )}
 
           {shouldShowGallery && (
             <div className="grid grid-cols-5 gap-2">
