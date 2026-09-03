@@ -159,3 +159,78 @@ export const seoContent = {
     links: [{ href: '/evcil-hayvan-dostu-oteller', label: 'Evcil Hayvan Dostu Oteller' }, { href: '/evcil-hayvanla-gezilecek-yerler', label: 'Evcil Hayvanla Gezilecek Yerler' }]
   }
 };
+
+export function generateCombinationSeoContent(cityName = '', intentType = 'pet-friendly') {
+  const cityStr = cityName ? `${cityName}'da ` : '';
+  const cityTitle = cityName ? `${cityName} ` : '';
+
+  if (intentType === 'kedi-kabul') {
+    return {
+      id: `${cityName}-kedi-kabul-seo`,
+      title: `${cityTitle}Kedi Kabul Eden Oteller`,
+      paragraphs: [
+        `${cityStr}kedinizle birlikte konaklayabileceğiniz doğrulanmış pet friendly otelleri, kedi kabul şartlarını ve tesis olanaklarını bu sayfada bulabilirsiniz. Kedilerin ev ortamı dışındaki stresini en aza indirmek için ses yalıtımlı odalar, korumalı balkona sahip tesisler ve mama kabı sağlayan oteller ön plana çıkmaktadır.`,
+        `Kedinizle ${cityTitle}tatiline çıkmadan önce tesisin kapalı taşıma çantası kuralını, aşı karnesi gereksinimini ve kedinizin odada tek başına kalıp kalamayacağını kontrol etmeniz tavsiye edilir.`
+      ],
+      highlights: [
+        `${cityTitle}bölgesindeki kedilere uygun doğrulanmış oteller`,
+        'Odada mama ve su kabı sağlayan kedi dostu tesisler',
+        'Sessiz ve güvenli balkon/pencere yapısına sahip odalar',
+        'Kedi aşı karnesi ve taşıma çantası kullanım rehberi'
+      ],
+      faqs: [
+        { question: `${cityTitle}otellerinde kedi kabulü için hangi belgeler istenir?`, answer: `Güncel aşı karnesi ve çip kaydı otel girişlerinde talep edilebilir. Seyahat öncesi işletmeden teyit alınmalıdır.` },
+        { question: `Kedim otel odasında yalnız kalabilir mi?`, answer: `Bazı tesisler taşıma kafesinde olması şartıyla odada yalnız kalmaya izin verirken bazıları yasaklar. Detaylar tesis kurallarında yer alır.` }
+      ],
+      links: [
+        { href: `/evcil-hayvan-dostu-oteller`, label: `Tüm Evcil Hayvan Dostu Oteller` }
+      ]
+    };
+  }
+
+  if (intentType === 'kopek-kabul') {
+    return {
+      id: `${cityName}-kopek-kabul-seo`,
+      title: `${cityTitle}Köpek Kabul Eden Oteller`,
+      paragraphs: [
+        `${cityStr}köpeğinizle konaklayabileceğiniz en iyi otel, butik otel ve bungalov seçenekleri. Küçük ırk veya büyük ırk köpeğiniz için geniş bahçeli, yürüyüş alanlarına yakın ve köpek dostu plaj erişimi sunan tesisleri inceleyebilirsiniz.`,
+        `Köpeğinizle ${cityTitle}otellerinde kalırken kilo sınırı, ırk kısıtlaması, tasmalı dolaşım kuralları ve ortak alan kabul durumunu rezervasyon öncesinde doğrudan doğrulayabilirsiniz.`
+      ],
+      highlights: [
+        `${cityTitle}genelinde köpek kabul eden seçkin oteller`,
+        'Geniş bahçe ve çim alan sunan tesisler',
+        'Maksimum kilo sınırı ve ırk politikası bilgileri',
+        'Köpekle gezilebilecek açık alan ve park yakınlığı'
+      ],
+      faqs: [
+        { question: `${cityTitle}otelleri büyük ırk köpek kabul ediyor mu?`, answer: `Kilo sınırı olmayan veya yüksek kilo limiti uygulayan tesislerin listesine filtre seçeneklerinden ulaşabilirsiniz.` },
+        { question: `Köpeğim otelin ortak alanlarına veya bahçesine çıkabilir mi?`, answer: `Genellikle tasmalı olması kaydıyla bahçe ve teras alanlarına kabul edilir. Restoran/havuz kapalı alan kuralları tesise göre değişir.` }
+      ],
+      links: [
+        { href: `/evcil-hayvan-dostu-oteller`, label: `Tüm Evcil Hayvan Dostu Oteller` }
+      ]
+    };
+  }
+
+  return {
+    id: `${cityName}-pet-friendly-seo`,
+    title: `${cityTitle}Pet Friendly & Evcil Hayvan Kabul Eden Oteller`,
+    paragraphs: [
+      `${cityStr}evcil hayvanınızla (kedi, köpek, kuş) sorunsuz konaklayabileceğiniz doğrulanmış pet friendly tesisler. Kilo sınırı, ek ücret bilgileri, oda şartları ve tesis imkanlarını editoryal kontrolle inceleyebilirsiniz.`,
+      `${cityTitle}bölgesindeki evcil hayvan kabul eden tesislerde tatil yaparken aşı karnenizi yanınızda bulundurmayı ve seyahat öncesinde tesis kural onayını almayı unutmayın.`
+    ],
+    highlights: [
+      `${cityTitle}bölgesi doğrulanmış pet friendly otel listesi`,
+      'Kedi ve köpek kabul şartları',
+      'Bahçe, pet yatağı ve mama kabı kolaylıkları',
+      '7/24 nöbetçi veteriner yakınlık bilgisi'
+    ],
+    faqs: [
+      { question: `${cityTitle}evcil hayvan dostu otellerde ne tür kurallar uygulanır?`, answer: `Tasmalı dolaşım, oda temizliği, aşı karnesi ibrazı ve sessizlik saatleri en yaygın kurallardır.` }
+    ],
+    links: [
+      { href: `/evcil-hayvan-dostu-oteller`, label: `Tüm Evcil Hayvan Dostu Oteller` }
+    ]
+  };
+}
+

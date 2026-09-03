@@ -896,6 +896,8 @@ app.get('/sitemap.xml', async (req, res) => {
   const urls = [
     { loc: 'https://www.patiyleseyahat.com/', priority: '1.0', frequency: 'daily' },
     { loc: 'https://www.patiyleseyahat.com/trust-ads', priority: '0.5', frequency: 'monthly' },
+    { loc: 'https://www.patiyleseyahat.com/kedi-kabul-eden-oteller', priority: '0.9', frequency: 'daily' },
+    { loc: 'https://www.patiyleseyahat.com/kopek-kabul-eden-oteller', priority: '0.9', frequency: 'daily' },
     ...Object.keys(categorySeoPages).map(categoryPath => ({
       loc: `https://www.patiyleseyahat.com${categoryPath}`,
       priority: '0.9',
@@ -903,6 +905,26 @@ app.get('/sitemap.xml', async (req, res) => {
     })),
     ...citySlugs.map(citySlug => ({
       loc: `https://www.patiyleseyahat.com/evcil-hayvan-dostu-oteller/${citySlug}`,
+      priority: '0.9',
+      frequency: 'daily'
+    })),
+    ...citySlugs.map(citySlug => ({
+      loc: `https://www.patiyleseyahat.com/evcil-hayvan-kabul-eden-oteller/${citySlug}`,
+      priority: '0.9',
+      frequency: 'daily'
+    })),
+    ...citySlugs.map(citySlug => ({
+      loc: `https://www.patiyleseyahat.com/kedi-kabul-eden-oteller/${citySlug}`,
+      priority: '0.9',
+      frequency: 'daily'
+    })),
+    ...citySlugs.map(citySlug => ({
+      loc: `https://www.patiyleseyahat.com/kopek-kabul-eden-oteller/${citySlug}`,
+      priority: '0.9',
+      frequency: 'daily'
+    })),
+    ...citySlugs.map(citySlug => ({
+      loc: `https://www.patiyleseyahat.com/pet-friendly-oteller/${citySlug}`,
       priority: '0.9',
       frequency: 'daily'
     })),

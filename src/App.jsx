@@ -518,23 +518,49 @@ function App() {
       } else if (path === '/evcil-hayvanla-gezilecek-yerler' || path === '/gezilecek-yerler') {
         setCurrentView('experiences');
         if (path !== CATEGORY_SEO.experiences.path) window.history.replaceState(null, '', CATEGORY_SEO.experiences.path);
-      } else if (path.startsWith('/evcil-hayvan-dostu-oteller/')) {
-        const citySlug = path.split('/').filter(Boolean)[1];
+      } else if (
+        path.startsWith('/evcil-hayvan-dostu-oteller/') ||
+        path.startsWith('/evcil-hayvan-kabul-eden-oteller/') ||
+        path.startsWith('/pet-friendly-oteller/') ||
+        path.startsWith('/kedi-kabul-eden-oteller/') ||
+        path.startsWith('/kopek-kabul-eden-oteller/')
+      ) {
+        const segments = path.split('/').filter(Boolean);
+        const prefix = segments[0];
+        const citySlug = segments[1];
+
+        let petType = 'all';
+        let filterTitle = null;
+
+        if (prefix.includes('kedi')) {
+          petType = 'cat';
+          filterTitle = 'Kedi Kabul Eden Oteller';
+        } else if (prefix.includes('kopek')) {
+          petType = 'dog';
+          filterTitle = 'Köpek Kabul Eden Oteller';
+        }
+
         const cityName = hotels.find(hotel => slugify(hotel.city) === citySlug)?.city
           || citySlug.split('-').map(part => part.charAt(0).toLocaleUpperCase('tr-TR') + part.slice(1)).join(' ');
+
         setSearchFilters({
           destination: cityName,
           citySlug,
-          petType: 'all',
+          petType: petType,
           accType: 'all',
           suitability: 'all',
           weightLimit: 'all',
           extraFeeOnly: false,
           features: [],
           customFilter: null,
-          filterTitle: null,
+          filterTitle: filterTitle ? `${cityName} ${filterTitle}` : null,
           cityLanding: true
         });
+      } else if (path === '/kedi-kabul-eden-oteller') {
+        setSearchFilters(current => ({ ...current, destination: '', petType: 'cat', cityLanding: false, filterTitle: 'Kedi Kabul Eden Oteller' }));
+        setCurrentView('accommodations');
+      } else if (path === '/kopek-kabul-eden-oteller') {
+        setSearchFilters(current => ({ ...current, destination: '', petType: 'dog', cityLanding: false, filterTitle: 'Köpek Kabul Eden Oteller' }));
         setCurrentView('accommodations');
       } else if (path.startsWith('/otel/')) {
         const segments = path.split('/').filter(Boolean).map(segment => decodeURIComponent(segment));

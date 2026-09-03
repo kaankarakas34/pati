@@ -3,7 +3,9 @@ import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon } fr
 import AdBanner from '../components/AdBanner';
 import { slugify } from '../../lib/seo-slugs';
 import SeoContentSection from '../components/SeoContentSection';
-import { seoContent } from '../data/seoContent';
+import { seoContent, generateCombinationSeoContent } from '../data/seoContent';
+
+
 
 export default function Accommodations({ hotels, onViewChange, searchFilters, setSearchFilters }) {
   // Filters state
@@ -125,26 +127,9 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
   const confirmedNoFeeHotels = verifiedCityHotels.filter(hotel => hotel.extraFee === 'no');
   const confirmedNoLimitHotels = verifiedCityHotels.filter(hotel => hotel.weightLimit === 0);
 
+  const intentType = selectedPet === 'cat' ? 'kedi-kabul' : selectedPet === 'dog' ? 'kopek-kabul' : 'pet-friendly';
   const pageSeoContent = searchFilters.cityLanding
-    ? {
-        id: `${searchFilters.citySlug}-hotel-seo`,
-        title: `${searchFilters.destination}'da Evcil Hayvanla Konaklama`,
-        paragraphs: [
-          `${searchFilters.destination} ilinde keşfedilen ${filteredHotels.length} evcil hayvan dostu tesis adayının konum ve tesis bilgilerini karşılaştırabilirsiniz.`,
-          `Tesis seçerken yalnızca konuma değil; kilo sınırı, ek ücret, oda kuralları ve ortak alan kullanımına da bakın.`
-        ],
-        highlights: [
-          `${filteredHotels.length} adet evcil hayvan kabul eden otel ve tesis listeleniyor`,
-          confirmedNoFeeHotels.length > 0 ? `${confirmedNoFeeHotels.length} tesis ek pet ücreti almıyor` : 'Ek pet ücreti bilgileri detaylarda yer alıyor',
-          `${new Set(filteredHotels.map(hotel => hotel.district).filter(Boolean)).size} farklı ilçede konaklama seçeneği`,
-          confirmedNoLimitHotels.length > 0 ? `${confirmedNoLimitHotels.length} tesiste kilo sınırı bulunmuyor` : 'Kilo ve ırk koşulları tesis bazında teyit ediliyor'
-        ],
-        faqs: [
-          { question: `${searchFilters.destination}'da köpek kabul eden otel var mı?`, answer: confirmedDogHotels.length > 0 ? `Köpek kabul eden ${confirmedDogHotels.length} tesis bulunuyor.` : 'Listelenen tesislerin kabul şartlarını detay sayfasından inceleyin.' },
-          { question: `${searchFilters.destination}'daki oteller evcil hayvan için ücret alıyor mu?`, answer: confirmedNoFeeHotels.length > 0 ? `${confirmedNoFeeHotels.length} tesis ek pet ücreti almıyor.` : 'Pet ücreti tesislere göre değişir.' }
-        ],
-        links: seoContent.accommodations.links
-      }
+    ? generateCombinationSeoContent(searchFilters.destination, intentType)
     : seoContent.accommodations;
 
   return (
