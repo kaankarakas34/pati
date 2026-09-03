@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { VerifiedBadge, LocationIcon } from '../components/PetIcons';
+import { LocationIcon } from '../components/PetIcons';
 import SeoContentSection from '../components/SeoContentSection';
 import { seoContent } from '../data/seoContent';
 
@@ -11,7 +11,7 @@ function trNormalize(str) {
     .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c');
 }
 
-export default function Vets({ vets = [], onViewChange }) {
+export default function Vets({ vets = [] }) {
   const [selectedCity, setSelectedCity] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [hasICU, setHasICU] = useState(false);
@@ -61,7 +61,7 @@ export default function Vets({ vets = [], onViewChange }) {
           </div>
           <h1 className="text-3xl font-bold font-title text-brand-navy">7/24 Acil Nöbetçi Veterinerler</h1>
           <p className="text-gray-600 text-sm mt-1.5">
-            Seyahatiniz sırasında acil durumlar için 24 saat kesintisiz hizmet veren, cerrahi ve yoğun bakım altyapısına sahip doğrulanmış veteriner klinikleri.
+            Seyahatiniz sırasında acil durumlar için 24 saat kesintisiz hizmet veren, cerrahi ve yoğun bakım altyapısına sahip veteriner klinikleri.
           </p>
         </div>
         <div className="bg-brand-navy text-white text-xs font-bold px-4 py-2 rounded-2xl whitespace-nowrap self-start md:self-auto shadow-xs">
@@ -142,59 +142,70 @@ export default function Vets({ vets = [], onViewChange }) {
               {filteredVets.map(vet => (
                 <div
                   key={vet.id}
-                  onClick={() => onViewChange('vet-detail', vet.id)}
-                  className="bg-white rounded-3xl p-5 shadow-xs border-2 border-brand-navy/10 hover:border-brand-navy hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col justify-between"
+                  className="bg-white rounded-3xl p-6 shadow-xs border-2 border-brand-navy/10 hover:border-brand-navy/30 transition-all duration-200 flex flex-col justify-between"
                 >
                   <div className="space-y-3 text-left">
                     {/* Header Row with Badges */}
                     <div className="flex items-center justify-between gap-2 border-b border-brand-beige pb-3">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="bg-red-600 text-white text-3xs font-black px-2.5 py-1 rounded-full shadow-xs flex items-center gap-1">
-                          🔴 7/24 ACİL
+                        <span className="bg-red-600 text-white text-3xs font-black px-3 py-1 rounded-full shadow-xs flex items-center gap-1">
+                          🔴 7/24 ACİL SERVİS
                         </span>
-                        <span className="bg-emerald-100 text-emerald-800 text-3xs font-bold px-2.5 py-1 rounded-full">
-                          Nöbetçi Hekim
+                        <span className="bg-emerald-100 text-emerald-800 text-3xs font-extrabold px-2.5 py-1 rounded-full">
+                          Nöbetçi Hekim Var
                         </span>
-                      </div>
-
-                      <div className="text-2xs font-extrabold text-brand-navy bg-brand-navy-light px-2.5 py-1 rounded-full flex items-center gap-1">
-                        <VerifiedBadge className="w-3.5 h-3.5 text-brand-navy" />
-                        <span>Doğrulanmış</span>
                       </div>
                     </div>
 
                     {/* Clinic Name & Location */}
                     <div>
-                      <h3 className="font-title text-base font-bold text-gray-950 line-clamp-1">{vet.name}</h3>
-                      <p className="text-xs text-gray-500 mt-1 flex items-center gap-1 font-medium">
+                      <h3 className="font-title text-lg font-bold text-gray-950">{vet.name}</h3>
+                      <p className="text-xs text-gray-500 mt-1 flex items-center gap-1 font-semibold">
                         <LocationIcon className="w-3.5 h-3.5 text-brand-earth flex-shrink-0" />
                         <span>{vet.city}, {vet.district}</span>
                       </p>
                     </div>
 
                     {/* Address details */}
-                    <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed bg-brand-cream/40 p-2.5 rounded-xl border border-brand-navy/5">
+                    <div className="text-xs text-gray-700 leading-relaxed bg-brand-cream/50 p-3 rounded-2xl border border-brand-navy/10 font-medium">
                       📍 {vet.address}
-                    </p>
+                    </div>
+
+                    {/* Description if present */}
+                    {vet.description && (
+                      <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
+                        {vet.description}
+                      </p>
+                    )}
 
                     {/* Features Badges */}
                     <div className="flex flex-wrap gap-1 pt-1">
                       {(vet.features || []).map((feat, idx) => (
-                        <span key={idx} className="text-3xs bg-brand-beige text-brand-navy px-2.5 py-0.5 rounded-full font-bold">
+                        <span key={idx} className="text-3xs bg-brand-beige text-brand-navy px-2.5 py-1 rounded-full font-bold">
                           {feat}
                         </span>
                       ))}
                     </div>
                   </div>
 
-                  {/* Phone Call Action Bar */}
-                  <div className="pt-4 mt-3 border-t border-brand-beige/60 flex items-center justify-between gap-2">
-                    <span className="text-xs font-bold text-gray-800">
-                      📞 {vet.phone || 'Telefon Teyit Edin'}
-                    </span>
-                    <button className="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-4 py-2 rounded-full transition-colors flex items-center gap-1.5 shadow-xs font-title">
-                      <span>Hemencek Ara</span> &rarr;
-                    </button>
+                  {/* Direct Phone Call & Website Actions (No card click, No 'Hemencek Ara') */}
+                  <div className="pt-4 mt-4 border-t border-brand-beige flex flex-col sm:flex-row items-center gap-2">
+                    <a
+                      href={vet.phone ? `tel:${vet.phone.replace(/\s+/g, '')}` : '#'}
+                      className="w-full bg-red-600 hover:bg-red-700 text-white font-extrabold text-xs py-3 px-4 rounded-2xl transition-colors flex items-center justify-center gap-2 shadow-xs font-title"
+                    >
+                      <span>📞 Klinik Numarasını Ara: {vet.phone || 'Teyit Edin'}</span>
+                    </a>
+                    {vet.website && (
+                      <a
+                        href={vet.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full sm:w-auto bg-brand-navy-light hover:bg-brand-navy hover:text-white text-brand-navy font-bold text-xs py-3 px-4 rounded-2xl transition-colors flex items-center justify-center whitespace-nowrap border border-brand-navy/10"
+                      >
+                        🌐 Web Sitesi
+                      </a>
+                    )}
                   </div>
                 </div>
               ))}
