@@ -487,60 +487,62 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
         </div>
       </div>
 
-      {/* Popular Travel Guides */}
-      <div className="bg-brand-beige py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-end mb-10">
-            <div>
-              <h2 className="text-3xl font-bold font-title text-brand-navy">Popüler Seyahat Rehberleri</h2>
-              <p className="text-gray-600 text-sm mt-1">Uçuş kuralları, kedi hazırlığı, köpek rotaları ve uzman veteriner görüşleri</p>
-            </div>
-            <button onClick={() => onViewChange('guides')} className="text-brand-navy font-bold hover:underline text-sm hidden sm:block">
-              Tüm Rehberleri Gör &rarr;
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {featuredGuides.map(guide => (
-              <div
-                key={guide.id}
-                onClick={() => onViewChange('guide-detail', guide.id)}
-                className="bg-white rounded-3xl overflow-hidden border border-brand-beige hover:shadow-md transition-shadow cursor-pointer flex flex-col justify-between"
-              >
-                <div className="p-6 space-y-4">
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="bg-brand-navy-light text-brand-navy px-2.5 py-0.5 rounded-full font-bold">
-                      {guide.category}
-                    </span>
-                    <span className="text-gray-400 font-medium">{guide.updatedAt}</span>
-                  </div>
-                  <h3 className="font-title text-base font-bold text-gray-900 hover:text-brand-navy transition-colors line-clamp-2 leading-snug">
-                    {guide.title}
-                  </h3>
-                  <p className="text-sm text-gray-650 line-clamp-3 leading-relaxed">
-                    {guide.summary}
-                  </p>
-                </div>
-
-                <div className="px-6 pb-6 pt-3 border-t border-brand-beige flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <img src={guide.author.imageUrl} alt={guide.author.name} className="w-8 h-8 rounded-full object-cover" />
-                    <div className="text-left">
-                      <p className="text-xs font-bold text-gray-800">{guide.author.name}</p>
-                      <p className="text-3xs text-gray-400">{guide.author.role}</p>
-                    </div>
-                  </div>
-                  {guide.vetChecked && (
-                    <span className="text-3xs bg-brand-orange-light text-brand-orange hover:bg-brand-orange hover:text-white px-2 py-1 rounded font-bold border border-brand-orange/30">
-                      🩺 Veteriner Onaylı
-                    </span>
-                  )}
-                </div>
+      {/* Popular Travel Guides (Hidden when no guides exist) */}
+      {featuredGuides.length > 0 && (
+        <div className="bg-brand-beige py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-end mb-10">
+              <div>
+                <h2 className="text-3xl font-bold font-title text-brand-navy">Popüler Seyahat Rehberleri</h2>
+                <p className="text-gray-600 text-sm mt-1">Uçuş kuralları, kedi hazırlığı, köpek rotaları ve uzman veteriner görüşleri</p>
               </div>
-            ))}
+              <button onClick={() => onViewChange('guides')} className="text-brand-navy font-bold hover:underline text-sm hidden sm:block">
+                Tüm Rehberleri Gör &rarr;
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {featuredGuides.map(guide => (
+                <div
+                  key={guide.id}
+                  onClick={() => onViewChange('guide-detail', guide.id)}
+                  className="bg-white rounded-3xl overflow-hidden border border-brand-beige hover:shadow-md transition-shadow cursor-pointer flex flex-col justify-between"
+                >
+                  <div className="p-6 space-y-4">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="bg-brand-navy-light text-brand-navy px-2.5 py-0.5 rounded-full font-bold">
+                        {guide.category}
+                      </span>
+                      <span className="text-gray-400 font-medium">{guide.updatedAt}</span>
+                    </div>
+                    <h3 className="font-title text-base font-bold text-gray-900 hover:text-brand-navy transition-colors line-clamp-2 leading-snug">
+                      {guide.title}
+                    </h3>
+                    <p className="text-sm text-gray-650 line-clamp-3 leading-relaxed">
+                      {guide.summary}
+                    </p>
+                  </div>
+
+                  <div className="px-6 pb-6 pt-3 border-t border-brand-beige flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <img src={guide.author.imageUrl} alt={guide.author.name} className="w-8 h-8 rounded-full object-cover" />
+                      <div className="text-left">
+                        <p className="text-xs font-bold text-gray-800">{guide.author.name}</p>
+                        <p className="text-3xs text-gray-400">{guide.author.role}</p>
+                      </div>
+                    </div>
+                    {guide.vetChecked && (
+                      <span className="text-3xs bg-brand-orange-light text-brand-orange hover:bg-brand-orange hover:text-white px-2 py-1 rounded font-bold border border-brand-orange/30">
+                        🩺 Veteriner Onaylı
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* How We Verify */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white border border-brand-beige rounded-3xl p-8 md:p-12 shadow-xs grid grid-cols-1 md:grid-cols-2 gap-8 items-center">

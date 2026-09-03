@@ -925,7 +925,7 @@ export default function DetailView({
       <AdBanner type="banner" className="mt-8" />
 
       {/* Interlinked Travel Guides box */}
-      {!isBoarding && (
+      {!isBoarding && guides && guides.length > 0 && (
         <div className="mt-12 bg-brand-navy-light border-2 border-brand-navy/15 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="text-left max-w-xl">
             <span className="bg-brand-navy text-white text-3xs font-bold uppercase px-3 py-1 rounded-full tracking-wider">İlgili Rehber</span>

@@ -8,7 +8,6 @@ export default function Layout({ children, currentView, onViewChange }) {
     { id: 'home', label: 'Ana Sayfa' },
     { id: 'accommodations', label: 'Pet Dostu Oteller' },
     { id: 'vets', label: 'Acil Veteriner' },
-    { id: 'guides', label: 'Seyahat Rehberi' },
   ];
 
   return (
@@ -158,11 +157,6 @@ export default function Layout({ children, currentView, onViewChange }) {
               <li>
                 <button onClick={() => onViewChange('vets')} className="hover:text-white transition-colors">
                   7/24 Acil Veterinerler
-                </button>
-              </li>
-              <li>
-                <button onClick={() => onViewChange('guides')} className="hover:text-white transition-colors">
-                  Seyahat Rehberleri
                 </button>
               </li>
               <li>
