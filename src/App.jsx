@@ -131,7 +131,7 @@ function App() {
         if (correctionsRes.status === 'fulfilled' && Array.isArray(correctionsRes.value)) setCorrections(correctionsRes.value);
         if (complaintsRes.status === 'fulfilled' && Array.isArray(complaintsRes.value)) setComplaints(complaintsRes.value);
         if (taxisRes.status === 'fulfilled' && Array.isArray(taxisRes.value) && taxisRes.value.length > 0) setTaxis(taxisRes.value);
-        if (vetsRes.status === 'fulfilled' && Array.isArray(vetsRes.value) && vetsRes.value.length > 0) setVets(vetsRes.value);
+        if (vetsRes.status === 'fulfilled' && Array.isArray(vetsRes.value) && vetsRes.value.length >= initialVets.length) setVets(vetsRes.value);
         if (experiencesRes.status === 'fulfilled' && Array.isArray(experiencesRes.value) && experiencesRes.value.length > 0) setExperiences(experiencesRes.value);
         if (adsRes.status === 'fulfilled' && Array.isArray(adsRes.value) && adsRes.value.length > 0) setAds(adsRes.value);
       } catch (err) {

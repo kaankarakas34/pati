@@ -992,8 +992,8 @@ export default function DetailView({
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {(vets || []).filter(v => v.city === item.city || v.district === item.district).slice(0, 2).map(v => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {(vets || []).filter(v => v.city === item.city || v.district === item.district).slice(0, 4).map(v => (
               <div key={v.id} className="bg-white p-4 rounded-2xl border-2 border-red-100 shadow-xs flex flex-col justify-between space-y-3">
                 <div>
                   <div className="flex justify-between items-center">

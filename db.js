@@ -431,6 +431,11 @@ export async function initDatabase() {
     if (Number(hotelsCount.rows[0].count) > 0) {
       console.log("Existing content found. Skipping destructive seed and preserving live records.");
       await seedGrowthTables(client);
+      const vetsCount = await client.query("SELECT COUNT(*) FROM vets");
+      if (Number(vetsCount.rows[0].count) < initialVets.length) {
+        console.log(`Syncing initial vets data into DB (${vetsCount.rows[0].count} < ${initialVets.length})...`);
+        await syncInitialVets(client);
+      }
       return;
     }
 
@@ -959,9 +964,28 @@ export async function deletePetTaxi(id) {
 }
 
 // Vets Helpers
+export async function syncInitialVets(clientOrPool = pool) {
+  for (const v of initialVets) {
+    await clientOrPool.query(`
+      INSERT INTO vets (id, name, city, district, image_url, address, features, description, phone, email, website, base_trust_score, last_verified)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+      ON CONFLICT (id) DO UPDATE SET
+        name = EXCLUDED.name, city = EXCLUDED.city, district = EXCLUDED.district,
+        image_url = EXCLUDED.image_url, address = EXCLUDED.address, features = EXCLUDED.features,
+        description = EXCLUDED.description, phone = EXCLUDED.phone, email = EXCLUDED.email,
+        website = EXCLUDED.website, base_trust_score = EXCLUDED.base_trust_score, last_verified = EXCLUDED.last_verified
+    `, [v.id, v.name, v.city, v.district, v.imageUrl, v.address, JSON.stringify(v.features), v.description, v.phone, v.email, v.website, v.baseTrustScore, v.lastVerified]);
+  }
+}
+
 export async function getVets() {
   try {
-    const result = await pool.query("SELECT * FROM vets ORDER BY id DESC");
+    let result = await pool.query("SELECT * FROM vets ORDER BY id DESC");
+    if (result.rows.length < initialVets.length) {
+      console.log(`getVets: DB has ${result.rows.length} vets, lower than initialVets (${initialVets.length}). Auto-syncing...`);
+      await syncInitialVets(pool);
+      result = await pool.query("SELECT * FROM vets ORDER BY id DESC");
+    }
     return result.rows.map(v => ({
       id: v.id,
       name: v.name,

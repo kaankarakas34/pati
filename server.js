@@ -333,9 +333,12 @@ app.delete('/api/taxis/:id', requireAdmin, async (req, res) => {
 app.get(['/api/vets', '/vets'], async (req, res) => {
   try {
     const data = await getVets();
+    if (!Array.isArray(data) || data.length < initialVets.length) {
+      return res.json(initialVets || []);
+    }
     res.json(data);
   } catch (err) {
-    console.warn("Falling back to [] due to DB error:", err.message);
+    console.warn("Falling back to initialVets due to DB error:", err.message);
     res.json(initialVets || []);
   }
 });
