@@ -583,43 +583,15 @@ export async function initDatabase() {
     }
 
     console.log("Seeding initial vets data...");
-    const initialVets = [
-      {
-        id: "vet-1",
-        name: "Bodrum Acil Veteriner Kliniği",
-        city: "Muğla",
-        district: "Bodrum",
-        imageUrl: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=400&q=80",
-        address: "Konacık Mh. Atatürk Cd. No: 12 Bodrum",
-        features: ["7/24 Acil Servis", "Yoğun Bakım Ünitesi", "Cerrahi Müdahale", "Laboratuvar Hizmeti"],
-        description: "Bodrum genelinde 24 saat kesintisiz hizmet veren, tam teşekküllü ameliyathane, dijital röntgen ve acil tıp uzmanı veteriner kadrosuna sahip kliniktir. Acil vakalar için ambulans hizmetimiz de mevcuttur.",
-        phone: "+90 252 319 0000",
-        email: "acilvet@bodrumveteriner.com",
-        website: "https://www.enuygun.com",
-        baseTrustScore: 9.8,
-        lastVerified: "2026-08-22"
-      },
-      {
-        id: "vet-2",
-        name: "Karaköy Pati 24 Veteriner Tıp Merkezi",
-        city: "İstanbul",
-        district: "Beyoğlu",
-        imageUrl: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=400&q=80",
-        address: "Kemeraltı Cd. No: 44 Karaköy/İstanbul",
-        features: ["7/24 Nöbetçi Hekim", "Yoğun Bakım", "Röntgen & Ultrason", "Pet Oteli & Kan Bankası"],
-        description: "İstanbul Avrupa yakasında kedi ve köpek acil durumları için kesintisiz cerrahi, dahiliye, yoğun bakım ve ambulans desteği sunan tam donanımlı hayvan tıp merkezi.",
-        phone: "+90 212 244 0000",
-        email: "karakoy24@patitip.com",
-        website: "https://www.enuygun.com",
-        baseTrustScore: 9.7,
-        lastVerified: "2026-08-25"
-      }
-    ];
-
     for (const v of initialVets) {
       await client.query(`
         INSERT INTO vets (id, name, city, district, image_url, address, features, description, phone, email, website, base_trust_score, last_verified)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+        ON CONFLICT (id) DO UPDATE SET
+          name = EXCLUDED.name, city = EXCLUDED.city, district = EXCLUDED.district,
+          image_url = EXCLUDED.image_url, address = EXCLUDED.address, features = EXCLUDED.features,
+          description = EXCLUDED.description, phone = EXCLUDED.phone, email = EXCLUDED.email,
+          website = EXCLUDED.website, base_trust_score = EXCLUDED.base_trust_score, last_verified = EXCLUDED.last_verified
       `, [v.id, v.name, v.city, v.district, v.imageUrl, v.address, JSON.stringify(v.features), v.description, v.phone, v.email, v.website, v.baseTrustScore, v.lastVerified]);
     }
 
