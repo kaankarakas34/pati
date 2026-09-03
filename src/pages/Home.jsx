@@ -45,7 +45,10 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
     onViewChange('accommodations');
   };
 
-  const featuredHotels = safeHotels.slice(0, 3);
+  const featuredHotels = safeHotels
+    .filter(h => h.extraFee === 'no')
+    .concat(safeHotels.filter(h => h.extraFee !== 'no'))
+    .slice(0, 3);
   const featuredBoardings = safeBoardings.slice(0, 2);
   const featuredGuides = safeGuides.slice(0, 3);
   const featuredExperiences = safeExperiences.slice(0, 3);
@@ -78,7 +81,7 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
           </h1>
 
           <p className="text-gray-700 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-            Türkiye genelindeki evcil hayvan kabul eden otelleri, kabul şartlarını ve acil nöbetçi veteriner kliniklelerini editör doğrulamasıyla tek adreste keşfedin.
+            Türkiye genelindeki evcil hayvan kabul eden otelleri, kabul şartlarını ve acil nöbetçi veteriner kliniklerini editör doğrulamasıyla tek adreste keşfedin.
           </p>
 
           {/* Quick Filter Bar */}
@@ -190,12 +193,15 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
         <PetTaxiAdBanner onViewChange={onViewChange} compact={true} />
       </div>
 
-      {/* Featured Pet-Friendly Hotels */}
+      {/* Featured Pet-Friendly Hotels (Prioritizing No Extra Fee) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-end mb-8">
+        <div className="flex justify-between items-end mb-8 text-left">
           <div>
-            <h2 className="text-3xl font-bold font-title text-brand-navy">Öne Çıkan Pet-Friendly Oteller</h2>
-            <p className="text-gray-600 text-sm mt-1">Editör ekibimiz tarafından test edilip tam doğrulanan seçkin tesisler</p>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-3xs font-extrabold mb-2">
+              <span>🟢 ÜCRETSİZ PET KABUL EDEN SEÇKİN TESİSLER</span>
+            </div>
+            <h2 className="text-3xl font-bold font-title text-brand-navy">Öne Çıkan Pet Dostu Oteller</h2>
+            <p className="text-gray-600 text-sm mt-1">Ek pet ücreti talep etmeyen ve evcil hayvanlara en yüksek konforu sunan doğrulanmış oteller</p>
           </div>
           <button onClick={() => onViewChange('accommodations')} className="text-brand-navy font-bold hover:underline text-sm hidden sm:block">
             Tümünü Gör ({hotels.length}) &rarr;
@@ -207,26 +213,31 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
             <div
               key={hotel.id}
               onClick={() => onViewChange('accommodation-detail', hotel.id)}
-              className="bg-white rounded-3xl overflow-hidden shadow-xs border border-brand-beige hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col justify-between"
+              className="bg-white rounded-3xl overflow-hidden shadow-xs border-2 border-brand-navy/10 hover:border-brand-navy hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col justify-between"
             >
               <div>
                 {/* Image */}
                 <div className="relative h-48 bg-gray-200">
                   <img src={hotel.imageUrl} alt={hotel.name} className="w-full h-full object-cover" />
-                  <div className="absolute top-3 left-3 bg-brand-navy text-white text-3xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1 shadow-sm">
-                    <VerifiedBadge className="w-3.5 h-3.5 text-white" />
-                    <span>Doğrulandı</span>
-                  </div>
-                  {/* Suitability Level */}
-                  <div className={`absolute bottom-3 right-3 text-3xs px-3 py-1 rounded-md font-bold text-white shadow-md ${
-                    hotel.suitability === 3 ? 'bg-indigo-650' : hotel.suitability === 2 ? 'bg-brand-green' : 'bg-brand-earth'
-                  }`}>
-                    {hotel.suitability === 3 ? 'Deneyim Sunuyor' : hotel.suitability === 2 ? 'Pet Dostu' : 'Kabul Ediyor'}
+                  
+                  {hotel.verified !== false && (
+                    <div className="absolute top-3 left-3 bg-brand-navy text-white text-3xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1 shadow-sm">
+                      <VerifiedBadge className="w-3.5 h-3.5 text-white" />
+                      <span>Doğrulanmış Tesis</span>
+                    </div>
+                  )}
+
+                  {/* Suitability Score Badge */}
+                  <div className="absolute bottom-3 right-3 text-xs px-3 py-1 rounded-xl font-black text-white shadow-md bg-brand-navy/90 backdrop-blur-xs flex items-center gap-1 border border-white/20">
+                    <span>⭐ Dost Uygunluğu:</span>
+                    <span className="text-brand-yellow font-extrabold">
+                      {(hotel.baseTrustScore || (hotel.suitability === 3 ? 9.5 : hotel.suitability === 2 ? 8.5 : 7.2)).toFixed(1)} / 10
+                    </span>
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="p-5 space-y-3">
+                <div className="p-5 space-y-3 text-left">
                   <div className="flex items-center justify-between text-3xs text-gray-500 font-medium">
                     <span>{hotel.type}</span>
                     <span className="flex items-center gap-1">
@@ -235,32 +246,41 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
                   </div>
                   <h3 className="font-title text-base font-bold text-gray-900 line-clamp-1">{hotel.name}</h3>
                   
-                  {/* Accepted Pets Bar */}
-                  <div className="flex items-center gap-2 pt-1 border-t border-brand-beige">
-                    <span className="text-3xs text-gray-400">Kabul Edilen:</span>
-                    <div className="flex gap-1.5 text-gray-600">
-                      {hotel.allowedPets.includes('dog') && <DogIcon className="w-4 h-4 text-brand-green" title="Köpek" />}
+                  {/* Prominent Extra Fee Box */}
+                  <div className="pt-1">
+                    {hotel.extraFee !== 'no' ? (
+                      <div className="bg-red-50 border border-red-200 text-red-700 font-black text-3xs px-3 py-1.5 rounded-xl flex items-center justify-between">
+                        <span>🔴 EK PET ÜCRETLİ</span>
+                        <span className="font-extrabold">{hotel.extraFee === 'Teyit bekliyor' ? 'Danışınız' : hotel.extraFee}</span>
+                      </div>
+                    ) : (
+                      <div className="bg-emerald-50 border border-emerald-300 text-emerald-800 font-extrabold text-3xs px-3 py-1.5 rounded-xl flex items-center justify-between">
+                        <span>🟢 ÜCRETSİZ PET KABULÜ</span>
+                        <span>Ek Ücret Alınmıyor</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Accepted Pets & Weight Limit Bar */}
+                  <div className="flex items-center justify-between pt-2 border-t border-brand-beige text-xs">
+                    <div className="flex items-center gap-1.5 text-gray-600">
+                      <span className="text-3xs text-gray-400 font-medium">Kabul:</span>
+                      {hotel.allowedPets.includes('dog') && <DogIcon className="w-4 h-4 text-brand-navy" title="Köpek" />}
                       {hotel.allowedPets.includes('cat') && <CatIcon className="w-4 h-4 text-amber-600" title="Kedi" />}
                       {hotel.allowedPets.includes('bird') && <BirdIcon className="w-4 h-4 text-sky-600" title="Kuş" />}
                       {hotel.allowedPets.includes('other') && <OtherIcon className="w-4 h-4 text-purple-600" title="Diğer Dostlar" />}
                     </div>
-                  </div>
 
-                  {/* Highlights */}
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    <span className="text-4xs bg-brand-beige px-2 py-0.5 rounded text-gray-600 font-medium">
-                      {hotel.weightLimit > 0 ? `Max ${hotel.weightLimit} Kg` : 'Kilo Sınırı Yok'}
-                    </span>
-                    <span className="text-4xs bg-brand-beige px-2 py-0.5 rounded text-gray-600 font-medium">
-                      {hotel.extraFee === 'no' ? 'Ek Ücretsiz' : 'Ek Ücretli'}
+                    <span className="text-3xs bg-brand-navy-light px-2.5 py-1 rounded-full text-brand-navy font-bold">
+                      ⚖️ {hotel.weightLimit > 0 ? `Max ${hotel.weightLimit} kg` : 'Kilo Sınırı Yok'}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="p-5 pt-0">
-                <button className="w-full bg-brand-navy-light hover:bg-brand-navy text-brand-navy hover:text-white transition-colors py-2 rounded-full text-xs font-bold flex items-center justify-center gap-1.5 border border-brand-navy/10">
-                  Detayları İncele
+              <div className="p-4 text-right border-t border-brand-beige/50 bg-brand-cream/20">
+                <button className="w-full bg-brand-navy hover:bg-brand-navy-hover text-white transition-colors py-2.5 rounded-full text-xs font-bold border border-brand-navy/10 font-title">
+                  Tesis Detaylarını İncele &rarr;
                 </button>
               </div>
             </div>

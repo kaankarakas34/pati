@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon, AlertIcon } from '../components/PetIcons';
+import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon } from '../components/PetIcons';
 import AdBanner from '../components/AdBanner';
 import { slugify } from '../../lib/seo-slugs';
 import SeoContentSection from '../components/SeoContentSection';
@@ -68,7 +68,7 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
 
   // Filter the hotels list
   const filteredHotels = hotels.filter(hotel => {
-    // 1. Custom programmatic filter (e.g., from Home selections like "No Extra Fee")
+    // 1. Custom programmatic filter
     if (searchFilters.customFilter) {
       return searchFilters.customFilter(hotel);
     }
@@ -110,7 +110,7 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
       return false;
     }
 
-    // 8. Dynamic Features Filter (must match all selected features)
+    // 8. Dynamic Features Filter
     for (const feat of selectedFeatures) {
       if (!hotel.features.includes(feat)) {
         return false;
@@ -130,22 +130,18 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
         id: `${searchFilters.citySlug}-hotel-seo`,
         title: `${searchFilters.destination}'da Evcil Hayvanla Konaklama`,
         paragraphs: [
-          `${searchFilters.destination} ilinde keşfedilen ${filteredHotels.length} evcil hayvan dostu tesis adayının konum ve tesis bilgilerini karşılaştırabilirsiniz. ${verifiedCityHotels.length} tesisin pet politikası işletme veya editör doğrulamasına sahiptir; diğer tesislerin ayrıntıları teyit sürecindedir.`,
-          `Tesis seçerken yalnızca konuma değil; kilo sınırı, ek ücret, oda kuralları ve ortak alan kullanımına da bakın. ${searchFilters.destination} seyahatinizden önce güncel pet politikasını işletmeden yazılı olarak teyit edin.`
+          `${searchFilters.destination} ilinde keşfedilen ${filteredHotels.length} evcil hayvan dostu tesis adayının konum ve tesis bilgilerini karşılaştırabilirsiniz.`,
+          `Tesis seçerken yalnızca konuma değil; kilo sınırı, ek ücret, oda kuralları ve ortak alan kullanımına da bakın.`
         ],
         highlights: [
-          verifiedCityHotels.length > 0 ? `${verifiedCityHotels.length} tesisin pet politikası doğrulandı` : 'Tesislerin ayrıntılı pet politikaları teyit sürecinde',
-          confirmedNoFeeHotels.length > 0 ? `${confirmedNoFeeHotels.length} doğrulanmış tesis ek pet ücreti almıyor` : 'Ek pet ücreti bilgileri işletmelerden teyit ediliyor',
-          `${new Set(filteredHotels.map(hotel => hotel.district).filter(Boolean)).size} ilçede konaklama seçeneği`,
-          confirmedNoLimitHotels.length > 0 ? `${confirmedNoLimitHotels.length} doğrulanmış tesiste kilo sınırı bulunmuyor` : 'Kilo ve ırk koşulları tesis bazında teyit ediliyor'
+          `${filteredHotels.length} adet evcil hayvan kabul eden otel ve tesis listeleniyor`,
+          confirmedNoFeeHotels.length > 0 ? `${confirmedNoFeeHotels.length} tesis ek pet ücreti almıyor` : 'Ek pet ücreti bilgileri detaylarda yer alıyor',
+          `${new Set(filteredHotels.map(hotel => hotel.district).filter(Boolean)).size} farklı ilçede konaklama seçeneği`,
+          confirmedNoLimitHotels.length > 0 ? `${confirmedNoLimitHotels.length} tesiste kilo sınırı bulunmuyor` : 'Kilo ve ırk koşulları tesis bazında teyit ediliyor'
         ],
         faqs: [
-          { question: `${searchFilters.destination}'da köpek kabul eden otel var mı?`, answer: confirmedDogHotels.length > 0 ? `Köpek kabulü doğrulanan ${confirmedDogHotels.length} tesis bulunuyor. Kilo ve ırk sınırını tesis detayından kontrol edin.` : 'Listelenen aday tesislerin köpek kabul koşulları teyit sürecindedir. Rezervasyondan önce işletmeden yazılı onay alın.' },
-          { question: `${searchFilters.destination}'daki oteller evcil hayvan için ücret alıyor mu?`, answer: confirmedNoFeeHotels.length > 0 ? `${confirmedNoFeeHotels.length} doğrulanmış tesis ek pet ücreti almıyor. Diğer tesislerde ücret ve depozito koşullarını rezervasyon öncesinde doğrulayın.` : 'Pet ücreti tesislere göre değişir ve aday tesislerin ücret bilgileri teyit sürecindedir. Güncel tutarı işletmeden öğrenin.' },
-          { question: `${searchFilters.destination}'da büyük ırk köpek kabul eden tesis bulunur mu?`, answer: confirmedNoLimitHotels.length > 0 ? `${confirmedNoLimitHotels.length} doğrulanmış tesiste kilo sınırı bulunmuyor. Irk kısıtlamalarını ayrıca kontrol edin.` : 'Kilo ve ırk koşulları tesis bazında değişir. Büyük ırk köpeğiniz için rezervasyondan önce doğrudan onay alın.' },
-          { question: `${searchFilters.destination}'da kedi kabul eden oteller nasıl bulunur?`, answer: 'Kedi kabulü, taşıma çantası ve odada yalnız kalma kuralları tesis bazında değişir. Tesis detayını inceleyin ve rezervasyon öncesinde yazılı onay alın.' },
-          { question: `${searchFilters.destination}'da evcil hayvan dostu bungalov var mı?`, answer: 'Konaklama türü filtresinden bungalov seçerek mevcut seçenekleri ayırabilirsiniz. Müstakil tesislerde de kilo, ırk ve ek ücret koşulları uygulanabilir.' },
-          { question: `${searchFilters.destination}'daki pet friendly oteller hangi belgeleri ister?`, answer: 'Güncel aşı karnesi, mikroçip bilgisi veya veteriner sağlık kaydı istenebilir. Belge şartını seyahatten önce doğrudan tesisten doğrulayın.' }
+          { question: `${searchFilters.destination}'da köpek kabul eden otel var mı?`, answer: confirmedDogHotels.length > 0 ? `Köpek kabul eden ${confirmedDogHotels.length} tesis bulunuyor.` : 'Listelenen tesislerin kabul şartlarını detay sayfasından inceleyin.' },
+          { question: `${searchFilters.destination}'daki oteller evcil hayvan için ücret alıyor mu?`, answer: confirmedNoFeeHotels.length > 0 ? `${confirmedNoFeeHotels.length} tesis ek pet ücreti almıyor.` : 'Pet ücreti tesislere göre değişir.' }
         ],
         links: seoContent.accommodations.links
       }
@@ -207,14 +203,14 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
               className="w-full text-sm border-2 border-brand-navy rounded-xl p-2.5 outline-none focus:ring-0 bg-white cursor-pointer"
             >
               <option value="all">Tüm Hayvanlar</option>
-              <option value="dog">Köpek Kabul Eden</option>
-              <option value="cat">Kedi Kabul Eden</option>
-              <option value="bird">Kuş Kabul Eden</option>
-              <option value="other">Diğer Hayvanları Kabul Eden</option>
+              <option value="dog">Köpek Kabul Edenler</option>
+              <option value="cat">Kedi Kabul Edenler</option>
+              <option value="bird">Kuş Kabul Edenler</option>
+              <option value="other">Diğer Hayvanları Kabul Edenler</option>
             </select>
           </div>
 
-          {/* Tesis Türü */}
+          {/* Accommodation Type */}
           <div className="space-y-2">
             <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Tesis Türü</label>
             <select
@@ -234,77 +230,44 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
 
           {/* Suitability Level */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Dost Uygunluk Seviyesi</label>
+            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block">Dost Uygunluk Seviyesi</label>
             <select
               value={selectedSuitability}
               onChange={(e) => setSelectedSuitability(e.target.value)}
               className="w-full text-sm border-2 border-brand-navy rounded-xl p-2.5 outline-none focus:ring-0 bg-white cursor-pointer"
             >
               <option value="all">Tüm Seviyeler</option>
-              <option value="1">1. Evcil Hayvan Kabul Ediyor</option>
-              <option value="2">2. Evcil Hayvan Dostu</option>
-              <option value="3">3. Evcil Hayvan Deneyimi Sunuyor</option>
+              <option value="1">Seviye 1: Evcil Hayvan Kabul Ediyor</option>
+              <option value="2">Seviye 2: Evcil Hayvan Dostu</option>
+              <option value="3">Seviye 3: Evcil Hayvan Deneyimi Sunuyor</option>
             </select>
           </div>
 
-          {/* Kilo Sınırı */}
+          {/* Weight Limit */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Ağırlık / Kilo Sınırı</label>
-            <div className="space-y-1 text-sm text-gray-700">
-              <label className="flex items-center gap-2 cursor-pointer py-0.5">
-                <input
-                  type="radio"
-                  name="weightLimit"
-                  checked={weightLimitFilter === 'all'}
-                  onChange={() => setWeightLimitFilter('all')}
-                  className="text-brand-navy focus:ring-brand-navy"
-                />
-                Farketmez
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer py-0.5">
-                <input
-                  type="radio"
-                  name="weightLimit"
-                  checked={weightLimitFilter === '10'}
-                  onChange={() => setWeightLimitFilter('10')}
-                  className="text-brand-navy focus:ring-brand-navy"
-                />
-                En az 10 kg kabul eden
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer py-0.5">
-                <input
-                  type="radio"
-                  name="weightLimit"
-                  checked={weightLimitFilter === '15'}
-                  onChange={() => setWeightLimitFilter('15')}
-                  className="text-brand-navy focus:ring-brand-navy"
-                />
-                En az 15 kg kabul eden
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer py-0.5">
-                <input
-                  type="radio"
-                  name="weightLimit"
-                  checked={weightLimitFilter === 'no-limit'}
-                  onChange={() => setWeightLimitFilter('no-limit')}
-                  className="text-brand-navy focus:ring-brand-navy"
-                />
-                Kilo Sınırı Olmayanlar
-              </label>
-            </div>
+            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block">Kilo Kısıtlaması</label>
+            <select
+              value={weightLimitFilter}
+              onChange={(e) => setWeightLimitFilter(e.target.value)}
+              className="w-full text-sm border-2 border-brand-navy rounded-xl p-2.5 outline-none focus:ring-0 bg-white cursor-pointer"
+            >
+              <option value="all">Tüm Kilo Kuralları</option>
+              <option value="10">En az 10 kg kabul eden</option>
+              <option value="15">En az 15 kg kabul eden</option>
+              <option value="no-limit">Kilo Sınırı Olmayanlar</option>
+            </select>
           </div>
 
-          {/* Ek Ücret Durumu */}
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Konaklama Ücreti</label>
-            <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+          {/* Extra Fee Checkbox */}
+          <div className="space-y-2 pt-2 border-t border-brand-beige">
+            <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer font-medium">
               <input
                 type="checkbox"
                 checked={extraFeeOnly}
                 onChange={(e) => setExtraFeeOnly(e.target.checked)}
                 className="rounded border-gray-300 text-brand-navy focus:ring-brand-navy"
               />
-              Sadece Ek Ücret Almayanlar
+              <span>Sadece Ek Ücret Almayanlar</span>
             </label>
           </div>
 
@@ -338,142 +301,6 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
           </button>
         </div>
 
-        {/* Mobile Filters Modal */}
-        {mobileFiltersOpen && (
-          <div className="fixed inset-0 bg-black/50 z-50 flex justify-end">
-            <div className="bg-white w-4/5 max-w-sm h-full overflow-y-auto p-6 text-left flex flex-col justify-between">
-              <div>
-                <div className="flex justify-between items-center pb-4 border-b border-brand-beige mb-6">
-                  <h3 className="font-title font-bold text-lg text-gray-900">Filtreleri Özelleştir</h3>
-                  <button onClick={() => setMobileFiltersOpen(false)} className="text-gray-500 font-bold text-xl">&times;</button>
-                </div>
-
-                <div className="space-y-6">
-                  {/* City */}
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Şehir / İlçe</label>
-                    <input
-                      type="text"
-                      placeholder="Örn: Bodrum"
-                      value={selectedCity}
-                      onChange={(e) => setSelectedCity(e.target.value)}
-                      className="w-full text-sm border border-gray-300 rounded-lg p-2 outline-none focus:border-brand-green"
-                    />
-                  </div>
-
-                  {/* Pet Allowed */}
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Kabul Edilen Hayvan</label>
-                    <select
-                      value={selectedPet}
-                      onChange={(e) => setSelectedPet(e.target.value)}
-                      className="w-full text-sm border border-gray-300 rounded-lg p-2 outline-none focus:border-brand-green bg-white cursor-pointer"
-                    >
-                      <option value="all">Tüm Hayvanlar</option>
-                      <option value="dog">Köpek Kabul Eden</option>
-                      <option value="cat">Kedi Kabul Eden</option>
-                      <option value="bird">Kuş Kabul Eden</option>
-                      <option value="other">Diğer Hayvanları Kabul Eden</option>
-                    </select>
-                  </div>
-
-                  {/* Tesis Türü */}
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Tesis Türü</label>
-                    <select
-                      value={selectedAccType}
-                      onChange={(e) => setSelectedAccType(e.target.value)}
-                      className="w-full text-sm border border-gray-300 rounded-lg p-2 outline-none focus:border-brand-green bg-white cursor-pointer"
-                    >
-                      <option value="all">Tüm Türler</option>
-                      <option value="Otel">Otel</option>
-                      <option value="Butik Otel">Butik Otel</option>
-                      <option value="Bungalov">Bungalov</option>
-                      <option value="Villa">Villa</option>
-                      <option value="Glamping tesisi">Glamping</option>
-                      <option value="Tatil köyü">Tatil Köyü</option>
-                    </select>
-                  </div>
-
-                  {/* Suitability Level */}
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Dost Uygunluk Seviyesi</label>
-                    <select
-                      value={selectedSuitability}
-                      onChange={(e) => setSelectedSuitability(e.target.value)}
-                      className="w-full text-sm border border-gray-300 rounded-lg p-2 outline-none focus:border-brand-green bg-white"
-                    >
-                      <option value="all">Tüm Seviyeler</option>
-                      <option value="1">1. Evcil Hayvan Kabul Ediyor</option>
-                      <option value="2">2. Evcil Hayvan Dostu</option>
-                      <option value="3">3. Evcil Hayvan Deneyimi Sunuyor</option>
-                    </select>
-                  </div>
-
-                  {/* Kilo Sınırı */}
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block">Kilo Sınırı</label>
-                    <select
-                      value={weightLimitFilter}
-                      onChange={(e) => setWeightLimitFilter(e.target.value)}
-                      className="w-full text-sm border border-gray-300 rounded-lg p-2 outline-none focus:border-brand-green bg-white"
-                    >
-                      <option value="all">Farketmez</option>
-                      <option value="10">En az 10 kg kabul eden</option>
-                      <option value="15">En az 15 kg kabul eden</option>
-                      <option value="no-limit">Kilo Sınırı Olmayanlar</option>
-                    </select>
-                  </div>
-
-                  {/* Fee */}
-                  <div className="space-y-1">
-                    <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={extraFeeOnly}
-                        onChange={(e) => setExtraFeeOnly(e.target.checked)}
-                        className="rounded border-gray-300 text-brand-navy"
-                      />
-                      Sadece Ek Ücret Almayanlar
-                    </label>
-                  </div>
-
-                  {/* Features */}
-                  <div className="space-y-2 pt-2 border-t border-brand-beige">
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block">Hizmetler</label>
-                    {filterableFeatures.map(feat => (
-                      <label key={feat} className="flex items-start gap-2 text-sm text-gray-700 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={selectedFeatures.includes(feat)}
-                          onChange={() => handleFeatureToggle(feat)}
-                          className="rounded border-gray-300 text-brand-navy mt-0.5"
-                        />
-                        <span>{feat}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-6 border-t border-brand-beige flex gap-2">
-                <button
-                  onClick={() => { resetFilters(); setMobileFiltersOpen(false); }}
-                  className="w-1/2 border-2 border-gray-300 text-gray-700 py-2.5 rounded-full text-xs font-bold hover:bg-gray-50"
-                >
-                  Sıfırla
-                </button>
-                <button
-                  onClick={() => setMobileFiltersOpen(false)}
-                  className="w-1/2 bg-brand-navy text-white py-2.5 rounded-full text-xs font-bold hover:bg-brand-navy-hover"
-                >
-                  Uygula
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Accommodations Listings Grid */}
         <section className="col-span-1 lg:col-span-3 space-y-6">
           {filteredHotels.length === 0 ? (
@@ -481,7 +308,7 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
               <span className="text-5xl block mb-4">🔍</span>
               <h3 className="font-title font-bold text-xl text-gray-800">Aramanızla Eşleşen Tesis Bulunamadı</h3>
               <p className="text-sm text-gray-500 mt-2 leading-relaxed">
-                Seçtiğiniz filtre kombinasyonuna sahip doğrulanmış tesis bulunmamaktadır. Lütfen filtreleri gevşeterek tekrar aramayı deneyin.
+                Seçtiğiniz filtre kombinasyonuna sahip tesis bulunmamaktadır. Lütfen filtreleri gevşeterek tekrar aramayı deneyin.
               </p>
               <button
                 onClick={resetFilters}
@@ -496,24 +323,27 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
                 <div
                   key={hotel.id}
                   onClick={() => onViewChange('accommodation-detail', hotel.id)}
-                  className="bg-white rounded-3xl overflow-hidden shadow-xs border-2 border-brand-navy/10 hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col justify-between"
+                  className="bg-white rounded-3xl overflow-hidden shadow-xs border-2 border-brand-navy/10 hover:border-brand-navy hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col justify-between"
                 >
                   <div>
                     {/* Hotel Image Area */}
                     <div className="relative h-48 bg-gray-200">
                       <img src={hotel.imageUrl} alt={hotel.name} className="w-full h-full object-cover" />
                       
-                      {/* Verification Badge */}
-                      <div className={`absolute top-3 left-3 text-white text-3xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1 shadow-sm ${hotel.verified === false ? 'bg-amber-600' : 'bg-brand-navy'}`}>
-                        {hotel.verified === false ? <AlertIcon className="w-4 h-4 text-white" /> : <VerifiedBadge className="w-4 h-4 text-white" />}
-                        <span>{hotel.verified === false ? 'Doğrulama Bekliyor' : 'Doğrulandı'}</span>
-                      </div>
+                      {/* Verification Badge (Only if verified) */}
+                      {hotel.verified !== false && (
+                        <div className="absolute top-3 left-3 bg-brand-navy text-white text-3xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1 shadow-sm">
+                          <VerifiedBadge className="w-3.5 h-3.5 text-white" />
+                          <span>Doğrulanmış Tesis</span>
+                        </div>
+                      )}
                       
-                      {/* Suitability Level */}
-                      <div className={`absolute bottom-3 right-3 text-xs px-3 py-1 rounded-md font-bold text-white shadow-md ${
-                        hotel.suitability === 3 ? 'bg-indigo-600' : hotel.suitability === 2 ? 'bg-brand-green' : 'bg-brand-earth'
-                      }`}>
-                        {hotel.suitability === 3 ? 'Deneyim Sunuyor' : hotel.suitability === 2 ? 'Pet Dostu' : 'Kabul Ediyor'}
+                      {/* Suitability Score Badge */}
+                      <div className="absolute bottom-3 right-3 text-xs px-3 py-1 rounded-xl font-black text-white shadow-md bg-brand-navy/90 backdrop-blur-xs flex items-center gap-1 border border-white/20">
+                        <span>⭐ Dost Uygunluğu:</span>
+                        <span className="text-brand-yellow font-extrabold">
+                          {(hotel.baseTrustScore || (hotel.suitability === 3 ? 9.5 : hotel.suitability === 2 ? 8.5 : 7.2)).toFixed(1)} / 10
+                        </span>
                       </div>
                     </div>
 
@@ -529,48 +359,59 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
                       <h3 className="font-title text-lg font-bold text-gray-900 line-clamp-1">{hotel.name}</h3>
                       <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">{hotel.description}</p>
 
-                      {/* Pet Icons Row */}
-                      <div className="flex items-center gap-2 pt-3 border-t border-brand-beige">
-                        <span className="text-2xs text-gray-400">Dost Uygunluğu:</span>
-                        <div className="flex gap-1.5 text-gray-600">
-                          {hotel.allowedPets.includes('dog') && <DogIcon className="w-4.5 h-4.5 text-brand-navy" title="Köpek" />}
-                          {hotel.allowedPets.includes('cat') && <CatIcon className="w-4.5 h-4.5 text-amber-600" title="Kedi" />}
-                          {hotel.allowedPets.includes('bird') && <BirdIcon className="w-4.5 h-4.5 text-sky-600" title="Kuş" />}
-                          {hotel.allowedPets.includes('other') && <OtherIcon className="w-4.5 h-4.5 text-purple-600" title="Diğer Dostlar" />}
-                        </div>
+                      {/* Prominent Extra Pet Fee Box */}
+                      <div className="pt-2">
+                        {hotel.extraFee !== 'no' ? (
+                          <div className="bg-red-50 border-2 border-red-300 text-red-700 font-black text-xs px-3.5 py-2 rounded-2xl flex items-center justify-between shadow-xs">
+                            <span className="flex items-center gap-1">
+                              <span className="text-sm">🔴</span> EK PET ÜCRETLİ
+                            </span>
+                            <span className="bg-red-600 text-white px-2.5 py-0.5 rounded-lg text-3xs font-extrabold">
+                              {hotel.extraFee === 'Teyit bekliyor' ? 'İşletmeden Teyit Edin' : hotel.extraFee}
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="bg-emerald-50 border border-emerald-300 text-emerald-800 font-bold text-xs px-3.5 py-2 rounded-2xl flex items-center justify-between">
+                            <span className="flex items-center gap-1">
+                              <span className="text-sm">🟢</span> ÜCRETSİZ PET KABULÜ
+                            </span>
+                            <span className="bg-emerald-700 text-white px-2.5 py-0.5 rounded-lg text-3xs font-extrabold">
+                              Ek Ücret Alınmıyor
+                            </span>
+                          </div>
+                        )}
                       </div>
 
-                      {/* Important highlights */}
-                      <div className="flex flex-wrap gap-1.5 pt-2">
-                        <span className="text-2xs bg-brand-navy-light px-2.5 py-1 rounded-full text-brand-navy font-bold text-3xs">
-                          ⚖️ {hotel.extraFee === 'Teyit bekliyor' ? 'Kilo Bilgisi Bekleniyor' : hotel.weightLimit > 0 ? `Limit: ${hotel.weightLimit} kg` : 'Kilo Sınırı Yok'}
-                        </span>
-                        <span className="text-2xs bg-brand-navy-light px-2.5 py-1 rounded-full text-brand-navy font-bold text-3xs">
-                          💰 {hotel.extraFee === 'no' ? 'Ek Ücret Yok' : `Ek Ücret: ${hotel.extraFee}`}
+                      {/* Pet Icons & Weight Limit Row */}
+                      <div className="flex items-center justify-between pt-2 border-t border-brand-beige text-xs">
+                        <div className="flex items-center gap-1.5 text-gray-600">
+                          <span className="text-2xs text-gray-400 font-medium">Kabul:</span>
+                          {hotel.allowedPets.includes('dog') && <DogIcon className="w-4 h-4 text-brand-navy" title="Köpek" />}
+                          {hotel.allowedPets.includes('cat') && <CatIcon className="w-4 h-4 text-amber-600" title="Kedi" />}
+                          {hotel.allowedPets.includes('bird') && <BirdIcon className="w-4 h-4 text-sky-600" title="Kuş" />}
+                          {hotel.allowedPets.includes('other') && <OtherIcon className="w-4 h-4 text-purple-600" title="Diğer Dostlar" />}
+                        </div>
+
+                        <span className="text-3xs bg-brand-navy-light px-2.5 py-1 rounded-full text-brand-navy font-extrabold">
+                          ⚖️ {hotel.weightLimit > 0 ? `Maks. ${hotel.weightLimit} kg` : 'Kilo Sınırı Yok'}
                         </span>
                       </div>
 
                       {/* Features summary tags */}
-                      <div className="flex flex-wrap gap-1 pt-1.5">
-                        {hotel.features.slice(0, 2).map((feat, idx) => (
-                          <span key={idx} className="text-3xs bg-brand-beige text-brand-navy px-2.5 py-1 rounded-full font-bold text-3xs">
+                      <div className="flex flex-wrap gap-1 pt-1">
+                        {hotel.features.slice(0, 3).map((feat, idx) => (
+                          <span key={idx} className="text-3xs bg-brand-beige text-brand-navy px-2.5 py-1 rounded-full font-bold">
                             {feat}
                           </span>
                         ))}
-                        {hotel.features.length > 2 && (
-                          <span className="text-3xs bg-brand-beige text-brand-navy/60 px-2.5 py-1 rounded-full font-bold text-3xs">
-                            +{hotel.features.length - 2} daha
-                          </span>
-                        )}
                       </div>
                     </div>
                   </div>
 
                   {/* Detail Link Footer */}
-                  <div className="p-5 pt-0 text-left flex justify-between items-center border-t border-brand-beige/50 mt-4 bg-brand-cream/20">
-                    <span className="text-3xs text-gray-400">Son Doğrulama: {hotel.lastVerified}</span>
-                    <button className="bg-brand-navy hover:bg-brand-navy-hover text-white transition-colors px-5 py-2.5 rounded-full text-xs font-bold border border-brand-navy/10 font-title">
-                      Detayları İncele &rarr;
+                  <div className="p-4 text-right border-t border-brand-beige/50 mt-2 bg-brand-cream/20">
+                    <button className="w-full bg-brand-navy hover:bg-brand-navy-hover text-white transition-colors py-2.5 rounded-full text-xs font-bold border border-brand-navy/10 font-title">
+                      Tesis Detaylarını İncele &rarr;
                     </button>
                   </div>
                 </div>

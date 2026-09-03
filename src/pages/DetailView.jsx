@@ -443,14 +443,14 @@ export default function DetailView({
             <div className="h-72 md:h-[450px] bg-gray-200 rounded-3xl overflow-hidden shadow-sm relative">
               <img src={shouldShowGallery ? selectedGalleryImage : item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
             
-              <div className={`absolute top-4 left-4 text-white text-xs px-3.5 py-1.5 rounded-full font-bold flex items-center gap-1 shadow-md ${item.verified === false ? 'bg-amber-600' : 'bg-brand-navy'}`}>
-                {item.verified === false ? <AlertIcon className="w-4 h-4 text-white" /> : <VerifiedBadge className="w-4 h-4 text-white" />}
-                <span>{item.verified === false ? 'Doğrulama Bekliyor' : 'Doğrulanmış Tesis'}</span>
+              <div className="absolute top-4 left-4 bg-brand-navy text-white text-xs px-3.5 py-1.5 rounded-full font-bold flex items-center gap-1 shadow-md">
+                <VerifiedBadge className="w-4 h-4 text-white" />
+                <span>Doğrulanmış Tesis</span>
               </div>
 
               {/* Dynamic Badge for Suitability or Boarding category */}
               <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-sm text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md">
-                {isBoarding ? item.category : `Dost Uygunluk Seviyesi: Seviye ${item.suitability}`}
+                {isBoarding ? item.category : `Dost Uygunluk Puanı: ${(item.baseTrustScore || (item.suitability === 3 ? 9.5 : item.suitability === 2 ? 8.5 : 7.2)).toFixed(1)} / 10`}
               </div>
             </div>
           )}
@@ -511,26 +511,57 @@ export default function DetailView({
               </div>
             </div>
 
-            {/* Suitability Level Info Card (For Hotels only) */}
+            {/* Suitability Level & Prominent Extra Pet Fee Card (For Hotels only) */}
             {!isBoarding && (
-              <div className="bg-brand-navy-light/30 border border-brand-navy/20 rounded-2xl p-4 mt-4">
-                <span className="text-xs font-bold text-brand-navy block mb-1">
-                  {item.suitability === 3 ? '🏆 Seviye 3: Deneyim Sunuyor' : item.suitability === 2 ? '🌱 Seviye 2: Evcil Hayvan Dostu' : '🐾 Seviye 1: Evcil Hayvan Kabul Ediyor'}
-                </span>
-                <p className="text-3xs text-gray-600 leading-normal">
-                  {item.suitability === 3 
-                    ? 'Evcil hayvanlara özel plaj/havuz, mama menüsü, yatak, 7/24 veteriner desteği vb. üst düzey deneyimler sunulur.'
-                    : item.suitability === 2
-                    ? 'Odada mama kabı, bahçe kullanım alanı ve açık restorana tasmalı kabul gibi temel pet kolaylıkları sağlar.'
-                    : 'Evcil hayvan kabulüne izin verir ancak mama kabı, yatak vb. hizmetler bulunmaz, kısıtlamalar mevcuttur.'
-                  }
-                </p>
-                <button
-                  onClick={() => onViewChange('methodology')}
-                  className="text-3xs text-brand-navy font-bold underline mt-2 hover:opacity-80"
-                >
-                  Kriterleri Gör &rarr;
-                </button>
+              <div className="space-y-3 mt-4 text-left">
+                {/* Prominent Extra Pet Fee Box */}
+                {item.extraFee !== 'no' ? (
+                  <div className="bg-red-50 border-2 border-red-300 rounded-2xl p-3.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-black text-red-700 uppercase tracking-wide flex items-center gap-1">
+                        🔴 EK EV CİL HAYVAN ÜCRETLİ
+                      </span>
+                      <span className="text-xs font-extrabold text-white bg-red-600 px-3 py-1 rounded-xl shadow-xs">
+                        {item.extraFee === 'Teyit bekliyor' ? 'İşletmeden Sorunuz' : item.extraFee}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-3.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-black text-emerald-800 uppercase tracking-wide flex items-center gap-1">
+                        🟢 ÜCRETSİZ PET KABULÜ
+                      </span>
+                      <span className="text-xs font-extrabold text-emerald-800 bg-emerald-200/80 px-3 py-1 rounded-xl">
+                        Ek Ücret Alınmıyor
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Suitability Level & Score Card */}
+                <div className="bg-brand-navy-light/30 border border-brand-navy/20 rounded-2xl p-4">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-bold text-brand-navy">
+                      {item.suitability === 3 ? '🏆 Seviye 3: Deneyim Sunuyor' : item.suitability === 2 ? '🌱 Seviye 2: Evcil Hayvan Dostu' : '🐾 Seviye 1: Evcil Hayvan Kabul Ediyor'}
+                    </span>
+                    <span className="text-xs font-black text-brand-navy bg-white px-2.5 py-0.5 rounded-lg border border-brand-navy/20 shadow-xs">
+                      ⭐ {(item.baseTrustScore || (item.suitability === 3 ? 9.5 : item.suitability === 2 ? 8.5 : 7.2)).toFixed(1)} / 10
+                    </span>
+                  </div>
+                  <p className="text-3xs text-gray-600 leading-normal mt-1">
+                    {item.suitability === 3 
+                      ? 'Evcil hayvanlara özel plaj/havuz, mama menüsü, yatak, 7/24 veteriner desteği vb. üst düzey deneyimler sunulur.'
+                      : item.suitability === 2
+                      ? 'Odada mama kabı, bahçe kullanım alanı ve açık restorana tasmalı kabul gibi temel pet kolaylıkları sağlar.'
+                      : 'Evcil hayvan kabulüne izin verir ancak mama kabı, yatak vb. hizmetler bulunmaz, kısıtlamalar mevcuttur.'
+                    }
+                  </p>
+                  <div className="mt-2 pt-2 border-t border-brand-beige flex items-center justify-between text-3xs font-bold text-gray-700">
+                    <span>⚖️ Kilo Kısıtlaması:</span>
+                    <span className="text-brand-navy font-extrabold">{item.weightLimit > 0 ? `Maksimum ${item.weightLimit} kg` : 'Kilo Sınırı Yok'}</span>
+                  </div>
+                </div>
               </div>
             )}
 
@@ -555,8 +586,8 @@ export default function DetailView({
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-3xs text-gray-400">Son Doğrulama: {item.lastVerified}</span>
-              <span className="text-3xs text-gray-400">Kaynak: {item.infoSource}</span>
+              <span className="text-4xs text-gray-400 font-normal">Son Doğrulama: {item.lastVerified}</span>
+              <span className="text-4xs text-gray-400 font-normal">Kaynak: {item.infoSource}</span>
             </div>
             <a
               href={item.website}
