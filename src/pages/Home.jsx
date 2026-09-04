@@ -265,17 +265,17 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
                   </div>
                   <h3 className="font-title text-base font-bold text-gray-900 line-clamp-1">{hotel.name}</h3>
                   
-                  {/* Prominent Extra Fee Box */}
+                  {/* Pet Fee Info Box */}
                   <div className="pt-1">
-                    {hotel.extraFee !== 'no' ? (
-                      <div className="bg-red-50 border border-red-200 text-red-700 font-black text-3xs px-3 py-1.5 rounded-xl flex items-center justify-between">
-                        <span>🔴 EK PET ÜCRETLİ</span>
-                        <span className="font-extrabold">{hotel.extraFee === 'Teyit bekliyor' ? 'Danışınız' : hotel.extraFee}</span>
-                      </div>
-                    ) : (
-                      <div className="bg-emerald-50 border border-emerald-300 text-emerald-800 font-extrabold text-3xs px-3 py-1.5 rounded-xl flex items-center justify-between">
+                    {hotel.extraFee === 'no' ? (
+                      <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 font-extrabold text-3xs px-3 py-1.5 rounded-xl flex items-center justify-between">
                         <span>🟢 ÜCRETSİZ PET KABULÜ</span>
                         <span>Ek Ücret Alınmıyor</span>
+                      </div>
+                    ) : (
+                      <div className="bg-slate-50 border border-slate-200 text-slate-700 font-bold text-3xs px-3 py-1.5 rounded-xl flex items-center justify-between">
+                        <span>💬 PET ÜCRET POLİTİKASI</span>
+                        <span className="font-bold">{hotel.extraFee === 'Teyit bekliyor' || !hotel.extraFee ? 'Tesisle Teyit Edin' : hotel.extraFee}</span>
                       </div>
                     )}
                   </div>

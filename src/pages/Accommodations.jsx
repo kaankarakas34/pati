@@ -359,24 +359,24 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
                       <h3 className="font-title text-lg font-bold text-gray-900 line-clamp-1">{hotel.name}</h3>
                       <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">{hotel.description}</p>
 
-                      {/* Prominent Extra Pet Fee Box */}
+                      {/* Pet Fee Info Box */}
                       <div className="pt-2">
-                        {hotel.extraFee !== 'no' ? (
-                          <div className="bg-red-50 border-2 border-red-300 text-red-700 font-black text-xs px-3.5 py-2 rounded-2xl flex items-center justify-between shadow-xs">
-                            <span className="flex items-center gap-1">
-                              <span className="text-sm">🔴</span> EK PET ÜCRETLİ
-                            </span>
-                            <span className="bg-red-600 text-white px-2.5 py-0.5 rounded-lg text-3xs font-extrabold">
-                              {hotel.extraFee === 'Teyit bekliyor' ? 'İşletmeden Teyit Edin' : hotel.extraFee}
-                            </span>
-                          </div>
-                        ) : (
-                          <div className="bg-emerald-50 border border-emerald-300 text-emerald-800 font-bold text-xs px-3.5 py-2 rounded-2xl flex items-center justify-between">
-                            <span className="flex items-center gap-1">
-                              <span className="text-sm">🟢</span> ÜCRETSİZ PET KABULÜ
+                        {hotel.extraFee === 'no' ? (
+                          <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold text-xs px-3.5 py-2 rounded-2xl flex items-center justify-between">
+                            <span className="flex items-center gap-1.5">
+                              <span>🟢</span> ÜCRETSİZ PET KABULÜ
                             </span>
                             <span className="bg-emerald-700 text-white px-2.5 py-0.5 rounded-lg text-3xs font-extrabold">
                               Ek Ücret Alınmıyor
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="bg-slate-50 border border-slate-200 text-slate-700 font-semibold text-xs px-3.5 py-2 rounded-2xl flex items-center justify-between">
+                            <span className="flex items-center gap-1.5">
+                              <span>💬</span> Pet Ücret Politikası
+                            </span>
+                            <span className="bg-slate-700 text-white px-2.5 py-0.5 rounded-lg text-3xs font-bold">
+                              {hotel.extraFee === 'Teyit bekliyor' || !hotel.extraFee ? 'Tesisle Teyit Edin' : hotel.extraFee}
                             </span>
                           </div>
                         )}
