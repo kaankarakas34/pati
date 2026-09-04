@@ -1,24 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon, StarIcon, CheckIcon, XIcon, GlobeIcon, PhoneIcon, MailIcon, AlertIcon } from '../components/PetIcons';
 import AdBanner from '../components/AdBanner';
+import { useCatalog } from '../lib/useCatalog';
+import CatalogPagination from '../components/CatalogPagination';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { slugify, getHotelPath } from '../../lib/seo-slugs';
-
-const hotelGalleryFallbacks = [
-  "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?auto=format&fit=crop&w=900&q=80"
-];
-
-const boardingGalleryFallbacks = [
-  "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1583512603805-3cc6b41f3edb?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1544568100-847a948585b9?auto=format&fit=crop&w=900&q=80"
-];
 
 function uniqueItems(items) {
   return Array.from(new Set(items.filter(Boolean)));
@@ -145,16 +131,10 @@ function makeAmenityGroups(item, isBoarding, isVet) {
 }
 
 export default function DetailView({
-  id,
+  item,
   isBoarding,
   isTaxi,
   isVet,
-  hotels,
-  boardings,
-  guides = [],
-  taxis = [],
-  vets = [],
-  complaints = [],
   addComplaint,
   onViewChange,
   addCorrection
@@ -171,97 +151,63 @@ export default function DetailView({
   const [complaintSubmitted, setComplaintSubmitted] = useState(false);
 
   // Reviews system states
-  const [reviews, setReviews] = useState([]);
-  const [reviewsLoading, setReviewsLoading] = useState(false);
+  const reviewPage = useCatalog('reviews', { targetId: item.id, status: 'approved' });
+  const nearbyVetsPage = useCatalog('vets', { city: item.city }, false, !isVet && Boolean(item.city));
+  const vets = nearbyVetsPage.items;
+  const complaintPage = useCatalog('complaints', { targetId: item.id, status: 'approved' }, false, activeTab === 'complaints');
+  const reviews = reviewPage.items.filter(review => review.status === 'approved');
+  const [submissionError, setSubmissionError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const submissionLock = useRef(false);
   const [reviewAuthor, setReviewAuthor] = useState('');
   const [reviewRating, setReviewRating] = useState(10);
   const [reviewText, setReviewText] = useState('');
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
   const [selectedGalleryIndex, setSelectedGalleryIndex] = useState(0);
 
-  useEffect(() => {
-    async function fetchReviews() {
-      if (!id) return;
-      setReviewsLoading(true);
-      try {
-        const res = await fetch(`/api/reviews?targetId=${id}`);
-        const data = await res.json();
-        setReviews(res.ok && Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("Failed to load reviews:", err);
-      } finally {
-        setReviewsLoading(false);
-      }
-    }
-    fetchReviews();
-    setReviewSubmitted(false);
-    setReviewAuthor('');
-    setReviewText('');
-    setReviewRating(10);
-    setSelectedGalleryIndex(0);
-  }, [id]);
-
-  const handleSubmitReview = async (e) => {
-    e.preventDefault();
-    if (!reviewAuthor || !reviewText) return;
-
-    const newReview = {
-      id: `rev-${Date.now()}`,
-      targetId: id,
-      author: reviewAuthor,
-      rating: parseInt(reviewRating),
-      text: reviewText,
-      date: new Date().toISOString().split('T')[0],
-      status: 'approved'
-    };
-
+  async function submit(action, onSuccess) {
+    if (submissionLock.current) return;
+    submissionLock.current = true;
+    setSubmitting(true);
+    setSubmissionError('');
     try {
-      await fetch('/api/reviews', {
+      await action();
+      onSuccess();
+    } catch (error) {
+      setSubmissionError(error.message || 'Gönderim başarısız. Lütfen tekrar deneyin.');
+    } finally {
+      submissionLock.current = false;
+      setSubmitting(false);
+    }
+  }
+
+  const handleSubmitReview = async (event) => {
+    event.preventDefault();
+    if (!reviewAuthor.trim() || !reviewText.trim()) return;
+    await submit(async () => {
+      const response = await fetch('/api/reviews', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newReview)
+        body: JSON.stringify({ targetId: item.id, author: reviewAuthor.trim(), rating: Number(reviewRating), text: reviewText.trim() })
       });
-      setReviews([newReview, ...reviews]);
+      const result = await response.json();
+      if (!response.ok || result.success !== true) throw new Error(result.error || 'Yorum gönderilemedi.');
+    }, () => {
       setReviewSubmitted(true);
       setReviewAuthor('');
       setReviewText('');
       setReviewRating(10);
-    } catch (err) {
-      console.error("Failed to submit review:", err);
-    }
+    });
   };
 
-  // Retrieve correct item
-  let item = null;
-  if (isBoarding) {
-    item = (boardings || []).find(b => b.id === id || slugify(b.name) === id);
-  } else if (isTaxi) {
-    item = (taxis || []).find(t => t.id === id || slugify(t.name) === id);
-  } else if (isVet) {
-    item = (vets || []).find(v => v.id === id || slugify(v.name) === id);
-  } else {
-    item = (hotels || []).find(h => h.id === id || slugify(h.name) === id || (getHotelPath(h) && getHotelPath(h).endsWith(`/${id}`)));
-  }
-
   const isUtility = isTaxi || isVet;
-
-  if (!item) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 py-16 text-center text-gray-500">
-        <h2 className="text-2xl font-bold font-title text-gray-850">Tesis bulunamadı</h2>
-        <button onClick={() => onViewChange('home')} className="mt-4 bg-brand-navy text-white px-6 py-2.5 rounded-full font-bold text-sm">Ana Sayfaya Dön</button>
-      </div>
-    );
-  }
-
-  // Calculate dynamic Trust Score
-  const approvedComplaints = complaints.filter(c => c.targetId === item.id && c.status === 'approved');
-  const trustScore = item.verified === false
+  const approvedComplaints = complaintPage.items.filter(complaint => complaint.status === 'approved');
+  const approvedComplaintCount = item.approvedComplaintCount;
+  const trustScore = item.verified === false || item.baseTrustScore == null || !Number.isInteger(approvedComplaintCount)
     ? null
-    : Math.max(1.0, (item.baseTrustScore ?? 9.5) - (approvedComplaints.length * 0.5)).toFixed(1);
+    : Math.max(1.0, Number(item.baseTrustScore) - approvedComplaintCount * 0.5).toFixed(1);
   const shouldShowGallery = !isTaxi && !isVet;
-  const galleryFallbacks = isBoarding ? boardingGalleryFallbacks : hotelGalleryFallbacks;
-  const galleryImages = Array.from(new Set([item.imageUrl, ...(item.galleryImages || []), ...galleryFallbacks].filter(Boolean))).slice(0, 6);
+  const galleryImages = Array.from(new Set([item.imageUrl, ...(item.galleryImages || [])].filter(Boolean))).slice(0, 6);
   const selectedGalleryImage = galleryImages[Math.min(selectedGalleryIndex, galleryImages.length - 1)] || item.imageUrl;
   const amenityGroups = makeAmenityGroups(item, isBoarding, isVet);
 
@@ -303,7 +249,7 @@ export default function DetailView({
         ],
         "priceRange": "$$"
       };
-    } else if (isBoarding) {
+    } else if (isBoarding || isTaxi) {
       jsonLd = {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
@@ -320,7 +266,7 @@ export default function DetailView({
         },
         "description": item.description,
         "priceRange": "$$",
-        "additionalType": "https://schema.org/AnimalShelter"
+        "additionalType": isBoarding ? "https://schema.org/AnimalShelter" : "https://schema.org/TaxiService"
       };
     } else {
       // Hotel Schema
@@ -378,59 +324,35 @@ export default function DetailView({
         scriptToRemove.remove();
       }
     };
-  }, [item, isBoarding]);
+  }, [item, isBoarding, isTaxi, isVet, trustScore]);
 
-  // Handle reporting form submission
-  const handleSubmitFeedback = (e) => {
-    e.preventDefault();
+  const handleSubmitFeedback = async (event) => {
+    event.preventDefault();
     if (!feedbackText.trim()) return;
-
-    addCorrection({
-      hotelId: item.id,
-      hotelName: item.name,
-      text: feedbackText,
-      date: new Date().toISOString().split('T')[0],
-      status: 'pending'
-    });
-
-    setFeedbackSubmitted(true);
-    setTimeout(() => {
-      setFeedbackOpen(false);
-      setFeedbackSubmitted(false);
+    await submit(() => addCorrection({ hotelId: item.id, hotelName: item.name, text: feedbackText.trim() }), () => {
+      setFeedbackSubmitted(true);
       setFeedbackText('');
-    }, 2500);
+    });
   };
 
-  // Handle complaint submission
-  const handleSubmitComplaint = (e) => {
-    e.preventDefault();
+  const handleSubmitComplaint = async (event) => {
+    event.preventDefault();
     if (!complaintText.trim() || !complaintAuthor.trim()) return;
-
-    addComplaint({
-      targetId: item.id,
-      targetName: item.name,
-      author: complaintAuthor,
-      text: complaintText,
-      date: new Date().toISOString().split('T')[0],
-      status: 'pending'
-    });
-
-    setComplaintSubmitted(true);
-    setTimeout(() => {
-      setComplaintOpen(false);
-      setComplaintSubmitted(false);
+    await submit(() => addComplaint({ targetId: item.id, targetName: item.name, author: complaintAuthor.trim(), text: complaintText.trim() }), () => {
+      setComplaintSubmitted(true);
       setComplaintText('');
       setComplaintAuthor('');
-    }, 2500);
+    });
   };
 
   const breadcrumbItems = [
     { label: 'Ana Sayfa', view: 'home', id: null, url: '/' },
-    isVet ? { label: '7/24 Acil Veterinerler', view: 'vets', id: null, url: '/veterinerler' }
+    isTaxi ? { label: 'Pet Taksi', view: 'taxis', id: null, url: '/pet-taksi' }
+    : isVet ? { label: '7/24 Acil Veterinerler', view: 'vets', id: null, url: '/veterinerler' }
     : isBoarding ? { label: 'Kedi & Köpek Otelleri', view: 'boardings', id: null, url: '/kedi-kopek-otelleri' }
     : { label: 'Pet Dostu Oteller', view: 'accommodations', id: null, url: '/evcil-hayvan-dostu-oteller' },
-    item.city && !isVet && !isBoarding ? { label: `${item.city} Otelleri`, view: 'accommodations', id: null, url: `/evcil-hayvan-dostu-oteller/${slugify(item.city)}` } : null,
-    { label: item.name, view: null, id: item.id, url: getHotelPath(item) }
+    item.city && !isUtility && !isBoarding ? { label: `${item.city} Otelleri`, view: 'accommodations', id: null, url: `/evcil-hayvan-dostu-oteller/${slugify(item.city)}` } : null,
+    { label: item.name, view: null, id: item.id, url: isTaxi ? `/taksi/${item.id}` : isVet ? `/veteriner/${item.id}` : isBoarding ? `/bakim/${item.id}` : getHotelPath(item) }
   ].filter(Boolean);
 
   return (
@@ -491,10 +413,6 @@ export default function DetailView({
                 src={shouldShowGallery ? selectedGalleryImage : item.imageUrl}
                 alt={item.name}
                 className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80';
-                }}
               />
             
               <div className="absolute top-4 left-4 bg-brand-navy text-white text-xs px-3.5 py-1.5 rounded-full font-bold flex items-center gap-1 shadow-md">
@@ -525,10 +443,6 @@ export default function DetailView({
                     src={image}
                     alt={`${item.name} galeri ${index + 1}`}
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.currentTarget.onerror = null;
-                      e.currentTarget.src = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80';
-                    }}
                   />
                 </button>
               ))}
@@ -574,7 +488,7 @@ export default function DetailView({
             </div>
 
             {/* Suitability Level & Prominent Extra Pet Fee Card (For Hotels only) */}
-            {!isBoarding && (
+            {!isBoarding && !isUtility && (
               <div className="space-y-3 mt-4 text-left">
                 {/* Prominent Extra Pet Fee Box */}
                 {item.extraFee !== 'no' ? (
@@ -714,7 +628,7 @@ export default function DetailView({
             activeTab === 'complaints' ? 'border-brand-navy text-brand-navy font-bold' : 'border-transparent text-gray-500 hover:text-gray-850'
           }`}
         >
-          Güven & Şikayetler ({approvedComplaints.length})
+          Güven & Şikayetler ({approvedComplaintCount ?? '-'})
         </button>
       </div>
 
@@ -740,14 +654,14 @@ export default function DetailView({
             )}
 
             {/* Suitable / Not Suitable */}
-            {!isBoarding && (
+            {!isBoarding && !isUtility && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-brand-beige">
                 <div className="space-y-3">
                   <h4 className="font-title font-bold text-brand-navy text-sm flex items-center gap-1.5">
                     <CheckIcon className="w-5 h-5" /> Kimler İçin Uygun?
                   </h4>
                   <ul className="space-y-2 text-xs text-gray-600 list-disc pl-5">
-                    {item.suitableFor.map((item, i) => <li key={i}>{item}</li>)}
+                    {(item.suitableFor || []).map((item, i) => <li key={i}>{item}</li>)}
                   </ul>
                 </div>
                 <div className="space-y-3">
@@ -755,7 +669,7 @@ export default function DetailView({
                     <XIcon className="w-5 h-5" /> Kimler İçin Uygun Olmayabilir?
                   </h4>
                   <ul className="space-y-2 text-xs text-gray-600 list-disc pl-5">
-                    {item.notSuitableFor.map((item, i) => <li key={i}>{item}</li>)}
+                    {(item.notSuitableFor || []).map((item, i) => <li key={i}>{item}</li>)}
                   </ul>
                 </div>
               </div>
@@ -780,7 +694,16 @@ export default function DetailView({
         )}
 
         {/* Tab 2: Policies */}
-        {activeTab === 'policies' && (
+        {activeTab === 'policies' && isUtility && (
+          <div className="space-y-3">
+            <h3 className="font-title text-xl font-bold">Hizmetler ve İletişim</h3>
+            <p>{item.description}</p>
+            <ul>{(item.features || []).map(feature => <li key={feature}>{feature}</li>)}</ul>
+            {item.phone && <a className="block underline" href={`tel:${item.phone}`}>{item.phone}</a>}
+            {item.website && <a className="block underline" href={item.website} target="_blank" rel="noopener noreferrer">Web Sitesi</a>}
+          </div>
+        )}
+        {activeTab === 'policies' && !isUtility && (
           <div className="space-y-8">
             <h3 className="font-title text-xl font-bold text-gray-950 pb-2 border-b border-brand-beige">
               {isBoarding ? 'Kabul Koşulları ve Acil Durum Bilgileri' : 'Evcil Hayvan Konaklama Politikası'}
@@ -955,7 +878,7 @@ export default function DetailView({
               <strong>Şikayet Değerlendirme Politikası:</strong> Kullanıcıların ilettiği şikayetler editörlerimizce otel yönetimi nezdinde incelenir. Kanıtlanmış ve doğrulanmış her şikayet kaydı platformda listelenir ve tesisin <strong>Pati Güven Endeksini (Güven Puanı) 0.5 puan düşürür</strong>.
             </div>
 
-            {approvedComplaints.length === 0 ? (
+            {complaintPage.loading || complaintPage.error ? <CatalogPagination page={complaintPage} /> : approvedComplaints.length === 0 ? (
               <div className="text-center py-10 bg-slate-50 border border-dashed rounded-2xl text-gray-500 text-sm space-y-2">
                 <span className="text-3xl block">🛡️</span>
                 <p className="font-semibold text-gray-800">Doğrulanmış Şikayet Bulunmamaktadır</p>
@@ -982,6 +905,34 @@ export default function DetailView({
           </div>
         )}
       </div>
+
+      {activeTab === 'complaints' && <CatalogPagination page={complaintPage} />}
+
+      <section className="mt-10 border-t border-brand-beige pt-6 space-y-5" aria-label="Misafir yorumları">
+        <h2 className="font-title text-xl font-bold">Misafir Yorumları</h2>
+        {reviewPage.loading || reviewPage.error ? null : reviews.length ? reviews.map(review => (
+          <article key={review.id} className="border-b border-brand-beige pb-4">
+            <p className="font-semibold">{review.author} · {review.rating}/10</p>
+            <p className="text-xs text-gray-500">{review.date}</p>
+            <p className="mt-2 whitespace-pre-wrap">{review.text}</p>
+          </article>
+        )) : <p>Henüz onaylanmış yorum bulunmuyor.</p>}
+        <CatalogPagination page={reviewPage} />
+        {reviewSubmitted ? <p role="status">Yorumunuz alındı. Editör onayından sonra yayınlanacaktır.</p> : (
+          <form onSubmit={handleSubmitReview} className="space-y-3 max-w-xl">
+            <label className="block">Adınız
+              <input required maxLength={120} value={reviewAuthor} onChange={event => setReviewAuthor(event.target.value)} className="block w-full border rounded p-2" />
+            </label>
+            <label className="block">Puan (1–10)
+              <input required type="number" min={1} max={10} step={1} value={reviewRating} onChange={event => setReviewRating(event.target.value)} className="block w-24 border rounded p-2" />
+            </label>
+            <label htmlFor="review-text" className="block">Yorumunuz</label>
+            <textarea id="review-text" required maxLength={2000} rows={4} value={reviewText} onChange={event => setReviewText(event.target.value)} className="block w-full border rounded p-2" />
+            {submissionError && <p role="alert">{submissionError}</p>}
+            <button disabled={submitting} type="submit" className="bg-brand-navy text-white rounded px-5 py-2 disabled:opacity-50">{submitting ? 'Gönderiliyor...' : 'Yorumu Gönder'}</button>
+          </form>
+        )}
+      </section>
 
       {/* Horizontal Banner ad spacer */}
       <AdBanner type="banner" className="mt-8" />
@@ -1021,10 +972,11 @@ export default function DetailView({
                   <p className="text-3xs text-gray-500 mt-0.5 line-clamp-1">📍 {v.address}</p>
                 </div>
                 <a
-                  href={v.phone ? `tel:${v.phone.replace(/\s+/g, '')}` : '#'}
+                  href={`/veteriner/${encodeURIComponent(v.id)}`}
+                  onClick={event => { event.preventDefault(); onViewChange('vet-detail', v.id); }}
                   className="bg-red-600 hover:bg-red-700 text-white text-3xs font-extrabold px-3 py-2 rounded-xl text-center block font-title transition-colors"
                 >
-                  📞 Klinik Ara: {v.phone}
+                  Klinik İletişim Bilgileri
                 </a>
               </div>
             ))}
@@ -1033,7 +985,7 @@ export default function DetailView({
       )}
 
       {/* Interlinked Travel Guides box */}
-      {!isBoarding && guides && guides.length > 0 && (
+      {!isBoarding && (
         <div className="mt-12 bg-brand-navy-light border-2 border-brand-navy/15 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="text-left max-w-xl">
             <span className="bg-brand-navy text-white text-3xs font-bold uppercase px-3 py-1 rounded-full tracking-wider">İlgili Rehber</span>
@@ -1072,6 +1024,7 @@ export default function DetailView({
               </div>
             ) : (
               <form onSubmit={handleSubmitFeedback} className="space-y-4">
+                {submissionError && <p role="alert">{submissionError}</p>}
                 <div className="flex items-center gap-2 border-b border-brand-beige pb-3 mb-2">
                   <span className="text-xl">🔔</span>
                   <h3 className="font-title font-bold text-lg text-gray-900">Bilgi Düzeltme Bildirimi</h3>
@@ -1085,6 +1038,7 @@ export default function DetailView({
                   <label className="text-2xs font-bold text-gray-500 uppercase tracking-wider block mb-1">Düzeltme Notu</label>
                   <textarea
                     rows="4"
+                    maxLength={2000}
                     required
                     placeholder="Örn: Evcil hayvan konaklama ücreti artık gecelik 300 TL olmuştur."
                     value={feedbackText}
@@ -1103,6 +1057,7 @@ export default function DetailView({
                   </button>
                   <button
                     type="submit"
+                    disabled={submitting}
                     className="bg-brand-navy hover:bg-brand-navy-hover text-white px-6 py-2 rounded-full text-xs font-bold border border-brand-navy/10"
                   >
                     Editöre Gönder
@@ -1135,6 +1090,7 @@ export default function DetailView({
               </div>
             ) : (
               <form onSubmit={handleSubmitComplaint} className="space-y-4">
+                {submissionError && <p role="alert">{submissionError}</p>}
                 <div className="flex items-center gap-2 border-b border-brand-beige pb-3 mb-2 text-brand-orange-hover">
                   <span className="text-xl">⚠️</span>
                   <h3 className="font-title font-bold text-lg text-gray-900">Olumsuz Deneyim / Şikayet Bildir</h3>
@@ -1149,6 +1105,7 @@ export default function DetailView({
                   <input
                     type="text"
                     required
+                    maxLength={120}
                     placeholder="Örn: Ahmet Y."
                     value={complaintAuthor}
                     onChange={(e) => setComplaintAuthor(e.target.value)}
@@ -1160,6 +1117,7 @@ export default function DetailView({
                   <label className="text-2xs font-bold text-gray-500 uppercase tracking-wider block mb-1">Şikayet Detayı</label>
                   <textarea
                     rows="4"
+                    maxLength={2000}
                     required
                     placeholder="Yaşadığınız olumsuz deneyimi detaylıca tarif ediniz..."
                     value={complaintText}
@@ -1178,6 +1136,7 @@ export default function DetailView({
                   </button>
                   <button
                     type="submit"
+                    disabled={submitting}
                     className="bg-brand-navy hover:bg-brand-navy-hover text-white px-6 py-2 rounded-full text-xs font-bold border border-brand-navy/10"
                   >
                     Şikayeti İlet

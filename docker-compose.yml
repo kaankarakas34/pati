@@ -6,10 +6,10 @@ services:
     container_name: pati_db
     environment:
       POSTGRES_USER: pati_user
-      POSTGRES_PASSWORD: pati_password
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in your local .env}
       POSTGRES_DB: pati_db
     ports:
-      - "5436:5432"
+      - "127.0.0.1:5436:5432"
     volumes:
       - pati_db_data:/var/lib/postgresql/data
     restart: always

@@ -73,6 +73,7 @@ export function createCandidate({
 
   return {
     id,
+    source: { provider: source, externalId: String(id).startsWith(`${source}-`) ? String(id).slice(source.length + 1) : String(id) },
     name,
     city: city || 'Belirtilmedi',
     district: district || 'Belirtilmedi',
@@ -155,35 +156,61 @@ export function mergeCandidate(existing, candidate) {
 export async function createCandidateSaver() {
   if (!process.env.ADMIN_TOKEN) throw new Error('.env dosyasında ADMIN_TOKEN bulunmalı.');
 
-  const response = await fetch(`${API_URL}/api/hotels`);
-  if (!response.ok) throw new Error(`Mevcut oteller alınamadı: ${response.status}`);
-  const existingHotels = await response.json();
+  const apiUrl = process.env.API_URL || API_URL;
+  const headers = { 'Content-Type': 'application/json', 'x-admin-token': process.env.ADMIN_TOKEN };
   let operationCount = 0;
 
   return {
     async save(candidate) {
-    const duplicate = findDuplicate(existingHotels, candidate);
-    const hotel = mergeCandidate(duplicate, candidate);
-    const saveResponse = await fetch(`${API_URL}/api/hotels`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-admin-token': process.env.ADMIN_TOKEN },
-      body: JSON.stringify(hotel)
-    });
-    const result = await saveResponse.json();
-    if (!saveResponse.ok) throw new Error(result.error || `${hotel.name} kaydedilemedi.`);
+      // Older callers carry source identity in the candidate ID.
+      const legacySource = /^(enuygun|otelz)-(.+)$/.exec(candidate.id || '');
+      const source = (candidate.source && typeof candidate.source === 'object')
+        ? candidate.source
+        : (legacySource && { provider: legacySource[1], externalId: legacySource[2] });
+      if (typeof source?.provider !== 'string' || !source.provider.trim() || source.provider.length > 80
+        || typeof source?.externalId !== 'string' || !source.externalId.trim() || source.externalId.length > 255) {
+        throw new Error('Gecerli kaynak ve harici kayit kimligi gerekli.');
+      }
+      const identity = { provider: source.provider.trim(), externalId: source.externalId.trim() };
+      const lookupResponse = await fetch(`${apiUrl}/api/source/${encodeURIComponent(identity.provider)}/${encodeURIComponent(identity.externalId)}`, { headers });
+      let existing = null;
+      if (lookupResponse.status !== 404) {
+        existing = await lookupResponse.json();
+        if (!lookupResponse.ok) throw new Error(existing?.error || `Kaynak sorgulanamadi: ${lookupResponse.status}`);
+        if (!existing?.id || !Number.isInteger(existing.version) || existing.version < 1) {
+          throw new Error('Kaynak sorgusu gecerli kayit kimligi ve surum dondurmedi.');
+        }
+      }
 
-    const index = duplicate ? existingHotels.indexOf(duplicate) : -1;
-    if (index >= 0) existingHotels[index] = hotel;
-    else existingHotels.push(hotel);
-    operationCount += 1;
-    console.log(`[kayıt] ${hotel.name}${duplicate ? ' (kaynaklar birleştirildi)' : ''}`);
-    return hotel;
+      const hotel = { ...mergeCandidate(existing, candidate) };
+      delete hotel.id;
+      delete hotel.version;
+      delete hotel.source;
+      if (existing) {
+        hotel.id = existing.id;
+        hotel.version = existing.version;
+      } else {
+        hotel.source = identity;
+      }
+      const saveResponse = await fetch(`${apiUrl}/api/hotels`, {
+        method: 'POST', headers, body: JSON.stringify(hotel)
+      });
+      const result = await saveResponse.json();
+      if (!saveResponse.ok || result?.success !== true) throw new Error(result?.error || `${hotel.name} kaydedilemedi (${saveResponse.status}).`);
+      if (!result.data?.id || !Number.isInteger(result.data.version) || result.data.version < 1) {
+        throw new Error('Kaydetme yaniti gecerli kayit kimligi ve surum dondurmedi.');
+      }
+
+      operationCount += 1;
+      console.log(`[kayıt] ${result.data.name}${existing ? ' (kaynaklar birleştirildi)' : ''}`);
+      return result.data;
     },
     get operationCount() {
       return operationCount;
     },
     get hotelCount() {
-      return existingHotels.length;
+      // The paginated API does not expose a catalog total.
+      return null;
     }
   };
 }

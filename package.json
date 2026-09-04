@@ -1,10 +1,20 @@
 {
   "name": "patiyleseyahat",
   "version": "1.0.0",
+  "private": true,
+  "files": ["server.js", "db.js", "lib/", "api/", "src/data/", "dist/", "public/", "index.html"],
   "description": "Türkiye'nin ilk evcil hayvan dostu konaklama ve seyahat rehberi platformu",
   "main": "server.js",
   "type": "module",
   "scripts": {
+    "db:migrate": "node scripts/apply-migrations.js",
+    "db:preflight": "node scripts/database-preflight.js",
+    "db:maintenance": "node scripts/database-maintenance.js",
+    "db:explain": "node scripts/explain-database.js",
+    "sitemap:build": "node scripts/build-sitemaps.js",
+    "dev:fixture": "node scripts/local-database-preview.js",
+    "test:database": "node --test tests/database.test.js",
+    "test:security": "node --test tests/*.test.js",
     "server": "node server.js",
     "client": "vite",
     "dev": "concurrently npm:server npm:client",
@@ -18,7 +28,10 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.4",
-    "axios": "^1.7.2",
+    "axios": "^1.19.0",
+    "dompurify": "^3.4.14",
+    "ipaddr.js": "^2.5.0",
+    "pg-format": "^1.0.4",
     "basic-ftp": "^6.2.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -30,7 +43,12 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
+  "overrides": {
+    "qs": "^6.16.0"
+  },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.8",
+    "jsdom": "^26.1.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
@@ -38,6 +56,6 @@
     "concurrently": "^8.2.2",
     "postcss": "^8.5.28",
     "tailwindcss": "^3.4.19",
-    "vite": "^5.3.1"
+    "vite": "^6.4.3"
   }
 }

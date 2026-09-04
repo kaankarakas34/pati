@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Accommodations from './pages/Accommodations';
 import Boardings from './pages/Boardings';
 import DetailView from './pages/DetailView';
+import DetailLoader from './components/DetailLoader';
 import TravelGuides from './pages/TravelGuides';
 import GuideDetail from './pages/GuideDetail';
 import Methodology from './pages/Methodology';
@@ -16,38 +17,7 @@ import Taxis from './pages/Taxis';
 import Vets from './pages/Vets';
 import Experiences from './pages/Experiences';
 import AdApplication from './pages/AdApplication';
-import {
-  initialHotels,
-  initialBoardings,
-  initialGuides,
-  initialCorrections,
-  initialComplaints,
-  initialVets,
-  initialTaxis,
-  initialExperiences,
-  initialAds
-} from './data/mockData';
-import { findHotelBySlugs, getHotelPath, slugify } from '../lib/seo-slugs';
-
-async function fetchTable(path, fallback = []) {
-  try {
-    const response = await fetch(path);
-    if (!response.ok) {
-      return fallback;
-    }
-    const contentType = response.headers.get('content-type') || '';
-    if (!contentType.includes('application/json')) {
-      return fallback;
-    }
-    const data = await response.json();
-    if (!Array.isArray(data)) {
-      return fallback;
-    }
-    return data;
-  } catch {
-    return fallback;
-  }
-}
+import { getHotelPath } from '../lib/seo-slugs';
 
 const CATEGORY_SEO = {
   accommodations: {
@@ -93,300 +63,26 @@ const CATEGORY_SEO = {
 };
 
 function App() {
-  const getInitialData = (key, fallback) => {
-    if (typeof window !== 'undefined' && window.__INITIAL_DATA__ && Array.isArray(window.__INITIAL_DATA__[key]) && window.__INITIAL_DATA__[key].length > 0) {
-      return window.__INITIAL_DATA__[key];
-    }
-    return fallback;
-  };
+  const [detailRecord, setDetailRecord] = useState(null);
+  const [hotelSlugs, setHotelSlugs] = useState(null);
 
-  // 1. Initialize DB states with window.__INITIAL_DATA__ or instant fallbacks
-  const [hotels, setHotels] = useState(() => getInitialData('hotels', initialHotels));
-  const [boardings, setBoardings] = useState(() => getInitialData('boardings', initialBoardings));
-  const [guides, setGuides] = useState(() => getInitialData('guides', initialGuides));
-  const [corrections, setCorrections] = useState(initialCorrections);
-  const [complaints, setComplaints] = useState(initialComplaints);
-  const [taxis, setTaxis] = useState(() => getInitialData('taxis', initialTaxis));
-  const [vets, setVets] = useState(() => getInitialData('vets', initialVets));
-  const [experiences, setExperiences] = useState(() => getInitialData('experiences', initialExperiences));
-  const [ads, setAds] = useState(() => getInitialData('ads', initialAds));
-  const [loading, setLoading] = useState(false);
-
-  // 2. Routing state
-  const [currentView, setCurrentView] = useState('home');
+  // Routing state
+  const [currentView, setCurrentView] = useState('loading');
   const [selectedItemId, setSelectedItemId] = useState(null);
 
-  // Load database on mount (background sync)
-  useEffect(() => {
-    async function loadData() {
-      try {
-        const [hotelsRes, boardingsRes, guidesRes, correctionsRes, complaintsRes, taxisRes, vetsRes, experiencesRes, adsRes] = await Promise.allSettled([
-          fetchTable('/api/hotels', initialHotels),
-          fetchTable('/api/boardings', initialBoardings),
-          fetchTable('/api/guides', initialGuides),
-          fetchTable('/api/corrections', initialCorrections),
-          fetchTable('/api/complaints', initialComplaints),
-          fetchTable('/api/taxis', initialTaxis),
-          fetchTable('/api/vets', initialVets),
-          fetchTable('/api/experiences', initialExperiences),
-          fetchTable('/api/ads', initialAds)
-        ]);
-
-        if (hotelsRes.status === 'fulfilled' && Array.isArray(hotelsRes.value) && hotelsRes.value.length >= initialHotels.length) setHotels(hotelsRes.value);
-        if (boardingsRes.status === 'fulfilled' && Array.isArray(boardingsRes.value) && boardingsRes.value.length > 0) setBoardings(boardingsRes.value);
-        if (guidesRes.status === 'fulfilled' && Array.isArray(guidesRes.value) && guidesRes.value.length > 0) setGuides(guidesRes.value);
-        if (correctionsRes.status === 'fulfilled' && Array.isArray(correctionsRes.value)) setCorrections(correctionsRes.value);
-        if (complaintsRes.status === 'fulfilled' && Array.isArray(complaintsRes.value)) setComplaints(complaintsRes.value);
-        if (taxisRes.status === 'fulfilled' && Array.isArray(taxisRes.value) && taxisRes.value.length > 0) setTaxis(taxisRes.value);
-        if (vetsRes.status === 'fulfilled' && Array.isArray(vetsRes.value) && vetsRes.value.length >= initialVets.length) setVets(vetsRes.value);
-        if (experiencesRes.status === 'fulfilled' && Array.isArray(experiencesRes.value) && experiencesRes.value.length > 0) setExperiences(experiencesRes.value);
-        if (adsRes.status === 'fulfilled' && Array.isArray(adsRes.value) && adsRes.value.length > 0) setAds(adsRes.value);
-      } catch (err) {
-        console.warn("Background data sync notice:", err);
-      }
-    }
-
-    loadData();
-  }, []);
-
-  // 3. Search parameters passed between home search and accommodations list
+  // Search parameters passed between home search and accommodations list
   const [searchFilters, setSearchFilters] = useState({
     destination: '',
+    citySlug: null,
+    districtSlug: null,
     petType: 'all',
     accType: 'all',
     suitability: 'all',
     weightLimit: 'all',
     extraFeeOnly: false,
     features: [],
-    customFilter: null,
     filterTitle: null
   });
-
-  // DB Sync Proxy Wrapper Functions (syncs state updates with Postgres DB via API)
-  const updateHotelsStateAndDb = async (newHotels) => {
-    const adminToken = sessionStorage.getItem('admin_token');
-    try {
-      if (newHotels.length < hotels.length) {
-        // Deletion
-        const deleted = hotels.find(h => !newHotels.some(nh => nh.id === h.id));
-        if (deleted) {
-          await fetch(`/api/hotels/${deleted.id}`, { method: 'DELETE', headers: { 'x-admin-token': adminToken || '' } });
-        }
-      } else {
-        // Insertion or modification
-        const altered = newHotels.find(nh => {
-          const match = hotels.find(h => h.id === nh.id);
-          return !match || JSON.stringify(match) !== JSON.stringify(nh);
-        });
-        if (altered) {
-          await fetch('/api/hotels', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken || '' },
-            body: JSON.stringify(altered)
-          });
-        }
-      }
-    } catch (err) {
-      console.error("Failed to sync hotel change to Postgres:", err);
-    }
-    setHotels(newHotels);
-  };
-
-  const updateBoardingsStateAndDb = async (newBoardings) => {
-    const adminToken = sessionStorage.getItem('admin_token');
-    try {
-      if (newBoardings.length < boardings.length) {
-        // Deletion
-        const deleted = boardings.find(b => !newBoardings.some(nb => nb.id === b.id));
-        if (deleted) {
-          await fetch(`/api/boardings/${deleted.id}`, { method: 'DELETE', headers: { 'x-admin-token': adminToken || '' } });
-        }
-      } else {
-        // Insertion or modification
-        const altered = newBoardings.find(nb => {
-          const match = boardings.find(b => b.id === nb.id);
-          return !match || JSON.stringify(match) !== JSON.stringify(nb);
-        });
-        if (altered) {
-          await fetch('/api/boardings', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken || '' },
-            body: JSON.stringify(altered)
-          });
-        }
-      }
-    } catch (err) {
-      console.error("Failed to sync boarding change to Postgres:", err);
-    }
-    setBoardings(newBoardings);
-  };
-
-  const updateGuidesStateAndDb = async (newGuides) => {
-    const adminToken = sessionStorage.getItem('admin_token');
-    try {
-      if (newGuides.length < guides.length) {
-        // Deletion
-        const deleted = guides.find(g => !newGuides.some(ng => ng.id === g.id));
-        if (deleted) {
-          await fetch(`/api/guides/${deleted.id}`, { method: 'DELETE', headers: { 'x-admin-token': adminToken || '' } });
-        }
-      } else {
-        // Insertion or modification
-        const altered = newGuides.find(ng => {
-          const match = guides.find(g => g.id === ng.id);
-          return !match || JSON.stringify(match) !== JSON.stringify(ng);
-        });
-        if (altered) {
-          await fetch('/api/guides', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken || '' },
-            body: JSON.stringify(altered)
-          });
-        }
-      }
-    } catch (err) {
-      console.error("Failed to sync guide change to Postgres:", err);
-    }
-    setGuides(newGuides);
-  };
-
-  const updateCorrectionsStateAndDb = async (newCorrections) => {
-    try {
-      const altered = newCorrections.find(nc => {
-        const match = corrections.find(c => c.id === nc.id);
-        return !match || JSON.stringify(match) !== JSON.stringify(nc);
-      });
-      if (altered) {
-        await fetch('/api/corrections', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(altered)
-        });
-      }
-    } catch (err) {
-      console.error("Failed to sync correction to Postgres:", err);
-    }
-    setCorrections(newCorrections);
-  };
-
-  const updateComplaintsStateAndDb = async (newComplaints) => {
-    try {
-      const altered = newComplaints.find(nc => {
-        const match = complaints.find(c => c.id === nc.id);
-        return !match || JSON.stringify(match) !== JSON.stringify(nc);
-      });
-      if (altered) {
-        await fetch('/api/complaints', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(altered)
-        });
-      }
-    } catch (err) {
-      console.error("Failed to sync complaint status to Postgres:", err);
-    }
-    setComplaints(newComplaints);
-  };
-
-  const updateTaxisStateAndDb = async (newTaxis) => {
-    const adminToken = sessionStorage.getItem('admin_token');
-    try {
-      if (newTaxis.length < taxis.length) {
-        const deleted = taxis.find(t => !newTaxis.some(nt => nt.id === t.id));
-        if (deleted) await fetch(`/api/taxis/${deleted.id}`, { method: 'DELETE', headers: { 'x-admin-token': adminToken || '' } });
-      } else {
-        const altered = newTaxis.find(nt => {
-          const match = taxis.find(t => t.id === nt.id);
-          return !match || JSON.stringify(match) !== JSON.stringify(nt);
-        });
-        if (altered) {
-          await fetch('/api/taxis', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken || '' },
-            body: JSON.stringify(altered)
-          });
-        }
-      }
-    } catch (err) {
-      console.error("Failed to sync taxi to Postgres:", err);
-    }
-    setTaxis(newTaxis);
-  };
-
-  const updateVetsStateAndDb = async (newVets) => {
-    const adminToken = sessionStorage.getItem('admin_token');
-    try {
-      if (newVets.length < vets.length) {
-        const deleted = vets.find(v => !newVets.some(nv => nv.id === v.id));
-        if (deleted) await fetch(`/api/vets/${deleted.id}`, { method: 'DELETE', headers: { 'x-admin-token': adminToken || '' } });
-      } else {
-        const altered = newVets.find(nv => {
-          const match = vets.find(v => v.id === nv.id);
-          return !match || JSON.stringify(match) !== JSON.stringify(nv);
-        });
-        if (altered) {
-          await fetch('/api/vets', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken || '' },
-            body: JSON.stringify(altered)
-          });
-        }
-      }
-    } catch (err) {
-      console.error("Failed to sync vet to Postgres:", err);
-    }
-    setVets(newVets);
-  };
-
-  const updateExperiencesStateAndDb = async (newExperiences) => {
-    const adminToken = sessionStorage.getItem('admin_token');
-    try {
-      if (newExperiences.length < experiences.length) {
-        const deleted = experiences.find(e => !newExperiences.some(ne => ne.id === e.id));
-        if (deleted) await fetch(`/api/experiences/${deleted.id}`, { method: 'DELETE', headers: { 'x-admin-token': adminToken || '' } });
-      } else {
-        const altered = newExperiences.find(ne => {
-          const match = experiences.find(e => e.id === ne.id);
-          return !match || JSON.stringify(match) !== JSON.stringify(ne);
-        });
-        if (altered) {
-          await fetch('/api/experiences', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken || '' },
-            body: JSON.stringify(altered)
-          });
-        }
-      }
-    } catch (err) {
-      console.error("Failed to sync experience to Postgres:", err);
-    }
-    setExperiences(newExperiences);
-  };
-
-  const updateAdsStateAndDb = async (newAds) => {
-    const adminToken = sessionStorage.getItem('admin_token');
-    try {
-      if (newAds.length < ads.length) {
-        const deleted = ads.find(ad => !newAds.some(nad => nad.id === ad.id));
-        if (deleted) await fetch(`/api/ads/${deleted.id}`, { method: 'DELETE', headers: { 'x-admin-token': adminToken || '' } });
-      } else {
-        const altered = newAds.find(nad => {
-          const match = ads.find(ad => ad.id === nad.id);
-          return !match || JSON.stringify(match) !== JSON.stringify(nad);
-        });
-        if (altered) {
-          await fetch('/api/ads', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken || '' },
-            body: JSON.stringify(altered)
-          });
-        }
-      }
-    } catch (err) {
-      console.error("Failed to sync ad to Postgres:", err);
-    }
-    setAds(newAds);
-  };
 
   // Scroll to top on view changes
   useEffect(() => {
@@ -395,16 +91,16 @@ function App() {
 
   useEffect(() => {
     const hotel = currentView === 'accommodation-detail'
-      ? hotels.find(item => item.id === selectedItemId)
+      ? detailRecord
       : null;
     const vet = currentView === 'vet-detail'
-      ? vets.find(item => item.id === selectedItemId)
+      ? detailRecord
       : null;
     const boarding = currentView === 'boarding-detail'
-      ? boardings.find(item => item.id === selectedItemId)
+      ? detailRecord
       : null;
     const taxi = currentView === 'taxi-detail'
-      ? taxis.find(item => item.id === selectedItemId)
+      ? detailRecord
       : null;
 
     const cityLanding = currentView === 'accommodations' && searchFilters.cityLanding
@@ -505,12 +201,14 @@ function App() {
       document.head.appendChild(canonicalLink);
     }
     canonicalLink.setAttribute('href', canonicalUrl);
-  }, [currentView, selectedItemId, hotels, vets, boardings, taxis, searchFilters]);
+  }, [currentView, selectedItemId, detailRecord, searchFilters]);
 
   // URL Path Router (supports /otel/il/ilce/otel-ismi and legacy hotel IDs)
   useEffect(() => {
     const handleLocationRouting = () => {
       const path = window.location.pathname;
+      setHotelSlugs(null);
+      setDetailRecord(null);
       if (path === '/' || path === '/home') {
         setCurrentView('home');
       } else if (path === '/yonetici') {
@@ -518,7 +216,7 @@ function App() {
       } else if (path === '/sihirbaz') {
         setCurrentView('wizard');
       } else if (path === '/evcil-hayvan-dostu-oteller' || path === '/accommodations') {
-        setSearchFilters(current => ({ ...current, destination: '', cityLanding: false, citySlug: null }));
+        setSearchFilters(current => ({ ...current, destination: '', cityLanding: false, citySlug: null, districtSlug: null }));
         setCurrentView('accommodations');
         if (path !== CATEGORY_SEO.accommodations.path) window.history.replaceState(null, '', CATEGORY_SEO.accommodations.path);
       } else if (path === '/kedi-kopek-otelleri' || path === '/boardings') {
@@ -527,7 +225,7 @@ function App() {
       } else if (path === '/evcil-hayvan-seyahat-rehberi' || path === '/guides') {
         setCurrentView('guides');
         if (path !== CATEGORY_SEO.guides.path) window.history.replaceState(null, '', CATEGORY_SEO.guides.path);
-      } else if (path === '/evcil-hayvanla-gezilecek-yerler' || path === '/gezilecek-yerler') {
+      } else if (path === '/evcil-hayvanla-gezilecek-yerler' || path === '/gezilecek-yerler' || path === '/experiences') {
         setCurrentView('experiences');
         if (path !== CATEGORY_SEO.experiences.path) window.history.replaceState(null, '', CATEGORY_SEO.experiences.path);
       } else if (
@@ -549,6 +247,7 @@ function App() {
         const segments = path.split('/').filter(Boolean);
         const prefix = segments[0];
         const citySlug = segments[1];
+        const districtSlug = segments[2] || null;
 
         let petType = 'all';
         let accType = 'all';
@@ -578,73 +277,65 @@ function App() {
           filterTitle = 'Evcil Hayvan Dostu Tatil Köyleri';
         }
 
-        const cityName = hotels.find(hotel => slugify(hotel.city) === citySlug)?.city
-          || citySlug.split('-').map(part => part.charAt(0).toLocaleUpperCase('tr-TR') + part.slice(1)).join(' ');
+        const cityName = citySlug.split('-').map(part => part.charAt(0).toLocaleUpperCase('tr-TR') + part.slice(1)).join(' ');
 
         setSearchFilters({
           destination: cityName,
           citySlug,
+          districtSlug,
           petType,
           accType,
           suitability: 'all',
           weightLimit: 'all',
           extraFeeOnly: false,
           features: [],
-          customFilter: null,
           filterTitle: filterTitle ? `${cityName} ${filterTitle}` : null,
           cityLanding: true
         });
         setCurrentView('accommodations');
       } else if (path === '/her-sey-dahil-evcil-hayvan-dostu-oteller') {
-        setSearchFilters(current => ({ ...current, destination: '', petType: 'all', accType: 'all', cityLanding: false, filterTitle: 'Her Şey Dahil Evcil Hayvan Kabul Eden Oteller' }));
+        setSearchFilters(current => ({ ...current, destination: '', petType: 'all', accType: 'all', cityLanding: false, citySlug: null, districtSlug: null, filterTitle: 'Her Şey Dahil Evcil Hayvan Kabul Eden Oteller' }));
         setCurrentView('accommodations');
       } else if (path === '/buyuk-kopek-kabul-eden-oteller') {
-        setSearchFilters(current => ({ ...current, destination: '', petType: 'dog', accType: 'all', cityLanding: false, filterTitle: 'Büyük Köpek Kabul Eden Oteller' }));
+        setSearchFilters(current => ({ ...current, destination: '', petType: 'dog', accType: 'all', cityLanding: false, citySlug: null, districtSlug: null, filterTitle: 'Büyük Köpek Kabul Eden Oteller' }));
         setCurrentView('accommodations');
       } else if (path === '/ucretsiz-evcil-hayvan-kabul-eden-oteller') {
-        setSearchFilters(current => ({ ...current, destination: '', extraFeeOnly: true, cityLanding: false, filterTitle: 'Ek Ücret Almayan Evcil Hayvan Dostu Oteller' }));
+        setSearchFilters(current => ({ ...current, destination: '', extraFeeOnly: true, cityLanding: false, citySlug: null, districtSlug: null, filterTitle: 'Ek Ücret Almayan Evcil Hayvan Dostu Oteller' }));
         setCurrentView('accommodations');
       } else if (path === '/bahceli-evcil-hayvan-dostu-oteller') {
-        setSearchFilters(current => ({ ...current, destination: '', features: ['Bahçesi bulunan'], cityLanding: false, filterTitle: 'Bahçeli Evcil Hayvan Dostu Oteller' }));
+        setSearchFilters(current => ({ ...current, destination: '', features: ['Bahçesi bulunan'], cityLanding: false, citySlug: null, districtSlug: null, filterTitle: 'Bahçeli Evcil Hayvan Dostu Oteller' }));
         setCurrentView('accommodations');
       } else if (path === '/evcil-hayvan-dostu-bungalovlar') {
-        setSearchFilters(current => ({ ...current, destination: '', accType: 'Bungalov', cityLanding: false, filterTitle: 'Evcil Hayvan Dostu Bungalovlar' }));
+        setSearchFilters(current => ({ ...current, destination: '', accType: 'Bungalov', cityLanding: false, citySlug: null, districtSlug: null, filterTitle: 'Evcil Hayvan Dostu Bungalovlar' }));
         setCurrentView('accommodations');
       } else if (path === '/kopek-kabul-eden-bungalovlar') {
-        setSearchFilters(current => ({ ...current, destination: '', petType: 'dog', accType: 'Bungalov', cityLanding: false, filterTitle: 'Köpek Kabul Eden Bungalovlar' }));
+        setSearchFilters(current => ({ ...current, destination: '', petType: 'dog', accType: 'Bungalov', cityLanding: false, citySlug: null, districtSlug: null, filterTitle: 'Köpek Kabul Eden Bungalovlar' }));
         setCurrentView('accommodations');
       } else if (path === '/evcil-hayvan-dostu-villalar') {
-        setSearchFilters(current => ({ ...current, destination: '', accType: 'Villa', cityLanding: false, filterTitle: 'Evcil Hayvan Dostu Villalar' }));
+        setSearchFilters(current => ({ ...current, destination: '', accType: 'Villa', cityLanding: false, citySlug: null, districtSlug: null, filterTitle: 'Evcil Hayvan Dostu Villalar' }));
         setCurrentView('accommodations');
       } else if (path === '/evcil-hayvan-dostu-butik-oteller') {
-        setSearchFilters(current => ({ ...current, destination: '', accType: 'Butik Otel', cityLanding: false, filterTitle: 'Evcil Hayvan Dostu Butik Oteller' }));
+        setSearchFilters(current => ({ ...current, destination: '', accType: 'Butik Otel', cityLanding: false, citySlug: null, districtSlug: null, filterTitle: 'Evcil Hayvan Dostu Butik Oteller' }));
         setCurrentView('accommodations');
       } else if (path === '/evcil-hayvan-dostu-tatil-koyleri') {
-        setSearchFilters(current => ({ ...current, destination: '', accType: 'Tatil Köyü', cityLanding: false, filterTitle: 'Evcil Hayvan Dostu Tatil Köyleri' }));
+        setSearchFilters(current => ({ ...current, destination: '', accType: 'Tatil Köyü', cityLanding: false, citySlug: null, districtSlug: null, filterTitle: 'Evcil Hayvan Dostu Tatil Köyleri' }));
         setCurrentView('accommodations');
       } else if (path === '/kedi-kabul-eden-oteller') {
-        setSearchFilters(current => ({ ...current, destination: '', petType: 'cat', cityLanding: false, filterTitle: 'Kedi Kabul Eden Oteller' }));
+        setSearchFilters(current => ({ ...current, destination: '', petType: 'cat', cityLanding: false, citySlug: null, districtSlug: null, filterTitle: 'Kedi Kabul Eden Oteller' }));
         setCurrentView('accommodations');
       } else if (path === '/kopek-kabul-eden-oteller') {
-        setSearchFilters(current => ({ ...current, destination: '', petType: 'dog', cityLanding: false, filterTitle: 'Köpek Kabul Eden Oteller' }));
+        setSearchFilters(current => ({ ...current, destination: '', petType: 'dog', cityLanding: false, citySlug: null, districtSlug: null, filterTitle: 'Köpek Kabul Eden Oteller' }));
         setCurrentView('accommodations');
       } else if (path === '/otel-zincirleri') {
-        setSearchFilters(current => ({ ...current, destination: '', cityLanding: false, filterTitle: 'Otel Zincirleri ve Pet Politikaları' }));
+        setSearchFilters(current => ({ ...current, destination: '', cityLanding: false, citySlug: null, districtSlug: null, filterTitle: 'Otel Zincirleri ve Pet Politikaları' }));
         setCurrentView('accommodations');
       } else if (path.startsWith('/otel/')) {
         const segments = path.split('/').filter(Boolean).map(segment => decodeURIComponent(segment));
-        const hotel = segments.length >= 4
-          ? findHotelBySlugs(hotels, segments[1], segments[2], segments[3])
-          : hotels.find(item => item.id === segments[1]);
-        const id = hotel?.id || segments.at(-1);
+        setHotelSlugs(segments.length === 4
+          ? { citySlug: segments[1], districtSlug: segments[2], nameSlug: segments[3] }
+          : null);
         setCurrentView('accommodation-detail');
-        setSelectedItemId(id);
-        if (hotel) {
-          const canonicalPath = getHotelPath(hotel);
-          if (path !== canonicalPath) {
-            window.history.replaceState(null, '', canonicalPath);
-          }
-        }
+        setSelectedItemId(segments.length === 2 ? segments[1] : null);
       } else if (path.startsWith('/bakim/')) {
         const id = path.split('/bakim/')[1];
         setCurrentView('boarding-detail');
@@ -681,15 +372,16 @@ function App() {
       window.removeEventListener('popstate', handleLocationRouting);
       window.removeEventListener('hashchange', handleLocationRouting);
     };
-  }, [hotels]);
+  }, []);
 
   // Navigation controller helper
   const handleViewChange = (view, id = null) => {
     setCurrentView(view);
+    setDetailRecord(null);
+    setHotelSlugs(null);
     if (id) {
       setSelectedItemId(id);
-      const hotel = view === 'accommodation-detail' ? hotels.find(item => item.id === id) : null;
-      const cleanPath = view === 'accommodation-detail' ? getHotelPath(hotel)
+      const cleanPath = view === 'accommodation-detail' ? `/otel/${encodeURIComponent(id)}`
                       : view === 'boarding-detail' ? `/bakim/${id}` 
                       : view === 'taxi-detail' ? `/taksi/${id}` 
                       : view === 'vet-detail' ? `/veteriner/${id}` 
@@ -698,8 +390,8 @@ function App() {
       window.history.pushState(null, '', cleanPath);
     } else {
       let cleanPath = view === 'home' ? '/' : CATEGORY_SEO[view]?.path || `/${view}`;
-      if (view === 'accommodations' && searchFilters.cityLanding) {
-        setSearchFilters(current => ({ ...current, destination: '', cityLanding: false, citySlug: null }));
+      if (view === 'accommodations' && currentView === 'accommodations' && searchFilters.cityLanding) {
+        setSearchFilters(current => ({ ...current, destination: '', cityLanding: false, citySlug: null, districtSlug: null }));
       }
       if (view === 'admin') {
         cleanPath = '/yonetici';
@@ -710,51 +402,28 @@ function App() {
     }
   };
 
-  const addCorrection = async (newCorr) => {
-    const finalCorr = {
-      ...newCorr,
-      id: `corr-${Date.now()}`
-    };
-    try {
-      await fetch('/api/corrections', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(finalCorr)
-      });
-      setCorrections([finalCorr, ...corrections]);
-    } catch (err) {
-      console.error("Failed to add correction:", err);
-    }
-  };
+  async function submitFeedback(resource, payload) {
+    const response = await fetch(`/api/${resource}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const result = await response.json();
+    if (!response.ok || result.success !== true) throw new Error(result.error || 'Gonderim basarisiz.');
+    return result.data;
+  }
 
-  const addComplaint = async (newComp) => {
-    const finalComp = {
-      ...newComp,
-      id: `comp-${Date.now()}`
-    };
-    try {
-      await fetch('/api/complaints', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(finalComp)
-      });
-      setComplaints([finalComp, ...complaints]);
-    } catch (err) {
-      console.error("Failed to add complaint:", err);
-    }
-  };
+  const addCorrection = ({ hotelId, hotelName, text }) => submitFeedback('corrections', { hotelId, hotelName, text });
+  const addComplaint = ({ targetId, targetName, author, text }) => submitFeedback('complaints', { targetId, targetName, author, text });
 
   // Render view conditionally based on routing state
   const renderActiveView = () => {
     switch (currentView) {
+      case 'loading':
+        return <p role="status" className="p-12 text-center">Yükleniyor...</p>;
       case 'home':
         return (
           <Home
-            hotels={hotels}
-            boardings={boardings}
-            guides={guides}
-            experiences={experiences}
-            ads={ads}
             onViewChange={handleViewChange}
             setSearchFilters={setSearchFilters}
           />
@@ -763,7 +432,6 @@ function App() {
       case 'accommodations':
         return (
           <Accommodations
-            hotels={hotels}
             searchFilters={searchFilters}
             setSearchFilters={setSearchFilters}
             onViewChange={handleViewChange}
@@ -771,59 +439,37 @@ function App() {
         );
 
       case 'accommodation-detail':
+      case 'boarding-detail':
+      case 'taxi-detail':
+      case 'vet-detail': {
+        const resource = { 'accommodation-detail': 'hotels', 'boarding-detail': 'boardings', 'taxi-detail': 'taxis', 'vet-detail': 'vets' }[currentView];
         return (
-          <DetailView
-            id={selectedItemId}
-            isBoarding={false}
-            hotels={hotels}
-            boardings={boardings}
-            guides={guides}
-            vets={vets}
-            taxis={taxis}
-            complaints={complaints}
-            addComplaint={addComplaint}
-            onViewChange={handleViewChange}
-            addCorrection={addCorrection}
-          />
+          <DetailLoader key={JSON.stringify([resource, selectedItemId, hotelSlugs])} resource={resource} id={selectedItemId} hotelSlugs={hotelSlugs} onLoad={setDetailRecord}>
+            {item => <DetailView key={item.id} item={item}
+              isBoarding={resource === 'boardings'} isTaxi={resource === 'taxis'} isVet={resource === 'vets'}
+              addComplaint={addComplaint} addCorrection={addCorrection} onViewChange={handleViewChange} />}
+          </DetailLoader>
         );
+      }
 
       case 'boardings':
-      case 'boarding-detail':
-        return (
-          <Home
-            hotels={hotels}
-            boardings={boardings}
-            guides={guides}
-            experiences={experiences}
-            ads={ads}
-            onViewChange={handleViewChange}
-            setSearchFilters={setSearchFilters}
-          />
-        );
+        return <Boardings onViewChange={handleViewChange} />;
 
       case 'guides':
         return (
           <TravelGuides
-            guides={guides}
             onViewChange={handleViewChange}
           />
         );
 
       case 'guide-detail':
-        return (
-          <GuideDetail
-            id={selectedItemId}
-            guides={guides}
-            hotels={hotels}
-            onViewChange={handleViewChange}
-          />
-        );
+        return <DetailLoader key={selectedItemId} resource="guides" id={selectedItemId}>
+          {guide => <GuideDetail key={guide.id} guide={guide} onViewChange={handleViewChange} />}
+        </DetailLoader>;
 
       case 'wizard':
         return (
           <Wizard
-            hotels={hotels}
-            boardings={boardings}
             onViewChange={handleViewChange}
           />
         );
@@ -845,94 +491,24 @@ function App() {
         return <AdApplication />;
 
       case 'taxis':
-      case 'taxi-detail':
+        return <Taxis onViewChange={handleViewChange} />;
       case 'experiences':
-        return (
-          <Home
-            hotels={hotels}
-            boardings={boardings}
-            guides={guides}
-            experiences={experiences}
-            ads={ads}
-            onViewChange={handleViewChange}
-            setSearchFilters={setSearchFilters}
-          />
-        );
-
+        return <Experiences />;
       case 'vets':
-        return (
-          <Vets
-            vets={vets}
-            onViewChange={handleViewChange}
-          />
-        );
-
-      case 'vet-detail':
-        return (
-          <DetailView
-            id={selectedItemId}
-            isVet={true}
-            hotels={hotels}
-            boardings={boardings}
-            guides={guides}
-            vets={vets}
-            taxis={taxis}
-            complaints={complaints}
-            addComplaint={addComplaint}
-            onViewChange={handleViewChange}
-            addCorrection={addCorrection}
-          />
-        );
+        return <Vets onViewChange={handleViewChange} />;
 
       case 'admin':
-        return (
-          <AdminPanel
-            hotels={hotels}
-            setHotels={updateHotelsStateAndDb}
-            boardings={boardings}
-            setBoardings={updateBoardingsStateAndDb}
-            guides={guides}
-            setGuides={updateGuidesStateAndDb}
-            corrections={corrections}
-            setCorrections={updateCorrectionsStateAndDb}
-            complaints={complaints}
-            setComplaints={updateComplaintsStateAndDb}
-            taxis={taxis}
-            setTaxis={updateTaxisStateAndDb}
-            vets={vets}
-            setVets={updateVetsStateAndDb}
-            experiences={experiences}
-            setExperiences={updateExperiencesStateAndDb}
-            ads={ads}
-            setAds={updateAdsStateAndDb}
-          />
-        );
+        return <AdminPanel />;
 
       default:
         return (
           <Home
-            hotels={hotels}
-            boardings={boardings}
-            guides={guides}
-            experiences={experiences}
-            ads={ads}
             onViewChange={handleViewChange}
             setSearchFilters={setSearchFilters}
           />
         );
     }
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-brand-cream flex items-center justify-center">
-        <div className="text-center space-y-3">
-          <span className="text-4xl block animate-spin">🐾</span>
-          <p className="font-title font-bold text-gray-700">Patiyle Seyahat Veritabanı Yükleniyor...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <ErrorBoundary>

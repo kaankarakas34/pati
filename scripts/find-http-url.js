@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { getPublicUrl } from '../lib/public-http.js';
 
 const candidateUrls = [
   'http://cdn.patiyleseyahat.com/test.txt',
@@ -15,7 +15,7 @@ const candidateUrls = [
 async function probeUrls() {
   for (const url of candidateUrls) {
     try {
-      const res = await axios.get(url, { timeout: 3000 });
+      const res = await getPublicUrl(url, { timeout: 3000 });
       console.log(`✅ BULUNDU (${res.status}): ${url} => ${res.data.trim()}`);
     } catch (err) {
       console.log(`❌ (${url}): ${err.response ? err.response.status : err.message}`);

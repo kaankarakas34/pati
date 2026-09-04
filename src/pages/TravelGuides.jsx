@@ -1,3 +1,5 @@
+import { useCatalog } from '../lib/useCatalog';
+import CatalogPagination from '../components/CatalogPagination';
 import React, { useState } from 'react';
 import SeoContentSection from '../components/SeoContentSection';
 import { seoContent } from '../data/seoContent';
@@ -15,15 +17,8 @@ export default function TravelGuides({ guides, onViewChange }) {
   ];
 
   // Dynamic filtering
-  const filteredGuides = guides.filter(guide => {
-    if (selectedCategory !== 'all' && guide.category !== selectedCategory) {
-      return false;
-    }
-    if (searchQuery && !guide.title.toLowerCase().includes(searchQuery.toLowerCase()) && !guide.summary.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false;
-    }
-    return true;
-  });
+  const page = useCatalog('guides', { q: searchQuery, category: selectedCategory });
+  const filteredGuides = page.items;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-left">
@@ -116,6 +111,7 @@ export default function TravelGuides({ guides, onViewChange }) {
           ))}
         </div>
       )}
+      <CatalogPagination page={page} />
       <SeoContentSection content={seoContent.guides} />
     </div>
   );

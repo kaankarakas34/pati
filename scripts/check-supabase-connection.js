@@ -1,4 +1,6 @@
 import pg from 'pg';
+import 'dotenv/config';
+import { databaseTls } from '../lib/database-config.js';
 import { createInterface } from 'node:readline';
 
 const lines = createInterface({ input: process.stdin, terminal: false });
@@ -14,7 +16,7 @@ try {
     database: credentials.database || 'postgres',
     user: credentials.user,
     password: credentials.password,
-    ssl: { rejectUnauthorized: false },
+    ssl: databaseTls(),
     connectionTimeoutMillis: 15000,
     max: 1
   });

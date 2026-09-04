@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon } from '../components/PetIcons';
 
-export default function Wizard({ hotels, boardings, onViewChange }) {
+export default function Wizard({ onViewChange }) {
   const [step, setStep] = useState(1);
   
   // Answers state
@@ -13,6 +13,30 @@ export default function Wizard({ hotels, boardings, onViewChange }) {
     housing: '', // 'cagefree', 'glass', 'any'
     amenities: [], // selected amenities/tags
   });
+
+  const [candidates, setCandidates] = useState({ items: [], loading: false, error: '' });
+  const [attempt, setAttempt] = useState(0);
+  const answersKey = JSON.stringify(answers);
+  useEffect(() => {
+    if (step !== 5) return;
+    const controller = new AbortController();
+    setCandidates({ items: [], loading: true, error: '' });
+    const params = new URLSearchParams({ envelope: 'true', limit: '60', pet: answers.petType });
+    if (answers.intent === 'together') {
+      if (answers.petType === 'dog') params.set('weightLimit', answers.weight === 'large' ? '0' : answers.weight === 'small' ? '10' : '20');
+      if (answers.netting === 'yes') params.append('quizTag', 'sineklik');
+    } else if (answers.housing !== 'any') {
+      params.append('quizTag', answers.housing === 'glass' ? 'cam-oda' : 'kafessiz');
+    }
+    fetch(`/api/${answers.intent === 'together' ? 'hotels' : 'boardings'}?${params}`, { signal: controller.signal })
+      .then(async response => {
+        const page = await response.json();
+        if (!response.ok || !Array.isArray(page.data)) throw new Error(page.error || 'Sonuçlar yüklenemedi.');
+        if (!controller.signal.aborted) setCandidates({ items: page.data, loading: false, error: '' });
+      })
+      .catch(error => { if (!controller.signal.aborted) setCandidates({ items: [], loading: false, error: error.message }); });
+    return () => controller.abort();
+  }, [step, answersKey, attempt]);
 
   const resetWizard = () => {
     setAnswers({
@@ -85,7 +109,7 @@ export default function Wizard({ hotels, boardings, onViewChange }) {
       
       answers.amenities.forEach(tag => queryTags.push(tag));
 
-      const scoredHotels = hotels.map(hotel => {
+      const scoredHotels = candidates.items.map(hotel => {
         let matches = 0;
         queryTags.forEach(tag => {
           if (hotel.quizTags && hotel.quizTags.includes(tag)) {
@@ -101,7 +125,7 @@ export default function Wizard({ hotels, boardings, onViewChange }) {
 
       // Sort by score
       return scoredHotels
-        .filter(h => h.allowedPets.includes(answers.petType))
+        .filter(h => h.allowedPets?.includes(answers.petType) && (answers.weight !== 'large' || h.weightLimit === 0))
         .sort((a, b) => b.matchPercentage - a.matchPercentage)
         .slice(0, 3);
 
@@ -114,7 +138,7 @@ export default function Wizard({ hotels, boardings, onViewChange }) {
       
       answers.amenities.forEach(tag => queryTags.push(tag));
 
-      const scoredBoardings = boardings.map(boarding => {
+      const scoredBoardings = candidates.items.map(boarding => {
         let matches = 0;
         queryTags.forEach(tag => {
           if (boarding.quizTags && boarding.quizTags.includes(tag)) {
@@ -129,7 +153,7 @@ export default function Wizard({ hotels, boardings, onViewChange }) {
       });
 
       return scoredBoardings
-        .filter(b => b.allowedPets.includes(answers.petType))
+        .filter(b => b.allowedPets?.includes(answers.petType))
         .sort((a, b) => b.matchPercentage - a.matchPercentage)
         .slice(0, 3);
     }
@@ -412,11 +436,13 @@ export default function Wizard({ hotels, boardings, onViewChange }) {
             <div className="text-center space-y-2">
               <span className="text-4xl">🎉</span>
               <h2 className="font-title text-2xl font-bold text-brand-navy">Sizin İçin En Uygun Tesisler</h2>
-              <p className="text-xs text-gray-500 max-w-sm mx-auto">Cevaplarınız analiz edildi ve en uyumlu eşleşme oranlarına sahip 3 tesis listelendi.</p>
+              <p className="text-xs text-gray-500 max-w-sm mx-auto">Tercihlerinize göre önerilen tesisler.</p>
             </div>
 
             <div className="space-y-4">
-              {results.length === 0 ? (
+              {candidates.loading ? <p role="status">Sonuçlar yükleniyor...</p> : candidates.error ? (
+                <div><p role="alert">{candidates.error}</p><button className="underline" onClick={() => setAttempt(value => value + 1)}>Tekrar dene</button></div>
+              ) : results.length === 0 ? (
                 <div className="text-center py-6 text-gray-500 italic text-sm">Eşleşen tesis bulunamadı. Lütfen daha esnek kriterlerle sihirbazı tekrar deneyin.</div>
               ) : (
                 results.map(res => (
@@ -443,9 +469,9 @@ export default function Wizard({ hotels, boardings, onViewChange }) {
                       </div>
                       
                       <div className="flex justify-between items-center pt-3 border-t border-brand-beige mt-3">
-                        <span className="text-3xs text-gray-400">Güven Puanı: <strong className="text-brand-navy">{res.baseTrustScore || 9.0}/10</strong></span>
+                        <span className="text-3xs text-gray-400">Güven Puanı: <strong className="text-brand-navy">{res.baseTrustScore == null ? 'Belirtilmemiş' : `${res.baseTrustScore}/10`}</strong></span>
                         <span className="text-3xs text-brand-navy font-bold flex items-center gap-0.5">
-                          <VerifiedBadge className="w-3.5 h-3.5" /> Doğrulandı
+                          {res.verified === true ? <><VerifiedBadge className="w-3.5 h-3.5" /> Doğrulandı</> : null}
                         </span>
                       </div>
                     </div>

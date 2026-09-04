@@ -1,39 +1,17 @@
 import express from 'express';
 import cors from 'cors';
-import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { randomUUID } from 'crypto';
 import dotenv from 'dotenv';
 
-// Import database helpers
-import { 
-  initDatabase,
-  checkDatabaseConnection,
-  getHotels, saveHotel, deleteHotel,
-  getBoardings, saveBoarding, deleteBoarding,
-  getGuides, saveGuide, deleteGuide,
-  getCorrections, saveCorrection,
-  getComplaints, saveComplaint,
-  getReviews, saveReview,
-  getPetTaxis, savePetTaxi, deletePetTaxi,
-  getVets, saveVet, deleteVet,
-  getExperiences, saveExperience, deleteExperience,
-  getAds, saveAd, deleteAd,
-  getAdApplications, saveAdApplication
-} from './db.js';
-import axios from 'axios';
-import { 
-  initialHotels, 
-  initialBoardings, 
-  initialGuides, 
-  initialCorrections, 
-  initialComplaints,
-  initialVets,
-  initialTaxis,
-  initialExperiences,
-  initialAds
-} from './src/data/mockData.js';
+import { getComplaints, getAdApplications, saveAdApplication } from './db.js';
+import { matchesSecret } from './lib/admin-security.js';
+import { getPublicUrl } from './lib/public-http.js';
+import { sendServerError, redirectToLocalPath, handleRequestError } from './lib/http-responses.js';
+import { getIndexHtmlTemplate } from './lib/html-template.js';
+import { createApiRouter, limitSubmission, asyncRoute } from './lib/api-router.js';
+import { repository } from './db.js';
 import { seoContent } from './src/data/seoContent.js';
 import { findHotelBySlugs, getHotelPath, slugify } from './lib/seo-slugs.js';
 
@@ -44,8 +22,8 @@ const PORT = process.env.PORT || 3000;
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN;
-const adApplicationAttempts = new Map();
 
+app.use((req,res,next)=>{ res.set('X-Content-Type-Options','nosniff'); next(); });
 app.use(cors());
 app.use(express.json());
 
@@ -63,21 +41,16 @@ app.use((req, res, next) => {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Local development initializes automatically. Production schema changes are explicit.
-if (process.env.VERCEL !== '1' || process.env.AUTO_INIT_DATABASE === 'true') {
-  try {
-    await initDatabase();
-  } catch (err) {
-    console.warn("Database initialization skipped / failed:", err.message);
-  }
-}
-
 function requireAdmin(req, res, next) {
   const token = req.headers['x-admin-token'];
-  if (token !== ADMIN_TOKEN) {
+  if (!matchesSecret(token, ADMIN_TOKEN)) {
     return res.status(401).json({ error: 'Admin yetkisi gerekli.' });
   }
   next();
+}
+
+function serializeJsonLd(value) {
+  return JSON.stringify(value).replace(/</g, '\\u003c');
 }
 
 function escapeHtml(value = '') {
@@ -87,20 +60,6 @@ function escapeHtml(value = '') {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
-}
-
-function isAllowedScrapeUrl(rawUrl) {
-  try {
-    const parsed = new URL(rawUrl);
-    const hostname = parsed.hostname.toLowerCase();
-    if (!['http:', 'https:'].includes(parsed.protocol)) return false;
-    if (hostname === 'localhost' || hostname.endsWith('.local')) return false;
-    if (/^(10|127|169\.254|192\.168)\./.test(hostname)) return false;
-    if (/^172\.(1[6-9]|2\d|3[0-1])\./.test(hostname)) return false;
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 function normalizeText(value, maxLength) {
@@ -116,22 +75,12 @@ function isValidHttpUrl(value) {
   }
 }
 
-function allowAdApplication(req) {
-  const key = String(req.headers['x-forwarded-for'] || req.ip || 'unknown').split(',')[0].trim();
-  const now = Date.now();
-  const recent = (adApplicationAttempts.get(key) || []).filter(timestamp => now - timestamp < 60 * 60 * 1000);
-  if (recent.length >= 5) return false;
-  recent.push(now);
-  adApplicationAttempts.set(key, recent);
-  return true;
-}
-
 app.post('/api/admin/login', (req, res) => {
   if (!ADMIN_USERNAME || !ADMIN_PASSWORD || !ADMIN_TOKEN) {
     return res.status(503).json({ error: 'Admin girisi sunucuda yapilandirilmamis.' });
   }
   const { username, password } = req.body || {};
-  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+  if (matchesSecret(username, ADMIN_USERNAME) && matchesSecret(password, ADMIN_PASSWORD)) {
     return res.json({ success: true, token: ADMIN_TOKEN });
   }
   res.status(401).json({ error: 'Hatalı kullanıcı adı veya şifre.' });
@@ -141,294 +90,13 @@ app.post('/api/admin/login', (req, res) => {
 // REST API ENDPOINTS
 // ----------------------------------------------------
 
-app.get('/api/health/database', async (req, res) => {
-  try {
-    const status = await checkDatabaseConnection();
-    res.json({ ok: true, database: status.database, checkedAt: status.checked_at });
-  } catch (err) {
-    res.status(503).json({ ok: false, error: err.message });
-  }
-});
-
-// Hotels API
-app.get('/api/hotels', async (req, res) => {
-  try {
-    const data = await getHotels();
-    if (!Array.isArray(data) || data.length < initialHotels.length) {
-      return res.json(initialHotels);
-    }
-    res.json(data);
-  } catch (err) {
-    console.warn("Falling back to initialHotels due to DB error:", err.message);
-    res.json(initialHotels);
-  }
-});
-
-app.post('/api/hotels', requireAdmin, async (req, res) => {
-  try {
-    const data = await saveHotel(req.body);
-    res.json({ success: true, data });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.delete('/api/hotels/:id', requireAdmin, async (req, res) => {
-  try {
-    await deleteHotel(req.params.id);
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Boardings API
-app.get(['/api/boardings', '/boardings'], async (req, res) => {
-  try {
-    const data = await getBoardings();
-    res.json(data);
-  } catch (err) {
-    console.warn("Falling back to initialBoardings due to DB error:", err.message);
-    res.json(initialBoardings);
-  }
-});
-
-app.post('/api/boardings', requireAdmin, async (req, res) => {
-  try {
-    const data = await saveBoarding(req.body);
-    res.json({ success: true, data });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.delete('/api/boardings/:id', requireAdmin, async (req, res) => {
-  try {
-    await deleteBoarding(req.params.id);
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Guides API
-app.get(['/api/guides', '/guides'], async (req, res) => {
-  try {
-    const data = await getGuides();
-    res.json(data);
-  } catch (err) {
-    console.warn("Falling back to initialGuides due to DB error:", err.message);
-    res.json(initialGuides);
-  }
-});
-
-app.post('/api/guides', requireAdmin, async (req, res) => {
-  try {
-    const data = await saveGuide(req.body);
-    res.json({ success: true, data });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.delete('/api/guides/:id', requireAdmin, async (req, res) => {
-  try {
-    await deleteGuide(req.params.id);
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Corrections API
-app.get(['/api/corrections', '/corrections'], async (req, res) => {
-  try {
-    const data = await getCorrections();
-    res.json(data);
-  } catch (err) {
-    console.warn("Falling back to initialCorrections due to DB error:", err.message);
-    res.json(initialCorrections);
-  }
-});
-
-app.post('/api/corrections', async (req, res) => {
-  try {
-    const data = await saveCorrection(req.body);
-    res.json({ success: true, data });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Complaints API
-app.get(['/api/complaints', '/complaints'], async (req, res) => {
-  try {
-    const data = await getComplaints();
-    res.json(data);
-  } catch (err) {
-    console.warn("Falling back to initialComplaints due to DB error:", err.message);
-    res.json(initialComplaints);
-  }
-});
-
-app.post('/api/complaints', async (req, res) => {
-  try {
-    const data = await saveComplaint(req.body);
-    res.json({ success: true, data });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Reviews API
-app.get(['/api/reviews', '/reviews'], async (req, res) => {
-  try {
-    const targetId = req.query.targetId;
-    if (!targetId) {
-      return res.status(400).json({ error: 'targetId parametresi zorunludur.' });
-    }
-    const data = await getReviews(targetId);
-    res.json(data);
-  } catch (err) {
-    res.json([]);
-  }
-});
-
-app.post('/api/reviews', async (req, res) => {
-  try {
-    const data = await saveReview(req.body);
-    res.json({ success: true, data });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Pet Taxis API
-app.get(['/api/taxis', '/taxis'], async (req, res) => {
-  try {
-    const data = await getPetTaxis();
-    res.json(data);
-  } catch (err) {
-    console.warn("Falling back to [] due to DB error:", err.message);
-    res.json(initialTaxis || []);
-  }
-});
-
-app.post('/api/taxis', requireAdmin, async (req, res) => {
-  try {
-    const data = await savePetTaxi(req.body);
-    res.json({ success: true, data });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.delete('/api/taxis/:id', requireAdmin, async (req, res) => {
-  try {
-    await deletePetTaxi(req.params.id);
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Vets API
-app.get(['/api/vets', '/vets'], async (req, res) => {
-  try {
-    const data = await getVets();
-    if (!Array.isArray(data) || data.length < initialVets.length) {
-      return res.json(initialVets || []);
-    }
-    res.json(data);
-  } catch (err) {
-    console.warn("Falling back to initialVets due to DB error:", err.message);
-    res.json(initialVets || []);
-  }
-});
-
-app.post('/api/vets', requireAdmin, async (req, res) => {
-  try {
-    const data = await saveVet(req.body);
-    res.json({ success: true, data });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.delete('/api/vets/:id', requireAdmin, async (req, res) => {
-  try {
-    await deleteVet(req.params.id);
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Experiences / Places API
-app.get(['/api/experiences', '/experiences'], async (req, res) => {
-  try {
-    const data = await getExperiences();
-    res.json(data);
-  } catch (err) {
-    console.warn("Falling back to [] due to DB error:", err.message);
-    res.json(initialExperiences || []);
-  }
-});
-
-app.post('/api/experiences', requireAdmin, async (req, res) => {
-  try {
-    const data = await saveExperience(req.body);
-    res.json({ success: true, data });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.delete('/api/experiences/:id', requireAdmin, async (req, res) => {
-  try {
-    await deleteExperience(req.params.id);
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Advertising API
-app.get(['/api/ads', '/ads'], async (req, res) => {
-  try {
-    const data = await getAds();
-    res.json(data);
-  } catch (err) {
-    console.warn("Falling back to initialAds due to DB error:", err.message);
-    res.json(initialAds || []);
-  }
-});
-
-app.post('/api/ads', requireAdmin, async (req, res) => {
-  try {
-    const data = await saveAd(req.body);
-    res.json({ success: true, data });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.delete('/api/ads/:id', requireAdmin, async (req, res) => {
-  try {
-    await deleteAd(req.params.id);
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+app.use('/api', createApiRouter(requireAdmin));
 
 // Advertising Applications API
-app.post('/api/ad-applications', async (req, res) => {
+app.post('/api/ad-applications', async (req, res, next) => {
   try {
     if (req.body?.company) return res.status(201).json({ success: true });
-    if (!allowAdApplication(req)) {
-      return res.status(429).json({ error: 'Çok fazla başvuru gönderildi. Lütfen daha sonra tekrar deneyin.' });
-    }
+    await limitSubmission(req);
 
     const application = {
       id: randomUUID(),
@@ -457,8 +125,7 @@ app.post('/api/ad-applications', async (req, res) => {
     const data = await saveAdApplication(application);
     res.status(201).json({ success: true, id: data.id });
   } catch (err) {
-    console.error('Ad application create error:', err.message);
-    res.status(500).json({ error: 'Başvuru şu anda kaydedilemedi. Lütfen daha sonra tekrar deneyin.' });
+    next(err);
   }
 });
 
@@ -471,18 +138,14 @@ app.get('/api/ad-applications', requireAdmin, async (req, res) => {
 });
 
 // URL Auto-Scrape/Fetch API
-app.post('/api/scrape-hotel', async (req, res) => {
+app.post('/api/scrape-hotel', requireAdmin, async (req, res) => {
   try {
     const { url } = req.body;
     if (!url) {
       return res.status(400).json({ error: 'URL parametresi zorunludur.' });
     }
-    if (!isAllowedScrapeUrl(url)) {
-      return res.status(400).json({ error: 'Bu URL güvenlik politikası nedeniyle taranamaz.' });
-    }
-
     // Fetch HTML using axios
-    const response = await axios.get(url, {
+    const response = await getPublicUrl(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Accept-Language': 'tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7'
@@ -564,7 +227,7 @@ app.post('/api/scrape-hotel', async (req, res) => {
 
     res.json(scrapedData);
   } catch (err) {
-    console.error("Scraping error:", err.message);
+    console.error("Scraping error:", err);
     res.status(500).json({ error: 'URL taranamadı. Lütfen geçerli bir otel linki girin.' });
   }
 });
@@ -577,24 +240,15 @@ app.post('/api/scrape-hotel', async (req, res) => {
 app.use('/assets', express.static(path.join(__dirname, 'dist/assets')));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// Helper to load index.html template based on dev or production
-function getIndexHtmlTemplate() {
-  const prodPath = path.join(__dirname, 'dist/index.html');
-  const devPath = path.join(__dirname, 'index.html');
-  
-  if (fs.existsSync(prodPath)) {
-    return fs.readFileSync(prodPath, 'utf8');
-  }
-  return fs.readFileSync(devPath, 'utf8');
-}
-
-async function getHotelSeoData() {
+async function getHotelSeoData(query = {}) {
   try {
-    const [hotels, complaints] = await Promise.all([getHotels(), getComplaints()]);
+    const hotels = (await repository.page('hotels', query, Boolean(query.id || query.nameSlug))).data;
+    const complaints = hotels.length === 1 ? await getComplaints({ targetId: hotels[0].id, limit: 100 }) : [];
+    if (hotels.length === 1) hotels[0].approvedComplaintCount = await repository.complaintCount(hotels[0].id);
     return { hotels, complaints };
   } catch (error) {
-    console.error('SEO database fallback:', error.message);
-    return { hotels: initialHotels, complaints: [] };
+    console.error('SEO database fallback:', error);
+    throw error;
   }
 }
 
@@ -602,7 +256,7 @@ function renderHotelSeoPage(res, hotel, complaintsList) {
   try {
     // Approved complaints count check
     const approvedComplaints = complaintsList.filter(c => c.targetId === hotel.id && c.status === 'approved');
-    const trustScore = Math.max(1.0, (hotel.baseTrustScore || 8) - approvedComplaints.length * 0.5).toFixed(1);
+    const trustScore = Math.max(1.0, (hotel.baseTrustScore || 8) - (hotel.approvedComplaintCount ?? approvedComplaints.length) * 0.5).toFixed(1);
     const canonicalUrl = `https://www.patiyleseyahat.com${getHotelPath(hotel)}`;
 
     let html = getIndexHtmlTemplate();
@@ -665,7 +319,7 @@ function renderHotelSeoPage(res, hotel, complaintsList) {
       "mainEntity": faqEntity
     };
 
-    const schemaScript = `<script type="application/ld+json">\n${JSON.stringify(jsonLd, null, 2)}\n</script>`;
+    const schemaScript = `<script type="application/ld+json">\n${serializeJsonLd(jsonLd)}\n</script>`;
     html = html.replace('</head>', `${schemaScript}\n</head>`);
 
     res.send(html);
@@ -731,7 +385,7 @@ app.get(Object.keys(categorySeoPages), (req, res) => {
     <meta property="og:description" content="${escapedDescription}" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="${canonicalUrl}" />
-    <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+    <script type="application/ld+json">${serializeJsonLd(jsonLd)}</script>
   </head>`);
   res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
   return res.send(html);
@@ -744,11 +398,11 @@ const legacyCategoryRedirects = {
   '/gezilecek-yerler': '/evcil-hayvanla-gezilecek-yerler'
 };
 
-app.get(Object.keys(legacyCategoryRedirects), (req, res) => res.redirect(301, legacyCategoryRedirects[req.path]));
+app.get(Object.keys(legacyCategoryRedirects), (req, res) => redirectToLocalPath(res, legacyCategoryRedirects[req.path]));
 
 // Indexable province landing pages with unique metadata and structured data.
-app.get('/evcil-hayvan-dostu-oteller/:citySlug', async (req, res) => {
-  const { hotels } = await getHotelSeoData();
+app.get('/evcil-hayvan-dostu-oteller/:citySlug', asyncRoute(async (req, res) => {
+  const { hotels } = await getHotelSeoData({ citySlug: req.params.citySlug, limit: 100 });
   const cityHotels = hotels.filter(hotel => slugify(hotel.city) === req.params.citySlug);
 
   if (cityHotels.length === 0) {
@@ -872,10 +526,10 @@ app.get('/evcil-hayvan-dostu-oteller/:citySlug', async (req, res) => {
     ]
   };
 
-  html = html.replace('</head>', `${socialAndCanonicalTags}\n<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>\n</head>`);
+  html = html.replace('</head>', `${socialAndCanonicalTags}\n<script type="application/ld+json">${serializeJsonLd(jsonLd)}</script>\n</head>`);
   res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
   return res.send(html);
-});
+}));
 
 function formatW3CDate(rawDate) {
   const fallback = '2026-09-03';
@@ -891,150 +545,14 @@ function formatW3CDate(rawDate) {
   return fallback;
 }
 
-app.get('/sitemap.xml', async (req, res) => {
-  const { hotels } = await getHotelSeoData();
-  const vets = await getVets().catch(() => initialVets || []);
-  const boardings = await getBoardings().catch(() => initialBoardings || []);
-  const taxis = await getPetTaxis().catch(() => initialTaxis || []);
-
-  const citySlugs = [...new Set(hotels.map(hotel => slugify(hotel.city)).filter(Boolean))];
-  
-  // District combinations
-  const districtUrls = [];
-  hotels.forEach(hotel => {
-    if (hotel.city && hotel.district) {
-      const citySlug = slugify(hotel.city);
-      const districtSlug = slugify(hotel.district);
-      if (citySlug && districtSlug) {
-        const url = `https://www.patiyleseyahat.com/evcil-hayvan-dostu-oteller/${citySlug}/${districtSlug}`;
-        if (!districtUrls.includes(url)) {
-          districtUrls.push(url);
-        }
-      }
+app.use('/sitemaps', express.static(path.join(__dirname,'public','sitemaps'), { index:false, dotfiles:'deny', maxAge:'1h' }));
+app.get('/sitemap.xml', (req,res,next) => {
+  res.sendFile(path.join(__dirname,'public','sitemaps','index.xml'), error => {
+    if(error && !res.headersSent) {
+      if(error.code==='ENOENT') return res.status(503).type('text/plain').send('Sitemap is not published yet.');
+      next(error);
     }
   });
-
-  const urls = [
-    { loc: 'https://www.patiyleseyahat.com/', priority: '1.0', frequency: 'daily', lastmod: '2026-09-03' },
-    { loc: 'https://www.patiyleseyahat.com/trust-ads', priority: '0.5', frequency: 'monthly', lastmod: '2026-09-03' },
-    { loc: 'https://www.patiyleseyahat.com/kedi-kabul-eden-oteller', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
-    { loc: 'https://www.patiyleseyahat.com/kopek-kabul-eden-oteller', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
-    { loc: 'https://www.patiyleseyahat.com/her-sey-dahil-evcil-hayvan-dostu-oteller', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
-    { loc: 'https://www.patiyleseyahat.com/buyuk-kopek-kabul-eden-oteller', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
-    { loc: 'https://www.patiyleseyahat.com/ucretsiz-evcil-hayvan-kabul-eden-oteller', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
-    { loc: 'https://www.patiyleseyahat.com/bahceli-evcil-hayvan-dostu-oteller', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
-    { loc: 'https://www.patiyleseyahat.com/evcil-hayvan-dostu-bungalovlar', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
-    { loc: 'https://www.patiyleseyahat.com/kopek-kabul-eden-bungalovlar', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
-    { loc: 'https://www.patiyleseyahat.com/evcil-hayvan-dostu-villalar', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
-    { loc: 'https://www.patiyleseyahat.com/evcil-hayvan-dostu-butik-oteller', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
-    { loc: 'https://www.patiyleseyahat.com/evcil-hayvan-dostu-tatil-koyleri', priority: '0.9', frequency: 'daily', lastmod: '2026-09-03' },
-    ...Object.keys(categorySeoPages).map(categoryPath => ({
-      loc: `https://www.patiyleseyahat.com${categoryPath}`,
-      priority: '0.9',
-      frequency: 'weekly',
-      lastmod: '2026-09-03'
-    })),
-    ...citySlugs.map(citySlug => ({
-      loc: `https://www.patiyleseyahat.com/evcil-hayvan-dostu-oteller/${citySlug}`,
-      priority: '0.9',
-      frequency: 'daily',
-      lastmod: '2026-09-03'
-    })),
-    ...citySlugs.map(citySlug => ({
-      loc: `https://www.patiyleseyahat.com/evcil-hayvan-kabul-eden-oteller/${citySlug}`,
-      priority: '0.9',
-      frequency: 'daily',
-      lastmod: '2026-09-03'
-    })),
-    ...citySlugs.map(citySlug => ({
-      loc: `https://www.patiyleseyahat.com/kedi-kabul-eden-oteller/${citySlug}`,
-      priority: '0.9',
-      frequency: 'daily',
-      lastmod: '2026-09-03'
-    })),
-    ...citySlugs.map(citySlug => ({
-      loc: `https://www.patiyleseyahat.com/kopek-kabul-eden-oteller/${citySlug}`,
-      priority: '0.9',
-      frequency: 'daily',
-      lastmod: '2026-09-03'
-    })),
-    ...citySlugs.map(citySlug => ({
-      loc: `https://www.patiyleseyahat.com/pet-friendly-oteller/${citySlug}`,
-      priority: '0.9',
-      frequency: 'daily',
-      lastmod: '2026-09-03'
-    })),
-    ...citySlugs.map(citySlug => ({
-      loc: `https://www.patiyleseyahat.com/her-sey-dahil-evcil-hayvan-dostu-oteller/${citySlug}`,
-      priority: '0.9',
-      frequency: 'daily',
-      lastmod: '2026-09-03'
-    })),
-    ...citySlugs.map(citySlug => ({
-      loc: `https://www.patiyleseyahat.com/buyuk-kopek-kabul-eden-oteller/${citySlug}`,
-      priority: '0.9',
-      frequency: 'daily',
-      lastmod: '2026-09-03'
-    })),
-    ...citySlugs.map(citySlug => ({
-      loc: `https://www.patiyleseyahat.com/evcil-hayvan-dostu-bungalovlar/${citySlug}`,
-      priority: '0.9',
-      frequency: 'daily',
-      lastmod: '2026-09-03'
-    })),
-    ...citySlugs.map(citySlug => ({
-      loc: `https://www.patiyleseyahat.com/evcil-hayvan-dostu-villalar/${citySlug}`,
-      priority: '0.9',
-      frequency: 'daily',
-      lastmod: '2026-09-03'
-    })),
-    ...districtUrls.map(url => ({
-      loc: url,
-      priority: '0.8',
-      frequency: 'weekly',
-      lastmod: '2026-09-03'
-    })),
-    ...hotels.map(hotel => ({
-      loc: `https://www.patiyleseyahat.com${getHotelPath(hotel)}`,
-      priority: '0.8',
-      frequency: 'weekly',
-      lastmod: hotel.updatedAt || hotel.lastVerified
-    })),
-    ...vets.map(vet => ({
-      loc: `https://www.patiyleseyahat.com/veteriner/${vet.id}`,
-      priority: '0.8',
-      frequency: 'monthly',
-      lastmod: vet.lastVerified
-    })),
-    ...boardings.map(boarding => ({
-      loc: `https://www.patiyleseyahat.com/bakim/${boarding.id}`,
-      priority: '0.7',
-      frequency: 'monthly',
-      lastmod: boarding.lastVerified
-    })),
-    ...taxis.map(taxi => ({
-      loc: `https://www.patiyleseyahat.com/taksi/${taxi.id}`,
-      priority: '0.7',
-      frequency: 'monthly',
-      lastmod: taxi.lastVerified
-    }))
-  ];
-
-  const urlNodes = urls.map(url => `
-    <url>
-      <loc>${escapeHtml(url.loc)}</loc>
-      <lastmod>${formatW3CDate(url.lastmod)}</lastmod>
-      <changefreq>${url.frequency}</changefreq>
-      <priority>${url.priority}</priority>
-    </url>`).join('');
-
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urlNodes}
-</urlset>`;
-
-  res.set('Content-Type', 'application/xml; charset=utf-8');
-  res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
-  return res.send(sitemap);
 });
 
 app.get('/robots.txt', (req, res) => {
@@ -1074,8 +592,8 @@ app.get('/trust-ads', (req, res) => {
 });
 
 // SEO-friendly hotel path: /otel/il/ilce/otel-ismi
-app.get('/otel/:city/:district/:hotelSlug', async (req, res) => {
-  const { hotels, complaints } = await getHotelSeoData();
+app.get('/otel/:city/:district/:hotelSlug', asyncRoute(async (req, res) => {
+  const { hotels, complaints } = await getHotelSeoData({ citySlug: req.params.city, districtSlug: req.params.district, nameSlug: req.params.hotelSlug, limit: 1 });
   const hotel = findHotelBySlugs(hotels, req.params.city, req.params.district, req.params.hotelSlug);
 
   if (!hotel) {
@@ -1083,26 +601,24 @@ app.get('/otel/:city/:district/:hotelSlug', async (req, res) => {
   }
 
   return renderHotelSeoPage(res, hotel, complaints);
-});
+}));
 
 // Preserve old links and consolidate SEO signals on the canonical URL.
-app.get('/otel/:id', async (req, res) => {
-  const { hotels } = await getHotelSeoData();
-  const hotel = hotels.find(item => item.id === req.params.id);
+app.get('/otel/:id', asyncRoute(async (req, res) => {
+  const hotel = await repository.one('hotels', req.params.id);
 
   if (!hotel) {
     return res.status(404).send("Tesis bulunamadı.");
   }
 
-  return res.redirect(301, getHotelPath(hotel));
-});
+  return redirectToLocalPath(res, getHotelPath(hotel));
+}));
 
 // Intercept Boarding Detail page request for SEO & GEO
 app.get('/bakim/:id', async (req, res) => {
   try {
     const boardingId = req.params.id;
-    const boardings = await getBoardings();
-    const boarding = boardings.find(b => b.id === boardingId);
+    const boarding = await repository.one('boardings', boardingId);
 
     if (!boarding) {
       return res.status(404).send("Bakım merkezi bulunamadı.");
@@ -1132,7 +648,7 @@ app.get('/bakim/:id', async (req, res) => {
       "telephone": boarding.phone
     };
 
-    const schemaScript = `<script type="application/ld+json">\n${JSON.stringify(jsonLd, null, 2)}\n</script>`;
+    const schemaScript = `<script type="application/ld+json">\n${serializeJsonLd(jsonLd)}\n</script>`;
     html = html.replace('</head>', `${schemaScript}\n</head>`);
 
     res.send(html);
@@ -1146,16 +662,12 @@ app.get('/bakim/:id', async (req, res) => {
 app.get('/taksi/:id', async (req, res) => {
   try {
     const taxiId = req.params.id;
-    const taxis = await getPetTaxis();
-    const complaintsList = await getComplaints();
-    const taxi = taxis.find(t => t.id === taxiId);
+    const taxi = await repository.one('pet_taxis', taxiId);
 
     if (!taxi) {
       return res.status(404).send("Pet taksi bulunamadı.");
     }
 
-    const approvedComplaints = complaintsList.filter(c => c.targetId === taxi.id && c.status === 'approved');
-    const trustScore = Math.max(1.0, taxi.baseTrustScore - approvedComplaints.length * 0.5).toFixed(1);
 
     let html = getIndexHtmlTemplate();
 
@@ -1185,7 +697,7 @@ app.get('/taksi/:id', async (req, res) => {
       }
     };
 
-    const schemaScript = `<script type="application/ld+json">\n${JSON.stringify(jsonLd, null, 2)}\n</script>`;
+    const schemaScript = `<script type="application/ld+json">\n${serializeJsonLd(jsonLd)}\n</script>`;
     html = html.replace('</head>', `${schemaScript}\n</head>`);
 
     res.send(html);
@@ -1198,16 +710,12 @@ app.get('/taksi/:id', async (req, res) => {
 app.get('/veteriner/:id', async (req, res) => {
   try {
     const vetId = req.params.id;
-    const vets = await getVets();
-    const complaintsList = await getComplaints();
-    const vet = vets.find(v => v.id === vetId);
+    const vet = await repository.one('vets', vetId);
 
     if (!vet) {
       return res.status(404).send("Veteriner kliniği bulunamadı.");
     }
 
-    const approvedComplaints = complaintsList.filter(c => c.targetId === vet.id && c.status === 'approved');
-    const trustScore = Math.max(1.0, vet.baseTrustScore - approvedComplaints.length * 0.5).toFixed(1);
 
     let html = getIndexHtmlTemplate();
 
@@ -1233,7 +741,7 @@ app.get('/veteriner/:id', async (req, res) => {
       "telephone": vet.phone
     };
 
-    const schemaScript = `<script type="application/ld+json">\n${JSON.stringify(jsonLd, null, 2)}\n</script>`;
+    const schemaScript = `<script type="application/ld+json">\n${serializeJsonLd(jsonLd)}\n</script>`;
     html = html.replace('</head>', `${schemaScript}\n</head>`);
 
     res.send(html);
@@ -1246,8 +754,7 @@ app.get('/veteriner/:id', async (req, res) => {
 app.get('/rehber/:id', async (req, res) => {
   try {
     const guideId = req.params.id;
-    const guides = await getGuides();
-    const guide = guides.find(g => g.id === guideId);
+    const guide = await repository.one('guides', guideId);
 
     if (!guide) {
       return res.status(404).send("Rehber bulunamadı.");
@@ -1285,7 +792,7 @@ app.get('/rehber/:id', async (req, res) => {
       }
     };
 
-    const schemaScript = `<script type="application/ld+json">\n${JSON.stringify(jsonLd, null, 2)}\n</script>`;
+    const schemaScript = `<script type="application/ld+json">\n${serializeJsonLd(jsonLd)}\n</script>`;
     html = html.replace('</head>', `${schemaScript}\n</head>`);
 
     res.send(html);
@@ -1344,7 +851,7 @@ app.get('*', (req, res) => {
         ]
       };
 
-      const schemaScript = `<script type="application/ld+json">\n${JSON.stringify(jsonLd, null, 2)}\n</script>`;
+      const schemaScript = `<script type="application/ld+json">\n${serializeJsonLd(jsonLd)}\n</script>`;
       html = html.replace('</head>', `${schemaScript}\n</head>`);
     }
 
@@ -1353,6 +860,8 @@ app.get('*', (req, res) => {
     res.status(500).send("Ana sayfa yüklenirken hata oluştu.");
   }
 });
+
+app.use(handleRequestError);
 
 export default app;
 

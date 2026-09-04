@@ -1,6 +1,7 @@
 import { chromium } from 'playwright-core';
 import dotenv from 'dotenv';
 import { existsSync } from 'node:fs';
+import { createCandidateSaver } from './scrapers/common.js';
 
 dotenv.config();
 
@@ -9,7 +10,6 @@ const searchUrl = args.find((arg) => arg.startsWith('http'));
 const shouldSave = args.includes('--save');
 const limitArg = args.find((arg) => arg.startsWith('--limit='));
 const limit = Math.max(1, Math.min(10, Number(limitArg?.split('=')[1] || 1)));
-const apiUrl = process.env.API_URL || 'http://localhost:3000';
 
 if (!searchUrl || !searchUrl.includes('enuygun.com/otel/')) {
   console.error('Kullanim: npm run import:enuygun:test -- "ARAMA_URL" --limit=1 --save');
@@ -57,6 +57,7 @@ function normalizeHotel({ details, canonicalUrl, description, sourceUrl }) {
 
   return {
     id: `enuygun-${details.id}`,
+    source: { provider: 'enuygun', externalId: String(details.id) },
     name: details.name,
     city: details.address?.city || details.address?.state || 'Belirtilmedi',
     district: details.address?.town || details.address?.subTown || 'Belirtilmedi',
@@ -122,7 +123,7 @@ async function extractHotel(page, url) {
     };
   });
 
-  if (!extracted.details) {
+  if (!extracted.details?.id || !extracted.details?.name) {
     throw new Error(`Otel detay verisi bulunamadi: ${url}`);
   }
 
@@ -130,6 +131,7 @@ async function extractHotel(page, url) {
 }
 
 async function main() {
+  const saver = shouldSave ? await createCandidateSaver() : null;
   const browser = await chromium.launch({ headless: true, executablePath });
   const context = await browser.newContext({ locale: 'tr-TR' });
   const page = await context.newPage();
@@ -156,21 +158,9 @@ async function main() {
         verified: hotel.verified
       }, null, 2));
 
-      if (shouldSave) {
-        if (!process.env.ADMIN_TOKEN) {
-          throw new Error('Kaydetmek icin .env dosyasinda ADMIN_TOKEN bulunmali.');
-        }
-        const response = await fetch(`${apiUrl}/api/hotels`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-admin-token': process.env.ADMIN_TOKEN
-          },
-          body: JSON.stringify(hotel)
-        });
-        const result = await response.json();
-        if (!response.ok) throw new Error(result.error || `API hatasi: ${response.status}`);
-        console.log(`${hotel.name} yerel veritabanina kaydedildi.`);
+      if (saver) {
+        const saved = await saver.save(hotel);
+        console.log(`${saved.name} yerel veritabanina kaydedildi (${saved.id}, surum ${saved.version}).`);
       }
     }
   } finally {

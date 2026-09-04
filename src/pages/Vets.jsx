@@ -1,50 +1,35 @@
-import React, { useState } from 'react';
+import { useCatalog } from '../lib/useCatalog';
+import CatalogPagination from '../components/CatalogPagination';
+import React, { useState, useEffect } from 'react';
 import { LocationIcon } from '../components/PetIcons';
 import AdBanner from '../components/AdBanner';
 import SeoContentSection from '../components/SeoContentSection';
 import { seoContent } from '../data/seoContent';
+import { slugify } from '../../lib/seo-slugs';
 
-function trNormalize(str) {
-  if (!str) return '';
-  return str.toString()
-    .replace(/İ/g, 'i').replace(/I/g, 'ı').replace(/Ğ/g, 'g').replace(/Ü/g, 'u').replace(/Ş/g, 's').replace(/Ö/g, 'o').replace(/Ç/g, 'c')
-    .replace(/i̇/g, 'i').toLowerCase()
-    .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c');
-}
-
-export default function Vets({ vets = [], onViewChange }) {
+export default function Vets({ onViewChange }) {
   const [selectedCity, setSelectedCity] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [hasICU, setHasICU] = useState(false);
 
-  // Extract unique cities list
-  const cities = Array.from(new Set((vets || []).map(v => v.city).filter(Boolean))).sort((a, b) => a.localeCompare(b, 'tr'));
+  const [cities, setCities] = useState([]);
+  const [citiesError, setCitiesError] = useState('');
+  const [citiesAttempt, setCitiesAttempt] = useState(0);
+  useEffect(() => {
+    const controller = new AbortController();
+    setCitiesError('');
+    fetch('/api/locations', { signal: controller.signal })
+      .then(async response => {
+        const data = await response.json();
+        if (!response.ok || !Array.isArray(data)) throw new Error(data.error || 'Şehirler yüklenemedi.');
+        if (!controller.signal.aborted) setCities(data.map(location => location.city));
+      })
+      .catch(error => { if (!controller.signal.aborted) setCitiesError(error.message); });
+    return () => controller.abort();
+  }, [citiesAttempt]);
 
-  const filteredVets = (vets || []).filter(v => {
-    // City Dropdown Filter
-    if (selectedCity !== 'all' && trNormalize(v.city) !== trNormalize(selectedCity)) {
-      return false;
-    }
-    // Search Query (City, District, Name, Address)
-    if (searchQuery.trim() !== '') {
-      const q = trNormalize(searchQuery);
-      const nameMatch = trNormalize(v.name).includes(q);
-      const cityMatch = trNormalize(v.city).includes(q);
-      const districtMatch = trNormalize(v.district).includes(q);
-      const addressMatch = trNormalize(v.address).includes(q);
-      if (!nameMatch && !cityMatch && !districtMatch && !addressMatch) {
-        return false;
-      }
-    }
-    // ICU Filter
-    if (hasICU) {
-      const featuresStr = trNormalize((v.features || []).join(' '));
-      if (!featuresStr.includes('yogun bakim')) {
-        return false;
-      }
-    }
-    return true;
-  });
+  const page = useCatalog('vets', { q: slugify(searchQuery).length >= 3 ? searchQuery : '', city: selectedCity, feature: hasICU ? ['Yoğun Bakım Ünitesi'] : [] });
+  const filteredVets = page.items;
 
   const resetFilters = () => {
     setSelectedCity('all');
@@ -89,14 +74,10 @@ export default function Vets({ vets = [], onViewChange }) {
                 onChange={(e) => setSelectedCity(e.target.value)}
                 className="w-full text-sm border-2 border-brand-navy rounded-xl p-2.5 outline-none focus:ring-0 bg-white cursor-pointer font-medium"
               >
-                <option value="all">Tüm Şehirler ({vets.length} Klinik)</option>
-                {cities.map(c => {
-                  const count = vets.filter(v => v.city === c).length;
-                  return (
-                    <option key={c} value={c}>{c} ({count} Klinik)</option>
-                  );
-                })}
+                <option value="all">Tüm Şehirler</option>
+                {cities.map(city => <option key={city} value={city}>{city}</option>)}
               </select>
+              {citiesError && <div><p role="alert">{citiesError}</p><button className="underline" onClick={() => setCitiesAttempt(value => value + 1)}>Tekrar dene</button></div>}
             </div>
 
             {/* Text Search Input */}
@@ -135,7 +116,7 @@ export default function Vets({ vets = [], onViewChange }) {
 
         {/* Listings Grid */}
         <section className="col-span-1 lg:col-span-3 space-y-6">
-          {filteredVets.length === 0 ? (
+          {page.loading || page.error ? <CatalogPagination page={page} /> : filteredVets.length === 0 ? (
             <div className="bg-white border-2 border-brand-navy/10 rounded-3xl p-12 text-center text-gray-500 max-w-xl mx-auto mt-8">
               <span className="text-5xl block mb-4">🏥</span>
               <h3 className="font-title font-bold text-xl text-gray-800">Acil Klinik Bulunamadı</h3>
@@ -208,10 +189,11 @@ export default function Vets({ vets = [], onViewChange }) {
                   {/* Direct Phone Call & Website Actions (No card click, No 'Hemencek Ara') */}
                   <div className="pt-4 mt-4 border-t border-brand-beige flex flex-col sm:flex-row items-center gap-2">
                     <a
-                      href={vet.phone ? `tel:${vet.phone.replace(/\s+/g, '')}` : '#'}
+                      href={`/veteriner/${encodeURIComponent(vet.id)}`}
+                      onClick={event => { event.preventDefault(); onViewChange('vet-detail', vet.id); }}
                       className="w-full bg-red-600 hover:bg-red-700 text-white font-extrabold text-xs py-3 px-4 rounded-2xl transition-colors flex items-center justify-center gap-2 shadow-xs font-title"
                     >
-                      <span>📞 Klinik Numarasını Ara: {vet.phone || 'Teyit Edin'}</span>
+                      <span>📞 {vet.phone || 'İletişim Bilgileri'}</span>
                     </a>
                     {vet.website && (
                       <a
@@ -230,6 +212,7 @@ export default function Vets({ vets = [], onViewChange }) {
           )}
         </section>
       </div>
+      <CatalogPagination page={page} />
       <SeoContentSection content={seoContent.vets || {}} />
     </div>
   );

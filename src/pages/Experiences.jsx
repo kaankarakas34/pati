@@ -1,30 +1,22 @@
-import React, { useMemo, useState } from 'react';
+import { useCatalog } from '../lib/useCatalog';
+import CatalogPagination from '../components/CatalogPagination';
+import DetailLoader from '../components/DetailLoader';
+import React, { useState } from 'react';
 import { DogIcon, CatIcon, BirdIcon, OtherIcon, LocationIcon, VerifiedBadge } from '../components/PetIcons';
 import SeoContentSection from '../components/SeoContentSection';
 import { seoContent } from '../data/seoContent';
+import { slugify } from '../../lib/seo-slugs';
 
-export default function Experiences({ experiences = [] }) {
+export default function Experiences() {
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedPet, setSelectedPet] = useState('all');
+  const [expandedId, setExpandedId] = useState(null);
 
-  const categories = useMemo(() => {
-    const unique = Array.from(new Set(experiences.map(item => item.category).filter(Boolean)));
-    return ['all', ...unique];
-  }, [experiences]);
+  const categories = ['all', 'Plaj & Sahil', 'Kafe & Restoran', 'Rota & Aktivite'];
 
-  const filteredExperiences = experiences.filter(item => {
-    if (selectedCity && !item.city.toLowerCase().includes(selectedCity.toLowerCase()) && !item.district.toLowerCase().includes(selectedCity.toLowerCase())) {
-      return false;
-    }
-    if (selectedCategory !== 'all' && item.category !== selectedCategory) {
-      return false;
-    }
-    if (selectedPet !== 'all' && !item.allowedPets.includes(selectedPet)) {
-      return false;
-    }
-    return true;
-  });
+  const page = useCatalog('experiences', { q: slugify(selectedCity).length >= 3 ? selectedCity : '', category: selectedCategory, pet: selectedPet });
+  const filteredExperiences = page.items;
 
   const resetFilters = () => {
     setSelectedCity('');
@@ -32,7 +24,7 @@ export default function Experiences({ experiences = [] }) {
     setSelectedPet('all');
   };
 
-  const renderPetIcons = (allowedPets) => (
+  const renderPetIcons = (allowedPets = []) => (
     <div className="flex gap-1.5 text-gray-600">
       {allowedPets.includes('dog') && <DogIcon className="w-4.5 h-4.5 text-brand-navy" />}
       {allowedPets.includes('cat') && <CatIcon className="w-4.5 h-4.5 text-amber-600" />}
@@ -98,7 +90,7 @@ export default function Experiences({ experiences = [] }) {
         </aside>
 
         <section className="col-span-1 lg:col-span-3">
-          {filteredExperiences.length === 0 ? (
+          {page.loading || page.error ? <CatalogPagination page={page} /> : filteredExperiences.length === 0 ? (
             <div className="bg-white border-2 border-brand-navy/10 rounded-3xl p-12 text-center text-gray-500 max-w-xl mx-auto mt-8">
               <span className="text-5xl block mb-4">🔎</span>
               <h3 className="font-title font-bold text-xl text-gray-800">Uygun Deneyim Bulunamadı</h3>
@@ -132,17 +124,13 @@ export default function Experiences({ experiences = [] }) {
                     <h2 className="font-title text-lg font-bold text-gray-900">{item.name}</h2>
                     <p className="text-xs text-gray-600 line-clamp-3 leading-relaxed">{item.description}</p>
 
-                    <div className="bg-brand-navy-light/35 border border-brand-navy/10 rounded-2xl p-3 text-xs text-brand-navy leading-relaxed">
-                      <strong>Pet politikası:</strong> {item.petPolicy}
-                    </div>
-
                     <div className="flex items-center gap-2 pt-2 border-t border-brand-beige">
                       <span className="text-2xs text-gray-400">Uygun:</span>
                       {renderPetIcons(item.allowedPets)}
                     </div>
 
                     <div className="flex flex-wrap gap-1.5">
-                      {item.features.slice(0, 4).map(feature => (
+                      {(item.features || []).slice(0, 4).map(feature => (
                         <span key={feature} className="text-3xs bg-brand-beige text-brand-navy px-2.5 py-1 rounded-full font-bold">
                           {feature}
                         </span>
@@ -150,6 +138,9 @@ export default function Experiences({ experiences = [] }) {
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-2 pt-3">
+                      <button type="button" aria-expanded={expandedId === item.id} onClick={() => setExpandedId(current => current === item.id ? null : item.id)} className="text-brand-navy underline text-sm">
+                        {expandedId === item.id ? 'Detayları Kapat' : 'Detayları Gör'}
+                      </button>
                       {item.mapUrl && (
                         <a href={item.mapUrl} target="_blank" rel="noopener noreferrer" className="flex-1 text-center bg-brand-navy text-white px-4 py-2.5 rounded-full text-xs font-bold font-title">
                           Haritada Aç
@@ -161,6 +152,15 @@ export default function Experiences({ experiences = [] }) {
                         </a>
                       )}
                     </div>
+                    {expandedId === item.id && <DetailLoader resource="experiences" id={item.id}>
+                      {detail => <div className="space-y-3 text-sm">
+                        <p>{detail.description}</p>
+                        {detail.petPolicy && <p><strong>Pet politikası:</strong> {detail.petPolicy}</p>}
+                        {detail.rules && <p>{detail.rules}</p>}
+                        {detail.mapUrl && <a className="block underline" href={detail.mapUrl} target="_blank" rel="noopener noreferrer">Haritada Aç</a>}
+                        {detail.website && <a className="block underline" href={detail.website} target="_blank" rel="noopener noreferrer">Web Sitesi</a>}
+                      </div>}
+                    </DetailLoader>}
                   </div>
                 </article>
               ))}
@@ -168,6 +168,7 @@ export default function Experiences({ experiences = [] }) {
           )}
         </section>
       </div>
+      <CatalogPagination page={page} />
       <SeoContentSection content={seoContent.experiences} />
     </div>
   );

@@ -1,15 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { EditIcon, PlusIcon, CheckIcon } from '../components/PetIcons';
+import CatalogPagination from '../components/CatalogPagination';
+import { useAdminCollection } from '../lib/useAdminCollection';
 
-export default function AdminPanel({
-  hotels, setHotels,
-  boardings, setBoardings,
-  guides, setGuides,
-  corrections, setCorrections,
-  complaints = [], setComplaints,
-  experiences = [], setExperiences,
-  ads = [], setAds
-}) {
+export default function AdminPanel() {
   const [activeSubTab, setActiveSubTab] = useState('hotels');
   
   // Edit states
@@ -17,7 +11,7 @@ export default function AdminPanel({
   const [isAdding, setIsAdding] = useState(false);
   const [hotelSearch, setHotelSearch] = useState('');
   const [hotelVerificationFilter, setHotelVerificationFilter] = useState('all');
-  const [hotelPage, setHotelPage] = useState(1);
+  const [feedbackStatus, setFeedbackStatus] = useState('pending');
 
   // Authentication states
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -26,30 +20,21 @@ export default function AdminPanel({
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
-  const [adApplications, setAdApplications] = useState([]);
-  const [applicationsLoading, setApplicationsLoading] = useState(false);
-  const [applicationsError, setApplicationsError] = useState('');
-
-  const loadAdApplications = async () => {
-    const token = sessionStorage.getItem('admin_token');
-    if (!token) return;
-    setApplicationsLoading(true);
-    setApplicationsError('');
-    try {
-      const response = await fetch('/api/ad-applications', { headers: { 'x-admin-token': token } });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Başvurular yüklenemedi.');
-      setAdApplications(Array.isArray(data) ? data : []);
-    } catch (error) {
-      setApplicationsError(error.message);
-    } finally {
-      setApplicationsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (isAuthenticated) loadAdApplications();
-  }, [isAuthenticated]);
+  const resource = activeSubTab === 'complaints-inbox' ? 'complaints' : activeSubTab;
+  const isFeedback = ['reviews', 'corrections', 'complaints'].includes(resource);
+  const collection = useAdminCollection(resource, resource === 'hotels' ? {
+    q: hotelSearch.trim(),
+    verified: hotelVerificationFilter === 'all' ? undefined : String(hotelVerificationFilter === 'verified')
+  } : isFeedback ? { status: feedbackStatus } : {}, isAuthenticated);
+  const hotels = resource === 'hotels' ? collection.items : [];
+  const boardings = resource === 'boardings' ? collection.items : [];
+  const guides = resource === 'guides' ? collection.items : [];
+  const experiences = resource === 'experiences' ? collection.items : [];
+  const ads = resource === 'ads' ? collection.items : [];
+  const adApplications = resource === 'ad-applications' ? collection.items : [];
+  const applicationsLoading = collection.loading;
+  const applicationsError = collection.error;
+  const loadAdApplications = collection.reload;
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -60,7 +45,7 @@ export default function AdminPanel({
         body: JSON.stringify({ username, password })
       });
       const data = await res.json();
-      if (!res.ok) {
+      if (!res.ok || !data.token) {
         setLoginError(data.error || 'Hatalı kullanıcı adı veya şifre!');
         return;
       }
@@ -93,12 +78,12 @@ export default function AdminPanel({
     try {
       const res = await fetch('/api/scrape-hotel', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': sessionStorage.getItem('admin_token') || '' },
         body: JSON.stringify({ url: scrapeUrl })
       });
       const data = await res.json();
-      if (data.error) {
-        setScrapeError(data.error);
+      if (!res.ok || data.error) {
+        setScrapeError(data.error || 'URL taranamadı.');
       } else {
         // Auto populate fields
         setHotelForm(prev => ({
@@ -166,40 +151,16 @@ export default function AdminPanel({
     status: 'active', impressions: 0, clicks: 0
   });
 
-  // Stats calculations
-  const pendingCorrectionsCount = corrections.filter(c => c.status === 'pending').length;
-  const pendingComplaintsCount = complaints.filter(c => c.status === 'pending').length;
+  // Counts describe only the currently loaded page.
   const verifiedHotelsCount = hotels.filter(hotel => hotel.verified === true).length;
   const unverifiedHotelsCount = hotels.length - verifiedHotelsCount;
-  const filteredHotels = useMemo(() => {
-    const query = hotelSearch.trim().toLocaleLowerCase('tr-TR');
-    return hotels.filter(hotel => {
-      const matchesQuery = !query || [hotel.name, hotel.city, hotel.district]
-        .some(value => String(value || '').toLocaleLowerCase('tr-TR').includes(query));
-      const matchesVerification = hotelVerificationFilter === 'all'
-        || (hotelVerificationFilter === 'verified' && hotel.verified === true)
-        || (hotelVerificationFilter === 'unverified' && hotel.verified !== true);
-      return matchesQuery && matchesVerification;
-    });
-  }, [hotels, hotelSearch, hotelVerificationFilter]);
-  const hotelsPerPage = 25;
-  const hotelPageCount = Math.max(1, Math.ceil(filteredHotels.length / hotelsPerPage));
-  const visibleHotels = filteredHotels.slice((hotelPage - 1) * hotelsPerPage, hotelPage * hotelsPerPage);
-
-  useEffect(() => {
-    setHotelPage(1);
-  }, [hotelSearch, hotelVerificationFilter]);
-
-  useEffect(() => {
-    setHotelPage(current => Math.min(current, hotelPageCount));
-  }, [hotelPageCount]);
 
   const handleEditHotel = (hotel) => {
-    setEditingItem({ type: 'hotel', id: hotel.id });
+    setEditingItem({ type: 'hotel', id: hotel.id, version: hotel.version });
     setHotelForm({
       ...hotel,
-      suitableFor: hotel.suitableFor.join('\n'),
-      notSuitableFor: hotel.notSuitableFor.join('\n'),
+      suitableFor: (hotel.suitableFor || []).join('\n'),
+      notSuitableFor: (hotel.notSuitableFor || []).join('\n'),
       disallowedPets: hotel.disallowedPets ? hotel.disallowedPets.join('\n') : '',
       galleryImages: (hotel.galleryImages || []).join('\n'),
       features: hotel.features || [], quizTags: hotel.quizTags || [], bookingLinks: hotel.bookingLinks || { enuygun: '', otelz: '', booking: '' }
@@ -208,7 +169,7 @@ export default function AdminPanel({
   };
 
   const handleEditBoarding = (boarding) => {
-    setEditingItem({ type: 'boarding', id: boarding.id });
+    setEditingItem({ type: 'boarding', id: boarding.id, version: boarding.version });
     setBoardingForm({
       ...boarding,
       galleryImages: (boarding.galleryImages || []).join('\n'),
@@ -218,33 +179,28 @@ export default function AdminPanel({
   };
 
   const handleEditGuide = (guide) => {
-    setEditingItem({ type: 'guide', id: guide.id });
+    setEditingItem({ type: 'guide', id: guide.id, version: guide.version });
     setGuideForm({
       ...guide,
-      checklist: guide.checklist.join('\n'),
-      authorName: guide.author.name,
-      authorRole: guide.author.role,
-      authorImage: guide.author.imageUrl
+      checklist: (guide.checklist || []).join('\n'),
+      authorName: guide.author?.name || '',
+      authorRole: guide.author?.role || '',
+      authorImage: guide.author?.imageUrl || ''
     });
     setIsAdding(true);
   };
 
-  const handleDeleteItem = (type, id) => {
+  const handleDeleteItem = async (type, id) => {
     if (!window.confirm('Bu kaydı tamamen silmek istediğinize emin misiniz?')) return;
-    if (type === 'hotel') {
-      setHotels(hotels.filter(h => h.id !== id));
-    } else if (type === 'boarding') {
-      setBoardings(boardings.filter(b => b.id !== id));
-    } else {
-      setGuides(guides.filter(g => g.id !== id));
-    }
+    const item = collection.items.find(record => record.id === id);
+    if (item) await collection.remove(item);
   };
 
-  const handleSaveHotel = (e) => {
+  const handleSaveHotel = async (e) => {
     e.preventDefault();
     const formattedHotel = {
       ...hotelForm,
-      id: editingItem ? editingItem.id : `hotel-${Date.now()}`,
+      ...(editingItem ? { id: editingItem.id, version: editingItem.version } : {}),
       suitability: parseInt(hotelForm.suitability),
       weightLimit: parseInt(hotelForm.weightLimit),
       maxPetsPerRoom: parseInt(hotelForm.maxPetsPerRoom),
@@ -258,20 +214,16 @@ export default function AdminPanel({
       verified: hotelForm.verified === true || hotelForm.verified === 'true'
     };
 
-    if (editingItem) {
-      setHotels(hotels.map(h => h.id === editingItem.id ? formattedHotel : h));
-    } else {
-      setHotels([formattedHotel, ...hotels]);
-    }
+    if (!await collection.save(formattedHotel)) return;
     setIsAdding(false);
     setEditingItem(null);
   };
 
-  const handleSaveBoarding = (e) => {
+  const handleSaveBoarding = async (e) => {
     e.preventDefault();
     const formattedBoarding = {
       ...boardingForm,
-      id: editingItem ? editingItem.id : `boarding-${Date.now()}`,
+      ...(editingItem ? { id: editingItem.id, version: editingItem.version } : {}),
       cameraSupport: boardingForm.cameraSupport === true || boardingForm.cameraSupport === 'true', bookingLinks: boardingForm.bookingLinks,
       galleryImages: typeof boardingForm.galleryImages === 'string' ? boardingForm.galleryImages.split('\n').map(url => url.trim()).filter(Boolean) : boardingForm.galleryImages,
       baseTrustScore: parseFloat(boardingForm.baseTrustScore || 9.5),
@@ -279,21 +231,16 @@ export default function AdminPanel({
       verified: true
     };
 
-    if (editingItem) {
-      setBoardings(boardings.map(b => b.id === editingItem.id ? formattedBoarding : b));
-    } else {
-      setBoardings([formattedBoarding, ...boardings]);
-    }
+    if (!await collection.save(formattedBoarding)) return;
     setIsAdding(false);
     setEditingItem(null);
   };
 
-  const handleSaveGuide = (e) => {
+  const handleSaveGuide = async (e) => {
     e.preventDefault();
     const formattedGuide = {
       ...guideForm,
-      id: editingItem ? editingItem.id : `guide-${Date.now()}`,
-      slug: guideForm.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+      ...(editingItem ? { id: editingItem.id, version: editingItem.version } : {}),
       checklist: guideForm.checklist.split('\n').filter(Boolean),
       author: {
         name: guideForm.authorName,
@@ -302,26 +249,21 @@ export default function AdminPanel({
       }
     };
 
-    if (editingItem) {
-      setGuides(guides.map(g => g.id === editingItem.id ? formattedGuide : g));
-    } else {
-      setGuides([formattedGuide, ...guides]);
-    }
+    if (!await collection.save(formattedGuide)) return;
     setIsAdding(false);
     setEditingItem(null);
   };
 
-  const handleSaveExperience = (e) => {
+  const handleSaveExperience = async (e) => {
     e.preventDefault();
     const formattedExperience = {
       ...experienceForm,
-      id: `exp-${Date.now()}`,
       allowedPets: experienceForm.allowedPets.split(',').map(item => item.trim()).filter(Boolean),
       features: experienceForm.features.split('\n').map(item => item.trim()).filter(Boolean),
       baseTrustScore: parseFloat(experienceForm.baseTrustScore || 9.0),
       verified: true
     };
-    setExperiences([formattedExperience, ...experiences]);
+    if (!await collection.save(formattedExperience)) return;
     setExperienceForm({
       name: '', category: 'Kafe & Restoran', city: '', district: '', imageUrl: '',
       petPolicy: '', allowedPets: 'dog,cat', features: '', description: '', address: '',
@@ -330,29 +272,20 @@ export default function AdminPanel({
     });
   };
 
-  const handleSaveAd = (e) => {
+  const handleSaveAd = async (e) => {
     e.preventDefault();
     const formattedAd = {
       ...adForm,
-      id: `ad-${Date.now()}`,
       impressions: parseInt(adForm.impressions || 0),
       clicks: parseInt(adForm.clicks || 0)
     };
-    setAds([formattedAd, ...ads]);
+    if (!await collection.save(formattedAd)) return;
     setAdForm({
       title: '', sponsor: '', placement: 'home-hero', targetUrl: '', imageUrl: '',
       city: '', category: 'Konaklama', startsAt: new Date().toISOString().split('T')[0],
       endsAt: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString().split('T')[0],
       status: 'active', impressions: 0, clicks: 0
     });
-  };
-
-  const handleCorrectionAction = (id, newStatus) => {
-    setCorrections(corrections.map(c => c.id === id ? { ...c, status: newStatus } : c));
-  };
-
-  const handleComplaintAction = (id, newStatus) => {
-    setComplaints(complaints.map(c => c.id === id ? { ...c, status: newStatus } : c));
   };
 
   if (!isAuthenticated) {
@@ -424,30 +357,10 @@ export default function AdminPanel({
         >
           <span>🔓</span> Çıkış Yap
         </button>
-        <div className="flex gap-3 text-center">
-          <div className="bg-white border border-brand-beige rounded-xl p-3 shadow-2xs min-w-[90px]">
-            <span className="text-lg font-bold text-brand-green block">{hotels.length}</span>
-            <span className="text-4xs text-gray-500 font-semibold uppercase">Otel</span>
-          </div>
-          <div className="bg-white border border-brand-beige rounded-xl p-3 shadow-2xs min-w-[90px]">
-            <span className="text-lg font-bold text-brand-earth-dark block">{boardings.length}</span>
-            <span className="text-4xs text-gray-500 font-semibold uppercase">Pet Oteli</span>
-          </div>
-          <div className="bg-white border border-brand-beige rounded-xl p-3 shadow-2xs min-w-[90px]">
-            <span className="text-lg font-bold text-sky-600 block">{guides.length}</span>
-            <span className="text-4xs text-gray-500 font-semibold uppercase">Rehber</span>
-          </div>
-          <div className="bg-white border border-brand-beige rounded-xl p-3 shadow-2xs min-w-[90px]">
-            <span className="text-lg font-bold text-brand-orange block">{pendingCorrectionsCount}</span>
-            <span className="text-4xs text-gray-500 font-semibold uppercase">Bildirim</span>
-          </div>
-          <div className="bg-white border border-brand-beige rounded-xl p-3 shadow-2xs min-w-[90px]">
-            <span className="text-lg font-bold text-red-650 block">{pendingComplaintsCount}</span>
-            <span className="text-4xs text-gray-500 font-semibold uppercase">Şikayet</span>
-          </div>
-        </div>
+        <span className="text-sm text-gray-500">Bu sayfada {collection.items.length} kayıt</span>
       </div>
 
+      <fieldset disabled={collection.busy} className="min-w-0">
       {/* Sub tabs navigation */}
       <div className="flex border-b border-brand-beige mb-6 gap-6 text-sm font-semibold overflow-x-auto">
         <button onClick={() => { setActiveSubTab('hotels'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'hotels' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Oteller</button>
@@ -455,19 +368,27 @@ export default function AdminPanel({
         <button onClick={() => { setActiveSubTab('guides'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'guides' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Rehberler</button>
         <button onClick={() => { setActiveSubTab('experiences'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'experiences' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Gezilecek Yerler</button>
         <button onClick={() => { setActiveSubTab('ads'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'ads' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Reklamlar</button>
-        <button onClick={() => { setActiveSubTab('ad-applications'); setIsAdding(false); loadAdApplications(); }} className={`pb-3 border-b-2 relative whitespace-nowrap ${activeSubTab === 'ad-applications' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
+        <button onClick={() => { setActiveSubTab('ad-applications'); setIsAdding(false); }} className={`pb-3 border-b-2 relative whitespace-nowrap ${activeSubTab === 'ad-applications' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
           Reklam Başvuruları
         </button>
         <button onClick={() => { setActiveSubTab('corrections'); setIsAdding(false); }} className={`pb-3 border-b-2 relative whitespace-nowrap ${activeSubTab === 'corrections' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
           Düzeltmeler
-          {pendingCorrectionsCount > 0 && <span className="ml-1 bg-brand-orange text-white text-4xs rounded-full px-1.5 py-0.5 font-bold">{pendingCorrectionsCount}</span>}
+
         </button>
         <button onClick={() => { setActiveSubTab('complaints-inbox'); setIsAdding(false); }} className={`pb-3 border-b-2 relative whitespace-nowrap ${activeSubTab === 'complaints-inbox' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
           Şikayet Kutusu
-          {pendingComplaintsCount > 0 && <span className="ml-1 bg-red-650 text-white text-4xs rounded-full px-1.5 py-0.5 font-bold animate-pulse">{pendingComplaintsCount}</span>}
-        </button>
-      </div>
 
+        </button>
+        <button onClick={() => { setActiveSubTab('reviews'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'reviews' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Yorumlar</button>
+      </div>
+      </fieldset>
+
+      {collection.error && <p role="alert" className="mb-4 text-red-700">{collection.error}</p>}
+      {collection.mutationError && <p role="alert" className="mb-4 text-red-700">{collection.mutationError}</p>}
+      {collection.message && <p role="status" className="mb-4 text-brand-green">{collection.message}</p>}
+      <fieldset disabled={collection.busy} className="min-w-0" aria-busy={collection.busy}>
+      {!isAdding && <CatalogPagination page={collection} />}
+      {collection.mutationError && <button type="button" onClick={collection.reload} className="mb-4 border rounded-lg px-3 py-2">Listeyi yenile</button>}
       {/* Adding/Editing View */}
       {isAdding ? (
         <div className="bg-white border border-brand-beige rounded-3xl p-6 md:p-8 shadow-sm">
@@ -906,7 +827,7 @@ export default function AdminPanel({
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-5">
                 <div>
                   <h3 className="font-title font-bold text-lg text-gray-950">Tüm Oteller</h3>
-                  <p className="text-xs text-gray-500 mt-1">Toplam {hotels.length} tesis · {verifiedHotelsCount} doğrulanmış · {unverifiedHotelsCount} doğrulanmamış</p>
+                  <p className="text-xs text-gray-500 mt-1">Bu sayfada {hotels.length} tesis · {verifiedHotelsCount} doğrulanmış · {unverifiedHotelsCount} doğrulanmamış</p>
                 </div>
                 <button onClick={() => { setIsAdding(true); setEditingItem(null); setHotelForm({ name: '', city: '', district: '', type: 'Otel', suitability: 1, weightLimit: 0, verified: false, extraFee: 'no', allowedPets: ['dog'], features: [], quizTags: [], imageUrl: '', galleryImages: '', description: '', whySelected: '', suitableFor: '', notSuitableFor: '', disallowedPets: '', breedRestrictions: '', maxPetsPerRoom: 1, depositInfo: 'Alınmıyor', requiredDocs: 'Aşı karnesi', canLeaveInRoomAlone: true, rules: { pool: '', beach: '', restaurant: '' }, bookingLinks: { enuygun: '', otelz: '', booking: '' }, veterinarySupport: '', phone: '', email: '', website: '', editorNote: '', infoSource: '', faq: [{ q: '', a: '' }], lastVerified: new Date().toISOString().split('T')[0], baseTrustScore: 9.5 }); }} className="bg-brand-green text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1 self-start lg:self-auto">
                   <PlusIcon className="w-4 h-4" /> Yeni Otel Ekle
@@ -922,7 +843,6 @@ export default function AdminPanel({
                 </select>
               </div>
 
-              <p className="text-xs text-gray-500 mb-3">{filteredHotels.length} kayıt bulundu · Sayfa {hotelPage}/{hotelPageCount}</p>
               <table className="w-full text-left text-sm border-collapse">
                 <thead>
                   <tr className="border-b border-brand-beige text-gray-500 font-medium text-xs">
@@ -936,7 +856,7 @@ export default function AdminPanel({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-brand-beige/55">
-                  {visibleHotels.map(h => (
+                  {hotels.map(h => (
                     <tr key={h.id} className="hover:bg-brand-cream/30">
                       <td className="py-3.5 px-2 font-semibold text-gray-900">{h.name}</td>
                       <td className="py-3.5 px-2 text-xs text-gray-600">{h.city}, {h.district}</td>
@@ -956,14 +876,7 @@ export default function AdminPanel({
                   ))}
                 </tbody>
               </table>
-              {filteredHotels.length === 0 && <p className="text-center py-10 text-sm text-gray-500">Aramanızla eşleşen otel bulunamadı.</p>}
-              {hotelPageCount > 1 && (
-                <div className="flex items-center justify-between gap-3 border-t border-brand-beige mt-4 pt-4">
-                  <button type="button" disabled={hotelPage === 1} onClick={() => setHotelPage(page => Math.max(1, page - 1))} className="border border-gray-300 px-4 py-2 rounded-lg text-xs font-bold disabled:opacity-40">Önceki</button>
-                  <span className="text-xs text-gray-500">{(hotelPage - 1) * hotelsPerPage + 1}-{Math.min(hotelPage * hotelsPerPage, filteredHotels.length)} / {filteredHotels.length}</span>
-                  <button type="button" disabled={hotelPage === hotelPageCount} onClick={() => setHotelPage(page => Math.min(hotelPageCount, page + 1))} className="border border-gray-300 px-4 py-2 rounded-lg text-xs font-bold disabled:opacity-40">Sonraki</button>
-                </div>
-              )}
+              {!collection.loading && !collection.error && hotels.length === 0 && <p className="text-center py-10 text-sm text-gray-500">Aramanızla eşleşen otel bulunamadı.</p>}
             </div>
           )}
 
@@ -1085,7 +998,7 @@ export default function AdminPanel({
                       <td className="py-3.5 px-2 text-xs text-gray-600">{item.city}, {item.district}</td>
                       <td className="py-3.5 px-2 text-xs font-bold text-brand-green">{item.baseTrustScore}/10</td>
                       <td className="py-3.5 px-2 text-right">
-                        <button onClick={() => setExperiences(experiences.filter(e => e.id !== item.id))} className="text-red-500 hover:underline text-xs font-bold">Sil</button>
+                        <button onClick={() => handleDeleteItem('experience', item.id)} className="text-red-500 hover:underline text-xs font-bold">Sil</button>
                       </td>
                     </tr>
                   ))}
@@ -1140,7 +1053,7 @@ export default function AdminPanel({
                       <td className="py-3.5 px-2 text-xs font-bold text-brand-green">{ad.status}</td>
                       <td className="py-3.5 px-2 text-xs">{ad.impressions} gösterim / {ad.clicks} tık</td>
                       <td className="py-3.5 px-2 text-right">
-                        <button onClick={() => setAds(ads.filter(item => item.id !== ad.id))} className="text-red-500 hover:underline text-xs font-bold">Sil</button>
+                        <button onClick={() => handleDeleteItem('ad', ad.id)} className="text-red-500 hover:underline text-xs font-bold">Sil</button>
                       </td>
                     </tr>
                   ))}
@@ -1190,107 +1103,42 @@ export default function AdminPanel({
             </div>
           )}
 
-          {activeSubTab === 'corrections' && (
+          {isFeedback && (
             <div>
-              <h3 className="font-title font-bold text-lg text-gray-950 mb-6">Kullanıcı Bilgi Düzeltme İstekleri</h3>
-              {corrections.length === 0 ? (
-                <p className="text-center py-6 text-sm text-gray-500 italic">Şu anda incelenecek düzeltme bildirim bulunmamaktadır.</p>
-              ) : (
-                <div className="space-y-4">
-                  {corrections.map(corr => (
-                    <div key={corr.id} className="border border-brand-beige rounded-2xl p-5 bg-brand-cream/30 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-left">
-                      <div className="space-y-1.5 max-w-2xl">
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-sm text-gray-900">{corr.hotelName}</span>
-                          <span className={`text-3xs font-bold px-2 py-0.5 rounded uppercase tracking-wider ${
-                            corr.status === 'pending' ? 'bg-amber-100 text-amber-700 animate-pulse' : corr.status === 'approved' ? 'bg-brand-green-light text-brand-green' : 'bg-gray-100 text-gray-400'
-                          }`}>
-                            {corr.status === 'pending' ? 'Bekliyor' : corr.status === 'approved' ? 'Uygulandı' : 'Reddedildi'}
-                          </span>
-                        </div>
-                        <p className="text-xs text-gray-500">Tarih: {corr.date}</p>
-                        <p className="text-sm text-gray-700 bg-white p-3 rounded-lg border border-brand-beige leading-relaxed italic">"{corr.text}"</p>
-                      </div>
-
-                      {corr.status === 'pending' && (
-                        <div className="flex gap-2 whitespace-nowrap">
-                          <button
-                            onClick={() => {
-                              handleCorrectionAction(corr.id, 'approved');
-                              alert('Bildirim onaylandı olarak işaretlendi. İlgili tesis bilgilerini form üzerinden güncelleyebilirsiniz.');
-                            }}
-                            className="bg-brand-green hover:bg-brand-green-hover text-white text-xs px-3.5 py-2 rounded-lg font-bold flex items-center gap-1"
-                          >
-                            <CheckIcon className="w-3.5 h-3.5 text-white" /> Onayla
-                          </button>
-                          <button
-                            onClick={() => handleCorrectionAction(corr.id, 'rejected')}
-                            className="border border-gray-300 text-gray-600 text-xs px-3 py-2 rounded-lg font-bold hover:bg-gray-50"
-                          >
-                            Yoksay
-                          </button>
-                        </div>
-                      )}
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+                <h3 className="font-title font-bold text-lg text-gray-950">
+                  {resource === 'reviews' ? 'Kullanıcı Yorumları' : resource === 'corrections' ? 'Bilgi Düzeltme İstekleri' : 'Şikayet ve İhlal Bildirimleri'}
+                </h3>
+                <select aria-label="Moderasyon durumu" value={feedbackStatus} onChange={event => setFeedbackStatus(event.target.value)} className="border rounded-lg p-2 text-sm">
+                  <option value="pending">Bekliyor</option>
+                  <option value="approved">Onaylandı</option>
+                  <option value="rejected">Reddedildi</option>
+                  <option value="all">Tümü</option>
+                </select>
+              </div>
+              {!collection.loading && !collection.error && collection.items.length === 0 && <p className="py-6 text-sm text-gray-500">Kayıt bulunamadı.</p>}
+              <div className="divide-y divide-brand-beige">
+                {collection.items.map(item => (
+                  <article key={item.id} className="py-5 flex flex-col md:flex-row justify-between gap-4">
+                    <div className="space-y-2 min-w-0">
+                      <h4 className="font-bold text-sm break-words">{item.hotelName || item.targetName || item.hotelId || item.targetId}</h4>
+                      <p className="text-xs text-gray-500 break-words">{item.author || ''} · {item.date} · {{ pending: 'Bekliyor', approved: 'Onaylandı', rejected: 'Reddedildi' }[item.status]}</p>
+                      {resource === 'reviews' && <p className="font-bold text-sm">{item.rating}/10</p>}
+                      <p className="text-sm whitespace-pre-wrap break-words">{item.text}</p>
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {activeSubTab === 'complaints-inbox' && (
-            <div>
-              <h3 className="font-title font-bold text-lg text-gray-950 mb-6">Kullanıcı Şikayet & İhlal Bildirimleri</h3>
-              <p className="text-xs text-gray-500 mb-6">
-                Buradaki şikayetleri onayladığınızda, şikayet ilgili tesisin detay sayfasındaki "Güven & Şikayetler" sekmesinde yayınlanır ve **güven puanını dinamik olarak 0.5 puan düşürür**.
-              </p>
-
-              {complaints.length === 0 ? (
-                <p className="text-center py-6 text-sm text-gray-500 italic">Şu anda gelen şikayet kaydı bulunmamaktadır.</p>
-              ) : (
-                <div className="space-y-4">
-                  {complaints.map(comp => (
-                    <div key={comp.id} className="border border-brand-beige rounded-2xl p-5 bg-red-50/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-left shadow-2xs">
-                      <div className="space-y-1.5 max-w-2xl">
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-sm text-gray-900">{comp.targetName}</span>
-                          <span className={`text-3xs font-bold px-2 py-0.5 rounded uppercase tracking-wider ${
-                            comp.status === 'pending' ? 'bg-amber-100 text-amber-700 animate-pulse' : comp.status === 'approved' ? 'bg-red-650 text-white' : 'bg-gray-100 text-gray-400'
-                          }`}>
-                            {comp.status === 'pending' ? 'İncelemede' : comp.status === 'approved' ? 'Onaylandı (Ceza Puanı Aktif)' : 'Reddedildi'}
-                          </span>
-                        </div>
-                        <p className="text-xs text-gray-500">Bildiren: <strong>{comp.author}</strong> | Tarih: {comp.date}</p>
-                        <p className="text-sm text-gray-700 bg-white p-3 rounded-lg border border-brand-beige leading-relaxed italic">"{comp.text}"</p>
-                      </div>
-
-                      {comp.status === 'pending' && (
-                        <div className="flex gap-2 whitespace-nowrap">
-                          <button
-                            onClick={() => {
-                              handleComplaintAction(comp.id, 'approved');
-                              alert('Şikayet onaylandı! İlgili tesisin güven puanı 0.5 puan düşürüldü ve detay sayfasında yayına alındı.');
-                            }}
-                            className="bg-brand-orange hover:bg-brand-orange-hover text-white text-xs px-3.5 py-2 rounded-lg font-bold flex items-center gap-1"
-                          >
-                            <CheckIcon className="w-3.5 h-3.5 text-white" /> Onayla & Yayınla
-                          </button>
-                          <button
-                            onClick={() => handleComplaintAction(comp.id, 'rejected')}
-                            className="border border-gray-300 text-gray-600 text-xs px-3 py-2 rounded-lg font-bold hover:bg-gray-50"
-                          >
-                            Yoksay / Reddet
-                          </button>
-                        </div>
-                      )}
+                    <div className="flex flex-wrap gap-2 items-start shrink-0">
+                      {item.status !== 'approved' && <button type="button" onClick={async () => { await collection.moderate(item, 'approved'); }} className="bg-brand-green text-white text-xs px-3 py-2 rounded-lg font-bold flex items-center gap-1"><CheckIcon className="w-3.5 h-3.5" />Onayla</button>}
+                      {item.status !== 'rejected' && <button type="button" onClick={async () => { await collection.moderate(item, 'rejected'); }} className="border border-gray-300 text-xs px-3 py-2 rounded-lg font-bold">Reddet</button>}
+                      {item.status !== 'pending' && <button type="button" onClick={async () => { await collection.moderate(item, 'pending'); }} className="border border-gray-300 text-xs px-3 py-2 rounded-lg font-bold">İncelemeye al</button>}
                     </div>
-                  ))}
-                </div>
-              )}
+                  </article>
+                ))}
+              </div>
             </div>
           )}
         </div>
       )}
+      </fieldset>
     </div>
   );
 }

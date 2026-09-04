@@ -1,154 +1,127 @@
-import fs from 'fs';
-import path from 'path';
+import 'dotenv/config';
+import { readFile, stat } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { parseArgs } from 'node:util';
 import pg from 'pg';
+import { databaseConfig } from '../lib/database-config.js';
+import { boundedInteger, isMain, validDate } from './database-preflight.js';
 
-const { Pool } = pg;
-
-const jsonPath = 'C:\\Users\\murat\\OneDrive\\Desktop\\google map scraper\\veteriner-output\\veteriner_24_7_list.json';
-const rawData = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
-
-const districtCityMap = {
-  'Bodrum': { city: 'Muğla', district: 'Bodrum' },
-  'Fethiye': { city: 'Muğla', district: 'Fethiye' },
-  'Marmaris': { city: 'Muğla', district: 'Marmaris' },
-  'Alanya': { city: 'Antalya', district: 'Alanya' },
-  'Kuşadası': { city: 'Aydın', district: 'Kuşadası' },
-  'Alaçatı': { city: 'İzmir', district: 'Çeşme' },
-  'Çeşme': { city: 'İzmir', district: 'Çeşme' },
-  'Sapanca': { city: 'Sakarya', district: 'Sapanca' },
-  'Ayvalık': { city: 'Balıkesir', district: 'Ayvalık' }
+const districtCities = {
+  Bodrum: ['Mu\u011fla', 'Bodrum'], Fethiye: ['Mu\u011fla', 'Fethiye'], Marmaris: ['Mu\u011fla', 'Marmaris'],
+  Alanya: ['Antalya', 'Alanya'], 'Ku\u015fadas\u0131': ['Ayd\u0131n', 'Ku\u015fadas\u0131'],
+  'Ala\u00e7at\u0131': ['\u0130zmir', '\u00c7e\u015fme'], '\u00c7e\u015fme': ['\u0130zmir', '\u00c7e\u015fme'],
+  Sapanca: ['Sakarya', 'Sapanca'], 'Ayval\u0131k': ['Bal\u0131kesir', 'Ayval\u0131k']
 };
-
-let count = 0;
-const processed = [];
-
-Object.entries(rawData).forEach(([key, list]) => {
-  list.forEach((item) => {
-    count++;
-    let city = key;
-    let district = key;
-
-    if (districtCityMap[key]) {
-      city = districtCityMap[key].city;
-      district = districtCityMap[key].district;
-    }
-
-    if (item.address) {
-      const parts = item.address.split(',');
-      const lastPart = parts[parts.length - 1].trim();
-      const match = lastPart.match(/([A-Za-zÇÇĞğİıÖöŞşAaBbCcÇçDdEeFfGgĞğHhIıİiJjKkLlMmNnOoÖöPpRrSsŞşTtUuÜüVvYyZz\s]+)\/([A-Za-zÇÇĞğİıÖöŞşAaBbCcÇçDdEeFfGgĞğHhIıİiJjKkLlMmNnOoÖöPpRrSsŞşTtUuÜüVvYyZz\s]+)$/);
-      if (match) {
-        district = match[1].replace(/^\d+\s*/, '').trim();
-        city = match[2].trim();
-      }
-    }
-
-    const rating = item.rating ? Number(item.rating) : 4.8;
-    const baseTrustScore = Math.min(10, Math.max(1, Number((rating * 2).toFixed(1))));
-    
-    const features = ['7/24 Acil Servis', 'Yoğun Bakım Ünitesi', 'Cerrahi Müdahale'];
-    if (item.reviews && item.reviews > 80) features.push('Laboratuvar & Röntgen');
-
-    const descRating = item.rating ? ` (Google Haritalar Puanı: ${item.rating}${item.reviews ? `, ${item.reviews} değerlendirme` : ''})` : '';
-
-    processed.push({
-      id: `vet-${count}`,
-      name: item.title.trim(),
-      city: city,
-      district: district,
-      imageUrl: '',
-      address: item.address ? item.address.trim() : '',
-      features: features,
-      description: `${item.title.trim()}, ${city} ${district} bölgesinde 7/24 kesintisiz acil ve nöbetçi veterinerlik hizmeti sunmaktadır.${descRating}`,
-      phone: item.phone ? item.phone.trim() : '',
-      email: '',
-      website: item.website ? item.website.trim() : '',
-      baseTrustScore: baseTrustScore,
-      lastVerified: '2026-09-03'
-    });
-  });
-});
-
-console.log(`Prepared ${processed.length} vet records.`);
-
-// Update src/data/mockData.js
-const mockDataPath = path.resolve(process.cwd(), 'src/data/mockData.js');
-let mockDataContent = fs.readFileSync(mockDataPath, 'utf8');
-
-const exportRegex = /export const initialVets = \[[\s\S]*?\];/;
-const newExportCode = `export const initialVets = ${JSON.stringify(processed, null, 2)};`;
-
-if (exportRegex.test(mockDataContent)) {
-  mockDataContent = mockDataContent.replace(exportRegex, newExportCode);
-  fs.writeFileSync(mockDataPath, mockDataContent, 'utf8');
-  console.log('Successfully updated initialVets in src/data/mockData.js');
-} else {
-  console.error('Could not find initialVets export in src/data/mockData.js');
+function text(value, max, label, required = false) {
+  if (value == null && !required) return '';
+  if (typeof value !== 'string' || value.trim().length > max || (required && !value.trim())) throw new Error(`Invalid ${label}.`);
+  return value.trim();
 }
 
-// Database sync if process.env.DATABASE_URL is set
-const connectionString = process.env.DATABASE_URL || 'postgresql://pati_user:pati_password@localhost:5436/pati_db';
-
-async function syncDb() {
-  const pool = new Pool({
-    connectionString,
-    ssl: false,
-    connectionTimeoutMillis: 3000
-  });
-
-  try {
-    const client = await pool.connect();
-    console.log('Connected to Postgres database. Upserting records...');
-
-    await client.query(`
-      CREATE TABLE IF NOT EXISTS vets (
-        id VARCHAR(100) PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        city VARCHAR(100) NOT NULL,
-        district VARCHAR(100) NOT NULL,
-        image_url VARCHAR(2000) NOT NULL,
-        address TEXT NOT NULL,
-        features JSONB NOT NULL,
-        description TEXT NOT NULL,
-        phone VARCHAR(255),
-        email VARCHAR(255),
-        website VARCHAR(2000),
-        base_trust_score NUMERIC(3,1) NOT NULL,
-        last_verified VARCHAR(255) NOT NULL
-      );
-    `);
-
-    for (const v of processed) {
-      await client.query(`
-        INSERT INTO vets (id, name, city, district, image_url, address, features, description, phone, email, website, base_trust_score, last_verified)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-        ON CONFLICT (id) DO UPDATE SET
-          name = EXCLUDED.name,
-          city = EXCLUDED.city,
-          district = EXCLUDED.district,
-          image_url = EXCLUDED.image_url,
-          address = EXCLUDED.address,
-          features = EXCLUDED.features,
-          description = EXCLUDED.description,
-          phone = EXCLUDED.phone,
-          email = EXCLUDED.email,
-          website = EXCLUDED.website,
-          base_trust_score = EXCLUDED.base_trust_score,
-          last_verified = EXCLUDED.last_verified;
-      `, [
-        v.id, v.name, v.city, v.district, v.imageUrl, v.address,
-        JSON.stringify(v.features), v.description, v.phone, v.email,
-        v.website, v.baseTrustScore, v.lastVerified
-      ]);
+export function prepareVets(data, provider) {
+  if (!data || typeof data !== 'object') throw new Error('Input must be an array or an object of location arrays.');
+  const groups = Array.isArray(data) ? [['', data]] : Object.entries(data);
+  const identities = new Set();
+  const prepared = [];
+  for (const [location, items] of groups) {
+    if (!Array.isArray(items)) throw new Error(`Location ${location} must contain an array.`);
+    for (const item of items) {
+      if (!item || typeof item !== 'object' || Array.isArray(item)) throw new Error('Invalid vet item.');
+      const source = {
+        provider: text(item.source?.provider || provider, 80, 'source provider', true),
+        externalId: text(item.source?.externalId || item.placeId || item.place_id || item.externalId, 255, 'stable source external ID', true)
+      };
+      const identity = JSON.stringify([source.provider, source.externalId]);
+      if (identities.has(identity)) throw new Error('Repeated source identity in input; reconcile it explicitly.');
+      identities.add(identity);
+      const [defaultCity, defaultDistrict] = districtCities[location] || [location, location];
+      const city = text(item.city || defaultCity, 100, 'city', true);
+      const district = text(item.district || defaultDistrict, 100, 'district', true);
+      const features = item.features ?? [];
+      if (!Array.isArray(features) || features.length > 100 || features.some(f => typeof f !== 'string') || Buffer.byteLength(JSON.stringify(features)) > 11000) throw new Error('Invalid features array.');
+      const score = item.baseTrustScore ?? 0;
+      if (typeof score !== 'number' || !Number.isFinite(score) || score < 0 || score > 10) throw new Error('Invalid baseTrustScore.');
+      const verification = text(item.lastVerified, 255, 'lastVerified');
+      if (/^\d{4}-\d{2}-\d{2}$/.test(verification) && !validDate(verification)) throw new Error('Invalid lastVerified date.');
+      prepared.push({
+        id: 'vet-' + createHash('sha256').update(identity).digest('hex'), source,
+        name: text(item.name || item.title, 255, 'name', true), city, district,
+        imageUrl: text(item.imageUrl, 2000, 'image URL'), address: text(item.address, 5000, 'address'), features,
+        description: text(item.description, 12000, 'description'), phone: text(item.phone, 255, 'phone'),
+        email: text(item.email, 255, 'email'), website: text(item.website, 2000, 'website'),
+        baseTrustScore: score, lastVerified: validDate(verification) ? verification : null, verificationNote: verification
+      });
     }
-
-    console.log(`Successfully synced ${processed.length} vets into database.`);
-    client.release();
-  } catch (err) {
-    console.warn('Database sync note:', err.message);
-  } finally {
-    await pool.end();
   }
+  return prepared;
 }
 
-syncDb();
+export async function importVets(client, records, batchSize = 100) {
+  boundedInteger(batchSize, 1, 500, 'batch size');
+  const counts = { inserted: 0, existing: 0, committedBatches: 0 };
+  // A stable lock order also serializes concurrent imports of the same identities.
+  const ordered = [...records].sort((a, b) => a.id.localeCompare(b.id));
+  for (let offset = 0; offset < ordered.length; offset += batchSize) {
+    const batch = ordered.slice(offset, offset + batchSize);
+    let inserted = 0;
+    let existing = 0;
+    await client.query('BEGIN');
+    try {
+      await client.query("SET LOCAL lock_timeout = '5s'");
+      for (const v of batch) {
+        await client.query('SELECT pg_advisory_xact_lock(hashtextextended($1,0))', [v.id]);
+        const found = await client.query(`SELECT s.place_id,v.id FROM public.place_sources s
+          LEFT JOIN public.vets v ON v.id=s.place_id WHERE s.provider=$1 AND s.external_id=$2`, [v.source.provider, v.source.externalId]);
+        if (found.rows.length) {
+          if (!found.rows[0].id) throw new Error('Source identity belongs to another catalog or an orphan place.');
+          existing++;
+          continue;
+        }
+        await client.query(`INSERT INTO public.vets
+          (id,name,city,district,image_url,address,features,description,phone,email,website,base_trust_score,last_verified,verification_note)
+          VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8,$9,$10,$11,$12,$13,$14)`,
+        [v.id,v.name,v.city,v.district,v.imageUrl,v.address,JSON.stringify(v.features),v.description,v.phone,v.email,v.website,v.baseTrustScore,v.lastVerified,v.verificationNote]);
+        await client.query('INSERT INTO public.place_sources(provider,external_id,place_id) VALUES($1,$2,$3)', [v.source.provider,v.source.externalId,v.id]);
+        inserted++;
+      }
+      await client.query('SET CONSTRAINTS ALL IMMEDIATE');
+      await client.query('COMMIT');
+      counts.inserted += inserted;
+      counts.existing += existing;
+      counts.committedBatches++;
+    } catch (error) {
+      await client.query('ROLLBACK').catch(() => {});
+      error.committed = counts;
+      throw error;
+    }
+  }
+  return counts;
+}
+
+async function main() {
+  const { values } = parseArgs({ options: {
+    input: { type: 'string' }, provider: { type: 'string' }, apply: { type: 'boolean', default: false },
+    'batch-size': { type: 'string', default: '100' }
+  } });
+  const batchSize = boundedInteger(values['batch-size'], 1, 500, 'batch size');
+  if (!values.input) throw new Error('--input is required.');
+  if ((await stat(values.input)).size > 32 * 1024 * 1024) throw new Error('Input exceeds 32 MiB; split the source file.');
+  const input = await readFile(values.input, 'utf8');
+  if (Buffer.byteLength(input) > 32 * 1024 * 1024) throw new Error('Input exceeds 32 MiB.');
+  const records = prepareVets(JSON.parse(input), values.provider);
+  if (!values.apply) {
+    console.log(JSON.stringify({ applied: false, prepared: records.length, sampleIds: records.slice(0, 10).map(v => v.id), note: 'Source identities required; database conflicts are checked only during apply.' }, null, 2));
+    return;
+  }
+  if (!process.env.IMPORT_DATABASE_URL) throw new Error('IMPORT_DATABASE_URL is required for --apply.');
+  const client = new pg.Client({ ...databaseConfig(process.env.IMPORT_DATABASE_URL), options: '-c role=pati_api', connectionTimeoutMillis: 10000, statement_timeout: 30000 });
+  try {
+    await client.connect();
+    console.log(JSON.stringify({ applied: true, ...await importVets(client, records, batchSize) }));
+  } finally { await client.end(); }
+}
+
+if (isMain(import.meta.url)) main().catch(error => {
+  console.error(JSON.stringify({ error: error.message, committed: error.committed }));
+  process.exitCode = 1;
+});

@@ -1,3 +1,5 @@
+import { useCatalog } from '../lib/useCatalog';
+import CatalogPagination from '../components/CatalogPagination';
 import React, { useState, useEffect } from 'react';
 import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon } from '../components/PetIcons';
 import AdBanner from '../components/AdBanner';
@@ -69,58 +71,8 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
   };
 
   // Filter the hotels list
-  const filteredHotels = hotels.filter(hotel => {
-    // 1. Custom programmatic filter
-    if (searchFilters.customFilter) {
-      return searchFilters.customFilter(hotel);
-    }
-
-    // 2. City Filter
-    if (searchFilters.cityLanding && searchFilters.citySlug) {
-      if (slugify(hotel.city) !== searchFilters.citySlug) return false;
-    } else if (selectedCity && !hotel.city.toLowerCase().includes(selectedCity.toLowerCase()) && !hotel.district.toLowerCase().includes(selectedCity.toLowerCase())) {
-      return false;
-    }
-
-    // 3. Pet Type Filter
-    if (selectedPet !== 'all' && !hotel.allowedPets.includes(selectedPet)) {
-      return false;
-    }
-
-    // 4. Accommodation Type Filter
-    if (selectedAccType !== 'all' && hotel.type !== selectedAccType) {
-      return false;
-    }
-
-    // 5. Suitability Level Filter
-    if (selectedSuitability !== 'all' && hotel.suitability !== parseInt(selectedSuitability)) {
-      return false;
-    }
-
-    // 6. Weight Limit Filter
-    if (weightLimitFilter !== 'all') {
-      if (weightLimitFilter === 'no-limit') {
-        if (hotel.weightLimit !== 0) return false;
-      } else {
-        const maxWeight = parseInt(weightLimitFilter);
-        if (hotel.weightLimit > 0 && hotel.weightLimit < maxWeight) return false;
-      }
-    }
-
-    // 7. Extra Fee Filter
-    if (extraFeeOnly && hotel.extraFee !== 'no') {
-      return false;
-    }
-
-    // 8. Dynamic Features Filter
-    for (const feat of selectedFeatures) {
-      if (!hotel.features.includes(feat)) {
-        return false;
-      }
-    }
-
-    return true;
-  });
+  const page = useCatalog('hotels', { q: selectedCity, citySlug: searchFilters.citySlug, districtSlug: searchFilters.districtSlug, pet: selectedPet, type: selectedAccType, suitability: selectedSuitability, weightLimit: weightLimitFilter === 'no-limit' ? '0' : weightLimitFilter, extraFeeOnly, feature: selectedFeatures, collection: searchFilters.collection });
+  const filteredHotels = page.items;
 
   const verifiedCityHotels = filteredHotels.filter(hotel => hotel.verified);
   const confirmedDogHotels = filteredHotels.filter(hotel => hotel.allowedPets?.includes('dog'));
@@ -420,6 +372,7 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
           )}
         </section>
       </div>
+      <CatalogPagination page={page} />
       <SeoContentSection content={pageSeoContent} />
     </div>
   );

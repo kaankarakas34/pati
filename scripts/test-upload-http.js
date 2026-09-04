@@ -1,7 +1,7 @@
 import * as ftp from 'basic-ftp';
 import fs from 'fs';
 import path from 'path';
-import axios from 'axios';
+import { getPublicUrl } from '../lib/public-http.js';
 
 async function testUploadAndHttp() {
   const client = new ftp.Client();
@@ -35,7 +35,7 @@ async function testUploadAndHttp() {
     for (const url of urlsToTest) {
       try {
         console.log(`HTTP erişimi test ediliyor: ${url}`);
-        const res = await axios.get(url, { timeout: 5000 });
+        const res = await getPublicUrl(url, { timeout: 5000 });
         console.log(`✅ HTTP Bağlantısı BAŞARILI (${res.status}): ${res.data}`);
       } catch (httpErr) {
         console.log(`⚠️ HTTP Erişim Notu (${url}): ${httpErr.message}`);

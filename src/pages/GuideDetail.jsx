@@ -1,17 +1,8 @@
 import React, { useEffect } from 'react';
+import { sanitizeGuideHtml } from '../lib/guide-html.js';
 import { VerifiedBadge, CheckIcon } from '../components/PetIcons';
 
-export default function GuideDetail({ id, guides, hotels, onViewChange }) {
-  const guide = guides.find(g => g.id === id);
-
-  if (!guide) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 py-16 text-center text-gray-500">
-        <h2 className="text-2xl font-bold font-title">Rehber bulunamadı</h2>
-        <button onClick={() => onViewChange('guides')} className="mt-4 bg-brand-navy text-white px-6 py-2.5 rounded-full font-bold text-sm">Tüm Rehberlere Dön</button>
-      </div>
-    );
-  }
+export default function GuideDetail({ guide, onViewChange }) {
 
   // SEO/GEO/VEO JSON-LD Structured Data Injection
   useEffect(() => {
@@ -31,8 +22,8 @@ export default function GuideDetail({ id, guides, hotels, onViewChange }) {
       "dateModified": guide.updatedAt,
       "author": {
         "@type": "Person",
-        "name": guide.author.name,
-        "jobTitle": guide.author.role
+        "name": guide.author?.name,
+        "jobTitle": guide.author?.role
       },
       "publisher": {
         "@type": "Organization",
@@ -50,7 +41,7 @@ export default function GuideDetail({ id, guides, hotels, onViewChange }) {
 
     // If guide has FAQs, append FAQPage schema
     if (guide.faq && guide.faq.length > 0) {
-      jsonLd.mainEntity = guide.faq.map(q => ({
+      jsonLd.mainEntity = (guide.faq || []).map(q => ({
         "@type": "Question",
         "name": q.q,
         "acceptedAnswer": {
@@ -63,7 +54,7 @@ export default function GuideDetail({ id, guides, hotels, onViewChange }) {
     const script = document.createElement('script');
     script.id = 'jsonld-guide-schema';
     script.type = 'application/ld+json';
-    script.innerHTML = JSON.stringify(jsonLd);
+    script.textContent = JSON.stringify(jsonLd);
     document.head.appendChild(script);
 
     return () => {
@@ -74,13 +65,7 @@ export default function GuideDetail({ id, guides, hotels, onViewChange }) {
     };
   }, [guide]);
 
-  // Find related hotels based on location matching in title/content
-  const relatedHotels = hotels.filter(h => 
-    guide.title.toLowerCase().includes(h.city.toLowerCase()) || 
-    guide.title.toLowerCase().includes(h.district.toLowerCase()) ||
-    (guide.category === 'Kediyle Seyahat' && h.allowedPets.includes('cat')) ||
-    (guide.category === 'Köpekle Seyahat' && h.allowedPets.includes('dog'))
-  ).slice(0, 2);
+  const relatedHotels = [];
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-left">
@@ -114,10 +99,10 @@ export default function GuideDetail({ id, guides, hotels, onViewChange }) {
         {/* Author & Vet row */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 py-4 border-y border-brand-beige mt-6">
           <div className="flex items-center gap-3">
-            <img src={guide.author.imageUrl} alt={guide.author.name} className="w-12 h-12 rounded-full object-cover shadow-sm" />
+            <img src={guide.author?.imageUrl} alt={guide.author?.name} className="w-12 h-12 rounded-full object-cover shadow-sm" />
             <div>
-              <p className="text-sm font-bold text-gray-800">{guide.author.name}</p>
-              <p className="text-xs text-gray-500">{guide.author.role}</p>
+              <p className="text-sm font-bold text-gray-800">{guide.author?.name}</p>
+              <p className="text-xs text-gray-500">{guide.author?.role}</p>
             </div>
           </div>
 
@@ -162,7 +147,7 @@ export default function GuideDetail({ id, guides, hotels, onViewChange }) {
           {/* Article Text Content */}
           <article 
             className="prose prose-sm md:prose max-w-none text-gray-800 leading-relaxed text-sm md:text-base space-y-6"
-            dangerouslySetInnerHTML={{ __html: guide.content }}
+            dangerouslySetInnerHTML={{ __html: sanitizeGuideHtml(guide.content) }}
           />
 
           {/* Checklist Area */}
@@ -171,7 +156,7 @@ export default function GuideDetail({ id, guides, hotels, onViewChange }) {
               <VerifiedBadge className="w-5 h-5" /> Seyahat Hazırlık Kontrol Listesi
             </h3>
             <ul className="space-y-2.5 text-xs md:text-sm text-gray-700">
-              {guide.checklist.map((item, idx) => (
+              {(guide.checklist || []).map((item, idx) => (
                 <li key={idx} className="flex items-start gap-2.5">
                   <span className="text-brand-navy font-bold text-base mt-0.5"><CheckIcon className="w-4.5 h-4.5" /></span>
                   <span>{item}</span>

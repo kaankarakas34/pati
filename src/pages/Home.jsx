@@ -1,19 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon } from '../components/PetIcons';
 import { slugify } from '../../lib/seo-slugs';
 import SeoContentSection from '../components/SeoContentSection';
 import { seoContent } from '../data/seoContent';
 import PetTaxiAdBanner from '../components/PetTaxiAdBanner';
 
-export default function Home({ hotels = [], boardings = [], guides = [], experiences = [], ads = [], onViewChange, setSearchFilters }) {
+export default function Home({ onViewChange, setSearchFilters }) {
   const [destination, setDestination] = useState('');
   const [petType, setPetType] = useState('all');
   const [accType, setAccType] = useState('all');
 
-  const safeHotels = Array.isArray(hotels) ? hotels : [];
-  const safeBoardings = Array.isArray(boardings) ? boardings : [];
-  const safeGuides = Array.isArray(guides) ? guides : [];
-  const safeExperiences = Array.isArray(experiences) ? experiences : [];
+  const [preview, setPreview] = useState({ hotels: [], cities: [], loading: true, error: '' });
+  const [attempt, setAttempt] = useState(0);
+  useEffect(() => {
+    const controller = new AbortController();
+    setPreview({ hotels: [], cities: [], loading: true, error: '' });
+    async function read(path) {
+      const response = await fetch(path, { signal: controller.signal });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Kayitlar yuklenemedi.');
+      return data;
+    }
+    Promise.all([
+      read('/api/hotels?limit=3&envelope=true&verified=true&extraFeeOnly=true'),
+      read('/api/locations')
+    ]).then(([page, cities]) => {
+      if (!Array.isArray(page.data) || !Array.isArray(cities)) throw new Error('Gecersiz liste yaniti.');
+      if (!controller.signal.aborted) setPreview({ hotels: page.data, cities, loading: false, error: '' });
+    }).catch(error => {
+      if (!controller.signal.aborted) setPreview({ hotels: [], cities: [], loading: false, error: error.message });
+    });
+    return () => controller.abort();
+  }, [attempt]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -30,7 +48,7 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
   };
 
   // Quick navigation helpers
-  const goToAccWithFilter = (filterFn, title) => {
+  const goToAccWithFilter = (filters, title) => {
     setSearchFilters({
       destination: '',
       petType: 'all',
@@ -39,35 +57,20 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
       suitability: 'all',
       weightLimit: 'all',
       extraFeeOnly: false,
-      customFilter: filterFn,
+      ...filters,
       filterTitle: title
     });
     onViewChange('accommodations');
   };
 
-  const featuredHotels = safeHotels
-    .filter(h => h.extraFee === 'no')
-    .concat(safeHotels.filter(h => h.extraFee !== 'no'))
-    .slice(0, 3);
-  const featuredBoardings = safeBoardings.slice(0, 2);
-  const featuredGuides = safeGuides.slice(0, 3);
-  const featuredExperiences = safeExperiences.slice(0, 3);
-  const cityLinks = Array.from(safeHotels.reduce((cities, hotel) => {
-    if (!hotel || !hotel.city) return cities;
-    const citySlug = slugify(hotel.city);
-    if (!citySlug) return cities;
-
-    const current = cities.get(citySlug);
-    cities.set(citySlug, {
-      name: current?.name || hotel.city,
-      slug: citySlug,
-      count: (current?.count || 0) + 1
-    });
-    return cities;
-  }, new Map()).values()).sort((a, b) => a.name.localeCompare(b.name, 'tr'));
+  const featuredHotels = preview.hotels;
+  const cityLinks = preview.cities.map(({ city }) => ({ name: city, slug: slugify(city) }));
 
   return (
     <div className="space-y-16 pb-20">
+      {preview.loading && <p role="status" className="text-center pt-4">Oteller yükleniyor...</p>}
+      {preview.error && <div className="text-center pt-4"><p role="alert">{preview.error}</p><button className="underline" onClick={() => setAttempt(value => value + 1)}>Tekrar dene</button></div>}
+      {!preview.loading && !preview.error && !featuredHotels.length && <p className="text-center pt-4">Henüz otel bulunmuyor.</p>}
       {/* Hero Section */}
       <div className="bg-gradient-to-b from-brand-yellow/30 via-brand-beige/50 to-brand-cream py-12 md:py-16 border-b border-brand-navy/10">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
@@ -213,7 +216,7 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
             <p className="text-gray-600 text-sm mt-1">Ek pet ücreti talep etmeyen ve evcil hayvanlara en yüksek konforu sunan doğrulanmış oteller</p>
           </div>
           <button onClick={() => onViewChange('accommodations')} className="text-brand-navy font-bold hover:underline text-sm hidden sm:block">
-            Tümünü Gör ({hotels.length}) &rarr;
+            Tümünü Gör &rarr;
           </button>
         </div>
 
@@ -233,10 +236,6 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
                     className="w-full h-full object-cover"
                     loading="lazy"
                     decoding="async"
-                    onError={(e) => {
-                      e.currentTarget.onerror = null;
-                      e.currentTarget.src = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=70';
-                    }}
                   />
                   
                   {hotel.verified !== false && (
@@ -328,7 +327,6 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
                 title={`${city.name} evcil hayvan dostu otelleri`}
               >
                 <span><span aria-hidden="true" className="mr-2 text-brand-earth">•</span>{city.name} Otelleri</span>
-                <span className="text-xs text-gray-700 font-semibold group-hover:text-brand-navy" aria-label={`${city.count} tesis`}>{city.count}</span>
               </a>
             ))}
           </nav>
@@ -389,19 +387,19 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
                 title: "Ek Ücret Almayan Oteller",
                 desc: "Dostunuz için hiçbir temizlik ya da ek konaklama bedeli talep etmeyen tesisler.",
                 icon: "💰",
-                filter: (h) => h.extraFee === 'no',
+                filter: { extraFeeOnly: true },
               },
               {
                 title: "Kendi Pet Plajı Olan Tesisler",
                 desc: "Köpeğinizle beraber güneşlenip yüzebileceğiniz özel plajlı tatil köyleri.",
                 icon: "🏖️",
-                filter: (h) => h.features.includes("Pet plajı bulunan"),
+                filter: { features: ["Pet plajı bulunan"] },
               },
               {
                 title: "Kilo Sınırı Olmayan Oteller",
-                desc: "Büyük ırk köpek sahipleri için herhangi bir ağırlık kısıtlaması uygulamayan yerler.",
+                desc: "Büyük ırk köpek sahipleri için ağırlık kısıtlaması uygulamayan tesisler.",
                 icon: "⚖️",
-                filter: (h) => h.weightLimit === 0,
+                filter: { petType: 'dog', weightLimit: 'no-limit' },
               }
             ].map((collection, idx) => (
               <div

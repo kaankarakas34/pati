@@ -1,3 +1,5 @@
+import { useCatalog } from '../lib/useCatalog';
+import CatalogPagination from '../components/CatalogPagination';
 import React, { useState } from 'react';
 import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon } from '../components/PetIcons';
 import SeoContentSection from '../components/SeoContentSection';
@@ -8,15 +10,8 @@ export default function Taxis({ taxis = [], onViewChange }) {
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedPet, setSelectedPet] = useState('all');
 
-  const filteredTaxis = taxis.filter(t => {
-    if (selectedCity && !t.city.toLowerCase().includes(selectedCity.toLowerCase()) && !t.district.toLowerCase().includes(selectedCity.toLowerCase())) {
-      return false;
-    }
-    if (selectedPet !== 'all' && !t.allowedPets.includes(selectedPet)) {
-      return false;
-    }
-    return true;
-  });
+  const page = useCatalog('taxis', { q: selectedCity, pet: selectedPet });
+  const filteredTaxis = page.items;
 
   const resetFilters = () => {
     setSelectedCity('');
@@ -119,6 +114,8 @@ export default function Taxis({ taxis = [], onViewChange }) {
           )}
         </section>
       </div>
+
+      <CatalogPagination page={page} />
 
       <SeoContentSection data={seoContent.taxis} />
     </div>

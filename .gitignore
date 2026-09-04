@@ -27,8 +27,13 @@ scratch/
 # Local database settings / credentials
 .env
 .env.*
+!.env.example
 *.env
 data/db.json
 data/scraper-results/
 
 .vercel
+supabase/.temp/
+# Local browser verification artifacts
+.playwright-cli/
+output/playwright/

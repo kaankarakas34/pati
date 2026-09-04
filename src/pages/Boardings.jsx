@@ -1,3 +1,5 @@
+import { useCatalog } from '../lib/useCatalog';
+import CatalogPagination from '../components/CatalogPagination';
 import React, { useState } from 'react';
 import { DogIcon, CatIcon, VerifiedBadge, LocationIcon } from '../components/PetIcons';
 import SeoContentSection from '../components/SeoContentSection';
@@ -22,33 +24,8 @@ export default function Boardings({ boardings, onViewChange }) {
   ];
 
   // Dynamic filter application
-  const filteredBoardings = boardings.filter(b => {
-    // Category check
-    if (categoryFilter !== 'all' && b.category !== categoryFilter) {
-      return false;
-    }
-
-    // City check
-    if (selectedCity && !b.city.toLowerCase().includes(selectedCity.toLowerCase()) && !b.district.toLowerCase().includes(selectedCity.toLowerCase())) {
-      return false;
-    }
-
-    // Features check
-    if (cameraRequired && !b.features.includes('Canlı kamera')) {
-      return false;
-    }
-    if (noCageRequired && !b.features.includes('Kafessiz konaklama')) {
-      return false;
-    }
-    if (staff247Required && !b.features.includes('7/24 personel')) {
-      return false;
-    }
-    if (vetRequired && !b.features.includes('Veteriner desteği')) {
-      return false;
-    }
-
-    return true;
-  });
+  const page = useCatalog('boardings', { q: selectedCity, category: categoryFilter, feature: [cameraRequired && 'Canlı kamera', noCageRequired && 'Kafessiz konaklama', staff247Required && '7/24 personel', vetRequired && 'Veteriner desteği'].filter(Boolean) });
+  const filteredBoardings = page.items;
 
   const resetFilters = () => {
     setCategoryFilter('all');
@@ -251,6 +228,7 @@ export default function Boardings({ boardings, onViewChange }) {
           )}
         </section>
       </div>
+      <CatalogPagination page={page} />
       <SeoContentSection content={seoContent.boardings} />
     </div>
   );
