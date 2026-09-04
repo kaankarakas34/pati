@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { LocationIcon } from '../components/PetIcons';
+import AdBanner from '../components/AdBanner';
 import SeoContentSection from '../components/SeoContentSection';
 import { seoContent } from '../data/seoContent';
 
@@ -71,55 +72,66 @@ export default function Vets({ vets = [], onViewChange }) {
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Sidebar Filters */}
-        <aside className="space-y-6 bg-white p-6 rounded-3xl border-2 border-brand-navy/10 shadow-sm text-left">
-          <div className="flex justify-between items-center pb-4 border-b border-brand-beige">
-            <h3 className="font-title font-bold text-lg text-gray-900">Klinik Filtrele</h3>
-            <button onClick={resetFilters} className="text-xs text-brand-navy font-bold hover:underline">Filtreleri Sıfırla</button>
-          </div>
+        <div className="space-y-6">
+          <aside className="space-y-6 bg-white p-6 rounded-3xl border-2 border-brand-navy/10 shadow-sm text-left">
+            <div className="flex justify-between items-center pb-4 border-b border-brand-beige">
+              <h3 className="font-title font-bold text-lg text-gray-900">Klinik Filtrele</h3>
+              <button onClick={resetFilters} className="text-xs text-brand-navy font-bold hover:underline">Filtreleri Sıfırla</button>
+            </div>
 
-          {/* City Dropdown */}
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block">Şehir Seçin</label>
-            <select
-              value={selectedCity}
-              onChange={(e) => setSelectedCity(e.target.value)}
-              className="w-full text-sm border-2 border-brand-navy rounded-xl p-2.5 outline-none focus:ring-0 bg-white cursor-pointer font-medium"
-            >
-              <option value="all">Tüm Şehirler ({vets.length} Klinik)</option>
-              {cities.map(c => {
-                const count = vets.filter(v => v.city === c).length;
-                return (
-                  <option key={c} value={c}>{c} ({count} Klinik)</option>
-                );
-              })}
-            </select>
-          </div>
+            {/* City Dropdown */}
+            <div className="space-y-2">
+              <label htmlFor="vet-city-select" className="text-xs font-bold text-gray-600 uppercase tracking-wider block">Şehir Seçin</label>
+              <select
+                id="vet-city-select"
+                aria-label="Veteriner şehir seçin"
+                value={selectedCity}
+                onChange={(e) => setSelectedCity(e.target.value)}
+                className="w-full text-sm border-2 border-brand-navy rounded-xl p-2.5 outline-none focus:ring-0 bg-white cursor-pointer font-medium"
+              >
+                <option value="all">Tüm Şehirler ({vets.length} Klinik)</option>
+                {cities.map(c => {
+                  const count = vets.filter(v => v.city === c).length;
+                  return (
+                    <option key={c} value={c}>{c} ({count} Klinik)</option>
+                  );
+                })}
+              </select>
+            </div>
 
-          {/* Text Search Input */}
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block">İlçe veya Klinik Adı</label>
-            <input
-              type="text"
-              placeholder="Örn: Kepez, Muratpaşa, Gala..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full text-sm border-2 border-brand-navy rounded-xl p-2.5 outline-none focus:ring-0"
-            />
-          </div>
-
-          {/* Emergency ICU Checkbox */}
-          <div className="space-y-2 pt-2 border-t border-brand-beige">
-            <label className="flex items-center gap-2.5 text-sm text-gray-700 cursor-pointer">
+            {/* Text Search Input */}
+            <div className="space-y-2">
+              <label htmlFor="vet-search-input" className="text-xs font-bold text-gray-600 uppercase tracking-wider block">İlçe veya Klinik Adı</label>
               <input
-                type="checkbox"
-                checked={hasICU}
-                onChange={(e) => setHasICU(e.target.checked)}
-                className="rounded border-gray-300 text-brand-navy focus:ring-brand-navy"
+                id="vet-search-input"
+                aria-label="Aramak istediğiniz ilçe veya veteriner kliniği adı"
+                type="text"
+                placeholder="Örn: Kepez, Muratpaşa, Gala..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full text-sm border-2 border-brand-navy rounded-xl p-2.5 outline-none focus:ring-0"
               />
-              <span className="font-medium text-xs">Yoğun Bakım Ünitesi Olanlar</span>
-            </label>
+            </div>
+
+            {/* Emergency ICU Checkbox */}
+            <div className="space-y-2 pt-2 border-t border-brand-beige">
+              <label className="flex items-center gap-2.5 text-sm text-gray-700 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={hasICU}
+                  onChange={(e) => setHasICU(e.target.checked)}
+                  className="rounded border-gray-300 text-brand-navy focus:ring-brand-navy"
+                />
+                <span className="font-medium text-xs">Yoğun Bakım Ünitesi Olanlar</span>
+              </label>
+            </div>
+          </aside>
+
+          {/* Standalone Fixed Sticky Ad Banner */}
+          <div className="sticky top-24">
+            <AdBanner type="square" onViewChange={onViewChange} />
           </div>
-        </aside>
+        </div>
 
         {/* Listings Grid */}
         <section className="col-span-1 lg:col-span-3 space-y-6">

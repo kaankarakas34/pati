@@ -160,12 +160,13 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* Desktop Sidebar Filters */}
-        <aside className="hidden lg:block space-y-6 bg-white p-6 rounded-3xl border-2 border-brand-navy/10 shadow-sm text-left max-h-[85vh] overflow-y-auto">
-          <div className="flex justify-between items-center pb-4 border-b border-brand-beige">
-            <h3 className="font-title font-bold text-lg text-gray-900">Detaylı Filtreler</h3>
-            <button onClick={resetFilters} className="text-xs text-brand-navy font-bold hover:underline">Temizle</button>
-          </div>
+        {/* Desktop Sidebar (Filters + Standalone Fixed Ad Banner) */}
+        <div className="hidden lg:block space-y-6">
+          <aside className="space-y-6 bg-white p-6 rounded-3xl border-2 border-brand-navy/10 shadow-sm text-left max-h-[75vh] overflow-y-auto">
+            <div className="flex justify-between items-center pb-4 border-b border-brand-beige">
+              <h3 className="font-title font-bold text-lg text-gray-900">Detaylı Filtreler</h3>
+              <button onClick={resetFilters} className="text-xs text-brand-navy font-bold hover:underline">Temizle</button>
+            </div>
 
           {/* City */}
           <div className="space-y-2">
@@ -271,10 +272,13 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
               </label>
             ))}
           </div>
-          <div className="pt-4 border-t border-brand-beige">
-            <AdBanner type="square" />
-          </div>
         </aside>
+
+        {/* Standalone Fixed / Sticky Ad Banner Box */}
+        <div className="sticky top-24">
+          <AdBanner type="square" onViewChange={onViewChange} />
+        </div>
+      </div>
 
         {/* Mobile Filters Toggle Button */}
         <div className="lg:hidden w-full mb-4">
