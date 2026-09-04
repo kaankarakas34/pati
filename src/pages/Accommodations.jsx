@@ -304,7 +304,7 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {filteredHotels.map(hotel => (
+              {filteredHotels.map((hotel, index) => (
                 <div
                   key={hotel.id}
                   onClick={() => onViewChange('accommodation-detail', hotel.id)}
@@ -313,7 +313,18 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
                   <div>
                     {/* Hotel Image Area */}
                     <div className="relative h-48 bg-gray-200">
-                      <img src={hotel.imageUrl} alt={hotel.name} className="w-full h-full object-cover" />
+                      <img
+                        src={hotel.imageUrl?.includes('images.unsplash.com') ? hotel.imageUrl.replace(/w=\d+/, 'w=400').replace(/q=\d+/, 'q=70') : hotel.imageUrl}
+                        alt={hotel.name}
+                        className="w-full h-full object-cover"
+                        loading={index < 2 ? "eager" : "lazy"}
+                        fetchPriority={index < 2 ? "high" : "low"}
+                        decoding="async"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=70';
+                        }}
+                      />
                       
                       {/* Verification Badge (Only if verified) */}
                       {hotel.verified !== false && (

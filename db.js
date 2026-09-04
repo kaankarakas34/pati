@@ -611,17 +611,18 @@ export async function initDatabase() {
   }
 }
 
-const DEFAULT_FALLBACK_IMG = "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80";
+const DEFAULT_FALLBACK_IMG = "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=70";
 
-function fixImageUrl(url, fallback = DEFAULT_FALLBACK_IMG) {
+function fixImageUrl(url, fallback = DEFAULT_FALLBACK_IMG, width = 400) {
   if (!url || typeof url !== 'string') return fallback;
   if (url.includes('cdn.patiyleseyahat.com')) {
     return fallback;
   }
-  if (url.startsWith('http://')) {
-    return url.replace('http://', 'https://');
+  let sanitized = url.startsWith('http://') ? url.replace('http://', 'https://') : url;
+  if (sanitized.includes('images.unsplash.com')) {
+    sanitized = sanitized.replace(/w=\d+/, `w=${width}`).replace(/q=\d+/, 'q=70');
   }
-  return url;
+  return sanitized;
 }
 
 // Database Helpers

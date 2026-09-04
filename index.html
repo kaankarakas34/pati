@@ -10,88 +10,27 @@
     <meta property="og:site_name" content="Patiyle Seyahat" />
     <meta property="og:locale" content="tr_TR" />
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9VT1ES4W9Q"></script>
+    <!-- Resource Hints for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://images.unsplash.com" />
+    
+    <!-- Google Fonts with display=swap -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Readex+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Deferred Non-blocking Analytics -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-9VT1ES4W9Q');
+      window.addEventListener('load', function() {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-9VT1ES4W9Q';
+        document.head.appendChild(s);
+        gtag('js', new Date());
+        gtag('config', 'G-9VT1ES4W9Q');
+      });
     </script>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Readex+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              brand: {
-                green: {
-                  DEFAULT: '#2D5A27',
-                  dark: '#1E3F20',
-                  light: '#EAF2EB',
-                  hover: '#244720'
-                },
-                earth: {
-                  DEFAULT: '#C87A53',
-                  dark: '#8C4E35',
-                  light: '#FAF0EB',
-                  hover: '#B56740'
-                },
-                orange: {
-                  DEFAULT: '#F2994A',
-                  light: '#FDF2E9',
-                  hover: '#E28732'
-                },
-                cream: '#FBFBFB',
-                beige: '#F6F4F1',
-                navy: {
-                  DEFAULT: '#002842',
-                  hover: '#001a2d',
-                  light: '#E5EEFF'
-                },
-                yellow: {
-                  DEFAULT: '#FFD100',
-                  hover: '#e6bc00'
-                },
-                slate: '#59606D'
-              }
-            },
-            fontFamily: {
-              sans: ['"Readex Pro"', 'sans-serif'],
-              title: ['"Fredoka"', 'sans-serif'],
-            }
-          }
-        }
-      }
-    </script>
-    <style>
-      body {
-        background-color: #FBFBFB;
-        color: #2E3031;
-      }
-      /* Custom scrollbar */
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #F6F4F1;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #002842;
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #001a2d;
-      }
-    </style>
   </head>
   <body>
     <div id="root"></div>

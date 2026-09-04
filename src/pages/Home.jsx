@@ -218,7 +218,17 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
               <div>
                 {/* Image */}
                 <div className="relative h-48 bg-gray-200">
-                  <img src={hotel.imageUrl} alt={hotel.name} className="w-full h-full object-cover" />
+                  <img
+                    src={hotel.imageUrl?.includes('images.unsplash.com') ? hotel.imageUrl.replace(/w=\d+/, 'w=400').replace(/q=\d+/, 'q=70') : hotel.imageUrl}
+                    alt={hotel.name}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=70';
+                    }}
+                  />
                   
                   {hotel.verified !== false && (
                     <div className="absolute top-3 left-3 bg-brand-navy text-white text-3xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1 shadow-sm">

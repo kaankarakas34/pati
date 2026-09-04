@@ -1,21 +1,29 @@
-/* CSS Reset and Global Overrides */
-body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-.form-input {
-  width: 100%;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  padding: 0.75rem 0.875rem;
-  color: #111827;
-  font-size: 0.875rem;
-  outline: none;
-  transition: border-color 150ms ease, box-shadow 150ms ease;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #FBFBFB;
+    color: #2E3031;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 }
 
-.form-input:focus {
-  border-color: #0b2d45;
-  box-shadow: 0 0 0 2px rgb(11 45 69 / 10%);
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F6F4F1;
+}
+::-webkit-scrollbar-thumb {
+  background: #002842;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #001a2d;
 }
