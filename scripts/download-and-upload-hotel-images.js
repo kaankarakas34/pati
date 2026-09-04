@@ -13,10 +13,10 @@ function slugify(text) {
 }
 
 const FTP_CONFIG = {
-  host: '89.19.30.15',
+  host: process.env.FTP_HOST || '89.19.30.15',
   port: 21,
-  user: 'cdnpati@cdn.patiyleseyahat.com',
-  password: ':blu@wC0.SMX6.06',
+  user: process.env.FTP_USER || '',
+  password: process.env.FTP_PASSWORD || '',
   secure: false
 };
 

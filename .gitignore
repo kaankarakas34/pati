@@ -26,6 +26,8 @@ scratch/
 
 # Local database settings / credentials
 .env
+.env.*
+*.env
 data/db.json
 data/scraper-results/
 
