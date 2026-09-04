@@ -154,6 +154,9 @@ app.get('/api/health/database', async (req, res) => {
 app.get('/api/hotels', async (req, res) => {
   try {
     const data = await getHotels();
+    if (!Array.isArray(data) || data.length < initialHotels.length) {
+      return res.json(initialHotels);
+    }
     res.json(data);
   } catch (err) {
     console.warn("Falling back to initialHotels due to DB error:", err.message);

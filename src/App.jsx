@@ -125,7 +125,7 @@ function App() {
           fetchTable('/api/ads', initialAds)
         ]);
 
-        if (hotelsRes.status === 'fulfilled' && Array.isArray(hotelsRes.value) && hotelsRes.value.length > 0) setHotels(hotelsRes.value);
+        if (hotelsRes.status === 'fulfilled' && Array.isArray(hotelsRes.value) && hotelsRes.value.length >= initialHotels.length) setHotels(hotelsRes.value);
         if (boardingsRes.status === 'fulfilled' && Array.isArray(boardingsRes.value) && boardingsRes.value.length > 0) setBoardings(boardingsRes.value);
         if (guidesRes.status === 'fulfilled' && Array.isArray(guidesRes.value) && guidesRes.value.length > 0) setGuides(guidesRes.value);
         if (correctionsRes.status === 'fulfilled' && Array.isArray(correctionsRes.value)) setCorrections(correctionsRes.value);
