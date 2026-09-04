@@ -88,10 +88,13 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
           <form onSubmit={handleSearch} className="bg-white p-4 md:p-6 rounded-3xl shadow-xl border-2 border-brand-navy/10 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-3 items-center">
             {/* Destination Input */}
             <div className="flex flex-col text-left px-2 border-b md:border-b-0 md:border-r border-brand-beige pb-2 md:pb-0">
-              <label className="text-2xs font-bold text-gray-500 uppercase tracking-wider mb-1">Nereye?</label>
+              <label htmlFor="home-destination" className="text-2xs font-bold text-gray-600 uppercase tracking-wider mb-1">Nereye?</label>
               <div className="flex items-center gap-2">
                 <LocationIcon className="w-4 h-4 text-brand-navy flex-shrink-0" />
                 <input
+                  id="home-destination"
+                  name="destination"
+                  aria-label="Nereye seyahat etmek istiyorsunuz?"
                   type="text"
                   placeholder="İl, ilçe veya otel adı..."
                   value={destination}
@@ -103,11 +106,14 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
 
             {/* Pet Type */}
             <div className="flex flex-col text-left px-2 border-b md:border-b-0 md:border-r border-brand-beige py-2 md:py-0">
-              <label className="text-2xs font-bold text-gray-500 uppercase tracking-wider mb-1">Patili Dostunuz</label>
+              <label htmlFor="home-pet-type" className="text-2xs font-bold text-gray-600 uppercase tracking-wider mb-1">Patili Dostunuz</label>
               <select
+                id="home-pet-type"
+                name="petType"
+                aria-label="Patili dostunuzun türünü seçin"
                 value={petType}
                 onChange={(e) => setPetType(e.target.value)}
-                className="bg-transparent border-none py-1 text-sm font-medium outline-none cursor-pointer focus:ring-0 focus:border-brand-navy"
+                className="bg-transparent border-none py-1 text-sm font-medium text-brand-navy outline-none cursor-pointer focus:ring-0 focus:border-brand-navy"
               >
                 <option value="all">Tüm Evcil Hayvanlar</option>
                 <option value="dog">Köpek</option>
@@ -118,11 +124,14 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
 
             {/* Accommodation Type */}
             <div className="flex flex-col text-left px-2 border-t md:border-t-0 md:border-l border-brand-beige pt-2 md:pt-0">
-              <label className="text-2xs font-bold text-gray-500 uppercase tracking-wider mb-1">Konaklama Türü</label>
+              <label htmlFor="home-acc-type" className="text-2xs font-bold text-gray-600 uppercase tracking-wider mb-1">Konaklama Türü</label>
               <select
+                id="home-acc-type"
+                name="accType"
+                aria-label="Konaklama türünü seçin"
                 value={accType}
                 onChange={(e) => setAccType(e.target.value)}
-                className="bg-transparent border-none py-1 text-sm font-medium outline-none cursor-pointer focus:ring-0 focus:border-brand-navy"
+                className="bg-transparent border-none py-1 text-sm font-medium text-brand-navy outline-none cursor-pointer focus:ring-0 focus:border-brand-navy"
               >
                 <option value="all">Tüm Tesisler</option>
                 <option value="Otel">Otel</option>
@@ -274,7 +283,7 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
                   {/* Accepted Pets & Weight Limit Bar */}
                   <div className="flex items-center justify-between pt-2 border-t border-brand-beige text-xs">
                     <div className="flex items-center gap-1.5 text-gray-600">
-                      <span className="text-3xs text-gray-400 font-medium">Kabul:</span>
+                      <span className="text-3xs text-gray-700 font-bold">Kabul:</span>
                       {hotel.allowedPets.includes('dog') && <DogIcon className="w-4 h-4 text-brand-navy" title="Köpek" />}
                       {hotel.allowedPets.includes('cat') && <CatIcon className="w-4 h-4 text-amber-600" title="Kedi" />}
                       {hotel.allowedPets.includes('bird') && <BirdIcon className="w-4 h-4 text-sky-600" title="Kuş" />}
@@ -319,7 +328,7 @@ export default function Home({ hotels = [], boardings = [], guides = [], experie
                 title={`${city.name} evcil hayvan dostu otelleri`}
               >
                 <span><span aria-hidden="true" className="mr-2 text-brand-earth">•</span>{city.name} Otelleri</span>
-                <span className="text-xs text-gray-400 group-hover:text-brand-navy" aria-label={`${city.count} tesis`}>{city.count}</span>
+                <span className="text-xs text-gray-700 font-semibold group-hover:text-brand-navy" aria-label={`${city.count} tesis`}>{city.count}</span>
               </a>
             ))}
           </nav>

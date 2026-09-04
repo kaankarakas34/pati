@@ -381,7 +381,7 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
                       {/* Pet Icons & Weight Limit Row */}
                       <div className="flex items-center justify-between pt-2 border-t border-brand-beige text-xs">
                         <div className="flex items-center gap-1.5 text-gray-600">
-                          <span className="text-2xs text-gray-400 font-medium">Kabul:</span>
+                          <span className="text-2xs text-gray-700 font-bold">Kabul:</span>
                           {hotel.allowedPets.includes('dog') && <DogIcon className="w-4 h-4 text-brand-navy" title="Köpek" />}
                           {hotel.allowedPets.includes('cat') && <CatIcon className="w-4 h-4 text-amber-600" title="Kedi" />}
                           {hotel.allowedPets.includes('bird') && <BirdIcon className="w-4 h-4 text-sky-600" title="Kuş" />}
