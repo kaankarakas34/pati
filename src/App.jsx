@@ -93,16 +93,23 @@ const CATEGORY_SEO = {
 };
 
 function App() {
-  // 1. Initialize DB states with instant local fallbacks
-  const [hotels, setHotels] = useState(initialHotels);
-  const [boardings, setBoardings] = useState(initialBoardings);
-  const [guides, setGuides] = useState(initialGuides);
+  const getInitialData = (key, fallback) => {
+    if (typeof window !== 'undefined' && window.__INITIAL_DATA__ && Array.isArray(window.__INITIAL_DATA__[key]) && window.__INITIAL_DATA__[key].length > 0) {
+      return window.__INITIAL_DATA__[key];
+    }
+    return fallback;
+  };
+
+  // 1. Initialize DB states with window.__INITIAL_DATA__ or instant fallbacks
+  const [hotels, setHotels] = useState(() => getInitialData('hotels', initialHotels));
+  const [boardings, setBoardings] = useState(() => getInitialData('boardings', initialBoardings));
+  const [guides, setGuides] = useState(() => getInitialData('guides', initialGuides));
   const [corrections, setCorrections] = useState(initialCorrections);
   const [complaints, setComplaints] = useState(initialComplaints);
-  const [taxis, setTaxis] = useState(initialTaxis);
-  const [vets, setVets] = useState(initialVets);
-  const [experiences, setExperiences] = useState(initialExperiences);
-  const [ads, setAds] = useState(initialAds);
+  const [taxis, setTaxis] = useState(() => getInitialData('taxis', initialTaxis));
+  const [vets, setVets] = useState(() => getInitialData('vets', initialVets));
+  const [experiences, setExperiences] = useState(() => getInitialData('experiences', initialExperiences));
+  const [ads, setAds] = useState(() => getInitialData('ads', initialAds));
   const [loading, setLoading] = useState(false);
 
   // 2. Routing state

@@ -634,19 +634,7 @@ export async function syncInitialHotels(clientOrPool = pool) {
         not_suitable_for, disallowed_pets, breed_restrictions, max_pets_per_room, deposit_info, required_docs,
         can_leave_in_room_alone, rules, veterinary_support, phone, email, website, booking_links, editor_note, info_source, faq
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34)
-      ON CONFLICT (id) DO UPDATE SET
-        name = EXCLUDED.name, city = EXCLUDED.city, district = EXCLUDED.district, type = EXCLUDED.type,
-        allowed_pets = EXCLUDED.allowed_pets, suitability = EXCLUDED.suitability, weight_limit = EXCLUDED.weight_limit,
-        extra_fee = EXCLUDED.extra_fee, features = EXCLUDED.features, quiz_tags = EXCLUDED.quiz_tags,
-        base_trust_score = EXCLUDED.base_trust_score, verified = EXCLUDED.verified, last_verified = EXCLUDED.last_verified,
-        image_url = EXCLUDED.image_url, description = EXCLUDED.description, why_selected = EXCLUDED.why_selected,
-        suitable_for = EXCLUDED.suitable_for, not_suitable_for = EXCLUDED.not_suitable_for,
-        disallowed_pets = EXCLUDED.disallowed_pets, breed_restrictions = EXCLUDED.breed_restrictions,
-        max_pets_per_room = EXCLUDED.max_pets_per_room, deposit_info = EXCLUDED.deposit_info,
-        required_docs = EXCLUDED.required_docs, can_leave_in_room_alone = EXCLUDED.can_leave_in_room_alone,
-        rules = EXCLUDED.rules, veterinary_support = EXCLUDED.veterinary_support, phone = EXCLUDED.phone,
-        email = EXCLUDED.email, website = EXCLUDED.website, booking_links = EXCLUDED.booking_links,
-        editor_note = EXCLUDED.editor_note, info_source = EXCLUDED.info_source, faq = EXCLUDED.faq
+      ON CONFLICT (id) DO NOTHING
     `, [
       h.id, h.name, h.city, h.district, h.type, JSON.stringify(h.allowedPets || []), h.suitability, h.weightLimit, h.extraFee,
       JSON.stringify(h.features || []), JSON.stringify(h.quizTags || []), h.baseTrustScore || 9.5, h.verified, h.lastVerified, h.imageUrl,
@@ -1021,11 +1009,7 @@ export async function syncInitialVets(clientOrPool = pool) {
     await clientOrPool.query(`
       INSERT INTO vets (id, name, city, district, image_url, address, features, description, phone, email, website, base_trust_score, last_verified)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-      ON CONFLICT (id) DO UPDATE SET
-        name = EXCLUDED.name, city = EXCLUDED.city, district = EXCLUDED.district,
-        image_url = EXCLUDED.image_url, address = EXCLUDED.address, features = EXCLUDED.features,
-        description = EXCLUDED.description, phone = EXCLUDED.phone, email = EXCLUDED.email,
-        website = EXCLUDED.website, base_trust_score = EXCLUDED.base_trust_score, last_verified = EXCLUDED.last_verified
+      ON CONFLICT (id) DO NOTHING
     `, [v.id, v.name, v.city, v.district, v.imageUrl, v.address, JSON.stringify(v.features), v.description, v.phone, v.email, v.website, v.baseTrustScore, v.lastVerified]);
   }
 }
