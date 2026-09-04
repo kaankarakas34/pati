@@ -22,7 +22,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
       return data;
     }
     Promise.all([
-      read('/api/hotels?limit=3&envelope=true&verified=true&extraFeeOnly=true'),
+      read('/api/hotels?limit=3&envelope=true&extraFeeOnly=true'),
       read('/api/locations')
     ]).then(([page, cities]) => {
       if (!Array.isArray(page.data) || !Array.isArray(cities)) throw new Error('Gecersiz liste yaniti.');

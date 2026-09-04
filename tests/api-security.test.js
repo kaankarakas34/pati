@@ -65,8 +65,7 @@ test('actual API rejects unauthorized writes and validates all delete routes', a
 
 test('write failures never expose database details in API responses', async (t) => {
   const privateDetail = 'PRIVATE_DATABASE_DETAILS internal-host SQL constraint stack';
-  const queryMock = t.mock.method(pg.Pool.prototype, 'query', async () => { throw new Error(privateDetail); });
-  t.mock.method(pg.Pool.prototype, 'connect', async () => { throw new Error(privateDetail); });
+  const connectMock = t.mock.method(pg.Pool.prototype, 'connect', async () => { throw new Error(privateDetail); });
   const errorLog = t.mock.method(console, 'error', () => {});
   const server = app.listen(0, '127.0.0.1');
   await once(server, 'listening');
@@ -88,7 +87,7 @@ test('write failures never expose database details in API responses', async (t) 
         ok: false, error: 'Islem su anda tamamlanamadi. Lutfen daha sonra tekrar deneyin.'
       });
     }
-    assert.ok(queryMock.mock.callCount() >= 3);
+    assert.ok(connectMock.mock.callCount() >= 3);
     assert.equal(errorLog.mock.callCount(), 17);
     assert.ok(errorLog.mock.calls.some(call => call.arguments[1]?.message === privateDetail));
   } finally {
@@ -149,7 +148,13 @@ test('template selection reads only fixed module-relative HTML files', async (t)
 });
 
 test('legacy redirects retain canonical site-local destinations', async (t) => {
-  t.mock.method(pg.Pool.prototype, 'query', async () => ({rows:[{...initialHotels[0],created_at:'2026-01-01T00:00:00Z'}]}));
+  t.mock.method(pg.Pool.prototype, 'connect', async () => ({
+    async query(sql) {
+      if (sql === 'SET ROLE "pati_api"') return { rows: [] };
+      return {rows:[{...initialHotels[0],created_at:'2026-01-01T00:00:00Z'}]};
+    },
+    release() {}
+  }));
   t.mock.method(console, 'warn', () => {});
   const server = app.listen(0, '127.0.0.1');
   await once(server, 'listening');

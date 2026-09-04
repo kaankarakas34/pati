@@ -62,7 +62,7 @@ export function rowIssues(table, row, columns) {
     const value = row[name];
     if (['json', 'jsonb'].includes(column.data_type)) {
       const objectRequired = ['author', 'rules', 'booking_links'].includes(name);
-      const arrayLimit = name === 'features' ? 100 : name === 'allowed_pets' ? 20 : name === 'gallery_images' ? 50 : null;
+      const arrayLimit = name === 'features' ? 200 : name === 'allowed_pets' ? 20 : name === 'gallery_images' ? 50 : null;
       if (value === null && row[`__sql_null_${name}`] !== false && !['features', 'allowed_pets', 'author'].includes(name)) continue;
       if (objectRequired && (!value || typeof value !== 'object' || Array.isArray(value))) issues.push(`${name}: expected JSON object`);
       if (!objectRequired && !Array.isArray(value)) issues.push(`${name}: expected JSON array`);

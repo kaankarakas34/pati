@@ -2,16 +2,18 @@ import pg from 'pg';
 import 'dotenv/config';
 import { databaseConfig } from './lib/database-config.js';
 import { createRepository } from './lib/repository.js';
+import { restrictPoolRole } from './lib/role-pool.js';
 
 const connection = databaseConfig(process.env.DATABASE_URL);
 const max = Number(process.env.DATABASE_POOL_MAX || 3);
 if (!Number.isInteger(max) || max < 1 || max > 20) throw new Error('DATABASE_POOL_MAX must be between 1 and 20.');
-export const pool = new pg.Pool({
+const rawPool = new pg.Pool({
   ...connection, max, idleTimeoutMillis: 10000, connectionTimeoutMillis: 5000,
   statement_timeout: 15000, query_timeout: 16000,
-  application_name: 'pati-api', options: '-c role=pati_api'
+  application_name: 'pati-api'
 });
-pool.on('error', error => console.error('Database pool error:', error.code));
+rawPool.on('error', error => console.error('Database pool error:', error.code));
+export const pool = restrictPoolRole(rawPool);
 export const repository = createRepository(pool);
 export async function checkDatabaseConnection() {
   const result = await pool.query('SELECT current_database() AS database, NOW() AS checked_at');

@@ -4,6 +4,7 @@ import { databaseConfig, databaseTls } from '../lib/database-config.js';
 import { matchesSecret, validateRecordId } from '../lib/admin-security.js';
 import { isPublicAddress, resolvePublicUrl, getPublicUrl } from '../lib/public-http.js';
 import { migrationSql, TABLES } from '../lib/migration-sql.js';
+import { restrictPoolRole } from '../lib/role-pool.js';
 import pg from 'pg';
 import axios from 'axios';
 
@@ -16,10 +17,38 @@ test('remote PostgreSQL always verifies certificates, including URL overrides', 
   }
   assert.equal(databaseConfig('postgresql://localhost.attacker.com/pati_db', {}).ssl.rejectUnauthorized, true);
   assert.equal(databaseConfig('postgresql://localhost@example.com/db', {}).ssl.rejectUnauthorized, true);
+  const supabase = databaseConfig('postgresql://postgres.project@aws-0-ap-southeast-2.pooler.supabase.com:5432/postgres', {});
+  assert.match(supabase.ssl.ca, /BEGIN CERTIFICATE/);
+  assert.equal(supabase.ssl.rejectUnauthorized, true);
   assert.equal(databaseConfig('postgresql://user@localhost:5436/db', {}).ssl, false);
   assert.equal(databaseConfig(undefined, {}).password, undefined);
   assert.throws(() => databaseConfig('https://example.com/db', {}));
   assert.throws(() => databaseTls({ DATABASE_SSL_CA_FILE: './does-not-exist.pem' }));
+});
+
+test('runtime pool drops privileges before every query and destroys failed clients', async () => {
+  const calls = [];
+  let released;
+  const client = {
+    async query(...args) { calls.push(args); return { rows: [{ ok: true }] }; },
+    release(error) { released = error || true; }
+  };
+  const pool = restrictPoolRole({
+    async connect() { return client; },
+    async end() {},
+    on() {}
+  });
+  const result = await pool.query('SELECT $1::int AS ok', [1]);
+  assert.equal(result.rows[0].ok, true);
+  assert.deepEqual(calls, [['SET ROLE "pati_api"'], ['SELECT $1::int AS ok', [1]]]);
+  assert.equal(released, true);
+
+  const failure = new Error('role denied');
+  const failedClient = { async query() { throw failure; }, release(error) { released = error; } };
+  const failedPool = restrictPoolRole({ async connect() { return failedClient; }, async end() {}, on() {} });
+  await assert.rejects(failedPool.query('SELECT 1'), failure);
+  assert.equal(released, failure);
+  assert.throws(() => restrictPoolRole({}, 'pati_api; RESET ROLE'));
 });
 
 test('admin secrets fail closed when missing or malformed', () => {

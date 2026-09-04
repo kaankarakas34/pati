@@ -331,7 +331,7 @@ BEGIN
     EXECUTE format('UPDATE public.%I SET last_verified = verification_note::date WHERE verification_note ~ ''^[0-9]{4}-[0-9]{2}-[0-9]{2}$''',t);
     EXECUTE format('ALTER TABLE public.%I ADD CONSTRAINT %I CHECK(base_trust_score BETWEEN 0 AND 10)', t,t || '_score_check');
     EXECUTE format('ALTER TABLE public.%I ADD CONSTRAINT %I CHECK(octet_length(description) <= 50000)', t,t || '_description_check');
-    EXECUTE format('ALTER TABLE public.%I ADD CONSTRAINT %I CHECK(jsonb_typeof(features) = ''array'' AND jsonb_array_length(features) <= 100 AND octet_length(features::text) <= 12000)',t,t || '_features_check');
+    EXECUTE format('ALTER TABLE public.%I ADD CONSTRAINT %I CHECK(jsonb_typeof(features) = ''array'' AND jsonb_array_length(features) <= 200 AND octet_length(features::text) <= 12000)',t,t || '_features_check');
     EXECUTE format('CREATE INDEX %I ON public.%I USING gin(features jsonb_path_ops)',t || '_features_idx',t);
     IF t <> 'vets' THEN
       EXECUTE format('ALTER TABLE public.%I ADD CONSTRAINT %I CHECK(jsonb_typeof(allowed_pets) = ''array'' AND jsonb_array_length(allowed_pets) <= 20)',t,t || '_pets_check');

@@ -183,7 +183,7 @@ It reports bounded ID-only samples and counts of:
   are objects; all other JSON columns are arrays. Experience `rules` is text.
   JSONB null is distinguished from SQL NULL. Arrays/objects have the migration's
   50,000-byte bound; features/checklist retain their tighter 12,000-byte limits,
-  and features/allowed-pets/gallery arrays enforce 100/20/50 element limits.
+  and features/allowed-pets/gallery arrays enforce 200/20/50 element limits.
 - On the new schema, missing/wrong place registrations, orphan registry entries,
   inconsistent locations, orphan source identities and orphan favorites.
 
