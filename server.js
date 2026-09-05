@@ -13,7 +13,7 @@ import { getIndexHtmlTemplate } from './lib/html-template.js';
 import { createApiRouter, limitSubmission, asyncRoute } from './lib/api-router.js';
 import { repository } from './db.js';
 import { seoContent } from './src/data/seoContent.js';
-import { findHotelBySlugs, getHotelPath, slugify } from './lib/seo-slugs.js';
+import { findHotelBySlugs, getHotelPath, getVetPath, slugify, PROGRAMMATIC_CLUSTERS } from './lib/seo-slugs.js';
 
 dotenv.config();
 
@@ -547,13 +547,33 @@ function formatW3CDate(rawDate) {
 }
 
 app.use('/sitemaps', express.static(path.join(__dirname,'public','sitemaps'), { index:false, dotfiles:'deny', maxAge:'1h' }));
-app.get('/sitemap.xml', (req,res,next) => {
-  res.sendFile(path.join(__dirname,'public','sitemaps','index.xml'), error => { // guardvibe-ignore VG678 -- fixed local XML path plus global nosniff.
-    if(error && !res.headersSent) {
-      if(error.code==='ENOENT') return res.status(503).type('text/plain').send('Sitemap is not published yet.');
-      next(error);
+app.get('/sitemap.xml', async (req,res,next) => {
+  try {
+    const paths = new Set([
+      '/', '/evcil-hayvan-dostu-oteller', '/kedi-kopek-otelleri', '/pet-taksi', '/veterinerler',
+      '/evcil-hayvanla-gezilecek-yerler', '/evcil-hayvan-seyahat-rehberi', '/trust-ads', '/otel-zincirleri',
+      ...PROGRAMMATIC_CLUSTERS.map(cluster => '/' + cluster.slug)
+    ]);
+    async function addCatalog(resource, pathFor) {
+      let cursor;
+      do {
+        const page = await repository.page(resource, { limit: 100, ...(cursor ? { cursor } : {}) });
+        for (const item of page.data) paths.add(pathFor(item));
+        cursor = page.nextCursor;
+      } while (cursor);
     }
-  });
+    await addCatalog('hotels', getHotelPath);
+    await addCatalog('vets', getVetPath);
+    await addCatalog('boardings', item => `/bakim/${encodeURIComponent(item.id)}`);
+    await addCatalog('pet_taxis', item => `/taksi/${encodeURIComponent(item.id)}`);
+    await addCatalog('guides', item => `/rehber/${encodeURIComponent(item.id)}`);
+    const origin = 'https://www.patiyleseyahat.com';
+    const escapeXml = value => String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' })[character]);
+    const body = [...paths].map(item => `<url><loc>${escapeXml(origin + item)}</loc></url>`).join('');
+    res.set('Cache-Control', 'public, max-age=0, s-maxage=3600').type('application/xml').send(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${body}</urlset>`);
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.get('/robots.txt', (req, res) => {

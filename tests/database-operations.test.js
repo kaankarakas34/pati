@@ -5,7 +5,7 @@ import { PGlite } from '@electric-sql/pglite';
 import { pg_trgm } from '@electric-sql/pglite/contrib/pg_trgm';
 import { JSDOM } from 'jsdom';
 import { applyMigrations } from '../lib/migrations.js';
-import { slugify } from '../lib/seo-slugs.js';
+import { getVetPath, slugify } from '../lib/seo-slugs.js';
 import { LEGACY_TABLES, legacySlugSql, preflight, rowIssues, validDate } from '../scripts/database-preflight.js';
 import { migrate, transformLegacyRow } from '../scripts/migrate-to-supabase.js';
 import { dedupe } from '../scripts/dedupe-hotels.js';
@@ -238,7 +238,7 @@ test('PGlite imports are repeatable, retention is bounded and sitemap publicatio
     } finally { dom.window.close(); }
     assert.equal(urls.length, result.urls);
     assert.equal(new Set(urls).size, urls.length);
-    for (const record of records) assert.ok(urls.includes('https://example.test/veteriner/' + record.id));
+    for (const record of records) assert.ok(urls.includes('https://example.test' + getVetPath(record)));
     const unpublished = [];
     const failingRead = { query: async (query, values) => {
       const text = typeof query === 'string' ? query : query.text;

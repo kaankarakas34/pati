@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
 import { parseArgs } from 'node:util';
 import { databaseConfig } from '../lib/database-config.js';
-import { getHotelPath, slugify, PROGRAMMATIC_CLUSTERS } from '../lib/seo-slugs.js';
+import { getHotelPath, getVetPath, slugify, PROGRAMMATIC_CLUSTERS } from '../lib/seo-slugs.js';
 import { boundedInteger, isMain, keysetRows } from './database-preflight.js';
 
 const namespace = 'http://www.sitemaps.org/schemas/sitemap/0.9';
@@ -74,7 +74,10 @@ export async function generateSitemaps(client, emit, { origin, batchSize = 250, 
         await add(getHotelPath(row), row.modified_at);
       }
     }
-    for (const [table, prefix] of [['boardings', '/bakim/'], ['pet_taxis', '/taksi/'], ['vets', '/veteriner/'], ['guides', '/rehber/']]) {
+    for await (const rows of keysetRows(client, 'vets', batchSize, 'id,name,city,district,modified_at::text AS modified_at')) {
+      for (const row of rows) await add(getVetPath(row), row.modified_at);
+    }
+    for (const [table, prefix] of [['boardings', '/bakim/'], ['pet_taxis', '/taksi/'], ['guides', '/rehber/']]) {
       for await (const rows of keysetRows(client, table, batchSize, 'id,modified_at::text AS modified_at')) {
         for (const row of rows) await add(prefix + encodeURIComponent(row.id), row.modified_at);
       }
