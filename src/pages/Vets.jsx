@@ -28,7 +28,7 @@ export default function Vets({ onViewChange }) {
     return () => controller.abort();
   }, [citiesAttempt]);
 
-  const page = useCatalog('vets', { q: slugify(searchQuery).length >= 3 ? searchQuery : '', city: selectedCity, feature: hasICU ? ['Yoğun Bakım Ünitesi'] : [] });
+  const page = useCatalog('vets', { q: slugify(searchQuery).length >= 3 ? searchQuery : '', city: selectedCity, feature: hasICU ? ['Yoğun Bakım Ünitesi'] : [] }, false, true, true);
   const filteredVets = page.items;
 
   const resetFilters = () => {
