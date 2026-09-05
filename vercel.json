@@ -37,8 +37,12 @@
       "destination": "/api/index"
     },
     {
-      "source": "/veteriner/:path*",
-      "destination": "/api/index"
+      "source": "/veteriner/:city/:district/:name",
+      "destination": "/api/index?vetCity=:city&vetDistrict=:district&vetName=:name"
+    },
+    {
+      "source": "/veteriner/:id",
+      "destination": "/api/index?vetId=:id"
     },
     {
       "source": "/evcil-hayvanla-gezilecek-yerler",

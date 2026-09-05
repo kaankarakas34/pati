@@ -30,7 +30,11 @@ app.use(express.json());
 
 // Normalize Vercel serverless request path
 app.use((req, res, next) => {
-  if (req.query && req.query.path) {
+  if (req.query?.vetCity && req.query?.vetDistrict && req.query?.vetName) {
+    req.url = `/veteriner/${encodeURIComponent(req.query.vetCity)}/${encodeURIComponent(req.query.vetDistrict)}/${encodeURIComponent(req.query.vetName)}`;
+  } else if (req.query?.vetId) {
+    req.url = `/veteriner/${encodeURIComponent(req.query.vetId)}`;
+  } else if (req.query && req.query.path) {
     const subPath = Array.isArray(req.query.path) ? req.query.path.join('/') : req.query.path;
     req.url = `/api/${subPath}`;
   } else if (req.url.startsWith('/api/index')) {
