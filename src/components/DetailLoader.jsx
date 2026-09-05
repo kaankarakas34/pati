@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { getHotelPath } from '../../lib/seo-slugs';
+import { getHotelPath, getVetPath } from '../../lib/seo-slugs';
 
-export default function DetailLoader({ resource, id, hotelSlugs, onLoad, children }) {
-  const requestKey = JSON.stringify({ resource, id, hotelSlugs });
+export default function DetailLoader({ resource, id, hotelSlugs, vetSlugs, onLoad, children }) {
+  const requestKey = JSON.stringify({ resource, id, hotelSlugs, vetSlugs });
   const [state, setState] = useState({ key: '', item: null, error: '' });
   const [attempt, setAttempt] = useState(0);
 
@@ -24,6 +24,12 @@ export default function DetailLoader({ resource, id, hotelSlugs, onLoad, childre
           if (!Array.isArray(page.data)) throw new Error('Gecersiz liste yaniti.');
           recordId = page.data[0]?.id;
         }
+        if (resource === 'vets' && vetSlugs) {
+          const params = new URLSearchParams({ ...vetSlugs, limit: '1', envelope: 'true' });
+          const page = await read(`/api/vets?${params}`);
+          if (!Array.isArray(page.data)) throw new Error('Gecersiz liste yaniti.');
+          recordId = page.data[0]?.id;
+        }
         if (!recordId) throw new Error('Kayit bulunamadi.');
         const [item, complaintCount] = await Promise.all([
           read(`/api/${resource}/${encodeURIComponent(recordId)}`),
@@ -36,6 +42,7 @@ export default function DetailLoader({ resource, id, hotelSlugs, onLoad, childre
         }
         if (controller.signal.aborted) return;
         if (resource === 'hotels') window.history.replaceState(null, '', getHotelPath(item));
+        if (resource === 'vets') window.history.replaceState(null, '', getVetPath(item));
         setState({ key: requestKey, item, error: '' });
         onLoad?.(item);
       } catch (error) {

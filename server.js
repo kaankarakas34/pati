@@ -708,10 +708,16 @@ app.get('/taksi/:id', async (req, res) => {
 });
 
 // Intercept Vet page request for SEO & GEO
-app.get('/veteriner/:id', async (req, res) => {
+app.get(['/veteriner/:id', '/veteriner/:city/:district/:name'], async (req, res) => {
   try {
-    const vetId = req.params.id;
-    const vet = await repository.one('vets', vetId);
+    const vet = req.params.id
+      ? await repository.one('vets', req.params.id)
+      : (await repository.page('vets', {
+          citySlug: req.params.city,
+          districtSlug: req.params.district,
+          nameSlug: req.params.name,
+          limit: 1
+        }, true)).data[0];
 
     if (!vet) {
       return res.status(404).send("Veteriner kliniği bulunamadı.");
@@ -723,7 +729,7 @@ app.get('/veteriner/:id', async (req, res) => {
     const title = escapeHtml(`${vet.name} | ${vet.city} 7/24 Acil Nöbetçi Veteriner | Patiyle Seyahat`);
     html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
 
-    const desc = escapeHtml(`${vet.name} 7/24 açık acil veteriner kliniği: ${vet.address}. ${vet.description.slice(0, 130)}...`);
+    const desc = escapeHtml(`${vet.name} 7/24 açık acil veteriner kliniği: ${vet.address || ''}. ${(vet.description || '').slice(0, 130)}...`);
     html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${desc}" />`);
 
     const jsonLd = {

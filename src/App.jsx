@@ -17,7 +17,7 @@ import Taxis from './pages/Taxis';
 import Vets from './pages/Vets';
 import Experiences from './pages/Experiences';
 import AdApplication from './pages/AdApplication';
-import { getHotelPath } from '../lib/seo-slugs';
+import { getHotelPath, getVetPath } from '../lib/seo-slugs';
 
 const CATEGORY_SEO = {
   accommodations: {
@@ -65,6 +65,7 @@ const CATEGORY_SEO = {
 function App() {
   const [detailRecord, setDetailRecord] = useState(null);
   const [hotelSlugs, setHotelSlugs] = useState(null);
+  const [vetSlugs, setVetSlugs] = useState(null);
 
   // Routing state
   const [currentView, setCurrentView] = useState('loading');
@@ -108,7 +109,7 @@ function App() {
       : null;
     const categoryMeta = CATEGORY_SEO[currentView];
     const canonicalPath = hotel ? getHotelPath(hotel)
-      : vet ? `/veteriner/${vet.id}`
+      : vet ? getVetPath(vet)
       : boarding ? `/bakim/${boarding.id}`
       : taxi ? `/taksi/${taxi.id}`
       : cityLanding ? window.location.pathname
@@ -208,6 +209,7 @@ function App() {
     const handleLocationRouting = () => {
       const path = window.location.pathname;
       setHotelSlugs(null);
+      setVetSlugs(null);
       setDetailRecord(null);
       if (path === '/' || path === '/home') {
         setCurrentView('home');
@@ -349,9 +351,12 @@ function App() {
         setCurrentView('taxi-detail');
         setSelectedItemId(id);
       } else if (path.startsWith('/veteriner/')) {
-        const id = path.split('/veteriner/')[1];
+        const segments = path.split('/').filter(Boolean).map(segment => decodeURIComponent(segment));
+        setVetSlugs(segments.length === 4
+          ? { citySlug: segments[1], districtSlug: segments[2], nameSlug: segments[3] }
+          : null);
         setCurrentView('vet-detail');
-        setSelectedItemId(id);
+        setSelectedItemId(segments.length === 2 ? segments[1] : null);
       } else if (path === '/pet-taksi') {
         setCurrentView('taxis');
       } else if (path === '/veterinerler') {
@@ -375,18 +380,19 @@ function App() {
   }, []);
 
   // Navigation controller helper
-  const handleViewChange = (view, id = null) => {
+  const handleViewChange = (view, id = null, preferredPath = null) => {
     setCurrentView(view);
     setDetailRecord(null);
     setHotelSlugs(null);
+    setVetSlugs(null);
     if (id) {
       setSelectedItemId(id);
-      const cleanPath = view === 'accommodation-detail' ? `/otel/${encodeURIComponent(id)}`
+      const cleanPath = preferredPath || (view === 'accommodation-detail' ? `/otel/${encodeURIComponent(id)}`
                       : view === 'boarding-detail' ? `/bakim/${id}` 
                       : view === 'taxi-detail' ? `/taksi/${id}` 
                       : view === 'vet-detail' ? `/veteriner/${id}` 
                       : view === 'guide-detail' ? `/rehber/${id}` 
-                      : `/${view}`;
+                      : `/${view}`);
       window.history.pushState(null, '', cleanPath);
     } else {
       let cleanPath = view === 'home' ? '/' : CATEGORY_SEO[view]?.path || `/${view}`;
@@ -444,7 +450,7 @@ function App() {
       case 'vet-detail': {
         const resource = { 'accommodation-detail': 'hotels', 'boarding-detail': 'boardings', 'taxi-detail': 'taxis', 'vet-detail': 'vets' }[currentView];
         return (
-          <DetailLoader key={JSON.stringify([resource, selectedItemId, hotelSlugs])} resource={resource} id={selectedItemId} hotelSlugs={hotelSlugs} onLoad={setDetailRecord}>
+          <DetailLoader key={JSON.stringify([resource, selectedItemId, hotelSlugs, vetSlugs])} resource={resource} id={selectedItemId} hotelSlugs={hotelSlugs} vetSlugs={vetSlugs} onLoad={setDetailRecord}>
             {item => <DetailView key={item.id} item={item}
               isBoarding={resource === 'boardings'} isTaxi={resource === 'taxis'} isVet={resource === 'vets'}
               addComplaint={addComplaint} addCorrection={addCorrection} onViewChange={handleViewChange} />}

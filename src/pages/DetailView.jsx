@@ -4,7 +4,7 @@ import AdBanner from '../components/AdBanner';
 import { useCatalog } from '../lib/useCatalog';
 import CatalogPagination from '../components/CatalogPagination';
 import Breadcrumbs from '../components/Breadcrumbs';
-import { slugify, getHotelPath } from '../../lib/seo-slugs';
+import { slugify, getHotelPath, getVetPath } from '../../lib/seo-slugs';
 
 function uniqueItems(items) {
   return Array.from(new Set(items.filter(Boolean)));
@@ -352,7 +352,7 @@ export default function DetailView({
     : isBoarding ? { label: 'Kedi & Köpek Otelleri', view: 'boardings', id: null, url: '/kedi-kopek-otelleri' }
     : { label: 'Pet Dostu Oteller', view: 'accommodations', id: null, url: '/evcil-hayvan-dostu-oteller' },
     item.city && !isUtility && !isBoarding ? { label: `${item.city} Otelleri`, view: 'accommodations', id: null, url: `/evcil-hayvan-dostu-oteller/${slugify(item.city)}` } : null,
-    { label: item.name, view: null, id: item.id, url: isTaxi ? `/taksi/${item.id}` : isVet ? `/veteriner/${item.id}` : isBoarding ? `/bakim/${item.id}` : getHotelPath(item) }
+    { label: item.name, view: null, id: item.id, url: isTaxi ? `/taksi/${item.id}` : isVet ? getVetPath(item) : isBoarding ? `/bakim/${item.id}` : getHotelPath(item) }
   ].filter(Boolean);
 
   return (
@@ -972,8 +972,8 @@ export default function DetailView({
                   <p className="text-3xs text-gray-500 mt-0.5 line-clamp-1">📍 {v.address}</p>
                 </div>
                 <a
-                  href={`/veteriner/${encodeURIComponent(v.id)}`}
-                  onClick={event => { event.preventDefault(); onViewChange('vet-detail', v.id); }}
+                  href={getVetPath(v)}
+                  onClick={event => { event.preventDefault(); onViewChange('vet-detail', v.id, getVetPath(v)); }}
                   className="bg-red-600 hover:bg-red-700 text-white text-3xs font-extrabold px-3 py-2 rounded-xl text-center block font-title transition-colors"
                 >
                   Klinik İletişim Bilgileri

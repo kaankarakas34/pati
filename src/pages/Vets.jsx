@@ -5,7 +5,7 @@ import { LocationIcon } from '../components/PetIcons';
 import AdBanner from '../components/AdBanner';
 import SeoContentSection from '../components/SeoContentSection';
 import { seoContent } from '../data/seoContent';
-import { slugify } from '../../lib/seo-slugs';
+import { getVetPath, slugify } from '../../lib/seo-slugs';
 
 export default function Vets({ onViewChange }) {
   const [selectedCity, setSelectedCity] = useState('all');
@@ -153,7 +153,7 @@ export default function Vets({ onViewChange }) {
                     {/* Clinic Name & Location */}
                     <div>
                       <h3
-                        onClick={() => onViewChange && onViewChange('vet-detail', vet.id)}
+                        onClick={() => onViewChange && onViewChange('vet-detail', vet.id, getVetPath(vet))}
                         className="font-title text-lg font-bold text-gray-950 hover:text-brand-navy cursor-pointer transition-colors"
                       >
                         {vet.name}
@@ -189,8 +189,8 @@ export default function Vets({ onViewChange }) {
                   {/* Direct Phone Call & Website Actions (No card click, No 'Hemencek Ara') */}
                   <div className="pt-4 mt-4 border-t border-brand-beige flex flex-col sm:flex-row items-center gap-2">
                     <a
-                      href={`/veteriner/${encodeURIComponent(vet.id)}`}
-                      onClick={event => { event.preventDefault(); onViewChange('vet-detail', vet.id); }}
+                      href={getVetPath(vet)}
+                      onClick={event => { event.preventDefault(); onViewChange('vet-detail', vet.id, getVetPath(vet)); }}
                       className="w-full bg-red-600 hover:bg-red-700 text-white font-extrabold text-xs py-3 px-4 rounded-2xl transition-colors flex items-center justify-center gap-2 shadow-xs font-title"
                     >
                       <span>📞 {vet.phone || 'İletişim Bilgileri'}</span>
