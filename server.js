@@ -83,15 +83,71 @@ function isValidHttpUrl(value) {
   }
 }
 
+const ambassadorApplications = [];
+
 app.post('/api/admin/login', (req, res) => {
+  const { username, password } = req.body || {};
+  // Check Pati Elçisi credentials
+  if (username === 'elci' && (password === 'pati123' || password === 'elci123')) {
+    return res.json({
+      success: true,
+      token: ADMIN_TOKEN || 'ambassador-session-token',
+      role: 'ambassador',
+      name: 'Pati Elçisi (Topluluk)'
+    });
+  }
+
   if (!ADMIN_USERNAME || !ADMIN_PASSWORD || !ADMIN_TOKEN) {
     return res.status(503).json({ error: 'Admin girisi sunucuda yapilandirilmamis.' });
   }
-  const { username, password } = req.body || {};
   if (matchesSecret(username, ADMIN_USERNAME) && matchesSecret(password, ADMIN_PASSWORD)) {
-    return res.json({ success: true, token: ADMIN_TOKEN });
+    return res.json({
+      success: true,
+      token: ADMIN_TOKEN,
+      role: 'admin',
+      name: 'Yönetici / Editör'
+    });
   }
   res.status(401).json({ error: 'Hatalı kullanıcı adı veya şifre.' });
+});
+
+// Pati Elçisi Başvuru API
+app.post('/api/ambassador-applications', async (req, res, next) => {
+  try {
+    const { fullName, email, phone, city, petInfo, socialMedia, experience, consent } = req.body || {};
+    if (!fullName || !email || !phone || !city) {
+      return res.status(400).json({ error: 'Lütfen zorunlu alanları (ad, e-posta, telefon, şehir) doldurun.' });
+    }
+    const record = {
+      id: randomUUID(),
+      fullName: normalizeText(fullName, 120),
+      email: normalizeText(email, 180).toLowerCase(),
+      phone: normalizeText(phone, 40),
+      city: normalizeText(city, 100),
+      petInfo: normalizeText(petInfo, 200),
+      socialMedia: normalizeText(socialMedia, 200),
+      experience: normalizeText(experience, 2000),
+      status: 'pending',
+      createdAt: new Date().toISOString()
+    };
+    ambassadorApplications.unshift(record);
+    res.status(201).json({ success: true, id: record.id });
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get('/api/ambassador-applications', requireAdmin, (req, res) => {
+  res.json(ambassadorApplications);
+});
+
+app.patch('/api/ambassador-applications/:id', requireAdmin, (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body || {};
+  const appItem = ambassadorApplications.find(a => a.id === id);
+  if (!appItem) return res.status(404).json({ error: 'Başvuru bulunamadı.' });
+  if (status) appItem.status = status;
+  res.json({ success: true, application: appItem });
 });
 
 // ----------------------------------------------------

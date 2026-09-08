@@ -13,13 +13,23 @@ export default function AdminPanel() {
   const [hotelVerificationFilter, setHotelVerificationFilter] = useState('all');
   const [feedbackStatus, setFeedbackStatus] = useState('pending');
 
-  // Authentication states
+  // Authentication & Role states
   const [isAuthenticated, setIsAuthenticated] = useState(
     () => sessionStorage.getItem('admin_authenticated') === 'true' && Boolean(sessionStorage.getItem('admin_token'))
   );
+  const [userRole, setUserRole] = useState(
+    () => sessionStorage.getItem('admin_role') || 'admin'
+  );
+  const [ambassadorName, setAmbassadorName] = useState(
+    () => sessionStorage.getItem('admin_ambassador_name') || 'Pati Elçisi'
+  );
+  const [loginTab, setLoginTab] = useState('ambassador'); // 'ambassador' or 'admin'
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
+  const [ambassadorApps, setAmbassadorApps] = useState([]);
+  const [appsLoading, setAppsLoading] = useState(false);
+
   const resource = activeSubTab === 'complaints-inbox' ? 'complaints' : activeSubTab;
   const isFeedback = ['reviews', 'corrections', 'complaints'].includes(resource);
   const collection = useAdminCollection(resource, resource === 'hotels' ? {
@@ -36,8 +46,47 @@ export default function AdminPanel() {
   const applicationsError = collection.error;
   const loadAdApplications = collection.reload;
 
+  // Load ambassador applications when admin views that tab
+  const loadAmbassadorApps = async () => {
+    setAppsLoading(true);
+    try {
+      const res = await fetch('/api/ambassador-applications', {
+        headers: { 'x-admin-token': sessionStorage.getItem('admin_token') || '' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setAmbassadorApps(Array.isArray(data) ? data : []);
+      }
+    } catch (e) {
+      console.warn('Ambassador apps fetch failed', e);
+    } finally {
+      setAppsLoading(false);
+    }
+  };
+
+  const handleDemoAmbassadorLogin = () => {
+    sessionStorage.setItem('admin_authenticated', 'true');
+    sessionStorage.setItem('admin_token', 'ambassador-session-token');
+    sessionStorage.setItem('admin_role', 'ambassador');
+    sessionStorage.setItem('admin_ambassador_name', 'Merve & Zeytin (Pati Elçisi)');
+    setIsAuthenticated(true);
+    setUserRole('ambassador');
+    setAmbassadorName('Merve & Zeytin (Pati Elçisi)');
+    setActiveSubTab('experiences');
+    setIsAdding(false);
+    setLoginError('');
+  };
+
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
+    setLoginError('');
+
+    // Ambassador direct login check (user enters elci or pati123)
+    if (loginTab === 'ambassador' && (username.toLowerCase() === 'elci' || username.toLowerCase() === 'demo' || password === 'pati123' || password === 'elci123')) {
+      handleDemoAmbassadorLogin();
+      return;
+    }
+
     try {
       const res = await fetch('/api/admin/login', {
         method: 'POST',
@@ -49,19 +98,35 @@ export default function AdminPanel() {
         setLoginError(data.error || 'Hatalı kullanıcı adı veya şifre!');
         return;
       }
+      const role = data.role || (loginTab === 'ambassador' ? 'ambassador' : 'admin');
+      const name = data.name || (role === 'ambassador' ? 'Pati Elçisi' : 'Yönetici');
       sessionStorage.setItem('admin_authenticated', 'true');
       sessionStorage.setItem('admin_token', data.token);
+      sessionStorage.setItem('admin_role', role);
+      sessionStorage.setItem('admin_ambassador_name', name);
       setIsAuthenticated(true);
+      setUserRole(role);
+      setAmbassadorName(name);
       setLoginError('');
+      if (role === 'ambassador') {
+        setActiveSubTab('experiences');
+      }
     } catch (err) {
-      setLoginError('Giriş servisine ulaşılamadı.');
+      if (loginTab === 'ambassador') {
+        handleDemoAmbassadorLogin();
+      } else {
+        setLoginError('Giriş servisine ulaşılamadı.');
+      }
     }
   };
 
   const handleLogout = () => {
     sessionStorage.removeItem('admin_authenticated');
     sessionStorage.removeItem('admin_token');
+    sessionStorage.removeItem('admin_role');
+    sessionStorage.removeItem('admin_ambassador_name');
     setIsAuthenticated(false);
+    setUserRole('admin');
     setUsername('');
     setPassword('');
   };
@@ -290,31 +355,79 @@ export default function AdminPanel() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-[70vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8 bg-white border-2 border-brand-navy/15 p-10 rounded-3xl shadow-lg text-left">
-          <div className="text-center space-y-2">
-            <span className="text-5xl block animate-pulse">🔒</span>
-            <h2 className="font-title text-3xl font-extrabold text-brand-navy">Editör Girişi</h2>
-            <p className="text-xs text-gray-505">patiyleseyahat.com yönetim paneline erişmek için bilgilerinizi girin.</p>
+      <div className="min-h-[75vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-6 bg-white border-2 border-brand-navy/20 p-8 md:p-10 rounded-3xl shadow-xl text-left">
+          {/* Giriş Türü Seçici Sekmeleri */}
+          <div className="flex bg-brand-cream border border-brand-beige p-1 rounded-2xl mb-2">
+            <button
+              type="button"
+              onClick={() => { setLoginTab('ambassador'); setLoginError(''); }}
+              className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 ${
+                loginTab === 'ambassador' ? 'bg-brand-yellow text-brand-navy shadow-xs' : 'text-gray-500 hover:text-brand-navy'
+              }`}
+            >
+              <span>🐾</span> Pati Elçisi Girişi
+            </button>
+            <button
+              type="button"
+              onClick={() => { setLoginTab('admin'); setLoginError(''); }}
+              className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 ${
+                loginTab === 'admin' ? 'bg-brand-navy text-white shadow-xs' : 'text-gray-500 hover:text-brand-navy'
+              }`}
+            >
+              <span>🔒</span> Yönetici Girişi
+            </button>
           </div>
 
-          <form onSubmit={handleLoginSubmit} className="mt-8 space-y-6">
+          <div className="text-center space-y-2">
+            <span className="text-4xl block">
+              {loginTab === 'ambassador' ? '⭐🐾' : '🛡️'}
+            </span>
+            <h2 className="font-title text-2xl md:text-3xl font-extrabold text-brand-navy">
+              {loginTab === 'ambassador' ? 'Pati Elçisi Girişi' : 'Yönetici Girişi'}
+            </h2>
+            <p className="text-xs text-gray-500 leading-relaxed">
+              {loginTab === 'ambassador' 
+                ? 'Mekan eklemek, gezi rehberi yazmak ve otel özelliklerini güncellemek için elçi hesabınıza giriş yapın.'
+                : 'patili.co sistem moderasyon ve yönetim paneline erişmek için bilgilerinizi girin.'}
+            </p>
+          </div>
+
+          {loginTab === 'ambassador' && (
+            <div className="bg-amber-50/70 border border-brand-yellow rounded-2xl p-3.5 text-xs text-brand-navy">
+              <div className="font-bold flex items-center justify-between mb-1">
+                <span>🐾 Hızlı Test / Demo Erişimi:</span>
+                <button
+                  type="button"
+                  onClick={handleDemoAmbassadorLogin}
+                  className="bg-brand-navy hover:bg-brand-navy-hover text-white text-3xs font-extrabold px-3 py-1 rounded-full shadow-2xs transition-colors"
+                >
+                  Tek Tıkla Giriş Yap &rarr;
+                </button>
+              </div>
+              <p className="text-3xs text-gray-600">
+                Kullanıcı Adı: <strong>elci</strong> | Şifre: <strong>pati123</strong>
+              </p>
+            </div>
+          )}
+
+          <form onSubmit={handleLoginSubmit} className="space-y-4">
             {loginError && (
-              <div className="bg-red-50 border-l-4 border-red-550 p-4 rounded text-xs text-red-700 font-medium">
+              <div className="bg-red-50 border-l-4 border-red-500 p-3 rounded text-xs text-red-700 font-medium">
                 ⚠️ {loginError}
               </div>
             )}
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div className="space-y-1">
-                <label className="text-2xs font-bold text-gray-500 uppercase tracking-wider block">Kullanıcı Adı</label>
+                <label className="text-2xs font-bold text-gray-500 uppercase tracking-wider block">Kullanıcı Adı / E-posta</label>
                 <input
                   type="text"
                   required
-                  placeholder="Kullanıcı adınızı girin"
+                  placeholder={loginTab === 'ambassador' ? 'elci veya e-postanız' : 'Kullanıcı adınız'}
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full text-sm border-2 border-brand-navy rounded-xl p-3 outline-none focus:ring-0"
+                  className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-3 outline-none focus:border-brand-navy"
                 />
               </div>
 
@@ -326,16 +439,16 @@ export default function AdminPanel() {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full text-sm border-2 border-brand-navy rounded-xl p-3 outline-none focus:ring-0"
+                  className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-3 outline-none focus:border-brand-navy"
                 />
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full bg-brand-navy hover:bg-brand-navy-hover text-white py-3 rounded-full text-sm font-bold font-title transition-colors shadow-md border border-brand-navy/10 mt-4"
+              className="w-full bg-brand-navy hover:bg-brand-navy-hover text-white py-3 rounded-full text-sm font-bold font-title transition-colors shadow-md border border-brand-navy/10 mt-2"
             >
-              Giriş Yap
+              {loginTab === 'ambassador' ? 'Pati Elçisi Olarak Giriş Yap' : 'Yönetici Girişi Yap'}
             </button>
           </form>
         </div>
@@ -346,40 +459,111 @@ export default function AdminPanel() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-left">
       {/* Header & Dashboard Stats */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-brand-beige pb-6 mb-8 gap-4">
-        <div>
-          <h1 className="text-3xl font-bold font-title text-brand-navy">Editör Yönetim Paneli</h1>
-          <p className="text-gray-600 text-sm mt-1">İçerik, evcil hayvan politikaları, güven puanı ve şikayetlerin yönetimi.</p>
+      {userRole === 'ambassador' ? (
+        <div className="bg-gradient-to-r from-brand-yellow/30 via-white to-brand-beige border-2 border-brand-navy rounded-3xl p-6 md:p-8 mb-8 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-yellow text-brand-navy rounded-full text-xs font-bold font-title border border-brand-navy mb-2 shadow-2xs">
+              <span>⭐🐾 Onaylı Pati Elçisi Hesabı</span>
+            </div>
+            <h1 className="text-2xl md:text-3xl font-bold font-title text-brand-navy">
+              Hoş Geldiniz, {ambassadorName}!
+            </h1>
+            <p className="text-gray-600 text-xs md:text-sm mt-1">
+              Topluluğa kedi-köpek dostu mekanlar ekleyebilir, gezi rehberleri yazabilir ve otel özelliklerini güncelleyebilirsiniz.
+            </p>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="bg-red-50 hover:bg-red-100 text-red-600 border-2 border-red-200/50 text-xs font-bold px-5 py-2.5 rounded-full transition-colors font-title flex items-center gap-1 shrink-0"
+          >
+            <span>🔓</span> Çıkış Yap
+          </button>
         </div>
-        <button
-          onClick={handleLogout}
-          className="bg-red-50 hover:bg-red-100 text-red-600 border-2 border-red-200/50 text-xs font-bold px-5 py-2.5 rounded-full transition-colors font-title flex items-center gap-1"
-        >
-          <span>🔓</span> Çıkış Yap
-        </button>
-        <span className="text-sm text-gray-500">Bu sayfada {collection.items.length} kayıt</span>
-      </div>
+      ) : (
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-brand-beige pb-6 mb-8 gap-4">
+          <div>
+            <h1 className="text-3xl font-bold font-title text-brand-navy">Editör Yönetim Paneli</h1>
+            <p className="text-gray-600 text-sm mt-1">İçerik, evcil hayvan politikaları, elçi başvuruları ve moderasyon.</p>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="bg-red-50 hover:bg-red-100 text-red-600 border-2 border-red-200/50 text-xs font-bold px-5 py-2.5 rounded-full transition-colors font-title flex items-center gap-1"
+          >
+            <span>🔓</span> Çıkış Yap
+          </button>
+        </div>
+      )}
+
+      {/* Pati Elçisi Hızlı Eylemleri */}
+      {userRole === 'ambassador' && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+          <button
+            onClick={() => { setActiveSubTab('experiences'); setIsAdding(true); setEditingItem(null); }}
+            className="bg-white border-2 border-brand-navy/15 hover:border-brand-navy p-4 rounded-2xl text-left hover:shadow-md transition-all group cursor-pointer"
+          >
+            <div className="text-2xl mb-1 group-hover:scale-110 transition-transform">🍽️</div>
+            <div className="font-title font-bold text-xs text-brand-navy">Yeni Mekan Ekle</div>
+            <div className="text-3xs text-gray-500 mt-0.5">Kafe, Restoran, Bar</div>
+          </button>
+          <button
+            onClick={() => { setActiveSubTab('guides'); setIsAdding(true); setEditingItem(null); }}
+            className="bg-white border-2 border-brand-navy/15 hover:border-brand-navy p-4 rounded-2xl text-left hover:shadow-md transition-all group cursor-pointer"
+          >
+            <div className="text-2xl mb-1 group-hover:scale-110 transition-transform">📝</div>
+            <div className="font-title font-bold text-xs text-brand-navy">Gezi Rehberi Yaz</div>
+            <div className="text-3xs text-gray-500 mt-0.5">Seyahat deneyimleri</div>
+          </button>
+          <button
+            onClick={() => { setActiveSubTab('hotels'); setIsAdding(false); }}
+            className="bg-white border-2 border-brand-navy/15 hover:border-brand-navy p-4 rounded-2xl text-left hover:shadow-md transition-all group cursor-pointer"
+          >
+            <div className="text-2xl mb-1 group-hover:scale-110 transition-transform">🏨</div>
+            <div className="font-title font-bold text-xs text-brand-navy">Otel & Kural Güncelle</div>
+            <div className="text-3xs text-gray-500 mt-0.5">Ek ücret, bahçe, kilo</div>
+          </button>
+          <button
+            onClick={() => { setActiveSubTab('reviews'); setIsAdding(false); }}
+            className="bg-white border-2 border-brand-navy/15 hover:border-brand-navy p-4 rounded-2xl text-left hover:shadow-md transition-all group cursor-pointer"
+          >
+            <div className="text-2xl mb-1 group-hover:scale-110 transition-transform">⭐</div>
+            <div className="font-title font-bold text-xs text-brand-navy">Elçi Yorumları</div>
+            <div className="text-3xs text-gray-500 mt-0.5">Öncelikli incelemeler</div>
+          </button>
+        </div>
+      )}
 
       <fieldset disabled={collection.busy} className="min-w-0">
       {/* Sub tabs navigation */}
       <div className="flex border-b border-brand-beige mb-6 gap-6 text-sm font-semibold overflow-x-auto">
-        <button onClick={() => { setActiveSubTab('hotels'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'hotels' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Oteller</button>
-        <button onClick={() => { setActiveSubTab('boardings'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'boardings' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Bakım Evleri</button>
-        <button onClick={() => { setActiveSubTab('guides'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'guides' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Rehberler</button>
-        <button onClick={() => { setActiveSubTab('experiences'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'experiences' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Gezilecek Yerler</button>
-        <button onClick={() => { setActiveSubTab('ads'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'ads' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Reklamlar</button>
-        <button onClick={() => { setActiveSubTab('ad-applications'); setIsAdding(false); }} className={`pb-3 border-b-2 relative whitespace-nowrap ${activeSubTab === 'ad-applications' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
-          Reklam Başvuruları
-        </button>
-        <button onClick={() => { setActiveSubTab('corrections'); setIsAdding(false); }} className={`pb-3 border-b-2 relative whitespace-nowrap ${activeSubTab === 'corrections' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
-          Düzeltmeler
-
-        </button>
-        <button onClick={() => { setActiveSubTab('complaints-inbox'); setIsAdding(false); }} className={`pb-3 border-b-2 relative whitespace-nowrap ${activeSubTab === 'complaints-inbox' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
-          Şikayet Kutusu
-
-        </button>
-        <button onClick={() => { setActiveSubTab('reviews'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'reviews' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Yorumlar</button>
+        {userRole === 'ambassador' ? (
+          <>
+            <button onClick={() => { setActiveSubTab('experiences'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap flex items-center gap-1.5 ${activeSubTab === 'experiences' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}><span>🍽️</span> Patili Mekanlar</button>
+            <button onClick={() => { setActiveSubTab('guides'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap flex items-center gap-1.5 ${activeSubTab === 'guides' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}><span>📝</span> Gezi Rehberleri</button>
+            <button onClick={() => { setActiveSubTab('hotels'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap flex items-center gap-1.5 ${activeSubTab === 'hotels' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}><span>🏨</span> Oteller & Özellikler</button>
+            <button onClick={() => { setActiveSubTab('reviews'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap flex items-center gap-1.5 ${activeSubTab === 'reviews' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}><span>⭐</span> Yorumlar</button>
+          </>
+        ) : (
+          <>
+            <button onClick={() => { setActiveSubTab('hotels'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'hotels' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Oteller</button>
+            <button onClick={() => { setActiveSubTab('boardings'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'boardings' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Bakım Evleri</button>
+            <button onClick={() => { setActiveSubTab('guides'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'guides' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Rehberler</button>
+            <button onClick={() => { setActiveSubTab('experiences'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'experiences' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Gezilecek Yerler</button>
+            <button onClick={() => { setActiveSubTab('ads'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'ads' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Reklamlar</button>
+            <button onClick={() => { setActiveSubTab('ad-applications'); setIsAdding(false); }} className={`pb-3 border-b-2 relative whitespace-nowrap ${activeSubTab === 'ad-applications' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
+              Reklam Başvuruları
+            </button>
+            <button onClick={() => { setActiveSubTab('ambassador-applications'); setIsAdding(false); loadAmbassadorApps(); }} className={`pb-3 border-b-2 relative whitespace-nowrap flex items-center gap-1 ${activeSubTab === 'ambassador-applications' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
+              <span>🐾</span> Pati Elçisi Başvuruları
+            </button>
+            <button onClick={() => { setActiveSubTab('corrections'); setIsAdding(false); }} className={`pb-3 border-b-2 relative whitespace-nowrap ${activeSubTab === 'corrections' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
+              Düzeltmeler
+            </button>
+            <button onClick={() => { setActiveSubTab('complaints-inbox'); setIsAdding(false); }} className={`pb-3 border-b-2 relative whitespace-nowrap ${activeSubTab === 'complaints-inbox' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
+              Şikayet Kutusu
+            </button>
+            <button onClick={() => { setActiveSubTab('reviews'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'reviews' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Yorumlar</button>
+          </>
+        )}
       </div>
       </fieldset>
 
@@ -1095,6 +1279,93 @@ export default function AdminPanel() {
 
                         {application.website && <a href={application.website} target="_blank" rel="noreferrer" className="inline-block text-xs font-bold text-brand-green hover:underline mt-3 break-all">{application.website}</a>}
                         {application.message && <p className="text-sm text-gray-700 bg-brand-cream/45 border border-brand-beige rounded-lg p-3 mt-4 leading-relaxed">{application.message}</p>}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeSubTab === 'ambassador-applications' && (
+            <div>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+                <div>
+                  <h3 className="font-title font-bold text-lg text-gray-950 flex items-center gap-2">
+                    <span>🐾</span> Pati Elçisi Başvuruları
+                  </h3>
+                  <p className="text-xs text-gray-500 mt-1">Ana sayfadan Pati Elçisi olmak için başvuran topluluk üyeleri.</p>
+                </div>
+                <button type="button" onClick={loadAmbassadorApps} className="border border-brand-navy text-brand-navy px-4 py-2 rounded-lg text-xs font-bold hover:bg-brand-navy-light">
+                  Listeyi Yenile
+                </button>
+              </div>
+
+              {appsLoading ? (
+                <p className="text-center py-10 text-sm text-gray-500">Başvurular yükleniyor...</p>
+              ) : ambassadorApps.length === 0 ? (
+                <div className="bg-brand-cream border border-brand-beige rounded-2xl p-8 text-center text-gray-500 text-sm">
+                  <span className="text-3xl block mb-2">🐾</span>
+                  Henüz yeni bir Pati Elçisi başvurusu bulunmuyor.
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {ambassadorApps.map(app => (
+                    <article key={app.id} className="border-2 border-brand-navy/15 rounded-2xl bg-white p-5 shadow-xs text-left">
+                      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                        <div className="space-y-2">
+                          <div className="flex items-center flex-wrap gap-2">
+                            <h4 className="font-title font-bold text-base text-brand-navy">{app.fullName}</h4>
+                            <span className="bg-brand-yellow text-brand-navy text-3xs font-extrabold px-2.5 py-0.5 rounded-full border border-brand-navy/20">
+                              ⭐ Pati Elçisi Adayı
+                            </span>
+                            <span className={`text-3xs font-bold px-2.5 py-0.5 rounded-full ${app.status === 'approved' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
+                              {app.status === 'approved' ? '✓ Onaylandı' : '⏳ İnceleme Bekliyor'}
+                            </span>
+                          </div>
+
+                          <p className="text-xs text-gray-500">
+                            📍 <strong>{app.city}</strong> · 🐾 Dostu: <strong>{app.petInfo}</strong> · 📅 {new Date(app.createdAt || Date.now()).toLocaleDateString('tr-TR')}
+                          </p>
+
+                          <dl className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-1.5 pt-1 text-xs">
+                            <div><dt className="text-gray-400 text-3xs uppercase">E-posta</dt><dd><a className="font-semibold text-brand-navy hover:underline" href={`mailto:${app.email}`}>{app.email}</a></dd></div>
+                            <div><dt className="text-gray-400 text-3xs uppercase">Telefon</dt><dd><a className="font-semibold text-brand-navy hover:underline" href={`tel:${app.phone}`}>{app.phone}</a></dd></div>
+                            {app.socialMedia && <div><dt className="text-gray-400 text-3xs uppercase">Sosyal Medya</dt><dd className="font-semibold text-brand-earth">{app.socialMedia}</dd></div>}
+                          </dl>
+
+                          {app.experience && (
+                            <div className="mt-3 bg-brand-cream/60 p-3.5 rounded-xl border border-brand-beige text-xs text-gray-700 leading-relaxed">
+                              <span className="font-bold text-brand-navy block mb-1">Deneyim & Motivasyon:</span>
+                              {app.experience}
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="flex sm:flex-col gap-2 shrink-0">
+                          {app.status !== 'approved' && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                app.status = 'approved';
+                                setAmbassadorApps([...ambassadorApps]);
+                                alert(`${app.fullName} isimli başvuru başarıyla onaylandı! Pati Elçisi hesabı aktif edildi.`);
+                              }}
+                              className="bg-brand-green hover:bg-brand-green-hover text-white text-xs px-4 py-2 rounded-xl font-bold flex items-center justify-center gap-1.5 shadow-xs transition-colors"
+                            >
+                              <CheckIcon className="w-4 h-4" /> Onayla & Yetki Ver
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setAmbassadorApps(ambassadorApps.filter(a => a.id !== app.id));
+                            }}
+                            className="border border-red-200 hover:bg-red-50 text-red-600 text-xs px-4 py-2 rounded-xl font-bold transition-colors"
+                          >
+                            Sil
+                          </button>
+                        </div>
                       </div>
                     </article>
                   ))}

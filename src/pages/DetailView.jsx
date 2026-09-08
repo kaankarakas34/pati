@@ -163,6 +163,9 @@ export default function DetailView({
   const [reviewRating, setReviewRating] = useState(10);
   const [reviewText, setReviewText] = useState('');
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
+  const [isAmbassadorPost, setIsAmbassadorPost] = useState(
+    () => sessionStorage.getItem('admin_role') === 'ambassador'
+  );
   const [selectedGalleryIndex, setSelectedGalleryIndex] = useState(0);
 
   async function submit(action, onSuccess) {
@@ -184,11 +187,13 @@ export default function DetailView({
   const handleSubmitReview = async (event) => {
     event.preventDefault();
     if (!reviewAuthor.trim() || !reviewText.trim()) return;
+    const authorName = isAmbassadorPost ? `${reviewAuthor.replace('(Pati Elçisi)', '').trim()} (Pati Elçisi)` : reviewAuthor.trim();
+    const finalReviewText = isAmbassadorPost && !reviewText.includes('[Pati Elçisi]') ? `[Pati Elçisi] ${reviewText.trim()}` : reviewText.trim();
     await submit(async () => {
       const response = await fetch('/api/reviews', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ targetId: item.id, author: reviewAuthor.trim(), rating: Number(reviewRating), text: reviewText.trim() })
+        body: JSON.stringify({ targetId: item.id, author: authorName, rating: Number(reviewRating), text: finalReviewText })
       });
       const result = await response.json();
       if (!response.ok || result.success !== true) throw new Error(result.error || 'Yorum gönderilemedi.');
@@ -908,28 +913,112 @@ export default function DetailView({
 
       {activeTab === 'complaints' && <CatalogPagination page={complaintPage} />}
 
-      <section className="mt-10 border-t border-brand-beige pt-6 space-y-5" aria-label="Misafir yorumları">
-        <h2 className="font-title text-xl font-bold">Misafir Yorumları</h2>
-        {reviewPage.loading || reviewPage.error ? null : reviews.length ? reviews.map(review => (
-          <article key={review.id} className="border-b border-brand-beige pb-4">
-            <p className="font-semibold">{review.author} · {review.rating}/10</p>
-            <p className="text-xs text-gray-500">{review.date}</p>
-            <p className="mt-2 whitespace-pre-wrap">{review.text}</p>
-          </article>
-        )) : <p>Henüz onaylanmış yorum bulunmuyor.</p>}
+      <section className="mt-10 border-t border-brand-beige pt-6 space-y-5 text-left" aria-label="Misafir yorumları">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <h2 className="font-title text-xl font-bold text-brand-navy">Misafir Yorumları & Elçi İncelemeleri</h2>
+          <span className="text-xs text-gray-500 font-medium">⭐ Pati Elçisi yorumları en üstte listelenir</span>
+        </div>
+
+        {reviewPage.loading || reviewPage.error ? null : (() => {
+          const isAmbassadorReview = (r) => Boolean(
+            r.isAmbassador ||
+            r.is_ambassador ||
+            r.author?.toLowerCase().includes('elçi') ||
+            r.author?.toLowerCase().includes('elcisi') ||
+            r.text?.includes('[Pati Elçisi]')
+          );
+          const sorted = [...reviews].sort((a, b) => {
+            const aAmb = isAmbassadorReview(a);
+            const bAmb = isAmbassadorReview(b);
+            if (aAmb && !bAmb) return -1;
+            if (!aAmb && bAmb) return 1;
+            return 0;
+          });
+
+          return sorted.length ? (
+            <div className="space-y-3">
+              {sorted.map(review => {
+                const isAmb = isAmbassadorReview(review);
+                const cleanAuthor = review.author?.replace('(Pati Elçisi)', '').replace('[Pati Elçisi]', '').trim();
+                const cleanText = review.text?.replace('[Pati Elçisi]', '').trim();
+
+                return (
+                  <article
+                    key={review.id}
+                    className={`rounded-2xl transition-all ${
+                      isAmb
+                        ? 'bg-amber-50/70 border-2 border-brand-yellow/80 p-5 shadow-xs'
+                        : 'border-b border-brand-beige pb-4 pt-2'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-sm text-brand-navy">{cleanAuthor}</span>
+                        {isAmb && (
+                          <span className="inline-flex items-center gap-1 bg-brand-yellow text-brand-navy text-3xs font-extrabold px-2.5 py-0.5 rounded-full border border-brand-navy/20 shadow-2xs font-title">
+                            ⭐🐾 Pati Elçisi
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-xs font-bold text-brand-navy bg-white px-2.5 py-0.5 rounded-md border border-brand-navy/10 shadow-2xs">
+                        ⭐ {review.rating}/10
+                      </span>
+                    </div>
+                    <p className="text-3xs text-gray-400 mt-1">{review.date}</p>
+                    <p className="mt-2 text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">
+                      {cleanText}
+                    </p>
+                  </article>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="text-sm text-gray-500">Henüz onaylanmış yorum bulunmuyor. İlk deneyimi siz paylaşın!</p>
+          );
+        })()}
+
         <CatalogPagination page={reviewPage} />
-        {reviewSubmitted ? <p role="status">Yorumunuz alındı. Editör onayından sonra yayınlanacaktır.</p> : (
-          <form onSubmit={handleSubmitReview} className="space-y-3 max-w-xl">
-            <label className="block">Adınız
-              <input required maxLength={120} value={reviewAuthor} onChange={event => setReviewAuthor(event.target.value)} className="block w-full border rounded p-2" />
+
+        {reviewSubmitted ? (
+          <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 p-4 rounded-2xl text-sm font-medium">
+            ✅ Yorumunuz başarıyla alındı. Editör onayından sonra yayınlanacaktır.
+          </div>
+        ) : (
+          <form onSubmit={handleSubmitReview} className="space-y-3 max-w-xl bg-white p-6 rounded-3xl border-2 border-brand-navy/10 shadow-xs">
+            <h3 className="font-title font-bold text-base text-brand-navy">Deneyiminizi Paylaşın</h3>
+            
+            <label className="block text-xs font-bold text-gray-700">
+              Adınız & Soyadınız
+              <input required maxLength={120} value={reviewAuthor} onChange={event => setReviewAuthor(event.target.value)} className="block w-full border-2 border-brand-navy/20 rounded-xl p-2.5 text-sm mt-1 outline-none focus:border-brand-navy" placeholder="Örn: Mert Kaya" />
             </label>
-            <label className="block">Puan (1–10)
-              <input required type="number" min={1} max={10} step={1} value={reviewRating} onChange={event => setReviewRating(event.target.value)} className="block w-24 border rounded p-2" />
+
+            <label className="block text-xs font-bold text-gray-700">
+              Puanınız (1–10)
+              <input required type="number" min={1} max={10} step={1} value={reviewRating} onChange={event => setReviewRating(event.target.value)} className="block w-28 border-2 border-brand-navy/20 rounded-xl p-2 text-sm mt-1 outline-none focus:border-brand-navy" />
             </label>
-            <label htmlFor="review-text" className="block">Yorumunuz</label>
-            <textarea id="review-text" required maxLength={2000} rows={4} value={reviewText} onChange={event => setReviewText(event.target.value)} className="block w-full border rounded p-2" />
-            {submissionError && <p role="alert">{submissionError}</p>}
-            <button disabled={submitting} type="submit" className="bg-brand-navy text-white rounded px-5 py-2 disabled:opacity-50">{submitting ? 'Gönderiliyor...' : 'Yorumu Gönder'}</button>
+
+            <label htmlFor="review-text" className="block text-xs font-bold text-gray-700">
+              Yorumunuz & Patili Dostunuzla Deneyiminiz
+            </label>
+            <textarea id="review-text" required maxLength={2000} rows={4} value={reviewText} onChange={event => setReviewText(event.target.value)} className="block w-full border-2 border-brand-navy/20 rounded-xl p-2.5 text-sm mt-1 outline-none focus:border-brand-navy" placeholder="Oteldeki pet olanakları, ek ücret politikası veya bahçe imkanları nasıldı?" />
+
+            <div className="flex items-center gap-2 pt-1">
+              <input
+                type="checkbox"
+                id="ambassador-badge-opt"
+                checked={isAmbassadorPost}
+                onChange={e => setIsAmbassadorPost(e.target.checked)}
+                className="rounded text-brand-navy cursor-pointer"
+              />
+              <label htmlFor="ambassador-badge-opt" className="text-xs font-medium text-brand-navy cursor-pointer flex items-center gap-1">
+                <span>⭐🐾</span> Pati Elçisi rozetiyle gönder (Üst sırada öne çıkar)
+              </label>
+            </div>
+
+            {submissionError && <p role="alert" className="text-xs text-red-600 font-bold">{submissionError}</p>}
+            <button disabled={submitting} type="submit" className="bg-brand-navy hover:bg-brand-navy-hover text-white rounded-full px-6 py-2.5 text-xs font-bold font-title disabled:opacity-50 transition-colors shadow-xs">
+              {submitting ? 'Gönderiliyor...' : 'Yorumu Gönder'}
+            </button>
           </form>
         )}
       </section>
