@@ -1,5 +1,5 @@
 import React from 'react';
-import { methodologyContent } from '../data/mockData';
+import { methodologyContent } from '../data/methodologyContent.js';
 import { VerifiedBadge } from '../components/PetIcons';
 
 export default function Methodology({ activeSubView }) {

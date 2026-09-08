@@ -8,6 +8,9 @@ Allow: /
 Disallow: /yonetici
 Disallow: /api/
 Disallow: /admin
+Disallow: /bakim/
+Disallow: /taksi/
+Disallow: /veteriner/vet-
 Disallow: /*?*sort=
 Disallow: /*?*page=
 
@@ -46,4 +49,4 @@ User-agent: CCBot
 Allow: /
 
 # Sitemaps
-Sitemap: https://patiyleseyahat.com/sitemap.xml
+Sitemap: https://www.patiyleseyahat.com/sitemap.xml

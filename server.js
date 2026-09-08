@@ -12,7 +12,7 @@ import { sendServerError, redirectToLocalPath, handleRequestError } from './lib/
 import { getIndexHtmlTemplate } from './lib/html-template.js';
 import { createApiRouter, limitSubmission, asyncRoute } from './lib/api-router.js';
 import { repository } from './db.js';
-import { seoContent } from './src/data/seoContent.js';
+import { seoContent, generateCombinationSeoContent } from './src/data/seoContent.js';
 import { findHotelBySlugs, getHotelPath, getVetPath, slugify, PROGRAMMATIC_CLUSTERS } from './lib/seo-slugs.js';
 
 dotenv.config();
@@ -30,7 +30,10 @@ app.use(express.json());
 
 // Normalize Vercel serverless request path
 app.use((req, res, next) => {
-  if (req.query?.vetCity && req.query?.vetDistrict && req.query?.vetName) {
+  const forwardedPath = req.query?.__path || req.headers['x-matched-path'] || req.headers['x-vercel-matched-path'];
+  if (forwardedPath && !forwardedPath.startsWith('/api/index')) {
+    req.url = forwardedPath;
+  } else if (req.query?.vetCity && req.query?.vetDistrict && req.query?.vetName) {
     req.url = `/veteriner/${encodeURIComponent(req.query.vetCity)}/${encodeURIComponent(req.query.vetDistrict)}/${encodeURIComponent(req.query.vetName)}`;
   } else if (req.query?.vetId) {
     req.url = `/veteriner/${encodeURIComponent(req.query.vetId)}`;
@@ -400,10 +403,21 @@ const legacyCategoryRedirects = {
   '/accommodations': '/evcil-hayvan-dostu-oteller',
   '/boardings': '/kedi-kopek-otelleri',
   '/guides': '/evcil-hayvan-seyahat-rehberi',
-  '/gezilecek-yerler': '/evcil-hayvanla-gezilecek-yerler'
+  '/gezilecek-yerler': '/evcil-hayvanla-gezilecek-yerler',
+  '/pet-friendly-oteller': '/evcil-hayvan-dostu-oteller',
+  '/evcil-hayvan-kabul-eden-oteller': '/evcil-hayvan-dostu-oteller'
 };
 
 app.get(Object.keys(legacyCategoryRedirects), (req, res) => redirectToLocalPath(res, legacyCategoryRedirects[req.path]));
+
+// Canonical 301 redirects for duplicate regional intent URLs
+app.get(['/pet-friendly-oteller/:city', '/evcil-hayvan-kabul-eden-oteller/:city'], (req, res) => {
+  return res.redirect(301, `/evcil-hayvan-dostu-oteller/${encodeURIComponent(req.params.city)}`);
+});
+
+app.get(['/pet-friendly-oteller/:city/:district', '/evcil-hayvan-kabul-eden-oteller/:city/:district'], (req, res) => {
+  return res.redirect(301, `/evcil-hayvan-dostu-oteller/${encodeURIComponent(req.params.city)}/${encodeURIComponent(req.params.district)}`);
+});
 
 // Indexable province landing pages with unique metadata and structured data.
 app.get('/evcil-hayvan-dostu-oteller/:citySlug', asyncRoute(async (req, res) => {
@@ -536,6 +550,201 @@ app.get('/evcil-hayvan-dostu-oteller/:citySlug', asyncRoute(async (req, res) => 
   return res.send(html);
 }));
 
+// Indexable district landing pages with unique metadata and structured data
+app.get('/evcil-hayvan-dostu-oteller/:citySlug/:districtSlug', asyncRoute(async (req, res) => {
+  const { citySlug, districtSlug } = req.params;
+  const { hotels } = await getHotelSeoData({ citySlug, districtSlug, limit: 100 });
+  const districtHotels = hotels.filter(hotel =>
+    slugify(hotel.city) === citySlug && slugify(hotel.district) === districtSlug
+  );
+
+  if (districtHotels.length === 0) {
+    return res.redirect(301, `/evcil-hayvan-dostu-oteller/${encodeURIComponent(citySlug)}`);
+  }
+
+  const cityName = districtHotels[0].city;
+  const districtName = districtHotels[0].district;
+  const canonicalUrl = `https://www.patiyleseyahat.com/evcil-hayvan-dostu-oteller/${citySlug}/${districtSlug}`;
+  const title = escapeHtml(`${districtName}, ${cityName} Evcil Hayvan Dostu Oteller | Patiyle Seyahat`);
+  const description = escapeHtml(`${cityName} ${districtName} bölgesinde evcil hayvan kabul eden ${districtHotels.length} oteli; pet politikaları, kilo sınırları ve özellikleri ile karşılaştırın.`);
+  let html = getIndexHtmlTemplate();
+
+  html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
+  html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${description}" />`);
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'CollectionPage',
+        '@id': canonicalUrl,
+        name: `${districtName}, ${cityName} Evcil Hayvan Dostu Oteller`,
+        description,
+        url: canonicalUrl,
+        isPartOf: { '@type': 'WebSite', name: 'Patiyle Seyahat', url: 'https://www.patiyleseyahat.com/' }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: 'https://www.patiyleseyahat.com/' },
+          { '@type': 'ListItem', position: 2, name: `${cityName} Otelleri`, item: `https://www.patiyleseyahat.com/evcil-hayvan-dostu-oteller/${citySlug}` },
+          { '@type': 'ListItem', position: 3, name: `${districtName} Otelleri`, item: canonicalUrl }
+        ]
+      },
+      {
+        '@type': 'ItemList',
+        name: `${districtName}, ${cityName} Evcil Hayvan Dostu Oteller`,
+        numberOfItems: districtHotels.length,
+        itemListElement: districtHotels.map((hotel, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: hotel.name,
+          url: `https://www.patiyleseyahat.com${getHotelPath(hotel)}`
+        }))
+      }
+    ]
+  };
+
+  html = html.replace('</head>', `
+    <link rel="canonical" href="${canonicalUrl}" />
+    <meta property="og:title" content="${title}" />
+    <meta property="og:description" content="${description}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="${canonicalUrl}" />
+    <script type="application/ld+json">${serializeJsonLd(jsonLd)}</script>
+  </head>`);
+  res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+  return res.send(html);
+}));
+
+// Programmatic Cluster Parent Landing Pages
+const clusterLandingPaths = PROGRAMMATIC_CLUSTERS.map(c => `/${c.slug}`);
+
+app.get(clusterLandingPaths, asyncRoute(async (req, res) => {
+  const slug = req.path.replace(/^\//, '');
+  const cluster = PROGRAMMATIC_CLUSTERS.find(c => c.slug === slug);
+  if (!cluster) return res.status(404).send('Sayfa bulunamadı.');
+
+  const canonicalUrl = `https://www.patiyleseyahat.com/${cluster.slug}`;
+  const title = escapeHtml(cluster.metaTitle || `${cluster.title} | Patiyle Seyahat`);
+  const description = escapeHtml(cluster.metaDesc || `${cluster.title} seçeneklerini inceleyin.`);
+  let html = getIndexHtmlTemplate();
+
+  html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
+  html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${description}" />`);
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'CollectionPage',
+        '@id': canonicalUrl,
+        name: cluster.h1 || cluster.title,
+        description,
+        url: canonicalUrl,
+        isPartOf: { '@type': 'WebSite', name: 'Patiyle Seyahat', url: 'https://www.patiyleseyahat.com/' }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: 'https://www.patiyleseyahat.com/' },
+          { '@type': 'ListItem', position: 2, name: cluster.title, item: canonicalUrl }
+        ]
+      }
+    ]
+  };
+
+  html = html.replace('</head>', `
+    <link rel="canonical" href="${canonicalUrl}" />
+    <meta property="og:title" content="${title}" />
+    <meta property="og:description" content="${description}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="${canonicalUrl}" />
+    <script type="application/ld+json">${serializeJsonLd(jsonLd)}</script>
+  </head>`);
+  res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+  return res.send(html);
+}));
+
+// Programmatic Cluster + City Pages (e.g. /buyuk-kopek-kabul-eden-oteller/antalya)
+app.get(PROGRAMMATIC_CLUSTERS.map(c => `/${c.slug}/:citySlug`), asyncRoute(async (req, res) => {
+  const clusterSlug = req.path.split('/')[1];
+  const cluster = PROGRAMMATIC_CLUSTERS.find(c => c.slug === clusterSlug);
+  if (!cluster) return res.status(404).send('Sayfa bulunamadı.');
+
+  const citySlug = req.params.citySlug;
+  const { hotels } = await getHotelSeoData({ citySlug, limit: 100 });
+  const cityHotels = hotels.filter(hotel => slugify(hotel.city) === citySlug);
+
+  if (cityHotels.length === 0) {
+    return res.redirect(301, `/evcil-hayvan-dostu-oteller/${encodeURIComponent(citySlug)}`);
+  }
+
+  const cityName = cityHotels[0].city;
+  const intentType = cluster.id || cluster.filterKey || cluster.accType || cluster.petType || 'pet-friendly';
+  const seoData = generateCombinationSeoContent(cityName, intentType);
+
+  const canonicalUrl = `https://www.patiyleseyahat.com/${cluster.slug}/${citySlug}`;
+  const title = escapeHtml(`${cityName} ${cluster.title} | Patiyle Seyahat`);
+  const description = escapeHtml(seoData.directAnswer || `${cityName} bölgesinde ${cluster.title.toLowerCase()} seçenekleri: ${cityHotels.length} tesisin evcil hayvan kurallarını inceleyin.`);
+  let html = getIndexHtmlTemplate();
+
+  html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
+  html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${description}" />`);
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'CollectionPage',
+        '@id': canonicalUrl,
+        name: `${cityName} ${cluster.title}`,
+        description,
+        url: canonicalUrl,
+        isPartOf: { '@type': 'WebSite', name: 'Patiyle Seyahat', url: 'https://www.patiyleseyahat.com/' }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: 'https://www.patiyleseyahat.com/' },
+          { '@type': 'ListItem', position: 2, name: cluster.title, item: `https://www.patiyleseyahat.com/${cluster.slug}` },
+          { '@type': 'ListItem', position: 3, name: `${cityName} ${cluster.title}`, item: canonicalUrl }
+        ]
+      },
+      {
+        '@type': 'ItemList',
+        name: `${cityName} ${cluster.title}`,
+        numberOfItems: cityHotels.length,
+        itemListElement: cityHotels.map((hotel, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: hotel.name,
+          url: `https://www.patiyleseyahat.com${getHotelPath(hotel)}`
+        }))
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: (seoData.faqs || []).map(faq => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: { '@type': 'Answer', text: faq.answer }
+        }))
+      }
+    ]
+  };
+
+  html = html.replace('</head>', `
+    <link rel="canonical" href="${canonicalUrl}" />
+    <meta property="og:title" content="${title}" />
+    <meta property="og:description" content="${description}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="${canonicalUrl}" />
+    <script type="application/ld+json">${serializeJsonLd(jsonLd)}</script>
+  </head>`);
+  res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+  return res.send(html);
+}));
+
 function formatW3CDate(rawDate) {
   const fallback = '2026-09-03';
   if (!rawDate) return fallback;
@@ -568,9 +777,21 @@ app.get('/sitemap.xml', async (req,res,next) => {
     }
     await addCatalog('hotels', getHotelPath);
     await addCatalog('vets', getVetPath);
-    await addCatalog('boardings', item => `/bakim/${encodeURIComponent(item.id)}`);
-    await addCatalog('pet_taxis', item => `/taksi/${encodeURIComponent(item.id)}`);
     await addCatalog('guides', item => `/rehber/${encodeURIComponent(item.id)}`);
+
+    // Add valid city landing pages that actually have listed hotels
+    try {
+      const hotelSample = await repository.page('hotels', { limit: 500 });
+      const verifiedCities = new Set();
+      for (const h of hotelSample.data || []) {
+        if (h.city) verifiedCities.add(slugify(h.city));
+      }
+      for (const citySlug of verifiedCities) {
+        paths.add(`/evcil-hayvan-dostu-oteller/${citySlug}`);
+      }
+    } catch {
+      // Ignore fallback if db query fails during sitemap generation
+    }
     const origin = 'https://www.patiyleseyahat.com';
     const escapeXml = value => String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' })[character]);
     const body = [...paths].map(item => `<url><loc>${escapeXml(origin + item)}</loc></url>`).join('');
@@ -585,6 +806,13 @@ app.get('/robots.txt', (req, res) => {
     'User-agent: *',
     'Allow: /',
     'Disallow: /yonetici',
+    'Disallow: /api/',
+    'Disallow: /admin',
+    'Disallow: /bakim/',
+    'Disallow: /taksi/',
+    'Disallow: /veteriner/vet-',
+    'Disallow: /*?*sort=',
+    'Disallow: /*?*page=',
     '',
     'Sitemap: https://www.patiyleseyahat.com/sitemap.xml'
   ].join('\n'));
@@ -639,109 +867,39 @@ app.get('/otel/:id', asyncRoute(async (req, res) => {
   return redirectToLocalPath(res, getHotelPath(hotel));
 }));
 
-// Intercept Boarding Detail page request for SEO & GEO
-app.get('/bakim/:id', async (req, res) => {
-  try {
-    const boardingId = req.params.id;
-    const boarding = await repository.one('boardings', boardingId);
-
-    if (!boarding) {
-      return res.status(404).send("Bakım merkezi bulunamadı.");
-    }
-
-    let html = getIndexHtmlTemplate();
-
-    const title = escapeHtml(`${boarding.name} | ${boarding.city} Doğrulanmış Kedi/Köpek Oteli | Patiyle Seyahat`);
-    html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
-
-    const desc = escapeHtml(`${boarding.name} evcil hayvan bakım merkezi: ${boarding.boardingModel}, ${boarding.price}. ${boarding.description.slice(0, 130)}...`);
-    html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${desc}" />`);
-
-    const jsonLd = {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": boarding.name,
-      "description": boarding.description,
-      "image": boarding.imageUrl,
-      "priceRange": "$$",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": boarding.district,
-        "addressRegion": boarding.city,
-        "addressCountry": "TR"
-      },
-      "telephone": boarding.phone
-    };
-
-    const schemaScript = `<script type="application/ld+json">\n${serializeJsonLd(jsonLd)}\n</script>`;
-    html = html.replace('</head>', `${schemaScript}\n</head>`);
-
-    res.send(html);
-
-  } catch (err) {
-    res.status(500).send("Bir hata oluştu.");
-  }
+// 301 redirect individual boarding IDs to main category page (eliminates thin/dummy ID pages)
+app.get('/bakim/:id', (req, res) => {
+  return res.redirect(301, '/kedi-kopek-otelleri');
 });
 
-// Intercept Pet Taxi page request for SEO & GEO
-app.get('/taksi/:id', async (req, res) => {
-  try {
-    const taxiId = req.params.id;
-    const taxi = await repository.one('pet_taxis', taxiId);
-
-    if (!taxi) {
-      return res.status(404).send("Pet taksi bulunamadı.");
-    }
-
-
-    let html = getIndexHtmlTemplate();
-
-    const title = escapeHtml(`${taxi.name} | ${taxi.city} Evcil Hayvan Taksi Hizmeti | Patiyle Seyahat`);
-    html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
-
-    const desc = escapeHtml(`${taxi.name} evcil hayvan transferi: ${taxi.price}. ${taxi.description.slice(0, 130)}...`);
-    html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${desc}" />`);
-
-    const jsonLd = {
-      "@context": "https://schema.org",
-      "@type": "TaxiService",
-      "name": taxi.name,
-      "description": taxi.description,
-      "image": taxi.imageUrl,
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": taxi.district,
-        "addressRegion": taxi.city,
-        "addressCountry": "TR"
-      },
-      "telephone": taxi.phone,
-      "provider": {
-        "@type": "LocalBusiness",
-        "name": taxi.name,
-        "telephone": taxi.phone
-      }
-    };
-
-    const schemaScript = `<script type="application/ld+json">\n${serializeJsonLd(jsonLd)}\n</script>`;
-    html = html.replace('</head>', `${schemaScript}\n</head>`);
-
-    res.send(html);
-  } catch (err) {
-    res.status(500).send("Bir hata oluştu.");
-  }
+// 301 redirect individual taxi IDs to main taxi category
+app.get('/taksi/:id', (req, res) => {
+  return res.redirect(301, '/pet-taksi');
 });
+
+// 301 redirect raw vet ID requests (e.g. /veteriner/vet-1) to canonical slug path
+app.get('/veteriner/:id', asyncRoute(async (req, res) => {
+  try {
+    const vet = await repository.one('vets', req.params.id);
+    if (!vet) {
+      return res.redirect(301, '/veterinerler');
+    }
+    return res.redirect(301, getVetPath(vet));
+  } catch {
+    return res.redirect(301, '/veterinerler');
+  }
+}));
 
 // Intercept Vet page request for SEO & GEO
-app.get(['/veteriner/:id', '/veteriner/:city/:district/:name'], async (req, res) => {
+app.get('/veteriner/:city/:district/:name', async (req, res) => {
   try {
-    const vet = req.params.id
-      ? await repository.one('vets', req.params.id)
-      : (await repository.page('vets', {
-          citySlug: req.params.city,
-          districtSlug: req.params.district,
-          nameSlug: req.params.name,
-          limit: 1
-        }, true)).data[0];
+    const result = await repository.page('vets', {
+      citySlug: req.params.city,
+      districtSlug: req.params.district,
+      nameSlug: req.params.name,
+      limit: 1
+    }, true);
+    const vet = result.data?.[0];
 
     if (!vet) {
       return res.status(404).send("Veteriner kliniği bulunamadı.");

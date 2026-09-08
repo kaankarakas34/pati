@@ -206,6 +206,59 @@ export default function Layout({ children, currentView, onViewChange }) {
           </div>
         </div>
 
+        {/* SEO Internal Link Hub for Crawlers & Users */}
+        <div className="border-t border-brand-navy/30 bg-[#072438] py-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            <div>
+              <h4 className="font-title text-sm font-bold text-brand-yellow uppercase tracking-wider mb-3">Popüler Evcil Hayvan Konaklama Konseptleri</h4>
+              <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-gray-300">
+                <a href="/buyuk-kopek-kabul-eden-oteller" className="hover:text-brand-yellow underline transition-colors">Büyük Köpek Kabul Eden Oteller</a>
+                <span className="text-gray-600">•</span>
+                <a href="/evcil-hayvan-dostu-bungalovlar" className="hover:text-brand-yellow underline transition-colors">Evcil Hayvan Dostu Bungalovlar</a>
+                <span className="text-gray-600">•</span>
+                <a href="/kopek-kabul-eden-bungalovlar" className="hover:text-brand-yellow underline transition-colors">Köpek Kabul Eden Bungalovlar</a>
+                <span className="text-gray-600">•</span>
+                <a href="/evcil-hayvan-dostu-villalar" className="hover:text-brand-yellow underline transition-colors">Evcil Hayvan Dostu Villalar</a>
+                <span className="text-gray-600">•</span>
+                <a href="/evcil-hayvan-dostu-butik-oteller" className="hover:text-brand-yellow underline transition-colors">Pet Friendly Butik Oteller</a>
+                <span className="text-gray-600">•</span>
+                <a href="/her-sey-dahil-evcil-hayvan-dostu-oteller" className="hover:text-brand-yellow underline transition-colors">Her Şey Dahil Pet Oteller</a>
+                <span className="text-gray-600">•</span>
+                <a href="/kedi-kabul-eden-oteller" className="hover:text-brand-yellow underline transition-colors">Kedi Kabul Eden Oteller</a>
+                <span className="text-gray-600">•</span>
+                <a href="/kopek-kabul-eden-oteller" className="hover:text-brand-yellow underline transition-colors">Köpek Kabul Eden Oteller</a>
+                <span className="text-gray-600">•</span>
+                <a href="/bahceli-evcil-hayvan-dostu-oteller" className="hover:text-brand-yellow underline transition-colors">Bahçeli Pet Friendly Oteller</a>
+                <span className="text-gray-600">•</span>
+                <a href="/otel-zincirleri" className="hover:text-brand-yellow underline transition-colors">Otel Zincirleri Pet Politikaları</a>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="font-title text-sm font-bold text-brand-yellow uppercase tracking-wider mb-3">Popüler Şehir & Bölge Rehberleri</h4>
+              <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-gray-300">
+                <a href="/evcil-hayvan-dostu-oteller/antalya" className="hover:text-brand-yellow underline transition-colors">Antalya Evcil Hayvan Dostu Oteller</a>
+                <span className="text-gray-600">•</span>
+                <a href="/evcil-hayvan-dostu-oteller/mugla" className="hover:text-brand-yellow underline transition-colors">Muğla & Bodrum Pet Friendly</a>
+                <span className="text-gray-600">•</span>
+                <a href="/evcil-hayvan-dostu-oteller/izmir" className="hover:text-brand-yellow underline transition-colors">İzmir & Çeşme Otelleri</a>
+                <span className="text-gray-600">•</span>
+                <a href="/evcil-hayvan-dostu-oteller/balikesir" className="hover:text-brand-yellow underline transition-colors">Balıkesir & Ayvalık Tesisleri</a>
+                <span className="text-gray-600">•</span>
+                <a href="/evcil-hayvan-dostu-oteller/canakkale" className="hover:text-brand-yellow underline transition-colors">Çanakkale & Assos Otelleri</a>
+                <span className="text-gray-600">•</span>
+                <a href="/evcil-hayvan-dostu-oteller/sakarya" className="hover:text-brand-yellow underline transition-colors">Sapanca Bungalov & Villalar</a>
+                <span className="text-gray-600">•</span>
+                <a href="/evcil-hayvan-dostu-oteller/bolu" className="hover:text-brand-yellow underline transition-colors">Bolu & Abant Doğa Otelleri</a>
+                <span className="text-gray-600">•</span>
+                <a href="/evcil-hayvan-dostu-oteller/istanbul" className="hover:text-brand-yellow underline transition-colors">İstanbul Evcil Hayvan Otelleri</a>
+                <span className="text-gray-600">•</span>
+                <a href="/evcil-hayvan-dostu-oteller/nevsehir" className="hover:text-brand-yellow underline transition-colors">Kapadokya Mağara Otelleri</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Copyright */}
         <div className="bg-[#051c2c] py-6 border-t border-brand-navy/30 text-center text-xs text-gray-400">
           <p>© 2026 patiyleseyahat.com. Tüm hakları saklıdır. Hiçbir içerik izinsiz kopyalanamaz.</p>

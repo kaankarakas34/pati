@@ -12,7 +12,6 @@
     "db:maintenance": "node scripts/database-maintenance.js",
     "db:explain": "node scripts/explain-database.js",
     "sitemap:build": "node scripts/build-sitemaps.js",
-    "dev:fixture": "node scripts/local-database-preview.js",
     "test:database": "node --test tests/database.test.js",
     "test:security": "node --test tests/*.test.js",
     "server": "node server.js",

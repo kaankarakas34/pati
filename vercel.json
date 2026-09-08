@@ -14,59 +14,179 @@
     },
     {
       "source": "/otel/:path*",
-      "destination": "/api/index"
+      "destination": "/api/index?__path=/otel/:path*"
     },
     {
       "source": "/evcil-hayvan-dostu-oteller/:path*",
-      "destination": "/api/index"
+      "destination": "/api/index?__path=/evcil-hayvan-dostu-oteller/:path*"
     },
     {
       "source": "/evcil-hayvan-dostu-oteller",
-      "destination": "/api/index"
+      "destination": "/api/index?__path=/evcil-hayvan-dostu-oteller"
+    },
+    {
+      "source": "/buyuk-kopek-kabul-eden-oteller/:path*",
+      "destination": "/api/index?__path=/buyuk-kopek-kabul-eden-oteller/:path*"
+    },
+    {
+      "source": "/buyuk-kopek-kabul-eden-oteller",
+      "destination": "/api/index?__path=/buyuk-kopek-kabul-eden-oteller"
+    },
+    {
+      "source": "/evcil-hayvan-dostu-bungalovlar/:path*",
+      "destination": "/api/index?__path=/evcil-hayvan-dostu-bungalovlar/:path*"
+    },
+    {
+      "source": "/evcil-hayvan-dostu-bungalovlar",
+      "destination": "/api/index?__path=/evcil-hayvan-dostu-bungalovlar"
+    },
+    {
+      "source": "/kopek-kabul-eden-bungalovlar/:path*",
+      "destination": "/api/index?__path=/kopek-kabul-eden-bungalovlar/:path*"
+    },
+    {
+      "source": "/kopek-kabul-eden-bungalovlar",
+      "destination": "/api/index?__path=/kopek-kabul-eden-bungalovlar"
+    },
+    {
+      "source": "/evcil-hayvan-dostu-villalar/:path*",
+      "destination": "/api/index?__path=/evcil-hayvan-dostu-villalar/:path*"
+    },
+    {
+      "source": "/evcil-hayvan-dostu-villalar",
+      "destination": "/api/index?__path=/evcil-hayvan-dostu-villalar"
+    },
+    {
+      "source": "/evcil-hayvan-dostu-butik-oteller/:path*",
+      "destination": "/api/index?__path=/evcil-hayvan-dostu-butik-oteller/:path*"
+    },
+    {
+      "source": "/evcil-hayvan-dostu-butik-oteller",
+      "destination": "/api/index?__path=/evcil-hayvan-dostu-butik-oteller"
+    },
+    {
+      "source": "/evcil-hayvan-dostu-tatil-koyleri/:path*",
+      "destination": "/api/index?__path=/evcil-hayvan-dostu-tatil-koyleri/:path*"
+    },
+    {
+      "source": "/evcil-hayvan-dostu-tatil-koyleri",
+      "destination": "/api/index?__path=/evcil-hayvan-dostu-tatil-koyleri"
+    },
+    {
+      "source": "/her-sey-dahil-evcil-hayvan-dostu-oteller/:path*",
+      "destination": "/api/index?__path=/her-sey-dahil-evcil-hayvan-dostu-oteller/:path*"
+    },
+    {
+      "source": "/her-sey-dahil-evcil-hayvan-dostu-oteller",
+      "destination": "/api/index?__path=/her-sey-dahil-evcil-hayvan-dostu-oteller"
+    },
+    {
+      "source": "/kedi-kabul-eden-oteller/:path*",
+      "destination": "/api/index?__path=/kedi-kabul-eden-oteller/:path*"
+    },
+    {
+      "source": "/kedi-kabul-eden-oteller",
+      "destination": "/api/index?__path=/kedi-kabul-eden-oteller"
+    },
+    {
+      "source": "/kopek-kabul-eden-oteller/:path*",
+      "destination": "/api/index?__path=/kopek-kabul-eden-oteller/:path*"
+    },
+    {
+      "source": "/kopek-kabul-eden-oteller",
+      "destination": "/api/index?__path=/kopek-kabul-eden-oteller"
+    },
+    {
+      "source": "/bahceli-evcil-hayvan-dostu-oteller/:path*",
+      "destination": "/api/index?__path=/bahceli-evcil-hayvan-dostu-oteller/:path*"
+    },
+    {
+      "source": "/bahceli-evcil-hayvan-dostu-oteller",
+      "destination": "/api/index?__path=/bahceli-evcil-hayvan-dostu-oteller"
+    },
+    {
+      "source": "/ucretsiz-evcil-hayvan-kabul-eden-oteller/:path*",
+      "destination": "/api/index?__path=/ucretsiz-evcil-hayvan-kabul-eden-oteller/:path*"
+    },
+    {
+      "source": "/ucretsiz-evcil-hayvan-kabul-eden-oteller",
+      "destination": "/api/index?__path=/ucretsiz-evcil-hayvan-kabul-eden-oteller"
+    },
+    {
+      "source": "/pet-friendly-oteller/:path*",
+      "destination": "/api/index?__path=/pet-friendly-oteller/:path*"
+    },
+    {
+      "source": "/pet-friendly-oteller",
+      "destination": "/api/index?__path=/pet-friendly-oteller"
+    },
+    {
+      "source": "/evcil-hayvan-kabul-eden-oteller/:path*",
+      "destination": "/api/index?__path=/evcil-hayvan-kabul-eden-oteller/:path*"
+    },
+    {
+      "source": "/evcil-hayvan-kabul-eden-oteller",
+      "destination": "/api/index?__path=/evcil-hayvan-kabul-eden-oteller"
     },
     {
       "source": "/kedi-kopek-otelleri",
-      "destination": "/api/index"
+      "destination": "/api/index?__path=/kedi-kopek-otelleri"
+    },
+    {
+      "source": "/bakim/:path*",
+      "destination": "/api/index?__path=/bakim/:path*"
     },
     {
       "source": "/pet-taksi",
-      "destination": "/api/index"
+      "destination": "/api/index?__path=/pet-taksi"
+    },
+    {
+      "source": "/taksi/:path*",
+      "destination": "/api/index?__path=/taksi/:path*"
     },
     {
       "source": "/veterinerler",
-      "destination": "/api/index"
+      "destination": "/api/index?__path=/veterinerler"
     },
     {
       "source": "/veteriner/:city/:district/:name",
-      "destination": "/api/index?vetCity=:city&vetDistrict=:district&vetName=:name"
+      "destination": "/api/index?__path=/veteriner/:city/:district/:name"
     },
     {
       "source": "/veteriner/:id",
-      "destination": "/api/index?vetId=:id"
+      "destination": "/api/index?__path=/veteriner/:id"
     },
     {
       "source": "/evcil-hayvanla-gezilecek-yerler",
-      "destination": "/api/index"
+      "destination": "/api/index?__path=/evcil-hayvanla-gezilecek-yerler"
     },
     {
       "source": "/evcil-hayvan-seyahat-rehberi",
-      "destination": "/api/index"
+      "destination": "/api/index?__path=/evcil-hayvan-seyahat-rehberi"
+    },
+    {
+      "source": "/rehber/:path*",
+      "destination": "/api/index?__path=/rehber/:path*"
+    },
+    {
+      "source": "/otel-zincirleri",
+      "destination": "/api/index?__path=/otel-zincirleri"
     },
     {
       "source": "/accommodations",
-      "destination": "/api/index"
+      "destination": "/api/index?__path=/accommodations"
     },
     {
       "source": "/boardings",
-      "destination": "/api/index"
+      "destination": "/api/index?__path=/boardings"
     },
     {
       "source": "/guides",
-      "destination": "/api/index"
+      "destination": "/api/index?__path=/guides"
     },
     {
       "source": "/gezilecek-yerler",
-      "destination": "/api/index"
+      "destination": "/api/index?__path=/gezilecek-yerler"
     },
     {
       "source": "/sitemap.xml",
@@ -82,7 +202,7 @@
     },
     {
       "source": "/trust-ads",
-      "destination": "/api/index"
+      "destination": "/api/index?__path=/trust-ads"
     },
     {
       "source": "/:path*",

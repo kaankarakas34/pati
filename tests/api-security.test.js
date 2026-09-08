@@ -4,7 +4,6 @@ import { once } from 'node:events';
 import { randomBytes } from 'node:crypto';
 import pg from 'pg';
 import fs from 'node:fs';
-import { initialHotels } from '../src/data/mockData.js';
 import { getHotelPath } from '../lib/seo-slugs.js';
 
 // Prevent initialization and any access to the real database or local credentials.
@@ -148,10 +147,11 @@ test('template selection reads only fixed module-relative HTML files', async (t)
 });
 
 test('legacy redirects retain canonical site-local destinations', async (t) => {
+  const sampleHotel = { id: 'hotel-1', name: 'Test Otel', city: 'İstanbul', district: 'Şile' };
   t.mock.method(pg.Pool.prototype, 'connect', async () => ({
     async query(sql) {
       if (sql === 'SET ROLE "pati_api"') return { rows: [] };
-      return {rows:[{...initialHotels[0],created_at:'2026-01-01T00:00:00Z'}]};
+      return {rows:[{...sampleHotel,created_at:'2026-01-01T00:00:00Z'}]};
     },
     release() {}
   }));
@@ -163,7 +163,7 @@ test('legacy redirects retain canonical site-local destinations', async (t) => {
     for (const [path, target] of [
       ['/accommodations', '/evcil-hayvan-dostu-oteller'],
       ['/gezilecek-yerler', '/evcil-hayvanla-gezilecek-yerler'],
-      [`/otel/${encodeURIComponent(initialHotels[0].id)}`, getHotelPath(initialHotels[0])]
+      [`/otel/${encodeURIComponent(sampleHotel.id)}`, getHotelPath(sampleHotel)]
     ]) {
       const response = await fetch(`${base}${path}?next=https://attacker.example`, { redirect: 'manual' });
       assert.equal(response.status, 301);

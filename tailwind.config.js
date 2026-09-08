@@ -48,8 +48,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['"Readex Pro"', 'sans-serif'],
-        title: ['"Fredoka"', 'sans-serif'],
+        sans: ['"Quicksand"', 'sans-serif'],
+        title: ['"Quicksand"', 'sans-serif'],
       }
     },
   },

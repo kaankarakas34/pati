@@ -4,7 +4,6 @@ import { PGlite } from '@electric-sql/pglite';
 import { pg_trgm } from '@electric-sql/pglite/contrib/pg_trgm';
 import { applyMigrations } from '../lib/migrations.js';
 import { slugify } from '../lib/seo-slugs.js';
-import { initialHotels } from '../src/data/mockData.js';
 import { buildCatalogQuery, createRepository } from '../lib/repository.js';
 
 test('PostgreSQL schema migrates, rejects invalid relations and enforces versioned writes', async () => {
@@ -47,8 +46,20 @@ test('PostgreSQL schema migrates, rejects invalid relations and enforces version
     await assert.rejects(repo.save('vets',{...input,features:{invalid:true}}),error=>error.status===400);
     for(let n=0;n<10;n++)await repo.consumeLimit('local-test-hash');
     await assert.rejects(repo.consumeLimit('local-test-hash'),error=>error.status===429);
-    const hotel=await repo.save('hotels',{...initialHotels[0],id:undefined,version:undefined});
-    const duplicate=await repo.save('hotels',{...initialHotels[0],name:initialHotels[0].name+' Imported Duplicate',id:undefined,version:undefined});
+    const sampleHotel = {
+      name: "Test Otel", city: "İstanbul", district: "Şile", type: "Bungalov",
+      allowedPets: ["dog"], suitability: 1, weightLimit: 15, extraFee: "no",
+      features: ["Bahçe"], quizTags: [], baseTrustScore: 8, verified: true,
+      lastVerified: "2026-09-04", imageUrl: "https://example.com/test.jpg",
+      galleryImages: [], description: "Test açıklama", whySelected: "Test",
+      suitableFor: ["Köpek"], notSuitableFor: [], disallowedPets: [],
+      breedRestrictions: "None", maxPetsPerRoom: 1, depositInfo: "None",
+      requiredDocs: "Aşı", canLeaveInRoomAlone: false, rules: {},
+      veterinarySupport: "", phone: "", email: "", website: "",
+      bookingLinks: {}, editorNote: "", infoSource: "", faq: []
+    };
+    const hotel=await repo.save('hotels',{...sampleHotel});
+    const duplicate=await repo.save('hotels',{...sampleHotel,name:sampleHotel.name+' Imported Duplicate'});
     const complaint=await repo.submit('complaints',{targetId:duplicate.id,targetName:'Forged',author:'Test',text:'Test'});
     const correction=await repo.submit('corrections',{hotelId:duplicate.id,hotelName:'Forged',text:'Test'});
     const stored=await repo.feedbackPage('complaints',{targetId:duplicate.id},true);

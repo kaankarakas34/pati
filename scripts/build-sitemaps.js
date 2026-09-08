@@ -77,7 +77,7 @@ export async function generateSitemaps(client, emit, { origin, batchSize = 250, 
     for await (const rows of keysetRows(client, 'vets', batchSize, 'id,name,city,district,modified_at::text AS modified_at')) {
       for (const row of rows) await add(getVetPath(row), row.modified_at);
     }
-    for (const [table, prefix] of [['boardings', '/bakim/'], ['pet_taxis', '/taksi/'], ['guides', '/rehber/']]) {
+    for (const [table, prefix] of [['guides', '/rehber/']]) {
       for await (const rows of keysetRows(client, table, batchSize, 'id,modified_at::text AS modified_at')) {
         for (const row of rows) await add(prefix + encodeURIComponent(row.id), row.modified_at);
       }
