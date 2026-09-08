@@ -52,6 +52,14 @@ export default function Layout({ children, currentView, onViewChange }) {
                   <span>{item.label}</span>
                 </button>
               ))}
+
+              <button
+                onClick={() => onViewChange('add-business')}
+                className="ml-3 px-4 py-2 bg-brand-yellow hover:bg-brand-yellow-hover text-brand-navy rounded-full text-xs font-black border border-brand-navy shadow-xs flex items-center gap-1.5 transition-transform hover:scale-105 font-title"
+              >
+                <span>🏢</span>
+                <span>İşletmeni Ekle</span>
+              </button>
             </div>
 
             {/* Mobile menu button */}
@@ -95,6 +103,16 @@ export default function Layout({ children, currentView, onViewChange }) {
                 <span>{item.label}</span>
               </button>
             ))}
+            <button
+              onClick={() => {
+                onViewChange('add-business');
+                setMobileMenuOpen(false);
+              }}
+              className="w-full text-left px-4 py-3 rounded-xl text-base font-extrabold bg-brand-yellow text-brand-navy border border-brand-navy mt-2 flex items-center justify-between shadow-xs font-title"
+            >
+              <span className="flex items-center gap-2"><span>🏢</span> İşletmeni Ekle</span>
+              <span>&rarr;</span>
+            </button>
           </div>
         )}
       </nav>
@@ -207,6 +225,11 @@ export default function Layout({ children, currentView, onViewChange }) {
               <li>
                 <button onClick={() => onViewChange('trust-ads')} className="hover:text-white transition-colors">
                   Reklam ve Sponsorluk
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onViewChange('add-business')} className="hover:text-brand-yellow font-bold text-white transition-colors flex items-center gap-1">
+                  <span>🏢</span> İşletmeni Ekle (Ücretsiz)
                 </button>
               </li>
             </ul>

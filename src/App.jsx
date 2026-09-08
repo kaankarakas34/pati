@@ -18,9 +18,15 @@ import Vets from './pages/Vets';
 import Experiences from './pages/Experiences';
 import DogWalkers from './pages/DogWalkers';
 import AdApplication from './pages/AdApplication';
+import BusinessApplication from './pages/BusinessApplication';
 import { getHotelPath, getVetPath } from '../lib/seo-slugs';
 
 const CATEGORY_SEO = {
+  'add-business': {
+    path: '/isletme-ekle',
+    title: 'İşletmeni Ekle | patili.co',
+    description: 'Evcil hayvan kabul eden otel, mekan, veteriner veya pet hizmeti işletmenizi patili.co ağına ücretsiz ekleyin.'
+  },
   accommodations: {
     path: '/evcil-hayvan-dostu-oteller',
     title: 'Evcil Hayvan Dostu Oteller | patili.co',
@@ -370,6 +376,9 @@ function App() {
         setCurrentView('taxis');
       } else if (path === '/veterinerler') {
         setCurrentView('vets');
+      } else if (path === '/isletme-ekle' || path === '/add-business') {
+        setCurrentView('add-business');
+        if (path !== CATEGORY_SEO['add-business'].path) window.history.replaceState(null, '', CATEGORY_SEO['add-business'].path);
       } else {
         const view = path.replace('/', '');
         setCurrentView(view || 'home');
@@ -504,6 +513,9 @@ function App() {
 
       case 'trust-ads':
         return <AdApplication />;
+
+      case 'add-business':
+        return <BusinessApplication onViewChange={handleViewChange} />;
 
       case 'taxis':
         return <Taxis onViewChange={handleViewChange} />;

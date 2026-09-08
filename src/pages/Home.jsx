@@ -10,56 +10,6 @@ export default function Home({ onViewChange, setSearchFilters }) {
   const [petType, setPetType] = useState('all');
   const [accType, setAccType] = useState('all');
 
-  // Pati Elçisi Başvuru Formu State
-  const [ambassadorForm, setAmbassadorForm] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    city: '',
-    petInfo: '',
-    socialMedia: '',
-    experience: '',
-    consent: false
-  });
-  const [ambassadorSubmitting, setAmbassadorSubmitting] = useState(false);
-  const [ambassadorSuccess, setAmbassadorSuccess] = useState(false);
-  const [ambassadorError, setAmbassadorError] = useState('');
-
-  const handleAmbassadorSubmit = async (e) => {
-    e.preventDefault();
-    if (!ambassadorForm.consent) {
-      setAmbassadorError('Lütfen aydınlatma ve katılım onayını işaretleyin.');
-      return;
-    }
-    setAmbassadorSubmitting(true);
-    setAmbassadorError('');
-    try {
-      const res = await fetch('/api/ambassador-applications', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(ambassadorForm)
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Başvuru kaydedilemedi.');
-      setAmbassadorSuccess(true);
-      setAmbassadorForm({
-        fullName: '',
-        email: '',
-        phone: '',
-        city: '',
-        petInfo: '',
-        socialMedia: '',
-        experience: '',
-        consent: false
-      });
-    } catch (err) {
-      // Fallback graceful success so user experience is always positive
-      setAmbassadorSuccess(true);
-    } finally {
-      setAmbassadorSubmitting(false);
-    }
-  };
-
   const [preview, setPreview] = useState({ hotels: [], cities: [], loading: true, error: '' });
   const [attempt, setAttempt] = useState(0);
   useEffect(() => {
@@ -566,219 +516,111 @@ export default function Home({ onViewChange, setSearchFilters }) {
 
 
 
-      {/* Pati Elçisi Ol Topluluk Bölümü ve Formu */}
-      <div id="pati-elcisi" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
-        <div className="bg-gradient-to-br from-brand-yellow/25 via-white to-brand-beige border-2 border-brand-navy rounded-3xl p-8 md:p-12 shadow-xl relative overflow-hidden">
-          {/* Arka Plan Dekoratif Pati */}
-          <div className="absolute -bottom-10 -right-10 text-9xl text-brand-navy/5 select-none pointer-events-none font-bold">
+      {/* İşletmeni Ekle Bölümü */}
+      <div id="isletmeni-ekle" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
+        <div className="bg-gradient-to-br from-brand-navy via-[#0c314b] to-brand-navy text-white rounded-3xl p-8 md:p-14 shadow-2xl relative overflow-hidden border-2 border-brand-navy">
+          {/* Arka Plan Dekoratif Efektler */}
+          <div className="absolute -top-12 -right-12 text-9xl text-white/5 select-none pointer-events-none font-bold">
+            🏨
+          </div>
+          <div className="absolute -bottom-8 -left-8 text-8xl text-brand-yellow/10 select-none pointer-events-none font-bold">
             🐾
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-            {/* Sol Kolon: Bilgilendirme ve Avantajlar (6 Kolon) */}
-            <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-brand-yellow text-brand-navy rounded-full text-xs font-bold border border-brand-navy shadow-xs font-title">
-                <span>⭐ patili.co Topluluk Programı</span>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
+            {/* Sol Kolon: Başlık ve Açıklama (7 Kolon) */}
+            <div className="lg:col-span-7 space-y-6">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-brand-yellow text-brand-navy rounded-full text-xs font-black border border-brand-navy shadow-sm font-title">
+                <span>🏢 patili.co İşletme Ağı</span>
               </div>
 
-              <h2 className="text-3xl md:text-4xl font-bold font-title text-brand-navy leading-tight">
-                Pati Elçisi Olun,<br />
-                <span className="text-brand-navy underline decoration-brand-yellow decoration-4">Deneyimlerinizle Rehberlik Edin!</span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-title text-white leading-tight">
+                İşletmenizi <span className="text-brand-yellow underline decoration-brand-yellow/50 decoration-4">patili.co'ya</span> Ekleyin!
               </h2>
 
-              <p className="text-gray-700 text-sm md:text-base leading-relaxed">
-                Patili dostunuzla gezmeyi, yeni yerler keşfetmeyi ve deneyimlerinizi paylaşmayı seviyor musunuz? <strong>patili.co Pati Elçisi</strong> olarak topluluğa katılın; yeni mekanlar ekleyin, otel kurallarını güncelleyin ve elçi rozetinizle yorumlarınız en üstte görünsün!
+              <p className="text-gray-200 text-sm md:text-base leading-relaxed max-w-2xl">
+                Evcil hayvan kabul eden <strong>otel, butik otel, kafe, restoran, pet oteli, 7/24 veteriner</strong> veya <strong>pet taksi</strong> işletmeniz mi var? İşletme türünüzü seçin, 1-2 fotoğraf ve iletişim bilgilerinizi iletin; işletmenizi Türkiye'nin en büyük hayvan dostu platformunda binlerce patili aileyle buluşturalım.
               </p>
 
-              {/* 4 Ana Elçi Ayrıcalığı */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                <div className="bg-white/90 border border-brand-navy/15 rounded-2xl p-4 shadow-2xs">
-                  <div className="text-2xl mb-1.5">🍽️</div>
-                  <h4 className="font-bold font-title text-sm text-brand-navy">Patili Mekan Ekle</h4>
-                  <p className="text-3xs text-gray-600 mt-1">
-                    Gittiğiniz kedi ve köpek dostu kafe, restoran, meyhane ve barları sisteme ekleyin.
-                  </p>
+              {/* 4 Öne Çıkan Fayda Kartı */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
+                <div className="bg-white/10 backdrop-blur-xs border border-white/15 rounded-2xl p-3.5 flex items-start gap-3">
+                  <span className="text-2xl shrink-0">🎯</span>
+                  <div>
+                    <h4 className="font-bold font-title text-xs text-brand-yellow">Doğrudan Hedef Kitle</h4>
+                    <p className="text-3xs text-gray-300 mt-0.5">Pet dostu arayan aileler doğrudan işletmenize ulaşsın.</p>
+                  </div>
                 </div>
 
-                <div className="bg-white/90 border border-brand-navy/15 rounded-2xl p-4 shadow-2xs">
-                  <div className="text-2xl mb-1.5">🏨</div>
-                  <h4 className="font-bold font-title text-sm text-brand-navy">Otel & Kural Güncelle</h4>
-                  <p className="text-3xs text-gray-600 mt-1">
-                    Otele ek ücret, bahçe veya kilo kurallarını güncelleyin (örn: ek ücret alıyorlar).
-                  </p>
+                <div className="bg-white/10 backdrop-blur-xs border border-white/15 rounded-2xl p-3.5 flex items-start gap-3">
+                  <span className="text-2xl shrink-0">📸</span>
+                  <div>
+                    <h4 className="font-bold font-title text-xs text-brand-yellow">Fotoğraflı Tesis Profili</h4>
+                    <p className="text-3xs text-gray-300 mt-0.5">Mekan fotoğraflarınız ve kabul kurallarınız öne çıkar.</p>
+                  </div>
                 </div>
 
-                <div className="bg-white/90 border border-brand-navy/15 rounded-2xl p-4 shadow-2xs">
-                  <div className="text-2xl mb-1.5">📝</div>
-                  <h4 className="font-bold font-title text-sm text-brand-navy">Gezi Rehberi Yaz</h4>
-                  <p className="text-3xs text-gray-600 mt-1">
-                    Köpeğinizle tatil rotalarınızı ve deneyimlerinizi editoryal rehber olarak yayınlayın.
-                  </p>
+                <div className="bg-white/10 backdrop-blur-xs border border-white/15 rounded-2xl p-3.5 flex items-start gap-3">
+                  <span className="text-2xl shrink-0">⭐</span>
+                  <div>
+                    <h4 className="font-bold font-title text-xs text-brand-yellow">Doğrulanmış Rozet</h4>
+                    <p className="text-3xs text-gray-300 mt-0.5">Pet dostu güvenilirlik puanıyla müşteri güvenini artırın.</p>
+                  </div>
                 </div>
 
-                <div className="bg-white/90 border border-brand-navy/15 rounded-2xl p-4 shadow-2xs">
-                  <div className="text-2xl mb-1.5">⭐</div>
-                  <h4 className="font-bold font-title text-sm text-brand-navy">Öncelikli Yorumlar</h4>
-                  <p className="text-3xs text-gray-600 mt-1">
-                    Yaptığınız tüm yorumlar altın "Pati Elçisi" rozetiyle her zaman en üstte listelenir.
-                  </p>
+                <div className="bg-white/10 backdrop-blur-xs border border-white/15 rounded-2xl p-3.5 flex items-start gap-3">
+                  <span className="text-2xl shrink-0">⚡</span>
+                  <div>
+                    <h4 className="font-bold font-title text-xs text-brand-yellow">Hızlı & Kolay Başvuru</h4>
+                    <p className="text-3xs text-gray-300 mt-0.5">Formu doldurun, ekibimiz inceleyip hemen listelesin.</p>
+                  </div>
                 </div>
-              </div>
-
-              <div className="flex items-center gap-3 pt-2 text-xs text-gray-600">
-                <span className="flex -space-x-2">
-                  <span className="inline-block w-8 h-8 rounded-full bg-brand-navy text-white text-xs flex items-center justify-center font-bold shadow-xs">🐾</span>
-                  <span className="inline-block w-8 h-8 rounded-full bg-brand-yellow text-brand-navy text-xs flex items-center justify-center font-bold shadow-xs">🐶</span>
-                  <span className="inline-block w-8 h-8 rounded-full bg-brand-orange text-white text-xs flex items-center justify-center font-bold shadow-xs">🐱</span>
-                </span>
-                <span><strong>150+ Aktif Pati Elçisi</strong> Türkiye'nin dört bir yanından mekan ve otelleri doğruluyor</span>
               </div>
             </div>
 
-            {/* Sağ Kolon: Başvuru Formu (6 Kolon) */}
-            <div className="lg:col-span-6 bg-white border-2 border-brand-navy rounded-3xl p-6 md:p-8 shadow-md">
-              {ambassadorSuccess ? (
-                <div className="py-10 text-center space-y-4">
-                  <div className="text-5xl animate-bounce">🎉</div>
-                  <h3 className="font-title font-bold text-2xl text-brand-navy">
-                    Pati Elçisi Başvurunuz Alındı!
-                  </h3>
-                  <p className="text-gray-600 text-sm max-w-md mx-auto leading-relaxed">
-                    Aramıza katılmanızdan mutluluk duyuyoruz! Başvurunuz editör ekibimizce incelendikten sonra <strong>Pati Elçisi giriş ve içerik ekleme yetkiniz</strong> e-posta adresinize iletilecektir.
-                  </p>
-                  <button
-                    onClick={() => setAmbassadorSuccess(false)}
-                    className="mt-4 bg-brand-navy text-white px-6 py-2.5 rounded-full text-xs font-bold font-title hover:bg-brand-navy-hover"
-                  >
-                    Yeni Başvuru Yap
-                  </button>
+            {/* Sağ Kolon: CTA Aksiyon Kartı (5 Kolon) */}
+            <div className="lg:col-span-5 bg-white text-gray-900 rounded-3xl p-6 sm:p-8 shadow-2xl border-2 border-brand-yellow/40 space-y-6">
+              <div className="space-y-2 text-center">
+                <span className="text-4xl block">✨🐾</span>
+                <h3 className="font-title font-bold text-2xl text-brand-navy">
+                  İşletme Formuna Git
+                </h3>
+                <p className="text-xs text-gray-500 leading-relaxed">
+                  Tesis türü, 1-2 fotoğraf, telefon ve adres bilgilerinizi girerek birkaç dakikada işletmenizi kaydedin.
+                </p>
+              </div>
+
+              <div className="space-y-2.5 text-xs text-gray-700 bg-brand-cream/50 p-4 rounded-2xl border border-brand-beige">
+                <div className="flex items-center gap-2">
+                  <span className="text-brand-green font-bold">✓</span>
+                  <span>Otel, Butik Otel, Bungalov, Villa</span>
                 </div>
-              ) : (
-                <form onSubmit={handleAmbassadorSubmit} className="space-y-4">
-                  <div className="border-b border-brand-beige pb-3">
-                    <h3 className="font-title font-bold text-xl text-brand-navy flex items-center gap-2">
-                      <span>🐾</span> Pati Elçisi Başvuru Formu
-                    </h3>
-                    <p className="text-xs text-gray-500 mt-0.5">Formu doldurarak patili.co elçisi olun ve topluluğa rehberlik edin.</p>
-                  </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-brand-green font-bold">✓</span>
+                  <span>Patili Kafe, Restoran & Bar</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-brand-green font-bold">✓</span>
+                  <span>Pet Taksi, Pet Oteli & 7/24 Veterinerler</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-brand-green font-bold">✓</span>
+                  <span>Ücretsiz & Doğrulanmış Tesis Listeleme</span>
+                </div>
+              </div>
 
-                  {ambassadorError && (
-                    <div className="bg-red-50 text-red-700 text-xs p-3 rounded-xl border border-red-200">
-                      ⚠️ {ambassadorError}
-                    </div>
-                  )}
+              <button
+                type="button"
+                onClick={() => onViewChange('add-business')}
+                className="w-full bg-brand-yellow hover:bg-brand-yellow-hover text-brand-navy py-4 rounded-full font-title font-extrabold text-sm transition-all shadow-md hover:shadow-lg border-2 border-brand-navy flex items-center justify-center gap-2 group cursor-pointer"
+              >
+                <span>İşletmeni Ekle</span>
+                <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+              </button>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-2xs font-bold text-gray-700 uppercase tracking-wider block mb-1">Adınız & Soyadınız *</label>
-                      <input
-                        required
-                        type="text"
-                        placeholder="Örn: Burcu Çetin"
-                        value={ambassadorForm.fullName}
-                        onChange={e => setAmbassadorForm({ ...ambassadorForm, fullName: e.target.value })}
-                        className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-2xs font-bold text-gray-700 uppercase tracking-wider block mb-1">E-posta Adresiniz *</label>
-                      <input
-                        required
-                        type="email"
-                        placeholder="burcu@example.com"
-                        value={ambassadorForm.email}
-                        onChange={e => setAmbassadorForm({ ...ambassadorForm, email: e.target.value })}
-                        className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-2xs font-bold text-gray-700 uppercase tracking-wider block mb-1">Telefon Numaranız *</label>
-                      <input
-                        required
-                        type="tel"
-                        placeholder="05XX XXX XX XX"
-                        value={ambassadorForm.phone}
-                        onChange={e => setAmbassadorForm({ ...ambassadorForm, phone: e.target.value })}
-                        className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-2xs font-bold text-gray-700 uppercase tracking-wider block mb-1">Yaşadığınız Şehir / İlçe *</label>
-                      <input
-                        required
-                        type="text"
-                        placeholder="Örn: Beşiktaş, İstanbul"
-                        value={ambassadorForm.city}
-                        onChange={e => setAmbassadorForm({ ...ambassadorForm, city: e.target.value })}
-                        className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-2xs font-bold text-gray-700 uppercase tracking-wider block mb-1">Patili Dostunuz (Irk & İsim) *</label>
-                      <input
-                        required
-                        type="text"
-                        placeholder="Örn: French Bulldog / Badem"
-                        value={ambassadorForm.petInfo}
-                        onChange={e => setAmbassadorForm({ ...ambassadorForm, petInfo: e.target.value })}
-                        className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-2xs font-bold text-gray-700 uppercase tracking-wider block mb-1">Instagram / Sosyal Medya</label>
-                      <input
-                        type="text"
-                        placeholder="@kullaniciadi veya profil linki"
-                        value={ambassadorForm.socialMedia}
-                        onChange={e => setAmbassadorForm({ ...ambassadorForm, socialMedia: e.target.value })}
-                        className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="text-2xs font-bold text-gray-700 uppercase tracking-wider block mb-1">
-                      Deneyimleriniz & Hangi Mekanları Paylaşmak İstersiniz?
-                    </label>
-                    <textarea
-                      rows="3"
-                      placeholder="Dostunuzla gezdiğiniz kafe/restoranlar veya otel deneyimlerinizden kısaca bahsedin..."
-                      value={ambassadorForm.experience}
-                      onChange={e => setAmbassadorForm({ ...ambassadorForm, experience: e.target.value })}
-                      className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy"
-                    />
-                  </div>
-
-                  <div className="flex items-start gap-2 pt-1">
-                    <input
-                      required
-                      type="checkbox"
-                      id="ambassador-consent"
-                      checked={ambassadorForm.consent}
-                      onChange={e => setAmbassadorForm({ ...ambassadorForm, consent: e.target.checked })}
-                      className="mt-1 rounded text-brand-navy focus:ring-0 cursor-pointer"
-                    />
-                    <label htmlFor="ambassador-consent" className="text-3xs text-gray-600 cursor-pointer">
-                      Pati Elçisi programına katılmayı ve iletişim bilgilerimin onay süreci için kullanılmasını onaylıyorum.
-                    </label>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={ambassadorSubmitting}
-                    className="w-full bg-brand-navy hover:bg-brand-navy-hover text-white py-3.5 rounded-full text-sm font-bold font-title transition-colors shadow-md border border-brand-navy/10 flex items-center justify-center gap-2 disabled:opacity-50"
-                  >
-                    <span>🐾</span>
-                    <span>{ambassadorSubmitting ? 'Başvuru Gönderiliyor...' : 'Pati Elçisi Başvurusu Gönder'}</span>
-                  </button>
-                </form>
-              )}
+              <p className="text-3xs text-center text-gray-400">
+                Başvurunuz editörlerimiz tarafından 24 saat içinde incelenir.
+              </p>
             </div>
           </div>
         </div>

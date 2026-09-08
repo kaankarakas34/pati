@@ -30,6 +30,24 @@ export default function AdminPanel() {
   const [ambassadorApps, setAmbassadorApps] = useState([]);
   const [appsLoading, setAppsLoading] = useState(false);
 
+  // Business Submissions ("İşletmeni Ekle") State
+  const [bizSubmissions, setBizSubmissions] = useState([]);
+  const [bizLoading, setBizLoading] = useState(false);
+
+  // Ambassador Management State (Only Admins Can Add/Delete)
+  const [ambassadorsList, setAmbassadorsList] = useState([]);
+  const [ambassadorsLoading, setAmbassadorsLoading] = useState(false);
+  const [isAddingAmbassador, setIsAddingAmbassador] = useState(false);
+  const [ambassadorFormState, setAmbassadorFormState] = useState({
+    fullName: '',
+    username: '',
+    password: '',
+    email: '',
+    phone: '',
+    city: '',
+    notes: ''
+  });
+
   const resource = activeSubTab === 'complaints-inbox' ? 'complaints' : activeSubTab;
   const isFeedback = ['reviews', 'corrections', 'complaints'].includes(resource);
   const collection = useAdminCollection(resource, resource === 'hotels' ? {
@@ -45,6 +63,121 @@ export default function AdminPanel() {
   const applicationsLoading = collection.loading;
   const applicationsError = collection.error;
   const loadAdApplications = collection.reload;
+
+  const loadBizSubmissions = async () => {
+    setBizLoading(true);
+    try {
+      const res = await fetch('/api/business-submissions', {
+        headers: { 'x-admin-token': sessionStorage.getItem('admin_token') || '' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setBizSubmissions(Array.isArray(data) ? data : []);
+      }
+    } catch (e) {
+      console.warn('Biz submissions fetch failed', e);
+    } finally {
+      setBizLoading(false);
+    }
+  };
+
+  const handleDeleteBizSubmission = async (id) => {
+    if (!window.confirm('Bu işletme başvurusunu silmek istediğinize emin misiniz?')) return;
+    try {
+      const res = await fetch(`/api/business-submissions/${id}`, {
+        method: 'DELETE',
+        headers: { 'x-admin-token': sessionStorage.getItem('admin_token') || '' }
+      });
+      if (res.ok) {
+        setBizSubmissions(prev => prev.filter(b => b.id !== id));
+      }
+    } catch (err) {
+      console.warn('Biz delete failed', err);
+    }
+  };
+
+  const handleApproveBizSubmission = async (item) => {
+    try {
+      await fetch(`/api/business-submissions/${item.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-token': sessionStorage.getItem('admin_token') || ''
+        },
+        body: JSON.stringify({ status: 'approved' })
+      });
+      item.status = 'approved';
+      setBizSubmissions([...bizSubmissions]);
+      alert(`"${item.businessName}" işletme başvurusu onaylandı!`);
+    } catch (err) {
+      alert('Onaylama işlemi başarısız oldu.');
+    }
+  };
+
+  const loadAmbassadors = async () => {
+    setAmbassadorsLoading(true);
+    try {
+      const res = await fetch('/api/admin/ambassadors', {
+        headers: { 'x-admin-token': sessionStorage.getItem('admin_token') || '' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setAmbassadorsList(Array.isArray(data) ? data : []);
+      }
+    } catch (e) {
+      console.warn('Ambassadors fetch failed', e);
+    } finally {
+      setAmbassadorsLoading(false);
+    }
+  };
+
+  const handleCreateAmbassador = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('/api/admin/ambassadors', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-token': sessionStorage.getItem('admin_token') || ''
+        },
+        body: JSON.stringify(ambassadorFormState)
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || 'Elçi oluşturulamadı.');
+        return;
+      }
+      alert(`Pati Elçisi "${ambassadorFormState.fullName}" başarıyla eklendi!`);
+      setIsAddingAmbassador(false);
+      setAmbassadorFormState({
+        fullName: '',
+        username: '',
+        password: '',
+        email: '',
+        phone: '',
+        city: '',
+        notes: ''
+      });
+      loadAmbassadors();
+    } catch (err) {
+      alert('İşlem başarısız oldu.');
+    }
+  };
+
+  const handleDeleteAmbassador = async (id) => {
+    if (!window.confirm('Bu Pati Elçisi hesabını silmek istediğinize emin misiniz?')) return;
+    try {
+      const res = await fetch(`/api/admin/ambassadors/${id}`, {
+        method: 'DELETE',
+        headers: { 'x-admin-token': sessionStorage.getItem('admin_token') || '' }
+      });
+      if (res.ok) {
+        setAmbassadorsList(prev => prev.filter(a => a.id !== id));
+      }
+    } catch (err) {
+      console.warn('Ambassador delete failed', err);
+    }
+  };
 
   // Load ambassador applications when admin views that tab
   const loadAmbassadorApps = async () => {
@@ -549,11 +682,14 @@ export default function AdminPanel() {
             <button onClick={() => { setActiveSubTab('guides'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'guides' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Rehberler</button>
             <button onClick={() => { setActiveSubTab('experiences'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'experiences' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Gezilecek Yerler</button>
             <button onClick={() => { setActiveSubTab('ads'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'ads' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Reklamlar</button>
+            <button onClick={() => { setActiveSubTab('business-submissions'); setIsAdding(false); loadBizSubmissions(); }} className={`pb-3 border-b-2 relative whitespace-nowrap flex items-center gap-1.5 ${activeSubTab === 'business-submissions' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
+              <span>🏢</span> İşletme Başvuruları
+            </button>
+            <button onClick={() => { setActiveSubTab('ambassadors-mgmt'); setIsAdding(false); loadAmbassadors(); }} className={`pb-3 border-b-2 relative whitespace-nowrap flex items-center gap-1.5 ${activeSubTab === 'ambassadors-mgmt' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
+              <span>🐾</span> Pati Elçileri
+            </button>
             <button onClick={() => { setActiveSubTab('ad-applications'); setIsAdding(false); }} className={`pb-3 border-b-2 relative whitespace-nowrap ${activeSubTab === 'ad-applications' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
               Reklam Başvuruları
-            </button>
-            <button onClick={() => { setActiveSubTab('ambassador-applications'); setIsAdding(false); loadAmbassadorApps(); }} className={`pb-3 border-b-2 relative whitespace-nowrap flex items-center gap-1 ${activeSubTab === 'ambassador-applications' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
-              <span>🐾</span> Pati Elçisi Başvuruları
             </button>
             <button onClick={() => { setActiveSubTab('corrections'); setIsAdding(false); }} className={`pb-3 border-b-2 relative whitespace-nowrap ${activeSubTab === 'corrections' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
               Düzeltmeler
@@ -1287,85 +1423,337 @@ export default function AdminPanel() {
             </div>
           )}
 
-          {activeSubTab === 'ambassador-applications' && (
+          {/* Tab 1: İşletme Başvuruları */}
+          {activeSubTab === 'business-submissions' && (
             <div>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
                 <div>
                   <h3 className="font-title font-bold text-lg text-gray-950 flex items-center gap-2">
-                    <span>🐾</span> Pati Elçisi Başvuruları
+                    <span>🏢</span> İşletme Başvuruları ("İşletmeni Ekle")
                   </h3>
-                  <p className="text-xs text-gray-500 mt-1">Ana sayfadan Pati Elçisi olmak için başvuran topluluk üyeleri.</p>
+                  <p className="text-xs text-gray-500 mt-1">Ana sayfa ve işletme formundan gönderilen otel, mekan ve pet işletmesi kayıtları.</p>
                 </div>
-                <button type="button" onClick={loadAmbassadorApps} className="border border-brand-navy text-brand-navy px-4 py-2 rounded-lg text-xs font-bold hover:bg-brand-navy-light">
+                <button type="button" onClick={loadBizSubmissions} className="border border-brand-navy text-brand-navy px-4 py-2 rounded-lg text-xs font-bold hover:bg-brand-navy-light">
                   Listeyi Yenile
                 </button>
               </div>
 
-              {appsLoading ? (
-                <p className="text-center py-10 text-sm text-gray-500">Başvurular yükleniyor...</p>
-              ) : ambassadorApps.length === 0 ? (
+              {bizLoading ? (
+                <p className="text-center py-10 text-sm text-gray-500">İşletme başvuruları yükleniyor...</p>
+              ) : bizSubmissions.length === 0 ? (
                 <div className="bg-brand-cream border border-brand-beige rounded-2xl p-8 text-center text-gray-500 text-sm">
-                  <span className="text-3xl block mb-2">🐾</span>
-                  Henüz yeni bir Pati Elçisi başvurusu bulunmuyor.
+                  <span className="text-3xl block mb-2">🏢</span>
+                  Henüz yeni bir işletme başvurusu bulunmuyor.
                 </div>
               ) : (
-                <div className="space-y-4">
-                  {ambassadorApps.map(app => (
-                    <article key={app.id} className="border-2 border-brand-navy/15 rounded-2xl bg-white p-5 shadow-xs text-left">
+                <div className="space-y-6">
+                  {bizSubmissions.map(biz => (
+                    <article key={biz.id} className="border-2 border-brand-navy/15 rounded-3xl bg-white p-6 shadow-xs text-left space-y-4">
                       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                         <div className="space-y-2">
                           <div className="flex items-center flex-wrap gap-2">
-                            <h4 className="font-title font-bold text-base text-brand-navy">{app.fullName}</h4>
-                            <span className="bg-brand-yellow text-brand-navy text-3xs font-extrabold px-2.5 py-0.5 rounded-full border border-brand-navy/20">
-                              ⭐ Pati Elçisi Adayı
+                            <h4 className="font-title font-bold text-lg text-brand-navy">{biz.businessName}</h4>
+                            <span className="bg-brand-yellow text-brand-navy text-3xs font-extrabold px-3 py-1 rounded-full border border-brand-navy/20">
+                              {biz.businessType}
                             </span>
-                            <span className={`text-3xs font-bold px-2.5 py-0.5 rounded-full ${app.status === 'approved' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
-                              {app.status === 'approved' ? '✓ Onaylandı' : '⏳ İnceleme Bekliyor'}
+                            <span className={`text-3xs font-bold px-2.5 py-0.5 rounded-full ${biz.status === 'approved' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
+                              {biz.status === 'approved' ? '✓ Onaylandı' : '⏳ İnceleme Bekliyor'}
                             </span>
                           </div>
 
                           <p className="text-xs text-gray-500">
-                            📍 <strong>{app.city}</strong> · 🐾 Dostu: <strong>{app.petInfo}</strong> · 📅 {new Date(app.createdAt || Date.now()).toLocaleDateString('tr-TR')}
+                            📍 <strong>{biz.city}{biz.district ? ` / ${biz.district}` : ''}</strong> {biz.address ? `(${biz.address})` : ''} · 📅 {new Date(biz.createdAt || Date.now()).toLocaleDateString('tr-TR')}
                           </p>
 
-                          <dl className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-1.5 pt-1 text-xs">
-                            <div><dt className="text-gray-400 text-3xs uppercase">E-posta</dt><dd><a className="font-semibold text-brand-navy hover:underline" href={`mailto:${app.email}`}>{app.email}</a></dd></div>
-                            <div><dt className="text-gray-400 text-3xs uppercase">Telefon</dt><dd><a className="font-semibold text-brand-navy hover:underline" href={`tel:${app.phone}`}>{app.phone}</a></dd></div>
-                            {app.socialMedia && <div><dt className="text-gray-400 text-3xs uppercase">Sosyal Medya</dt><dd className="font-semibold text-brand-earth">{app.socialMedia}</dd></div>}
+                          <dl className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-1.5 pt-2 text-xs">
+                            <div><dt className="text-gray-400 text-3xs uppercase font-bold">Yetkili Kişi</dt><dd className="font-semibold text-gray-800">{biz.contactName}</dd></div>
+                            <div><dt className="text-gray-400 text-3xs uppercase font-bold">Telefon</dt><dd><a className="font-semibold text-brand-navy hover:underline" href={`tel:${biz.phone}`}>{biz.phone}</a></dd></div>
+                            <div><dt className="text-gray-400 text-3xs uppercase font-bold">E-posta</dt><dd><a className="font-semibold text-brand-navy hover:underline break-all" href={`mailto:${biz.email}`}>{biz.email}</a></dd></div>
                           </dl>
 
-                          {app.experience && (
-                            <div className="mt-3 bg-brand-cream/60 p-3.5 rounded-xl border border-brand-beige text-xs text-gray-700 leading-relaxed">
-                              <span className="font-bold text-brand-navy block mb-1">Deneyim & Motivasyon:</span>
-                              {app.experience}
+                          {biz.website && (
+                            <div className="text-xs pt-1">
+                              <span className="text-gray-400 text-3xs uppercase font-bold mr-1">Web/Sosyal:</span>
+                              <a href={biz.website.startsWith('http') ? biz.website : `https://${biz.website}`} target="_blank" rel="noreferrer" className="text-brand-green font-bold hover:underline break-all">
+                                {biz.website}
+                              </a>
                             </div>
                           )}
                         </div>
 
                         <div className="flex sm:flex-col gap-2 shrink-0">
-                          {app.status !== 'approved' && (
+                          {biz.status !== 'approved' && (
                             <button
                               type="button"
-                              onClick={() => {
-                                app.status = 'approved';
-                                setAmbassadorApps([...ambassadorApps]);
-                                alert(`${app.fullName} isimli başvuru başarıyla onaylandı! Pati Elçisi hesabı aktif edildi.`);
-                              }}
-                              className="bg-brand-green hover:bg-brand-green-hover text-white text-xs px-4 py-2 rounded-xl font-bold flex items-center justify-center gap-1.5 shadow-xs transition-colors"
+                              onClick={() => handleApproveBizSubmission(biz)}
+                              className="bg-brand-green hover:bg-brand-green-hover text-white text-xs px-4 py-2.5 rounded-xl font-bold flex items-center justify-center gap-1.5 shadow-xs transition-colors"
                             >
-                              <CheckIcon className="w-4 h-4" /> Onayla & Yetki Ver
+                              <CheckIcon className="w-4 h-4" /> Onayla & Yayınla
                             </button>
                           )}
                           <button
                             type="button"
-                            onClick={() => {
-                              setAmbassadorApps(ambassadorApps.filter(a => a.id !== app.id));
-                            }}
-                            className="border border-red-200 hover:bg-red-50 text-red-600 text-xs px-4 py-2 rounded-xl font-bold transition-colors"
+                            onClick={() => handleDeleteBizSubmission(biz.id)}
+                            className="border border-red-200 hover:bg-red-50 text-red-600 text-xs px-4 py-2.5 rounded-xl font-bold transition-colors"
                           >
-                            Sil
+                            Başvuruyu Sil
                           </button>
                         </div>
+                      </div>
+
+                      {/* Fotoğraflar (1-2 Fotoğraf) */}
+                      {(biz.photo1 || biz.photo2) && (
+                        <div className="pt-2 border-t border-brand-beige">
+                          <span className="text-3xs font-bold text-gray-400 uppercase tracking-wider block mb-2">Gönderilen Fotoğraflar:</span>
+                          <div className="flex flex-wrap gap-4">
+                            {biz.photo1 && (
+                              <div className="relative w-40 h-28 rounded-xl overflow-hidden border border-brand-navy/20 shadow-xs group bg-gray-100">
+                                <img src={biz.photo1} alt="1. Fotoğraf" className="w-full h-full object-cover" />
+                                <span className="absolute bottom-1 left-1 bg-black/70 text-white text-4xs px-1.5 py-0.5 rounded">1. Fotoğraf</span>
+                              </div>
+                            )}
+                            {biz.photo2 && (
+                              <div className="relative w-40 h-28 rounded-xl overflow-hidden border border-brand-navy/20 shadow-xs group bg-gray-100">
+                                <img src={biz.photo2} alt="2. Fotoğraf" className="w-full h-full object-cover" />
+                                <span className="absolute bottom-1 left-1 bg-black/70 text-white text-4xs px-1.5 py-0.5 rounded">2. Fotoğraf</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Açıklama & Pet Koşulları */}
+                      <div className="bg-brand-cream/50 p-4 rounded-2xl border border-brand-beige text-xs space-y-2">
+                        <div className="flex flex-wrap gap-3 items-center">
+                          <span className="font-bold text-brand-navy">Pet Politikası:</span>
+                          <span className={`px-2 py-0.5 rounded-full text-3xs font-bold ${biz.extraFee === 'no' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
+                            {biz.extraFee === 'no' ? '🟢 Ek Ücret Alınmıyor' : '🟡 Ek Ücretli'}
+                          </span>
+                          {Array.isArray(biz.allowedPets) && (
+                            <span className="text-gray-600">Kabul: <strong>{biz.allowedPets.join(', ')}</strong></span>
+                          )}
+                        </div>
+                        {biz.description && (
+                          <p className="text-gray-700 leading-relaxed pt-1">
+                            {biz.description}
+                          </p>
+                        )}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Tab 2: Pati Elçileri Yönetimi (Sadece Admin Ekleyebilir) */}
+          {activeSubTab === 'ambassadors-mgmt' && (
+            <div>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+                <div>
+                  <h3 className="font-title font-bold text-lg text-gray-950 flex items-center gap-2">
+                    <span>🐾</span> Pati Elçileri Yönetimi
+                  </h3>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Yalnızca yöneticiler yeni Pati Elçisi tanımlayabilir. Tanımlanan elçiler giriş yaparak mekan ve rehber ekleyebilir.
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsAddingAmbassador(!isAddingAmbassador)}
+                    className="bg-brand-navy hover:bg-brand-navy-hover text-white px-4 py-2 rounded-xl text-xs font-bold shadow-xs transition-colors flex items-center gap-1"
+                  >
+                    <span>+</span> {isAddingAmbassador ? 'Formu Kapat' : 'Yeni Pati Elçisi Ekle'}
+                  </button>
+                  <button type="button" onClick={loadAmbassadors} className="border border-brand-navy text-brand-navy px-3 py-2 rounded-xl text-xs font-bold hover:bg-brand-navy-light">
+                    Yenile
+                  </button>
+                </div>
+              </div>
+
+              {/* Yeni Elçi Ekleme Formu */}
+              {isAddingAmbassador && (
+                <form onSubmit={handleCreateAmbassador} className="bg-brand-yellow/10 border-2 border-brand-navy rounded-3xl p-6 mb-8 text-left space-y-4 shadow-md">
+                  <div className="border-b border-brand-navy/20 pb-3">
+                    <h4 className="font-title font-bold text-base text-brand-navy flex items-center gap-2">
+                      <span>⭐</span> Yeni Pati Elçisi Hesabı Tanımla
+                    </h4>
+                    <p className="text-xs text-gray-600 mt-0.5">
+                      Pati elçisi hesabı açtığınız kullanıcı, bu kullanıcı adı ve şifreyle sisteme giriş yapabilecektir.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="text-3xs font-bold text-gray-700 uppercase tracking-wider block mb-1">Ad Soyad *</label>
+                      <input
+                        required
+                        type="text"
+                        placeholder="Örn: Merve Kaya"
+                        value={ambassadorFormState.fullName}
+                        onChange={e => setAmbassadorFormState({ ...ambassadorFormState, fullName: e.target.value })}
+                        className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy bg-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-3xs font-bold text-gray-700 uppercase tracking-wider block mb-1">Kullanıcı Adı (Giriş için) *</label>
+                      <input
+                        required
+                        type="text"
+                        placeholder="Örn: merve"
+                        value={ambassadorFormState.username}
+                        onChange={e => setAmbassadorFormState({ ...ambassadorFormState, username: e.target.value })}
+                        className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy bg-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-3xs font-bold text-gray-700 uppercase tracking-wider block mb-1">Şifre *</label>
+                      <input
+                        required
+                        type="text"
+                        placeholder="Örn: pati123"
+                        value={ambassadorFormState.password}
+                        onChange={e => setAmbassadorFormState({ ...ambassadorFormState, password: e.target.value })}
+                        className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy bg-white font-mono"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="text-3xs font-bold text-gray-700 uppercase tracking-wider block mb-1">E-posta</label>
+                      <input
+                        type="email"
+                        placeholder="merve@example.com"
+                        value={ambassadorFormState.email}
+                        onChange={e => setAmbassadorFormState({ ...ambassadorFormState, email: e.target.value })}
+                        className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy bg-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-3xs font-bold text-gray-700 uppercase tracking-wider block mb-1">Telefon</label>
+                      <input
+                        type="tel"
+                        placeholder="05XX XXX XX XX"
+                        value={ambassadorFormState.phone}
+                        onChange={e => setAmbassadorFormState({ ...ambassadorFormState, phone: e.target.value })}
+                        className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy bg-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-3xs font-bold text-gray-700 uppercase tracking-wider block mb-1">Şehir / Bölge</label>
+                      <input
+                        type="text"
+                        placeholder="Örn: İstanbul / Kadıköy"
+                        value={ambassadorFormState.city}
+                        onChange={e => setAmbassadorFormState({ ...ambassadorFormState, city: e.target.value })}
+                        className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy bg-white"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-3xs font-bold text-gray-700 uppercase tracking-wider block mb-1">Notlar / Açıklama</label>
+                    <input
+                      type="text"
+                      placeholder="Örn: Kadıköy ve Moda bölgesi kedi & köpek mekan temsilcisi"
+                      value={ambassadorFormState.notes}
+                      onChange={e => setAmbassadorFormState({ ...ambassadorFormState, notes: e.target.value })}
+                      className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy bg-white"
+                    />
+                  </div>
+
+                  <div className="flex gap-2 pt-2">
+                    <button
+                      type="submit"
+                      className="bg-brand-green hover:bg-brand-green-hover text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-xs transition-colors"
+                    >
+                      ✓ Elçi Hesabını Kaydet
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsAddingAmbassador(false)}
+                      className="border border-gray-300 text-gray-700 px-4 py-2.5 rounded-xl text-xs font-bold hover:bg-gray-100 transition-colors"
+                    >
+                      Vazgeç
+                    </button>
+                  </div>
+                </form>
+              )}
+
+              {/* Mevcut Elçiler Listesi */}
+              {ambassadorsLoading ? (
+                <p className="text-center py-10 text-sm text-gray-500">Pati Elçileri listesi yükleniyor...</p>
+              ) : ambassadorsList.length === 0 ? (
+                <div className="bg-brand-cream border border-brand-beige rounded-2xl p-8 text-center text-gray-500 text-sm">
+                  <span className="text-3xl block mb-2">🐾</span>
+                  Kayıtlı Pati Elçisi bulunmuyor. Yukarıdaki butondan yeni bir elçi tanımlayabilirsiniz.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {ambassadorsList.map(ambassador => (
+                    <article key={ambassador.id} className="border-2 border-brand-navy/15 rounded-2xl bg-white p-5 shadow-xs text-left flex flex-col justify-between space-y-4">
+                      <div className="space-y-2">
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <h4 className="font-title font-bold text-base text-brand-navy">{ambassador.fullName}</h4>
+                            <span className="text-3xs font-mono text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">
+                              @{ambassador.username}
+                            </span>
+                          </div>
+                          <span className="bg-brand-yellow text-brand-navy text-4xs font-extrabold px-2.5 py-0.5 rounded-full border border-brand-navy/20 shrink-0">
+                            ⭐ Pati Elçisi
+                          </span>
+                        </div>
+
+                        <div className="bg-brand-cream/60 p-3 rounded-xl border border-brand-beige text-xs space-y-1">
+                          <div className="flex justify-between text-3xs">
+                            <span className="text-gray-500">Giriş Şifresi:</span>
+                            <span className="font-mono font-bold text-brand-navy">{ambassador.password}</span>
+                          </div>
+                          {ambassador.city && (
+                            <div className="flex justify-between text-3xs">
+                              <span className="text-gray-500">Bölge:</span>
+                              <span className="font-bold text-gray-700">{ambassador.city}</span>
+                            </div>
+                          )}
+                          {ambassador.email && (
+                            <div className="flex justify-between text-3xs">
+                              <span className="text-gray-500">E-posta:</span>
+                              <span className="font-medium text-brand-navy truncate max-w-[150px]">{ambassador.email}</span>
+                            </div>
+                          )}
+                          {ambassador.phone && (
+                            <div className="flex justify-between text-3xs">
+                              <span className="text-gray-500">Telefon:</span>
+                              <span className="font-medium text-gray-700">{ambassador.phone}</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {ambassador.notes && (
+                          <p className="text-3xs text-gray-600 italic">
+                            "{ambassador.notes}"
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="pt-2 border-t border-brand-beige flex items-center justify-between">
+                        <span className="text-4xs text-gray-400">
+                          {ambassador.createdAt ? new Date(ambassador.createdAt).toLocaleDateString('tr-TR') : 'Aktif'}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteAmbassador(ambassador.id)}
+                          className="text-red-600 hover:text-red-800 text-xs font-bold hover:underline"
+                        >
+                          Yetkiyi Kaldır / Sil
+                        </button>
                       </div>
                     </article>
                   ))}

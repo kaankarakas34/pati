@@ -83,17 +83,33 @@ function isValidHttpUrl(value) {
   }
 }
 
+const ambassadorsList = [
+  {
+    id: 'elci-1',
+    fullName: 'Demo Pati Elçisi',
+    username: 'elci',
+    password: 'pati123',
+    email: 'elci@patili.co',
+    phone: '0555 123 45 67',
+    city: 'İstanbul',
+    notes: 'Varsayılan topluluk temsilcisi',
+    createdAt: new Date().toISOString()
+  }
+];
+
+const businessSubmissions = [];
 const ambassadorApplications = [];
 
 app.post('/api/admin/login', (req, res) => {
   const { username, password } = req.body || {};
-  // Check Pati Elçisi credentials
-  if (username === 'elci' && (password === 'pati123' || password === 'elci123')) {
+  // Check against ambassadors list
+  const matchedAmbassador = ambassadorsList.find(a => a.username === username && a.password === password);
+  if (matchedAmbassador || (username === 'elci' && (password === 'pati123' || password === 'elci123'))) {
     return res.json({
       success: true,
       token: ADMIN_TOKEN || 'ambassador-session-token',
       role: 'ambassador',
-      name: 'Pati Elçisi (Topluluk)'
+      name: matchedAmbassador ? matchedAmbassador.fullName : 'Pati Elçisi (Topluluk)'
     });
   }
 
@@ -111,10 +127,118 @@ app.post('/api/admin/login', (req, res) => {
   res.status(401).json({ error: 'Hatalı kullanıcı adı veya şifre.' });
 });
 
-// Pati Elçisi Başvuru API
+// Admin-only Ambassador Management APIs
+app.get('/api/admin/ambassadors', requireAdmin, (req, res) => {
+  res.json(ambassadorsList);
+});
+
+app.post('/api/admin/ambassadors', requireAdmin, (req, res) => {
+  const { fullName, username, password, email, phone, city, notes } = req.body || {};
+  if (!fullName || !username || !password) {
+    return res.status(400).json({ error: 'Ad Soyad, Kullanıcı Adı ve Şifre zorunludur.' });
+  }
+  if (ambassadorsList.some(a => a.username.toLowerCase() === username.toLowerCase())) {
+    return res.status(400).json({ error: 'Bu kullanıcı adı zaten mevcut.' });
+  }
+  const newAmbassador = {
+    id: randomUUID(),
+    fullName: normalizeText(fullName, 120),
+    username: normalizeText(username, 60).toLowerCase(),
+    password: String(password || '').trim(),
+    email: normalizeText(email, 180).toLowerCase(),
+    phone: normalizeText(phone, 40),
+    city: normalizeText(city, 100),
+    notes: normalizeText(notes, 500),
+    createdAt: new Date().toISOString()
+  };
+  ambassadorsList.unshift(newAmbassador);
+  res.status(201).json({ success: true, ambassador: newAmbassador });
+});
+
+app.delete('/api/admin/ambassadors/:id', requireAdmin, (req, res) => {
+  const { id } = req.params;
+  const index = ambassadorsList.findIndex(a => a.id === id);
+  if (index === -1) return res.status(404).json({ error: 'Elçi bulunamadı.' });
+  ambassadorsList.splice(index, 1);
+  res.json({ success: true });
+});
+
+// Business Submissions ("İşletmeni Ekle") API
+app.post('/api/business-submissions', async (req, res, next) => {
+  try {
+    const {
+      businessName,
+      businessType,
+      contactName,
+      phone,
+      email,
+      city,
+      district,
+      address,
+      website,
+      photo1,
+      photo2,
+      allowedPets,
+      extraFee,
+      description
+    } = req.body || {};
+
+    if (!businessName || !phone || !email || !city) {
+      return res.status(400).json({ error: 'Lütfen zorunlu alanları (işletme adı, telefon, e-posta, şehir) doldurun.' });
+    }
+
+    const submission = {
+      id: randomUUID(),
+      businessName: normalizeText(businessName, 180),
+      businessType: normalizeText(businessType || 'Otel / Konaklama', 100),
+      contactName: normalizeText(contactName, 120),
+      phone: normalizeText(phone, 40),
+      email: normalizeText(email, 180).toLowerCase(),
+      city: normalizeText(city, 100),
+      district: normalizeText(district, 100),
+      address: normalizeText(address, 300),
+      website: normalizeText(website, 300),
+      photo1: photo1 || '',
+      photo2: photo2 || '',
+      allowedPets: Array.isArray(allowedPets) ? allowedPets : ['dog', 'cat'],
+      extraFee: extraFee || 'no',
+      description: normalizeText(description, 3000),
+      status: 'pending',
+      createdAt: new Date().toISOString()
+    };
+
+    businessSubmissions.unshift(submission);
+    res.status(201).json({ success: true, id: submission.id });
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get('/api/business-submissions', requireAdmin, (req, res) => {
+  res.json(businessSubmissions);
+});
+
+app.patch('/api/business-submissions/:id', requireAdmin, (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body || {};
+  const item = businessSubmissions.find(b => b.id === id);
+  if (!item) return res.status(404).json({ error: 'Kayıt bulunamadı.' });
+  if (status) item.status = status;
+  res.json({ success: true, item });
+});
+
+app.delete('/api/business-submissions/:id', requireAdmin, (req, res) => {
+  const { id } = req.params;
+  const index = businessSubmissions.findIndex(b => b.id === id);
+  if (index === -1) return res.status(404).json({ error: 'Kayıt bulunamadı.' });
+  businessSubmissions.splice(index, 1);
+  res.json({ success: true });
+});
+
+// Pati Elçisi Başvuru API (admin moderation)
 app.post('/api/ambassador-applications', async (req, res, next) => {
   try {
-    const { fullName, email, phone, city, petInfo, socialMedia, experience, consent } = req.body || {};
+    const { fullName, email, phone, city, petInfo, socialMedia, experience } = req.body || {};
     if (!fullName || !email || !phone || !city) {
       return res.status(400).json({ error: 'Lütfen zorunlu alanları (ad, e-posta, telefon, şehir) doldurun.' });
     }
