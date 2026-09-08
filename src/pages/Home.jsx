@@ -75,16 +75,16 @@ export default function Home({ onViewChange, setSearchFilters }) {
       <div className="bg-gradient-to-b from-brand-yellow/30 via-brand-beige/50 to-brand-cream py-12 md:py-16 border-b border-brand-navy/10">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white border border-brand-navy/10 rounded-full text-xs font-bold text-brand-navy shadow-sm">
-            <span>🐾 Türkiye'nin İlk Doğrulanmış Pet Seyahat Rehberi</span>
+            <span>🐾 patili.co | Evcil Hayvan Dostu Yaşam & Seyahat Platformu</span>
           </div>
 
           <h1 className="text-3xl md:text-5xl font-bold font-title text-brand-navy leading-tight">
-            Patili Dostunuzla Yolculuğa Çıkın,<br />
+            Patili Dostunuzla Hayatı Paylaşın,<br />
             <span className="text-brand-navy underline decoration-brand-yellow decoration-4">Kural Sürprizi Yaşamayın</span>
           </h1>
 
           <p className="text-gray-700 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-            Türkiye genelindeki evcil hayvan kabul eden otelleri, kabul şartlarını ve acil nöbetçi veteriner kliniklerini editör doğrulamasıyla tek adreste keşfedin.
+            Türkiye genelindeki evcil hayvan kabul eden otelleri, patili mekanları (kafe, restoran, bar), pet taksileri, pet otelleri ve 7/24 acil veteriner kliniklerini editör doğrulamasıyla tek adreste keşfedin.
           </p>
 
           {/* Quick Filter Bar */}
@@ -156,14 +156,14 @@ export default function Home({ onViewChange, setSearchFilters }) {
         </div>
       </div>
 
-      {/* Main Two Directions Cards */}
-      {/* Category Cards - Clean 2-Col Active Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      {/* 2 Ana Odak ve 4 Hizmet Kutusu */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        {/* 2 Ana Odak Kartı */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Active Card 1: Oteller */}
+          {/* Ana Odak 1: Patili Seyahat (Pati Dostu Oteller) */}
           <div
             onClick={() => onViewChange('accommodations')}
-            className="bg-white border-2 border-brand-navy rounded-3xl p-7 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group relative overflow-hidden"
+            className="bg-white border-2 border-brand-navy rounded-3xl p-7 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group relative overflow-hidden text-left"
           >
             <div className="absolute top-0 right-0 bg-brand-yellow text-brand-navy text-xs font-bold px-3.5 py-1.5 rounded-bl-xl font-title">
               ⭐ Ana Odak
@@ -180,24 +180,120 @@ export default function Home({ onViewChange, setSearchFilters }) {
             </span>
           </div>
 
-          {/* Active Card 2: Acil Veteriner */}
+          {/* Ana Odak 2: Patili Mekanlar (Kafe, Restoran & Bar) */}
           <div
-            onClick={() => onViewChange('vets')}
-            className="bg-white border-2 border-brand-navy/20 hover:border-brand-navy rounded-3xl p-7 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group relative overflow-hidden"
+            onClick={() => onViewChange('experiences')}
+            className="bg-white border-2 border-brand-navy rounded-3xl p-7 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group relative overflow-hidden text-left"
           >
-            <div className="absolute top-0 right-0 bg-red-100 text-red-700 text-xs font-bold px-3.5 py-1.5 rounded-bl-xl font-title">
-              🏥 7/24 Acil
+            <div className="absolute top-0 right-0 bg-brand-yellow text-brand-navy text-xs font-bold px-3.5 py-1.5 rounded-bl-xl font-title">
+              ⭐ Ana Odak
             </div>
             <div>
-              <div className="text-5xl mb-4">🏥</div>
-              <h2 className="text-2xl sm:text-3xl font-bold font-title text-brand-navy group-hover:opacity-80 transition-opacity">7/24 Acil Veterinerler</h2>
+              <div className="text-5xl mb-4">🍽️</div>
+              <h2 className="text-2xl sm:text-3xl font-bold font-title text-brand-navy group-hover:opacity-80 transition-opacity">Patili Mekanlar</h2>
               <p className="text-gray-700 mt-2 leading-relaxed text-sm sm:text-base">
-                Seyahatinizde acil durumlar için nöbetçi veteriner klinikleri, iletişim numaraları ve acil müdahale noktaları.
+                Dostunuzla keyifle vakit geçirebileceğiniz kedi ve köpek dostu kafe, restoran, meyhane ve barları keşfedin.
               </p>
             </div>
             <span className="text-brand-navy font-bold flex items-center gap-2 mt-6 group-hover:underline text-sm sm:text-base">
-              Nöbetçi Klinik Bul &rarr;
+              Mekanları Keşfet &rarr;
             </span>
+          </div>
+        </div>
+
+        {/* 4 Tamamlayıcı Hizmet Kutusu */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between text-left">
+            <div>
+              <h3 className="text-xl md:text-2xl font-bold font-title text-brand-navy flex items-center gap-2">
+                <span>🐾</span> Patili Hizmetler & Acil Çözümler
+              </h3>
+              <p className="text-xs md:text-sm text-gray-500 mt-1">
+                Patili dostunuzun seyahat, bakım, gezi ve sağlık ihtiyaçlarını karşılayan doğrulanmış servisler
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {/* Kutu 1: Pet Taksi */}
+            <div
+              onClick={() => onViewChange('taxis')}
+              className="bg-white border-2 border-brand-navy/15 hover:border-brand-navy rounded-3xl p-6 hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between group relative overflow-hidden text-left"
+            >
+              <div className="absolute top-0 right-0 bg-amber-100 text-amber-900 text-3xs font-bold px-3 py-1 rounded-bl-xl font-title">
+                🚕 Transfer
+              </div>
+              <div>
+                <div className="text-4xl mb-3">🚕</div>
+                <h4 className="text-lg font-bold font-title text-brand-navy group-hover:opacity-80 transition-opacity">Pet Taksi</h4>
+                <p className="text-gray-600 mt-2 text-xs leading-relaxed">
+                  Veteriner, havaalanı, otel ve şehirler arası güvenli, klimalı ve kafesli evcil hayvan transferi.
+                </p>
+              </div>
+              <span className="text-brand-navy font-bold flex items-center gap-1.5 mt-5 group-hover:underline text-xs">
+                Taksileri İncele &rarr;
+              </span>
+            </div>
+
+            {/* Kutu 2: Pet Otel */}
+            <div
+              onClick={() => onViewChange('boardings')}
+              className="bg-white border-2 border-brand-navy/15 hover:border-brand-navy rounded-3xl p-6 hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between group relative overflow-hidden text-left"
+            >
+              <div className="absolute top-0 right-0 bg-blue-100 text-blue-900 text-3xs font-bold px-3 py-1 rounded-bl-xl font-title">
+                🏡 Pansiyon
+              </div>
+              <div>
+                <div className="text-4xl mb-3">🏡</div>
+                <h4 className="text-lg font-bold font-title text-brand-navy group-hover:opacity-80 transition-opacity">Pet Otel</h4>
+                <p className="text-gray-600 mt-2 text-xs leading-relaxed">
+                  Siz tatildeyken kedi ve köpekleriniz için 7/24 uzman gözetimli, kafessiz konforlu bakım merkezleri.
+                </p>
+              </div>
+              <span className="text-brand-navy font-bold flex items-center gap-1.5 mt-5 group-hover:underline text-xs">
+                Pet Otelleri Gör &rarr;
+              </span>
+            </div>
+
+            {/* Kutu 3: Köpek Gezdiriciler */}
+            <div
+              onClick={() => onViewChange('dog-walkers')}
+              className="bg-white border-2 border-brand-navy/15 hover:border-brand-navy rounded-3xl p-6 hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between group relative overflow-hidden text-left"
+            >
+              <div className="absolute top-0 right-0 bg-emerald-100 text-emerald-900 text-3xs font-bold px-3 py-1 rounded-bl-xl font-title">
+                🦮 Gezdirme
+              </div>
+              <div>
+                <div className="text-4xl mb-3">🦮</div>
+                <h4 className="text-lg font-bold font-title text-brand-navy group-hover:opacity-80 transition-opacity">Köpek Gezdiriciler</h4>
+                <p className="text-gray-600 mt-2 text-xs leading-relaxed">
+                  Günlük düzenli yürüyüş, tuvalet ve sosyalleşme için referanslı ve doğrulanmış gezdiriciler.
+                </p>
+              </div>
+              <span className="text-brand-navy font-bold flex items-center gap-1.5 mt-5 group-hover:underline text-xs">
+                Gezdirici Bul &rarr;
+              </span>
+            </div>
+
+            {/* Kutu 4: 7-24 Veterinerler */}
+            <div
+              onClick={() => onViewChange('vets')}
+              className="bg-white border-2 border-brand-navy/15 hover:border-brand-navy rounded-3xl p-6 hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between group relative overflow-hidden text-left"
+            >
+              <div className="absolute top-0 right-0 bg-red-100 text-red-700 text-3xs font-bold px-3 py-1 rounded-bl-xl font-title">
+                🏥 7/24 Acil
+              </div>
+              <div>
+                <div className="text-4xl mb-3">🏥</div>
+                <h4 className="text-lg font-bold font-title text-brand-navy group-hover:opacity-80 transition-opacity">7/24 Veterinerler</h4>
+                <p className="text-gray-600 mt-2 text-xs leading-relaxed">
+                  Seyahatinizde acil durumlar için nöbetçi veteriner klinikleri, iletişim numaraları ve acil müdahale.
+                </p>
+              </div>
+              <span className="text-brand-navy font-bold flex items-center gap-1.5 mt-5 group-hover:underline text-xs">
+                Nöbetçi Klinik Bul &rarr;
+              </span>
+            </div>
           </div>
         </div>
 

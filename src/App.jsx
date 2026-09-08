@@ -16,48 +16,54 @@ import Wizard from './pages/Wizard';
 import Taxis from './pages/Taxis';
 import Vets from './pages/Vets';
 import Experiences from './pages/Experiences';
+import DogWalkers from './pages/DogWalkers';
 import AdApplication from './pages/AdApplication';
 import { getHotelPath, getVetPath } from '../lib/seo-slugs';
 
 const CATEGORY_SEO = {
   accommodations: {
     path: '/evcil-hayvan-dostu-oteller',
-    title: 'Evcil Hayvan Dostu Oteller | Patiyle Seyahat',
+    title: 'Evcil Hayvan Dostu Oteller | patili.co',
     description: 'Köpek, kedi ve diğer evcil hayvanları kabul eden otelleri; kilo sınırı, ek ücret ve tesis kurallarıyla karşılaştırın.'
   },
   boardings: {
     path: '/kedi-kopek-otelleri',
-    title: 'Kedi ve Köpek Otelleri | Güvenli Pet Bakımı',
+    title: 'Kedi ve Köpek Otelleri | Güvenli Pet Bakımı | patili.co',
     description: 'Kedi oteli, köpek oteli, gündüz bakım ve ev tipi pet bakım merkezlerini özellikleri ve kabul şartlarıyla inceleyin.'
   },
   taxis: {
     path: '/pet-taksi',
-    title: 'Pet Taksi ve Evcil Hayvan Transferi | Patiyle Seyahat',
+    title: 'Pet Taksi ve Evcil Hayvan Transferi | patili.co',
     description: 'Veteriner, havaalanı, otel ve bakım merkezi ulaşımı için pet taksi ve güvenli evcil hayvan transfer seçeneklerini karşılaştırın.'
   },
   vets: {
     path: '/veterinerler',
-    title: '7/24 Acil Veteriner Klinikleri | Patiyle Seyahat',
+    title: '7/24 Acil Veteriner Klinikleri | patili.co',
     description: 'Yakınınızdaki 7/24 açık acil veteriner kliniklerini, adres ve hizmet olanaklarıyla inceleyin.'
   },
   experiences: {
-    path: '/evcil-hayvanla-gezilecek-yerler',
-    title: 'Evcil Hayvanla Gezilecek Yerler | Patiyle Seyahat',
-    description: 'Köpekle gezilecek park, plaj, yürüyüş rotası ve evcil hayvan kabul eden mekanları keşfedin.'
+    path: '/patili-mekanlar',
+    title: 'Patili Mekanlar | Kedi & Köpek Dostu Kafe ve Restoranlar | patili.co',
+    description: 'Evcil hayvanınızla gidebileceğiniz köpek ve kedi kabul eden kafe, restoran, meyhane ve barları keşfedin.'
+  },
+  'dog-walkers': {
+    path: '/kopek-gezdiricileri',
+    title: 'Köpek Gezdiricileri & Profesyonel Pet Bakıcıları | patili.co',
+    description: 'Günlük yürüyüş, tuvalet egzersizi ve bakım için referanslı ve güvenilir köpek gezdiricilerini inceleyin.'
   },
   guides: {
     path: '/evcil-hayvan-seyahat-rehberi',
-    title: 'Evcil Hayvan Seyahat Rehberi | Patiyle Seyahat',
+    title: 'Evcil Hayvan Seyahat Rehberi | patili.co',
     description: 'Kedi ve köpekle yolculuk, sağlık belgeleri, otel seçimi ve destinasyon hazırlığı için güncel seyahat rehberleri.'
   },
   'trust-ads': {
     path: '/trust-ads',
-    title: 'Reklam Başvurusu ve Sponsorluk | Patiyle Seyahat',
-    description: 'Patiyle Seyahat reklam ve sponsorluk başvurusu yapın; otel, pet oteli, veteriner, pet taksi ve evcil hayvan markanızı doğru kitleyle buluşturun.'
+    title: 'Reklam Başvurusu ve Sponsorluk | patili.co',
+    description: 'patili.co reklam ve sponsorluk başvurusu yapın; otel, mekan, pet oteli, veteriner, pet taksi markanızı doğru kitleyle buluşturun.'
   },
   chains: {
     path: '/otel-zincirleri',
-    title: 'Türkiye Evcil Hayvan Dostu Otel Zincirleri (Hilton, Radisson vb.) | Patiyle Seyahat',
+    title: 'Türkiye Evcil Hayvan Dostu Otel Zincirleri (Hilton, Radisson vb.) | patili.co',
     description: 'Hilton, Radisson, Akra, Swissotel gibi otel zincirlerinin evcil hayvan politikaları, kilo sınırları ve aile dostu konaklama imkanları.'
   }
 };
@@ -115,21 +121,21 @@ function App() {
       : cityLanding ? window.location.pathname
       : categoryMeta?.path || window.location.pathname;
 
-    const canonicalUrl = `https://www.patiyleseyahat.com${canonicalPath}`;
+    const canonicalUrl = `https://patili.co${canonicalPath}`;
 
     const title = hotel
-      ? `${hotel.name} | ${hotel.district}, ${hotel.city} Evcil Hayvan Dostu Otel | Patiyle Seyahat`
+      ? `${hotel.name} | ${hotel.district}, ${hotel.city} Evcil Hayvan Dostu Otel | patili.co`
       : vet
-      ? `${vet.name} - 7/24 Acil Nöbetçi Veteriner ${vet.district}, ${vet.city} | Patiyle Seyahat`
+      ? `${vet.name} - 7/24 Acil Nöbetçi Veteriner ${vet.district}, ${vet.city} | patili.co`
       : boarding
-      ? `${boarding.name} - Kedi & Köpek Oteli ${boarding.district}, ${boarding.city} | Patiyle Seyahat`
+      ? `${boarding.name} - Kedi & Köpek Oteli ${boarding.district}, ${boarding.city} | patili.co`
       : taxi
-      ? `${taxi.name} - Evcil Hayvan Taksi ${taxi.city} | Patiyle Seyahat`
+      ? `${taxi.name} - Evcil Hayvan Taksi ${taxi.city} | patili.co`
       : cityLanding
-      ? `${cityLanding} Evcil Hayvan Dostu Oteller | Patiyle Seyahat`
+      ? `${cityLanding} Evcil Hayvan Dostu Oteller | patili.co`
       : categoryMeta?.title
       ? categoryMeta.title
-      : "Patiyle Seyahat | Türkiye'nin Evcil Hayvan Dostu Seyahat Rehberi";
+      : "patili.co | Türkiye'nin Evcil Hayvan Dostu Seyahat & Mekan Rehberi";
 
     const description = hotel
       ? `${hotel.name}, ${hotel.district}/${hotel.city} evcil hayvan kabul koşulları, tesis özellikleri ve fotoğrafları.`
@@ -227,9 +233,12 @@ function App() {
       } else if (path === '/evcil-hayvan-seyahat-rehberi' || path === '/guides') {
         setCurrentView('guides');
         if (path !== CATEGORY_SEO.guides.path) window.history.replaceState(null, '', CATEGORY_SEO.guides.path);
-      } else if (path === '/evcil-hayvanla-gezilecek-yerler' || path === '/gezilecek-yerler' || path === '/experiences') {
+      } else if (path === '/patili-mekanlar' || path === '/evcil-hayvanla-gezilecek-yerler' || path === '/gezilecek-yerler' || path === '/experiences') {
         setCurrentView('experiences');
         if (path !== CATEGORY_SEO.experiences.path) window.history.replaceState(null, '', CATEGORY_SEO.experiences.path);
+      } else if (path === '/kopek-gezdiricileri' || path === '/dog-walkers') {
+        setCurrentView('dog-walkers');
+        if (path !== CATEGORY_SEO['dog-walkers'].path) window.history.replaceState(null, '', CATEGORY_SEO['dog-walkers'].path);
       } else if (
         path.startsWith('/evcil-hayvan-dostu-oteller/') ||
         path.startsWith('/evcil-hayvan-kabul-eden-oteller/') ||
@@ -500,6 +509,8 @@ function App() {
         return <Taxis onViewChange={handleViewChange} />;
       case 'experiences':
         return <Experiences />;
+      case 'dog-walkers':
+        return <DogWalkers onViewChange={handleViewChange} />;
       case 'vets':
         return <Vets onViewChange={handleViewChange} />;
 

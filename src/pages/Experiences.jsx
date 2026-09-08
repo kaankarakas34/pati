@@ -36,9 +36,12 @@ export default function Experiences() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div className="border-b border-brand-beige pb-6 mb-8 text-left">
-        <h1 className="text-3xl font-bold font-title text-brand-navy">Evcil Hayvanla Gezilecek Yerler</h1>
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-yellow/30 border border-brand-yellow text-brand-navy rounded-full text-xs font-bold mb-3">
+          <span>🍽️ patili.co Mekan Rehberi</span>
+        </div>
+        <h1 className="text-3xl font-bold font-title text-brand-navy">Patili Mekanlar & Gezilecek Yerler</h1>
         <p className="text-gray-600 text-sm mt-1.5 max-w-3xl">
-          Tatilde sadece nerede kalacağınızı değil, dostunuzla nerede yürüyebileceğinizi, kahve içebileceğinizi, denize girebileceğinizi ve acil durumda nereye yakın olduğunuzu keşfedin.
+          Evcil hayvanınızla keyifle oturabileceğiniz kedi ve köpek dostu kafe, restoran, meyhane, plaj ve yürüyüş rotalarını keşfedin.
         </p>
       </div>
 

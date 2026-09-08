@@ -6,7 +6,9 @@ export default function Layout({ children, currentView, onViewChange }) {
 
   const menuItems = [
     { id: 'home', label: 'Ana Sayfa' },
-    { id: 'accommodations', label: 'Pet Dostu Oteller' },
+    { id: 'accommodations', label: 'Patili Seyahat' },
+    { id: 'experiences', label: 'Patili Mekanlar' },
+    { id: 'dog-walkers', label: 'Köpek Gezdirici' },
     { id: 'vets', label: 'Acil Veteriner' },
   ];
 
@@ -15,7 +17,7 @@ export default function Layout({ children, currentView, onViewChange }) {
       {/* Top Header Promo */}
       <div className="bg-brand-navy text-white text-xs py-2.5 px-4 text-center flex items-center justify-center gap-2 font-medium tracking-wide border-b border-white/10">
         <ShieldCheckIcon className="w-4 h-4 text-brand-yellow" />
-        <span>Türkiye'nin ilk %100 doğrulanmış, editör denetimli evcil hayvan seyahat platformu</span>
+        <span>Türkiye'nin ilk %100 doğrulanmış evcil hayvan seyahat, mekan ve hizmet platformu</span>
       </div>
 
       {/* Main Navbar */}
@@ -26,8 +28,7 @@ export default function Layout({ children, currentView, onViewChange }) {
             <div className="flex items-center cursor-pointer" onClick={() => onViewChange('home')}>
               <span className="text-2xl font-bold font-title text-brand-navy flex items-center gap-1.5">
                 <span className="text-3xl">🐾</span>
-                <span>Patiyle</span>
-                <span>Seyahat</span>
+                <span>patili<span className="text-brand-orange">.co</span></span>
               </span>
             </div>
 
@@ -41,7 +42,9 @@ export default function Layout({ children, currentView, onViewChange }) {
                     currentView === item.id || 
                     (item.id === 'guides' && currentView === 'guide-detail') || 
                     (item.id === 'accommodations' && currentView === 'accommodation-detail') || 
-                    (item.id === 'vets' && currentView === 'vet-detail')
+                    (item.id === 'vets' && currentView === 'vet-detail') ||
+                    (item.id === 'experiences' && currentView === 'experiences') ||
+                    (item.id === 'dog-walkers' && currentView === 'dog-walkers')
                       ? 'bg-brand-navy text-white font-bold'
                       : 'text-gray-700 hover:text-brand-navy hover:bg-brand-navy-light'
                   }`}
@@ -135,13 +138,13 @@ export default function Layout({ children, currentView, onViewChange }) {
           <div className="space-y-4">
             <span className="text-xl font-bold font-title text-white flex items-center gap-1.5">
               <span>🐾</span>
-              <span>Patiyle Seyahat</span>
+              <span>patili.co</span>
             </span>
             <p className="text-gray-300 text-sm leading-relaxed">
-              Türkiye'nin doğrulanmış evcil hayvan dostu otel ve seyahat rehberi. Editörlerimiz tarafından yerinde denetlenen ve doğruluğu kanıtlanan seyahat noktaları.
+              Türkiye'nin doğrulanmış evcil hayvan dostu otel, mekan (kafe & restoran), pet taksi, pet otel ve sağlık rehberi. Patili dostlarınızla birlikte hayatı kolaylaştıran güvenilir platform.
             </p>
             <div className="text-brand-yellow text-xs font-semibold">
-              Son Güncelleme: Ağustos 2026
+              Son Güncelleme: Eylül 2026
             </div>
           </div>
 
@@ -151,17 +154,32 @@ export default function Layout({ children, currentView, onViewChange }) {
             <ul className="space-y-2 text-sm text-gray-300">
               <li>
                 <button onClick={() => onViewChange('accommodations')} className="hover:text-white transition-colors">
-                  Pati Dostu Oteller
+                  Patili Seyahat (Oteller)
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onViewChange('experiences')} className="hover:text-white transition-colors">
+                  Patili Mekanlar (Kafe & Bar)
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onViewChange('taxis')} className="hover:text-white transition-colors">
+                  Pet Taksi
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onViewChange('boardings')} className="hover:text-white transition-colors">
+                  Pet Otel & Pansiyon
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onViewChange('dog-walkers')} className="hover:text-white transition-colors">
+                  Köpek Gezdiricileri
                 </button>
               </li>
               <li>
                 <button onClick={() => onViewChange('vets')} className="hover:text-white transition-colors">
                   7/24 Acil Veterinerler
-                </button>
-              </li>
-              <li>
-                <button onClick={() => onViewChange('methodology')} className="hover:text-white transition-colors">
-                  Değerlendirme Kriterleri
                 </button>
               </li>
             </ul>
@@ -261,7 +279,7 @@ export default function Layout({ children, currentView, onViewChange }) {
 
         {/* Copyright */}
         <div className="bg-[#051c2c] py-6 border-t border-brand-navy/30 text-center text-xs text-gray-400">
-          <p>© 2026 patiyleseyahat.com. Tüm hakları saklıdır. Hiçbir içerik izinsiz kopyalanamaz.</p>
+          <p>© 2026 patili.co. Tüm hakları saklıdır. Hiçbir içerik izinsiz kopyalanamaz.</p>
         </div>
       </footer>
     </div>
