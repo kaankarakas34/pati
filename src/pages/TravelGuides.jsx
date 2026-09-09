@@ -17,7 +17,7 @@ export default function TravelGuides({ guides, onViewChange }) {
   ];
 
   // Dynamic filtering
-  const page = useCatalog('guides', { q: searchQuery, category: selectedCategory });
+  const page = useCatalog('guides', { q: searchQuery, category: selectedCategory }, false, true, true);
   const filteredGuides = page.items;
 
   return (

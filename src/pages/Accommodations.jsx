@@ -71,7 +71,7 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
   };
 
   // Filter the hotels list
-  const page = useCatalog('hotels', { q: selectedCity, citySlug: searchFilters.citySlug, districtSlug: searchFilters.districtSlug, pet: selectedPet, type: selectedAccType, suitability: selectedSuitability, weightLimit: weightLimitFilter === 'no-limit' ? '0' : weightLimitFilter, extraFeeOnly, feature: selectedFeatures, collection: searchFilters.collection });
+  const page = useCatalog('hotels', { q: selectedCity, citySlug: searchFilters.citySlug, districtSlug: searchFilters.districtSlug, pet: selectedPet, type: selectedAccType, suitability: selectedSuitability, weightLimit: weightLimitFilter === 'no-limit' ? '0' : weightLimitFilter, extraFeeOnly, feature: selectedFeatures, collection: searchFilters.collection }, false, true, true);
   const filteredHotels = page.items;
 
   const verifiedCityHotels = filteredHotels.filter(hotel => hotel.verified);

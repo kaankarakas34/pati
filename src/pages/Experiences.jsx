@@ -15,7 +15,7 @@ export default function Experiences() {
 
   const categories = ['all', 'Plaj & Sahil', 'Kafe & Restoran', 'Rota & Aktivite'];
 
-  const page = useCatalog('experiences', { q: slugify(selectedCity).length >= 3 ? selectedCity : '', category: selectedCategory, pet: selectedPet });
+  const page = useCatalog('experiences', { q: slugify(selectedCity).length >= 3 ? selectedCity : '', category: selectedCategory, pet: selectedPet }, false, true, true);
   const filteredExperiences = page.items;
 
   const resetFilters = () => {

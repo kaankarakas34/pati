@@ -24,7 +24,7 @@ export default function Boardings({ boardings, onViewChange }) {
   ];
 
   // Dynamic filter application
-  const page = useCatalog('boardings', { q: selectedCity, category: categoryFilter, feature: [cameraRequired && 'Canlı kamera', noCageRequired && 'Kafessiz konaklama', staff247Required && '7/24 personel', vetRequired && 'Veteriner desteği'].filter(Boolean) });
+  const page = useCatalog('boardings', { q: selectedCity, category: categoryFilter, feature: [cameraRequired && 'Canlı kamera', noCageRequired && 'Kafessiz konaklama', staff247Required && '7/24 personel', vetRequired && 'Veteriner desteği'].filter(Boolean) }, false, true, true);
   const filteredBoardings = page.items;
 
   const resetFilters = () => {

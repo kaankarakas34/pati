@@ -10,7 +10,7 @@ export default function Taxis({ taxis = [], onViewChange }) {
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedPet, setSelectedPet] = useState('all');
 
-  const page = useCatalog('taxis', { q: selectedCity, pet: selectedPet });
+  const page = useCatalog('taxis', { q: selectedCity, pet: selectedPet }, false, true, true);
   const filteredTaxis = page.items;
 
   const resetFilters = () => {
