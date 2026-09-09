@@ -150,10 +150,12 @@ export default function DetailView({
   const [complaintText, setComplaintText] = useState('');
   const [complaintSubmitted, setComplaintSubmitted] = useState(false);
 
-  // Reviews system states
   const reviewPage = useCatalog('reviews', { targetId: item.id, status: 'approved' });
-  const nearbyVetsPage = useCatalog('vets', { city: item.city }, false, !isVet && Boolean(item.city));
-  const vets = nearbyVetsPage.items;
+  const nearbyVetsPage = useCatalog('vets', { city: item.city }, false, Boolean(item.city));
+  const nearbyHotelsPage = useCatalog('hotels', { city: item.city }, false, !isVet && !isTaxi && !isBoarding && Boolean(item.city));
+  const nearbyHotels = nearbyHotelsPage.items.filter(h => h.id !== item.id).slice(0, 3);
+  const nearbyVets = (isVet ? nearbyVetsPage.items.filter(v => v.id !== item.id) : nearbyVetsPage.items).slice(0, 3);
+  const vets = nearbyVets;
   const complaintPage = useCatalog('complaints', { targetId: item.id, status: 'approved' }, false, activeTab === 'complaints');
   const reviews = reviewPage.items.filter(review => review.status === 'approved');
   const [submissionError, setSubmissionError] = useState('');
@@ -361,7 +363,7 @@ export default function DetailView({
   ].filter(Boolean);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-left">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-left">
       {/* Breadcrumb Navigation */}
       <Breadcrumbs items={breadcrumbItems} onViewChange={onViewChange} />
 
@@ -381,7 +383,7 @@ export default function DetailView({
                   </span>
                 </div>
 
-                <h2 className="font-title text-2xl md:text-3xl font-bold text-gray-950 mb-2">{item.name}</h2>
+                <h1 className="font-title text-2xl md:text-3xl font-bold text-gray-950 mb-2">{item.name}</h1>
                 <p className="text-gray-600 text-sm leading-relaxed mb-6">{item.description}</p>
 
                 <div className="space-y-3 bg-white p-5 rounded-2xl border border-brand-navy/10 shadow-xs">
@@ -413,11 +415,15 @@ export default function DetailView({
               </div>
             </div>
           ) : (
-            <div className="h-72 md:h-[450px] bg-gray-200 rounded-3xl overflow-hidden shadow-sm relative">
+            <div className="h-72 md:h-[450px] aspect-video md:aspect-[16/9] bg-gray-200 rounded-3xl overflow-hidden shadow-sm relative">
               <img
                 src={shouldShowGallery ? selectedGalleryImage : item.imageUrl}
                 alt={item.name}
                 className="w-full h-full object-cover"
+                loading="eager"
+                fetchpriority="high"
+                width="800"
+                height="450"
               />
             
               <div className="absolute top-4 left-4 bg-brand-navy text-white text-xs px-3.5 py-1.5 rounded-full font-bold flex items-center gap-1 shadow-md">
@@ -448,6 +454,9 @@ export default function DetailView({
                     src={image}
                     alt={`${item.name} galeri ${index + 1}`}
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    width="160"
+                    height="90"
                   />
                 </button>
               ))}
@@ -1092,6 +1101,71 @@ export default function DetailView({
         </div>
       )}
 
+      {/* Related listings contextual internal linking */}
+      {((!isVet && nearbyHotels.length > 0) || (isVet && nearbyVets.length > 0)) && (
+        <section className="mt-12 pt-8 border-t border-brand-beige space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl md:text-2xl font-bold font-title text-brand-navy">
+                {item.city} Bölgesindeki Diğer {isVet ? 'Veteriner Klinikleri' : 'Evcil Hayvan Dostu Oteller'}
+              </h2>
+              <p className="text-xs text-gray-500 mt-1">
+                Aynı bölgede patili dostunuzla tercih edebileceğiniz alternatif doğrulanmış seçenekler
+              </p>
+            </div>
+            <a
+              href={isVet ? `/veterinerler?city=${slugify(item.city)}` : `/evcil-hayvan-dostu-oteller/${slugify(item.city)}`}
+              onClick={(e) => {
+                if (!e.ctrlKey && !e.metaKey) {
+                  e.preventDefault();
+                  onViewChange(isVet ? 'vets' : 'accommodations');
+                }
+              }}
+              className="text-xs font-bold text-brand-c2 hover:underline hidden sm:inline-block"
+            >
+              Tümünü Gör &rarr;
+            </a>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {(isVet ? nearbyVets : nearbyHotels).map(rel => {
+              const relPath = isVet ? getVetPath(rel) : getHotelPath(rel);
+              return (
+                <a
+                  key={rel.id}
+                  href={relPath}
+                  onClick={(e) => {
+                    if (!e.ctrlKey && !e.metaKey) {
+                      e.preventDefault();
+                      onViewChange(isVet ? 'vet-detail' : 'accommodation-detail', rel.id, relPath);
+                    }
+                  }}
+                  className="bg-white border border-brand-beige rounded-2xl p-4 hover:shadow-lg transition-all block text-left group"
+                >
+                  <div className="aspect-video w-full rounded-xl overflow-hidden bg-gray-100 mb-3">
+                    <img
+                      src={rel.imageUrl || (isVet ? 'https://patili.co/assets/vet-placeholder.jpg' : 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80')}
+                      alt={rel.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                      width="320"
+                      height="180"
+                    />
+                  </div>
+                  <h3 className="font-bold text-sm text-brand-navy group-hover:text-brand-c2 transition-colors line-clamp-1">
+                    {rel.name}
+                  </h3>
+                  <p className="text-2xs text-gray-500 mt-1">{rel.district}, {rel.city}</p>
+                  <span className="text-2xs font-bold text-brand-c2 mt-3 inline-block">
+                    İncele &rarr;
+                  </span>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
       {/* Feedback Correction Form Modal */}
       {feedbackOpen && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
@@ -1236,6 +1310,6 @@ export default function DetailView({
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 }

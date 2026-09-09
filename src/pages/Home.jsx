@@ -4,7 +4,7 @@ import {
   HotelIcon, DiningIcon, TaxiCarIcon, BoardingHomeIcon, DogWalkerIcon, VetClinicIcon,
   MoneyIcon, BeachIcon, ScaleIcon, SearchIcon, ArrowRightIcon
 } from '../components/PetIcons';
-import { slugify } from '../../lib/seo-slugs';
+import { slugify, getHotelPath } from '../../lib/seo-slugs';
 import SeoContentSection from '../components/SeoContentSection';
 import { seoContent } from '../data/seoContent';
 import PetTaxiAdBanner from '../components/PetTaxiAdBanner';
@@ -183,9 +183,15 @@ export default function Home({ onViewChange, setSearchFilters }) {
         {/* 2 Ana Odak Kartı */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Ana Odak 1: Patili Seyahat (Pati Dostu Oteller) */}
-          <div
-            onClick={() => onViewChange('accommodations')}
-            className="bg-white border border-brand-beige rounded-3xl p-8 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
+          <a
+            href="/evcil-hayvan-dostu-oteller"
+            onClick={(e) => {
+              if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                e.preventDefault();
+                onViewChange('accommodations');
+              }
+            }}
+            className="bg-white border border-brand-beige rounded-3xl p-8 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left block no-underline"
           >
             <div>
               <div className="w-14 h-14 rounded-full bg-brand-cream border border-brand-beige flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
@@ -200,12 +206,18 @@ export default function Home({ onViewChange, setSearchFilters }) {
               <span>Otelleri İncele</span>
               <ArrowRightIcon className="w-4 h-4 text-brand-c2" />
             </span>
-          </div>
+          </a>
 
           {/* Ana Odak 2: Patili Mekanlar (Kafe, Restoran & Bar) */}
-          <div
-            onClick={() => onViewChange('experiences')}
-            className="bg-white border border-brand-beige rounded-3xl p-8 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
+          <a
+            href="/patili-mekanlar"
+            onClick={(e) => {
+              if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                e.preventDefault();
+                onViewChange('experiences');
+              }
+            }}
+            className="bg-white border border-brand-beige rounded-3xl p-8 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left block no-underline"
           >
             <div>
               <div className="w-14 h-14 rounded-full bg-brand-cream border border-brand-beige flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
@@ -220,7 +232,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
               <span>Mekanları Keşfet</span>
               <ArrowRightIcon className="w-4 h-4 text-brand-c2" />
             </span>
-          </div>
+          </a>
         </div>
 
         {/* 4 Tamamlayıcı Hizmet Kutusu */}
@@ -238,9 +250,15 @@ export default function Home({ onViewChange, setSearchFilters }) {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {/* Kutu 1: Pet Taksi */}
-            <div
-              onClick={() => onViewChange('taxis')}
-              className="bg-white border border-brand-beige rounded-3xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
+            <a
+              href="/pet-taksi"
+              onClick={(e) => {
+                if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                  e.preventDefault();
+                  onViewChange('taxis');
+                }
+              }}
+              className="bg-white border border-brand-beige rounded-3xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left block no-underline"
             >
               <div>
                 <div className="w-12 h-12 rounded-full bg-brand-cream border border-brand-beige flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
@@ -252,12 +270,18 @@ export default function Home({ onViewChange, setSearchFilters }) {
                 <span>Taksileri İncele</span>
                 <ArrowRightIcon className="w-3.5 h-3.5 text-brand-c2" />
               </span>
-            </div>
+            </a>
 
             {/* Kutu 2: Pet Otel */}
-            <div
-              onClick={() => onViewChange('boardings')}
-              className="bg-white border border-brand-beige rounded-3xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
+            <a
+              href="/kedi-kopek-otelleri"
+              onClick={(e) => {
+                if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                  e.preventDefault();
+                  onViewChange('boardings');
+                }
+              }}
+              className="bg-white border border-brand-beige rounded-3xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left block no-underline"
             >
               <div>
                 <div className="w-12 h-12 rounded-full bg-brand-cream border border-brand-beige flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
@@ -269,12 +293,18 @@ export default function Home({ onViewChange, setSearchFilters }) {
                 <span>Pet Otelleri Gör</span>
                 <ArrowRightIcon className="w-3.5 h-3.5 text-brand-c2" />
               </span>
-            </div>
+            </a>
 
             {/* Kutu 3: Köpek Gezdiriciler */}
-            <div
-              onClick={() => onViewChange('dog-walkers')}
-              className="bg-white border border-brand-beige rounded-3xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
+            <a
+              href="/kopek-gezdiricileri"
+              onClick={(e) => {
+                if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                  e.preventDefault();
+                  onViewChange('dog-walkers');
+                }
+              }}
+              className="bg-white border border-brand-beige rounded-3xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left block no-underline"
             >
               <div>
                 <div className="w-12 h-12 rounded-full bg-brand-cream border border-brand-beige flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
@@ -286,12 +316,18 @@ export default function Home({ onViewChange, setSearchFilters }) {
                 <span>Gezdirici Bul</span>
                 <ArrowRightIcon className="w-3.5 h-3.5 text-brand-c2" />
               </span>
-            </div>
+            </a>
 
             {/* Kutu 4: 7-24 Veterinerler */}
-            <div
-              onClick={() => onViewChange('vets')}
-              className="bg-white border border-brand-beige rounded-3xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
+            <a
+              href="/veterinerler"
+              onClick={(e) => {
+                if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                  e.preventDefault();
+                  onViewChange('vets');
+                }
+              }}
+              className="bg-white border border-brand-beige rounded-3xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left block no-underline"
             >
               <div>
                 <div className="w-12 h-12 rounded-full bg-brand-cream border border-brand-beige flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
@@ -303,7 +339,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
                 <span>Nöbetçi Klinik Bul</span>
                 <ArrowRightIcon className="w-3.5 h-3.5 text-brand-c2" />
               </span>
-            </div>
+            </a>
           </div>
         </div>
 
@@ -327,89 +363,100 @@ export default function Home({ onViewChange, setSearchFilters }) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {featuredHotels.map(hotel => (
-            <div
-              key={hotel.id}
-              onClick={() => onViewChange('accommodation-detail', hotel.id)}
-              className="bg-white rounded-3xl overflow-hidden shadow-xs border border-brand-beige hover:shadow-xl transition-all duration-200 cursor-pointer flex flex-col justify-between"
-            >
-              <div>
-                {/* Image */}
-                <div className="relative h-48 bg-gray-200">
-                  <img
-                    src={hotel.imageUrl?.includes('images.unsplash.com') ? hotel.imageUrl.replace(/w=\d+/, 'w=400').replace(/q=\d+/, 'q=70') : hotel.imageUrl}
-                    alt={hotel.name}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  
-                  {hotel.verified !== false && (
-                    <div className="absolute top-3 left-3 bg-brand-navy text-white text-3xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1 shadow-sm">
-                      <VerifiedBadge className="w-3.5 h-3.5 text-white" />
-                      <span>Doğrulanmış Tesis</span>
-                    </div>
-                  )}
-
-                  {/* Suitability Score Badge */}
-                  <div className="absolute bottom-3 right-3 text-xs px-3.5 py-1 rounded-full font-black text-white shadow-md bg-brand-navy/90 backdrop-blur-xs flex items-center gap-1.5 border border-white/20">
-                    <StarIcon className="w-3.5 h-3.5 text-brand-c4 fill-current" />
-                    <span>Dost Uygunluğu:</span>
-                    <span className="text-brand-c4 font-extrabold">
-                      {(hotel.baseTrustScore || (hotel.suitability === 3 ? 9.5 : hotel.suitability === 2 ? 8.5 : 7.2)).toFixed(1)} / 10
-                    </span>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-5 space-y-3 text-left">
-                  <div className="flex items-center justify-between text-3xs text-gray-500 font-medium">
-                    <span>{hotel.type}</span>
-                    <span className="flex items-center gap-1">
-                      <LocationIcon className="w-3.5 h-3.5 text-brand-c3" /> {hotel.city}, {hotel.district}
-                    </span>
-                  </div>
-                  <h3 className="font-title text-base font-bold text-gray-900 line-clamp-1">{hotel.name}</h3>
-                  
-                  {/* Pet Fee Info Box */}
-                  <div className="pt-1">
-                    {hotel.extraFee === 'no' ? (
-                      <div className="bg-brand-c2/10 border border-brand-c2/20 text-brand-c2 font-extrabold text-3xs px-3.5 py-1.5 rounded-full flex items-center justify-between">
-                        <span>ÜCRETSİZ PET KABULÜ</span>
-                        <span>Ek Ücret Alınmıyor</span>
-                      </div>
-                    ) : (
-                      <div className="bg-brand-cream border border-brand-beige text-brand-c2 font-bold text-3xs px-3.5 py-1.5 rounded-full flex items-center justify-between">
-                        <span>PET ÜCRET POLİTİKASI</span>
-                        <span className="font-bold">{hotel.extraFee === 'Teyit bekliyor' || !hotel.extraFee ? 'Tesisle Teyit Edin' : hotel.extraFee}</span>
+          {featuredHotels.map(hotel => {
+            const hotelUrl = getHotelPath(hotel);
+            return (
+              <a
+                key={hotel.id}
+                href={hotelUrl}
+                onClick={(e) => {
+                  if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                    e.preventDefault();
+                    onViewChange('accommodation-detail', hotel.id);
+                  }
+                }}
+                className="bg-white rounded-3xl overflow-hidden shadow-xs border border-brand-beige hover:shadow-xl transition-all duration-200 cursor-pointer flex flex-col justify-between block no-underline text-inherit"
+              >
+                <div>
+                  {/* Image */}
+                  <div className="relative aspect-video w-full bg-gray-200">
+                    <img
+                      src={hotel.imageUrl?.includes('images.unsplash.com') ? hotel.imageUrl.replace(/w=\d+/, 'w=400').replace(/q=\d+/, 'q=70') : hotel.imageUrl}
+                      alt={hotel.name}
+                      width="400"
+                      height="225"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    
+                    {hotel.verified !== false && (
+                      <div className="absolute top-3 left-3 bg-brand-navy text-white text-3xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1 shadow-sm">
+                        <VerifiedBadge className="w-3.5 h-3.5 text-white" />
+                        <span>Doğrulanmış Tesis</span>
                       </div>
                     )}
+
+                    {/* Suitability Score Badge */}
+                    <div className="absolute bottom-3 right-3 text-xs px-3.5 py-1 rounded-full font-black text-white shadow-md bg-brand-navy/90 backdrop-blur-xs flex items-center gap-1.5 border border-white/20">
+                      <StarIcon className="w-3.5 h-3.5 text-brand-c4 fill-current" />
+                      <span>Dost Uygunluğu:</span>
+                      <span className="text-brand-c4 font-extrabold">
+                        {(hotel.baseTrustScore || (hotel.suitability === 3 ? 9.5 : hotel.suitability === 2 ? 8.5 : 7.2)).toFixed(1)} / 10
+                      </span>
+                    </div>
                   </div>
 
-                  {/* Accepted Pets & Weight Limit Bar */}
-                  <div className="flex items-center justify-between pt-2 border-t border-brand-beige text-xs">
-                    <div className="flex items-center gap-1.5 text-gray-600">
-                      <span className="text-3xs text-gray-700 font-bold">Kabul:</span>
-                      {hotel.allowedPets.includes('dog') && <DogIcon className="w-4 h-4 text-brand-c2" title="Köpek" />}
-                      {hotel.allowedPets.includes('cat') && <CatIcon className="w-4 h-4 text-brand-c2" title="Kedi" />}
-                      {hotel.allowedPets.includes('bird') && <BirdIcon className="w-4 h-4 text-brand-c2" title="Kuş" />}
-                      {hotel.allowedPets.includes('other') && <OtherIcon className="w-4 h-4 text-brand-c2" title="Diğer Dostlar" />}
+                  {/* Content */}
+                  <div className="p-5 space-y-3 text-left">
+                    <div className="flex items-center justify-between text-3xs text-gray-500 font-medium">
+                      <span>{hotel.type}</span>
+                      <span className="flex items-center gap-1">
+                        <LocationIcon className="w-3.5 h-3.5 text-brand-c3" /> {hotel.city}, {hotel.district}
+                      </span>
+                    </div>
+                    <h3 className="font-title text-base font-bold text-gray-900 line-clamp-1">{hotel.name}</h3>
+                    
+                    {/* Pet Fee Info Box */}
+                    <div className="pt-1">
+                      {hotel.extraFee === 'no' ? (
+                        <div className="bg-brand-c2/10 border border-brand-c2/20 text-brand-c2 font-extrabold text-3xs px-3.5 py-1.5 rounded-full flex items-center justify-between">
+                          <span>ÜCRETSİZ PET KABULÜ</span>
+                          <span>Ek Ücret Alınmıyor</span>
+                        </div>
+                      ) : (
+                        <div className="bg-brand-cream border border-brand-beige text-brand-c2 font-bold text-3xs px-3.5 py-1.5 rounded-full flex items-center justify-between">
+                          <span>PET ÜCRET POLİTİKASI</span>
+                          <span className="font-bold">{hotel.extraFee === 'Teyit bekliyor' || !hotel.extraFee ? 'Tesisle Teyit Edin' : hotel.extraFee}</span>
+                        </div>
+                      )}
                     </div>
 
-                    <span className="text-3xs bg-brand-c2/10 px-2.5 py-1 rounded-full text-brand-c2 font-bold">
-                      {hotel.weightLimit > 0 ? `Max ${hotel.weightLimit} kg` : 'Kilo Sınırı Yok'}
-                    </span>
+                    {/* Accepted Pets & Weight Limit Bar */}
+                    <div className="flex items-center justify-between pt-2 border-t border-brand-beige text-xs">
+                      <div className="flex items-center gap-1.5 text-gray-600">
+                        <span className="text-3xs text-gray-700 font-bold">Kabul:</span>
+                        {hotel.allowedPets.includes('dog') && <DogIcon className="w-4 h-4 text-brand-c2" title="Köpek" />}
+                        {hotel.allowedPets.includes('cat') && <CatIcon className="w-4 h-4 text-brand-c2" title="Kedi" />}
+                        {hotel.allowedPets.includes('bird') && <BirdIcon className="w-4 h-4 text-brand-c2" title="Kuş" />}
+                        {hotel.allowedPets.includes('other') && <OtherIcon className="w-4 h-4 text-brand-c2" title="Diğer Dostlar" />}
+                      </div>
+
+                      <span className="text-3xs bg-brand-c2/10 px-2.5 py-1 rounded-full text-brand-c2 font-bold">
+                        {hotel.weightLimit > 0 ? `Max ${hotel.weightLimit} kg` : 'Kilo Sınırı Yok'}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="p-4 text-right border-t border-brand-beige/50 bg-brand-cream/20">
-                <button className="w-full bg-brand-navy hover:bg-brand-c2 text-white transition-colors py-2.5 rounded-full text-xs font-bold border border-brand-navy/10 font-title">
-                  Tesis Detaylarını İncele &rarr;
-                </button>
-              </div>
-            </div>
-          ))}
+                <div className="p-4 text-right border-t border-brand-beige/50 bg-brand-cream/20">
+                  <span className="w-full bg-brand-navy group-hover:bg-brand-c2 text-white transition-colors py-2.5 rounded-full text-xs font-bold border border-brand-navy/10 font-title flex items-center justify-center">
+                    Tesis Detaylarını İncele &rarr;
+                  </span>
+                </div>
+              </a>
+            );
+          })}
         </div>
       </div>
 

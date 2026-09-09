@@ -30,13 +30,18 @@ export default function Breadcrumbs({ items = [], onViewChange }) {
               {isLast || !item.view ? (
                 <span className="text-brand-navy font-extrabold line-clamp-1">{item.label}</span>
               ) : (
-                <button
-                  type="button"
-                  onClick={() => onViewChange && onViewChange(item.view, item.id)}
+                <a
+                  href={item.url || '#'}
+                  onClick={(e) => {
+                    if (!e.ctrlKey && !e.metaKey && onViewChange) {
+                      e.preventDefault();
+                      onViewChange(item.view, item.id, item.url);
+                    }
+                  }}
                   className="text-gray-600 hover:text-brand-navy hover:underline transition-colors"
                 >
                   {item.label}
-                </button>
+                </a>
               )}
             </li>
           );

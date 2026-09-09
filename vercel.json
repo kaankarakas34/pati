@@ -241,7 +241,7 @@
     },
     {
       "source": "/:path*",
-      "destination": "/index.html"
+      "destination": "/api/index?__path=/:path*"
     }
   ]
 }

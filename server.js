@@ -14,6 +14,7 @@ import { createApiRouter, limitSubmission, asyncRoute } from './lib/api-router.j
 import { repository } from './db.js';
 import { seoContent, generateCombinationSeoContent } from './src/data/seoContent.js';
 import { findHotelBySlugs, getHotelPath, getVetPath, slugify, PROGRAMMATIC_CLUSTERS } from './lib/seo-slugs.js';
+import { renderHotelPreRenderHtml, renderVetPreRenderHtml, renderHomePreRenderHtml, render404PreRenderHtml } from './lib/seo-prerender.js';
 
 dotenv.config();
 
@@ -607,7 +608,7 @@ async function getHotelSeoData(query = {}) {
   }
 }
 
-function renderHotelSeoPage(res, hotel, complaintsList) {
+function renderHotelSeoPage(res, hotel, complaintsList, relatedHotels = []) {
   try {
     // Approved complaints count check
     const approvedComplaints = complaintsList.filter(c => c.targetId === hotel.id && c.status === 'approved');
@@ -616,26 +617,27 @@ function renderHotelSeoPage(res, hotel, complaintsList) {
 
     let html = getIndexHtmlTemplate();
 
-    // 1. Inject custom title for search engines
-    const title = escapeHtml(`${hotel.name} | ${hotel.city} Evcil Hayvan Dostu Otel Detayları | patili.co`);
+    // 1. Inject SERP-optimized title (30-60 chars)
+    const title = escapeHtml(`${hotel.name} - ${hotel.city} Pet Friendly Otel | patili.co`);
     html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
 
-    // 2. Inject custom meta description
-    const desc = escapeHtml(`${hotel.name} evcil hayvan kuralları: ${hotel.weightLimit > 0 ? `${hotel.weightLimit} kg kilo sınırı` : 'kilo sınırı yok'}, ${hotel.extraFee === 'no' ? 'ek ücret yok' : 'ek ücret uygulanır'}. ${(hotel.description || '').slice(0, 130)}...`);
+    // 2. Inject concise meta description (120-155 chars)
+    const desc = escapeHtml(`${hotel.name} ${hotel.city} evcil hayvan kuralları: ${hotel.weightLimit > 0 ? `${hotel.weightLimit} kg sınır` : 'kilo sınırı yok'}, ${hotel.extraFee === 'no' ? 'ek ücret yok' : 'ek ücret uygulanır'}. ${escapeHtml((hotel.description || '').slice(0, 75))}...`);
     html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${desc}" />`);
     
-    // Inject OpenGraph social tags dynamically
+    // Inject OpenGraph & Twitter social tags dynamically
     const ogTags = `
       <meta property="og:title" content="${title}" />
       <meta property="og:description" content="${desc}" />
       <meta property="og:image" content="${escapeHtml(hotel.imageUrl)}" />
       <meta property="og:type" content="place" />
       <meta property="og:url" content="${canonicalUrl}" />
+      <meta name="twitter:card" content="summary_large_image" />
       <link rel="canonical" href="${canonicalUrl}" />
     `;
     html = html.replace('</head>', `${ogTags}\n</head>`);
 
-    // 3. Inject dynamic JSON-LD Schema (Hotel + FAQPage) for GEO / VEO engines
+    // 3. Inject dynamic JSON-LD Schema (Hotel + FAQPage + BreadcrumbList)
     const faqEntity = hotel.faq ? hotel.faq.map(f => ({
       "@type": "Question",
       "name": f.q,
@@ -647,37 +649,59 @@ function renderHotelSeoPage(res, hotel, complaintsList) {
 
     const jsonLd = {
       "@context": "https://schema.org",
-      "@type": ["Hotel", "FAQPage"],
-      "name": hotel.name,
-      "description": hotel.description,
-      "image": hotel.imageUrl,
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": hotel.district,
-        "addressRegion": hotel.city,
-        "addressCountry": "TR"
-      },
-      "telephone": hotel.phone || "+90 252 444 0000",
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": trustScore,
-        "bestRating": "10",
-        "worstRating": "1",
-        "ratingCount": approvedComplaints.length + 1
-      },
-      "url": canonicalUrl,
-      "amenityFeature": (hotel.features || []).map(feat => ({
-        "@type": "LocationFeatureSpecification",
-        "name": feat,
-        "value": true
-      })),
-      "mainEntity": faqEntity
+      "@graph": [
+        {
+          "@type": "Hotel",
+          "@id": `${canonicalUrl}#hotel`,
+          "name": hotel.name,
+          "description": hotel.description,
+          "image": hotel.imageUrl,
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": hotel.district,
+            "addressRegion": hotel.city,
+            "addressCountry": "TR"
+          },
+          "telephone": hotel.phone || "+90 252 444 0000",
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": trustScore,
+            "bestRating": "10",
+            "worstRating": "1",
+            "ratingCount": approvedComplaints.length + 1
+          },
+          "url": canonicalUrl,
+          "amenityFeature": (hotel.features || []).map(feat => ({
+            "@type": "LocationFeatureSpecification",
+            "name": feat,
+            "value": true
+          }))
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Ana Sayfa", "item": "https://patili.co/" },
+            { "@type": "ListItem", "position": 2, "name": "Evcil Hayvan Dostu Oteller", "item": "https://patili.co/evcil-hayvan-dostu-oteller" },
+            { "@type": "ListItem", "position": 3, "name": `${hotel.city} Otelleri`, "item": `https://patili.co/evcil-hayvan-dostu-oteller/${slugify(hotel.city || '')}` },
+            { "@type": "ListItem", "position": 4, "name": hotel.name, "item": canonicalUrl }
+          ]
+        },
+        ...(faqEntity.length > 0 ? [{
+          "@type": "FAQPage",
+          "mainEntity": faqEntity
+        }] : [])
+      ]
     };
 
     const schemaScript = `<script type="application/ld+json">\n${serializeJsonLd(jsonLd)}\n</script>`;
     html = html.replace('</head>', `${schemaScript}\n</head>`);
 
-    res.send(html);
+    // 4. Inject semantic pre-rendered HTML into root div for search crawlers
+    const preRenderHtml = renderHotelPreRenderHtml(hotel, complaintsList, relatedHotels);
+    html = html.replace('<div id="root"></div>', `<div id="root">${preRenderHtml}</div>`);
+
+    res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+    return res.send(html);
   } catch (err) {
     console.error("SEO Prerender Error:", err);
     res.status(500).send("Bir hata oluştu.");
@@ -1202,7 +1226,13 @@ app.get('/otel/:city/:district/:hotelSlug', asyncRoute(async (req, res) => {
     return res.status(404).send("Tesis bulunamadı.");
   }
 
-  return renderHotelSeoPage(res, hotel, complaints);
+  let relatedHotels = [];
+  try {
+    const { hotels: cityHotels } = await getHotelSeoData({ citySlug: req.params.city, limit: 6 });
+    relatedHotels = cityHotels.filter(h => h.id !== hotel.id).slice(0, 3);
+  } catch {}
+
+  return renderHotelSeoPage(res, hotel, complaints, relatedHotels);
 }));
 
 // Preserve old links and consolidate SEO signals on the canonical URL.
@@ -1254,35 +1284,77 @@ app.get('/veteriner/:city/:district/:name', async (req, res) => {
       return res.status(404).send("Veteriner kliniği bulunamadı.");
     }
 
+    let relatedVets = [];
+    try {
+      const relatedResult = await repository.page('vets', { citySlug: req.params.city, limit: 6 }, true);
+      relatedVets = (relatedResult.data || []).filter(v => v.id !== vet.id).slice(0, 3);
+    } catch {}
 
     let html = getIndexHtmlTemplate();
 
-    const title = escapeHtml(`${vet.name} | ${vet.city} 7/24 Acil Nöbetçi Veteriner | patili.co`);
+    // 1. Inject SERP-optimized title (30-60 chars)
+    const title = escapeHtml(`${vet.name} - ${vet.district ? `${vet.district}, ` : ''}${vet.city} Veteriner | patili.co`);
     html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
 
-    const desc = escapeHtml(`${vet.name} 7/24 açık acil veteriner kliniği: ${vet.address || ''}. ${(vet.description || '').slice(0, 130)}...`);
+    // 2. Inject concise meta description (120-155 chars)
+    const desc = escapeHtml(`${vet.name} ${vet.city} 7/24 nöbetçi veteriner kliniği: ${escapeHtml(vet.address || '')}. Aşı, cerrahi ve acil veteriner sağlık hizmetleri.`);
     html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${desc}" />`);
 
+    const canonicalUrl = `https://patili.co${getVetPath(vet)}`;
+
+    // 3. Inject OpenGraph & Twitter tags
+    const ogTags = `
+      <link rel="canonical" href="${canonicalUrl}" />
+      <meta property="og:title" content="${title}" />
+      <meta property="og:description" content="${desc}" />
+      <meta property="og:type" content="business.business" />
+      <meta property="og:url" content="${canonicalUrl}" />
+      ${vet.imageUrl ? `<meta property="og:image" content="${escapeHtml(vet.imageUrl)}" />` : ''}
+      <meta name="twitter:card" content="summary_large_image" />
+    `;
+    html = html.replace('</head>', `${ogTags}\n</head>`);
+
+    // 4. Inject JSON-LD Schema (VeterinaryCare + BreadcrumbList)
     const jsonLd = {
       "@context": "https://schema.org",
-      "@type": "VeterinaryCare",
-      "name": vet.name,
-      "description": vet.description,
-      "image": vet.imageUrl,
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": vet.address,
-        "addressLocality": vet.district,
-        "addressRegion": vet.city,
-        "addressCountry": "TR"
-      },
-      "telephone": vet.phone
+      "@graph": [
+        {
+          "@type": "VeterinaryCare",
+          "@id": `${canonicalUrl}#clinic`,
+          "name": vet.name,
+          "description": vet.description || `${vet.name} veteriner kliniği ${vet.city}`,
+          "image": vet.imageUrl,
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": vet.address || '',
+            "addressLocality": vet.district,
+            "addressRegion": vet.city,
+            "addressCountry": "TR"
+          },
+          "telephone": vet.phone,
+          "url": canonicalUrl
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Ana Sayfa", "item": "https://patili.co/" },
+            { "@type": "ListItem", "position": 2, "name": "Veterinerler", "item": "https://patili.co/veterinerler" },
+            { "@type": "ListItem", "position": 3, "name": `${vet.city} Veterinerleri`, "item": `https://patili.co/veterinerler?city=${slugify(vet.city || '')}` },
+            { "@type": "ListItem", "position": 4, "name": vet.name, "item": canonicalUrl }
+          ]
+        }
+      ]
     };
 
     const schemaScript = `<script type="application/ld+json">\n${serializeJsonLd(jsonLd)}\n</script>`;
     html = html.replace('</head>', `${schemaScript}\n</head>`);
 
-    res.send(html);
+    // 5. Inject semantic pre-rendered HTML into root div
+    const preRenderHtml = renderVetPreRenderHtml(vet, relatedVets);
+    html = html.replace('<div id="root"></div>', `<div id="root">${preRenderHtml}</div>`);
+
+    res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+    return res.send(html);
   } catch (err) {
     res.status(500).send("Bir hata oluştu.");
   }
@@ -1340,14 +1412,45 @@ app.get('/rehber/:id', async (req, res) => {
   }
 });
 
-// Fallback: serve standard frontend shell with Home Page SEO & GEO metadata
-app.get('*', (req, res) => {
+const VALID_SPA_ROUTES = new Set([
+  '/', '/home',
+  '/evcil-hayvan-dostu-oteller',
+  '/kedi-kopek-otelleri',
+  '/pet-taksi',
+  '/veterinerler',
+  '/patili-mekanlar',
+  '/evcil-hayvanla-gezilecek-yerler',
+  '/kopek-gezdiricileri',
+  '/isletme-ekle',
+  '/evcil-hayvan-seyahat-rehberi',
+  '/trust-ads',
+  '/otel-zincirleri',
+  '/sihirbaz',
+  '/yonetici',
+  '/hukuki-metinler',
+  '/kullanim-kosullari',
+  '/gizlilik-politikasi',
+  '/kvkk-aydinlatma-metni',
+  '/cerez-politikasi',
+  '/acik-riza-metni',
+  '/otel-listeleme-sozlesmesi',
+  '/hizmet-veren-sozlesmesi',
+  '/kopek-gezdiren-sozlesmesi',
+  '/kopek-sahibi-sozlesmesi',
+  '/guvenlik-standartlari',
+  '/icerik-ve-degerlendirme-politikasi',
+  '/iletisim-ve-sikayet-proseduru',
+  ...PROGRAMMATIC_CLUSTERS.map(c => '/' + c.slug)
+]);
+
+// Fallback: serve standard frontend shell with Home Page SEO & GEO metadata, or real 404
+app.get('*', async (req, res) => {
   try {
-    let html = getIndexHtmlTemplate();
-    
-    // If requesting root path, inject organization & website schemas
     const path = req.path;
+
+    // If requesting root path, inject organization, website schemas and crawlable pre-rendered HTML
     if (path === '/' || path === '/home') {
+      let html = getIndexHtmlTemplate();
       const title = "patili.co | Türkiye'nin En Kapsamlı Evcil Hayvan Dostu Seyahat & Mekan Rehberi";
       html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
 
@@ -1359,6 +1462,7 @@ app.get('*', (req, res) => {
         <meta property="og:description" content="${desc}" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://patili.co/" />
+        <meta name="twitter:card" content="summary_large_image" />
       </head>`);
 
       const jsonLd = {
@@ -1391,11 +1495,43 @@ app.get('*', (req, res) => {
 
       const schemaScript = `<script type="application/ld+json">\n${serializeJsonLd(jsonLd)}\n</script>`;
       html = html.replace('</head>', `${schemaScript}\n</head>`);
+
+      // Inject semantic pre-rendered home HTML
+      let featuredHotels = [];
+      try {
+        const hotelSample = await repository.page('hotels', { limit: 3 });
+        featuredHotels = hotelSample.data || [];
+      } catch {}
+
+      const preRenderHtml = renderHomePreRenderHtml(featuredHotels);
+      html = html.replace('<div id="root"></div>', `<div id="root">${preRenderHtml}</div>`);
+
+      res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+      return res.send(html);
     }
 
-    res.send(html);
+    // Check if the requested path is a valid SPA route
+    if (VALID_SPA_ROUTES.has(path)) {
+      let html = getIndexHtmlTemplate();
+      res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+      return res.send(html);
+    }
+
+    // Static asset request that was not found
+    if (/\.[a-zA-Z0-9]+$/.test(path)) {
+      return res.status(404).send('Not Found');
+    }
+
+    // Non-existent route: Return real HTTP 404 with noindex and user-friendly 404 UI
+    let html = getIndexHtmlTemplate();
+    html = html.replace(/<title>.*?<\/title>/, '<title>Sayfa Bulunamadı (404) | patili.co</title>');
+    html = html.replace(/<meta name="robots" content=".*?" \/>/, '<meta name="robots" content="noindex, nofollow" />');
+    const preRender404 = render404PreRenderHtml();
+    html = html.replace('<div id="root"></div>', `<div id="root">${preRender404}</div>`);
+
+    return res.status(404).send(html);
   } catch (err) {
-    res.status(500).send("Ana sayfa yüklenirken hata oluştu.");
+    res.status(500).send("Sayfa yüklenirken hata oluştu.");
   }
 });
 
