@@ -13,28 +13,28 @@ export default function AdBanner({ type = 'banner', className = '', onViewChange
     switch (type) {
       case 'leaderboard':
         return {
-          title: "📢 SPONSORLU REKLAM ALANI",
+          title: "Sponsorlu Reklam Alanı",
           desc: "Tesisinizi ve markanızı Patiyle Seyahat ziyaretçileriyle buluşturun. Sponsorluk tekliflerimizi inceleyin.",
           cta: "Reklam Başvurusu Yap",
-          bg: "bg-gradient-to-r from-amber-50 to-orange-100 border border-brand-orange/30 text-brand-earth-dark",
-          layout: "flex flex-col sm:flex-row items-center justify-between px-6 py-3.5 rounded-xl gap-4 text-xs"
+          bg: "bg-gradient-to-r from-brand-cream to-white border border-brand-beige text-brand-c1",
+          layout: "flex flex-col sm:flex-row items-center justify-between px-6 py-3.5 rounded-full gap-4 text-xs"
         };
       case 'square':
         return {
-          title: "📢 Sponsorlu Reklam Alanı",
+          title: "Sponsorlu Reklam Alanı",
           desc: "Evcil hayvan dostu tesisinizi veya markanızı binlerce hayvanseverle buluşturun.",
           cta: "Reklam Ver & Öne Çık",
-          bg: "bg-gradient-to-br from-brand-navy/5 to-brand-cream border border-brand-navy/15 text-brand-navy",
-          layout: "flex flex-col p-5 rounded-2xl gap-3 text-xs text-left"
+          bg: "bg-white border border-brand-beige text-brand-c1",
+          layout: "flex flex-col p-5 rounded-3xl gap-3 text-xs text-left"
         };
       case 'banner':
       default:
         return {
-          title: "📢 Patiyle Seyahat Sponsorlu Alan",
+          title: "Patiyle Seyahat Sponsorlu Alan",
           desc: "Evcil hayvan kabul eden otel, pet taksi, klinik veya pet markanızı hedef kitlenizle buluşturmak için sponsor olun.",
           cta: "Sponsorluk Detayları",
-          bg: "bg-gradient-to-r from-brand-navy-light to-brand-cream border border-brand-navy/15 text-brand-navy",
-          layout: "flex flex-col md:flex-row items-center justify-between p-6 rounded-2xl gap-4 text-sm text-left"
+          bg: "bg-white border border-brand-beige text-brand-c1",
+          layout: "flex flex-col md:flex-row items-center justify-between p-6 rounded-3xl gap-4 text-sm text-left"
         };
     }
   };
