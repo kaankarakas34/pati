@@ -3,7 +3,7 @@ import CatalogPagination from '../components/CatalogPagination';
 import React, { useState, useEffect } from 'react';
 import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon } from '../components/PetIcons';
 import AdBanner from '../components/AdBanner';
-import { slugify } from '../../lib/seo-slugs';
+import { slugify, getHotelPath } from '../../lib/seo-slugs';
 import SeoContentSection from '../components/SeoContentSection';
 import { seoContent, generateCombinationSeoContent } from '../data/seoContent';
 
@@ -308,7 +308,9 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
                         </span>
                       </div>
 
-                      <h3 className="font-title text-lg font-bold text-gray-900 line-clamp-1">{hotel.name}</h3>
+                      <h3 className="font-title text-lg font-bold text-gray-900 line-clamp-1">
+                        <a href={getHotelPath(hotel)} className="hover:underline">{hotel.name}</a>
+                      </h3>
                       <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">{hotel.description}</p>
 
                       {/* Pet Fee Info Box */}
@@ -362,9 +364,12 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
 
                   {/* Detail Link Footer */}
                   <div className="p-4 text-right border-t border-brand-beige/50 mt-2 bg-brand-cream/20">
-                    <button className="w-full bg-brand-navy hover:bg-brand-navy-hover text-white transition-colors py-2.5 rounded-full text-xs font-bold border border-brand-navy/10 font-title">
+                    <a
+                      href={getHotelPath(hotel)}
+                      className="block w-full text-center bg-brand-navy hover:bg-brand-navy-hover text-white transition-colors py-2.5 rounded-full text-xs font-bold border border-brand-navy/10 font-title"
+                    >
                       Tesis Detaylarını İncele &rarr;
-                    </button>
+                    </a>
                   </div>
                 </div>
               ))}

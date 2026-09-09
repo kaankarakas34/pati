@@ -51,8 +51,8 @@ const CATEGORY_SEO = {
   },
   vets: {
     path: '/veterinerler',
-    title: '7/24 Acil Veteriner Klinikleri | patili.co',
-    description: 'Yakınınızdaki 7/24 açık acil veteriner kliniklerini, adres ve hizmet olanaklarıyla inceleyin.'
+    title: 'Veteriner Klinikleri & Hayvan Hastaneleri Rehberi | patili.co',
+    description: 'Türkiye genelindeki veteriner klinikleri ve hayvan hastaneleri rehberi. Adres, telefon ve veteriner sağlık hizmetleri.'
   },
   experiences: {
     path: '/patili-mekanlar',
