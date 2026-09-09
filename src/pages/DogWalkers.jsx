@@ -147,7 +147,7 @@ export default function DogWalkers({ onViewChange }) {
         {filteredWalkers.map(walker => (
           <div 
             key={walker.id}
-            className="bg-white rounded-3xl border-2 border-brand-navy/15 hover:border-brand-navy hover:shadow-lg transition-all duration-200 p-6 flex flex-col justify-between text-left relative overflow-hidden"
+            className="bg-white rounded-3xl border border-brand-beige hover:shadow-xl transition-all duration-200 p-6 flex flex-col justify-between text-left relative overflow-hidden"
           >
             <div className="space-y-4">
               <div className="flex items-start justify-between gap-4">

@@ -194,7 +194,7 @@ export default function GuideDetail({ guide, onViewChange }) {
                   <div
                     key={h.id}
                     onClick={() => onViewChange('accommodation-detail', h.id)}
-                    className="border-2 border-brand-navy/10 rounded-2xl overflow-hidden flex cursor-pointer hover:border-brand-navy hover:shadow-md transition-shadow bg-white"
+                    className="border border-brand-beige rounded-2xl overflow-hidden flex cursor-pointer hover:shadow-xl transition-all bg-white"
                   >
                     <img src={h.imageUrl} alt={h.name} className="w-24 h-24 object-cover" />
                     <div className="p-3 text-left flex flex-col justify-between">

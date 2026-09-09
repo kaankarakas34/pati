@@ -105,7 +105,7 @@ export default function Experiences() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {filteredExperiences.map(item => (
-                <article key={item.id} className="bg-white rounded-3xl overflow-hidden shadow-xs border-2 border-brand-navy/10 hover:border-brand-navy hover:shadow-md transition-all duration-200 text-left">
+                <article key={item.id} className="bg-white rounded-3xl overflow-hidden shadow-xs border border-brand-beige hover:shadow-xl transition-all duration-200 text-left">
                   <div className="relative h-52 bg-gray-200">
                     <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
                     <div className="absolute top-3 left-3 bg-brand-navy text-white text-3xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1 shadow-sm">

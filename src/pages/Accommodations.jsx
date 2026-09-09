@@ -264,7 +264,7 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
                 <div
                   key={hotel.id}
                   onClick={() => onViewChange('accommodation-detail', hotel.id)}
-                  className="bg-white rounded-3xl overflow-hidden shadow-xs border-2 border-brand-navy/10 hover:border-brand-navy hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col justify-between"
+                  className="bg-white rounded-3xl overflow-hidden shadow-xs border border-brand-beige hover:shadow-xl transition-all duration-200 cursor-pointer flex flex-col justify-between"
                 >
                   <div>
                     {/* Hotel Image Area */}

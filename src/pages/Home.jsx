@@ -168,7 +168,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
           {/* Ana Odak 1: Patili Seyahat (Pati Dostu Oteller) */}
           <div
             onClick={() => onViewChange('accommodations')}
-            className="bg-white border border-brand-beige hover:border-brand-c3 rounded-3xl p-8 hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
+            className="bg-white border border-brand-beige rounded-3xl p-8 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
           >
             <div>
               <div className="w-14 h-14 rounded-full bg-brand-cream border border-brand-beige flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
@@ -188,7 +188,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
           {/* Ana Odak 2: Patili Mekanlar (Kafe, Restoran & Bar) */}
           <div
             onClick={() => onViewChange('experiences')}
-            className="bg-white border border-brand-beige hover:border-brand-c3 rounded-3xl p-8 hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
+            className="bg-white border border-brand-beige rounded-3xl p-8 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
           >
             <div>
               <div className="w-14 h-14 rounded-full bg-brand-cream border border-brand-beige flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
@@ -223,7 +223,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
             {/* Kutu 1: Pet Taksi */}
             <div
               onClick={() => onViewChange('taxis')}
-              className="bg-white border border-brand-beige hover:border-brand-c3 rounded-3xl p-6 hover:shadow-md transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
+              className="bg-white border border-brand-beige rounded-3xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
             >
               <div>
                 <div className="w-12 h-12 rounded-full bg-brand-cream border border-brand-beige flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
@@ -243,7 +243,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
             {/* Kutu 2: Pet Otel */}
             <div
               onClick={() => onViewChange('boardings')}
-              className="bg-white border border-brand-beige hover:border-brand-c3 rounded-3xl p-6 hover:shadow-md transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
+              className="bg-white border border-brand-beige rounded-3xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
             >
               <div>
                 <div className="w-12 h-12 rounded-full bg-brand-cream border border-brand-beige flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
@@ -263,7 +263,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
             {/* Kutu 3: Köpek Gezdiriciler */}
             <div
               onClick={() => onViewChange('dog-walkers')}
-              className="bg-white border border-brand-beige hover:border-brand-c3 rounded-3xl p-6 hover:shadow-md transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
+              className="bg-white border border-brand-beige rounded-3xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
             >
               <div>
                 <div className="w-12 h-12 rounded-full bg-brand-cream border border-brand-beige flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
@@ -283,7 +283,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
             {/* Kutu 4: 7-24 Veterinerler */}
             <div
               onClick={() => onViewChange('vets')}
-              className="bg-white border border-brand-beige hover:border-brand-c3 rounded-3xl p-6 hover:shadow-md transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
+              className="bg-white border border-brand-beige rounded-3xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
             >
               <div>
                 <div className="w-12 h-12 rounded-full bg-brand-cream border border-brand-beige flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
@@ -326,7 +326,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
             <div
               key={hotel.id}
               onClick={() => onViewChange('accommodation-detail', hotel.id)}
-              className="bg-white rounded-3xl overflow-hidden shadow-xs border-2 border-brand-navy/10 hover:border-brand-navy hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col justify-between"
+              className="bg-white rounded-3xl overflow-hidden shadow-xs border border-brand-beige hover:shadow-xl transition-all duration-200 cursor-pointer flex flex-col justify-between"
             >
               <div>
                 {/* Image */}
@@ -463,7 +463,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
                 });
                 onViewChange('accommodations');
               }}
-              className="bg-white border border-brand-beige hover:border-brand-navy p-6 rounded-3xl text-center cursor-pointer hover:shadow-md transition-all group"
+              className="bg-white border border-brand-beige p-6 rounded-3xl text-center cursor-pointer hover:shadow-xl transition-all group"
             >
               <div className="inline-flex p-3 rounded-full bg-brand-cream group-hover:scale-110 transition-transform mb-4">
                 {pet.icon}
@@ -507,7 +507,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
               <div
                 key={idx}
                 onClick={() => goToAccWithFilter(collection.filter, collection.title)}
-                className="bg-white p-6 rounded-3xl border-2 border-brand-navy/15 hover:border-brand-navy cursor-pointer hover:shadow-md transition-all flex items-start gap-4"
+                className="bg-white p-6 rounded-3xl border border-brand-beige cursor-pointer hover:shadow-xl transition-all flex items-start gap-4"
               >
                 <div className="p-3 bg-brand-c2/10 rounded-full shrink-0">
                   {collection.icon}

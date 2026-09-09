@@ -135,7 +135,7 @@ export default function Vets({ onViewChange }) {
               {filteredVets.map(vet => (
                 <div
                   key={vet.id}
-                  className="bg-white rounded-3xl p-6 shadow-xs border-2 border-brand-navy/10 hover:border-brand-navy/30 transition-all duration-200 flex flex-col justify-between"
+                  className="bg-white rounded-3xl p-6 shadow-xs border border-brand-beige hover:shadow-xl transition-all duration-200 flex flex-col justify-between"
                 >
                   <div className="space-y-3 text-left">
                     {/* Header Row with Badges */}

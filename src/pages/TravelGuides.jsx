@@ -75,7 +75,7 @@ export default function TravelGuides({ guides, onViewChange }) {
             <div
               key={guide.id}
               onClick={() => onViewChange('guide-detail', guide.id)}
-              className="bg-white rounded-3xl overflow-hidden border-2 border-brand-navy/10 hover:border-brand-navy hover:shadow-md transition-shadow cursor-pointer flex flex-col justify-between"
+              className="bg-white rounded-3xl overflow-hidden border border-brand-beige hover:shadow-xl transition-all cursor-pointer flex flex-col justify-between"
             >
               <div className="p-6 space-y-4">
                 <div className="flex justify-between items-center text-3xs font-bold">

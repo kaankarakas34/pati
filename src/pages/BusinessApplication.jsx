@@ -242,7 +242,7 @@ export default function BusinessApplication({ onViewChange }) {
                     className={`p-3.5 rounded-2xl border-2 text-left transition-all flex flex-col justify-between ${
                       formData.businessType === type.id
                         ? 'border-brand-navy bg-brand-yellow/15 shadow-xs'
-                        : 'border-brand-beige hover:border-brand-navy/40 bg-white'
+                        : 'border-brand-beige hover:shadow-md bg-white'
                     }`}
                   >
                     <span className="text-2xl mb-1.5">{type.icon}</span>

@@ -86,7 +86,7 @@ export default function Taxis({ taxis = [], onViewChange }) {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {filteredTaxis.map(t => (
-                <div key={t.id} className="bg-white rounded-3xl p-6 border-2 border-brand-navy/10 hover:border-brand-navy transition-all shadow-sm flex flex-col justify-between text-left">
+                <div key={t.id} className="bg-white rounded-3xl p-6 border border-brand-beige hover:shadow-xl transition-all shadow-sm flex flex-col justify-between text-left">
                   <div>
                     <div className="flex justify-between items-start mb-3">
                       <div>
