@@ -234,15 +234,187 @@ export default function Layout({ children, currentView, onViewChange }) {
             </ul>
           </div>
 
-          {/* Yasal Sayfalar */}
+          {/* Yasal & Sözleşmeler */}
           <div>
-            <h4 className="font-title text-lg font-bold text-brand-c4 mb-4">Yasal</h4>
+            <h4 className="font-title text-lg font-bold text-brand-c4 mb-4">Hukuk & KVKK</h4>
             <ul className="space-y-2 text-sm text-gray-300">
-              <li><button onClick={() => onViewChange('legal-kvkk')} className="hover:text-white transition-colors">KVKK Aydınlatma Metni</button></li>
-              <li><button onClick={() => onViewChange('legal-terms')} className="hover:text-white transition-colors">Kullanım Koşulları</button></li>
-              <li><button onClick={() => onViewChange('legal-privacy')} className="hover:text-white transition-colors">Gizlilik Politikası</button></li>
-              <li><button onClick={() => onViewChange('legal-cookies')} className="hover:text-white transition-colors">Çerez Politikası</button></li>
+              <li>
+                <button onClick={() => onViewChange('kullanim-kosullari')} className="hover:text-white transition-colors text-left">
+                  Kullanım Koşulları
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onViewChange('ziyaretci-ve-uye')} className="hover:text-white transition-colors text-left">
+                  KVKK Aydınlatma Metni
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onViewChange('cerez-politikasi')} className="hover:text-white transition-colors text-left">
+                  Çerez Politikası
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onViewChange('acik-riza-metni')} className="hover:text-white transition-colors text-left">
+                  Açık Rıza Metni
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onViewChange('ticari-elektronik-ileti')} className="hover:text-white transition-colors text-left">
+                  Ticari Elektronik İleti Onayı
+                </button>
+              </li>
+              <li className="pt-2">
+                <button 
+                  onClick={() => onViewChange('legal-hub')} 
+                  className="text-brand-c4 hover:text-white font-bold text-xs flex items-center gap-1 transition-colors"
+                >
+                  <span>📜 Tüm Sözleşmeler (18 Belge)</span>
+                  <span>&rarr;</span>
+                </button>
+              </li>
             </ul>
+          </div>
+        </div>
+
+        {/* Kapsamlı Hukuki Metinler ve Sözleşmeler Bölümü (PDF Paketi) */}
+        <div className="border-t border-white/10 bg-[#161224] py-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 text-left">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+              <div>
+                <h4 className="font-title text-base font-bold text-white flex items-center gap-2">
+                  <span className="text-brand-c4">⚖️</span>
+                  <span>Patili.co Hukuki Metinler ve Sözleşmeler Paketi</span>
+                </h4>
+                <p className="text-xs text-gray-400 mt-1">
+                  Listeleme platformu, oteller, mekânlar, pet taksi, gezdiriciler, veterinerler ve KVKK uyumlu resmi sözleşme metinleri (Sürüm: v1.0 — 9 Eylül 2026).
+                </p>
+              </div>
+              <button
+                onClick={() => onViewChange('legal-hub')}
+                className="self-start sm:self-auto px-4 py-2 bg-white/10 hover:bg-white/20 text-brand-c4 border border-brand-c4/30 rounded-full text-xs font-bold transition-all whitespace-nowrap"
+              >
+                Hukuk Portalı Dizinini Aç &rarr;
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-xs">
+              {/* Kolon 1: Kullanıcı & Platform */}
+              <div className="space-y-3">
+                <h5 className="font-bold text-brand-c4 text-2xs uppercase tracking-wider">
+                  Genel & Kullanıcı Şartları
+                </h5>
+                <ul className="space-y-2 text-gray-300">
+                  <li>
+                    <button onClick={() => onViewChange('kullanim-kosullari')} className="hover:text-white transition-colors text-left">
+                      • Genel Platform Kullanım Koşulları & Sorumluluk Sınırları
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => onViewChange('kullanici-yorumlari')} className="hover:text-white transition-colors text-left">
+                      • Kullanıcı İçeriği, Puanlama ve Yorum Sözleşmesi
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => onViewChange('fikri-mulkiyet-ve-telif')} className="hover:text-white transition-colors text-left">
+                      • Fikri Mülkiyet, Marka ve İçerik Kullanım Koşulları
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => onViewChange('icerik-sikayet-kaldirma')} className="hover:text-white transition-colors text-left">
+                      • İçerik Şikâyet, İtiraz ve Yayından Kaldırma Politikası
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => onViewChange('dogrulama-rozeti')} className="hover:text-white transition-colors text-left">
+                      • Doğrulanmış İşletme ve Rozet Kullanım Koşulları
+                    </button>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Kolon 2: İşletme & Hizmet Sağlayıcı */}
+              <div className="space-y-3">
+                <h5 className="font-bold text-brand-c4 text-2xs uppercase tracking-wider">
+                  İşletme & Hizmet Listeleme Sözleşmeleri
+                </h5>
+                <ul className="space-y-2 text-gray-300">
+                  <li>
+                    <button onClick={() => onViewChange('otel-listeleme')} className="hover:text-white transition-colors text-left">
+                      • Evcil Hayvan Kabul Eden Otel Listeleme Sözleşmesi
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => onViewChange('mekan-listeleme')} className="hover:text-white transition-colors text-left">
+                      • Restoran, Kafe ve Mekân Listeleme Sözleşmesi
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => onViewChange('pet-otel-listeleme')} className="hover:text-white transition-colors text-left">
+                      • Pet Otel / Ev Hayvanı Barınma Yeri Sözleşmesi
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => onViewChange('pet-taksi-listeleme')} className="hover:text-white transition-colors text-left">
+                      • Pet Taksi / Transfer Hizmeti Listeleme Sözleşmesi
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => onViewChange('kopek-gezdirici-listeleme')} className="hover:text-white transition-colors text-left">
+                      • Köpek Gezdirici / Pet Walker Listeleme Sözleşmesi
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => onViewChange('veteriner-listeleme')} className="hover:text-white transition-colors text-left">
+                      • Veteriner Muayenehane ve Hastane Listeleme Sözleşmesi
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => onViewChange('isletme-bilgi-beyani')} className="hover:text-white transition-colors text-left">
+                      • İşletme Bilgi Beyanı, Belge Doğruluğu & Taahhüdü
+                    </button>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Kolon 3: KVKK, İletişim ve Reklam */}
+              <div className="space-y-3">
+                <h5 className="font-bold text-brand-c4 text-2xs uppercase tracking-wider">
+                  KVKK, Gizlilik, İletişim & Reklam
+                </h5>
+                <ul className="space-y-2 text-gray-300">
+                  <li>
+                    <button onClick={() => onViewChange('ziyaretci-ve-uye')} className="hover:text-white transition-colors text-left">
+                      • Ziyaretçi ve Üye KVKK Aydınlatma Metni
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => onViewChange('isletme-yetkilisi')} className="hover:text-white transition-colors text-left">
+                      • İşletme Yetkilisi & Sağlayıcı KVKK Aydınlatma Metni
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => onViewChange('acik-riza-metni')} className="hover:text-white transition-colors text-left">
+                      • Açık Rıza Metni Şablonu ve Prensipleri
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => onViewChange('cerez-politikasi')} className="hover:text-white transition-colors text-left">
+                      • Çerez Politikası ve Tercih Yönetimi Metni
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => onViewChange('ticari-elektronik-ileti')} className="hover:text-white transition-colors text-left">
+                      • Ticari Elektronik İleti Onay Metni (İYS)
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => onViewChange('reklam-ve-premium')} className="hover:text-white transition-colors text-left">
+                      • Ücretli, Vitrin & Premium Listeleme Kuralları
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
 

@@ -19,9 +19,16 @@ import Experiences from './pages/Experiences';
 import DogWalkers from './pages/DogWalkers';
 import AdApplication from './pages/AdApplication';
 import BusinessApplication from './pages/BusinessApplication';
+import LegalDocument from './pages/LegalDocument';
+import { LEGAL_DOCUMENTS } from './data/legalDocuments';
 import { getHotelPath, getVetPath } from '../lib/seo-slugs';
 
 const CATEGORY_SEO = {
+  'legal-hub': {
+    path: '/hukuki-metinler',
+    title: 'Hukuki Metinler ve Sözleşmeler Portalı | patili.co',
+    description: 'patili.co genel kullanım koşulları, otel ve mekan listeleme sözleşmeleri, KVKK metinleri ve güvenlik standartları.'
+  },
   'add-business': {
     path: '/isletme-ekle',
     title: 'İşletmeni Ekle | patili.co',
@@ -73,6 +80,21 @@ const CATEGORY_SEO = {
     description: 'Hilton, Radisson, Akra, Swissotel gibi otel zincirlerinin evcil hayvan politikaları, kilo sınırları ve aile dostu konaklama imkanları.'
   }
 };
+
+// Register legal documents in SEO routes
+LEGAL_DOCUMENTS.forEach(doc => {
+  CATEGORY_SEO[doc.slug] = {
+    path: doc.path,
+    title: `${doc.title} | patili.co`,
+    description: doc.summary
+  };
+  CATEGORY_SEO[doc.id] = CATEGORY_SEO[doc.slug];
+});
+
+CATEGORY_SEO['legal-terms'] = CATEGORY_SEO['kullanim-kosullari'];
+CATEGORY_SEO['legal-kvkk'] = CATEGORY_SEO['ziyaretci-ve-uye'];
+CATEGORY_SEO['legal-privacy'] = CATEGORY_SEO['ziyaretci-ve-uye'];
+CATEGORY_SEO['legal-cookies'] = CATEGORY_SEO['cerez-politikasi'];
 
 function App() {
   const [detailRecord, setDetailRecord] = useState(null);
@@ -379,9 +401,16 @@ function App() {
       } else if (path === '/isletme-ekle' || path === '/add-business') {
         setCurrentView('add-business');
         if (path !== CATEGORY_SEO['add-business'].path) window.history.replaceState(null, '', CATEGORY_SEO['add-business'].path);
+      } else if (path === '/hukuki-metinler' || path === '/sozlesmeler') {
+        setCurrentView('legal-hub');
       } else {
-        const view = path.replace('/', '');
-        setCurrentView(view || 'home');
+        const legalMatch = LEGAL_DOCUMENTS.find(d => d.path === path || `/${d.slug}` === path || `/${d.id}` === path);
+        if (legalMatch) {
+          setCurrentView(legalMatch.slug);
+        } else {
+          const view = path.replace('/', '');
+          setCurrentView(view || 'home');
+        }
       }
     };
 
@@ -498,15 +527,50 @@ function App() {
           />
         );
 
-      // Trust/Methodology & Legal sub-pages
-      case 'methodology':
-      case 'trust-how':
-      case 'trust-editorial':
-      case 'trust-correction':
+      // Hukuki Metinler ve Sözleşmeler Portalı & Alt Sayfaları
+      case 'legal-hub':
+      case 'hukuki-metinler':
+      case 'sozlesmeler':
+      case 'kullanim-kosullari':
+      case 'otel-listeleme':
+      case 'mekan-listeleme':
+      case 'pet-otel-listeleme':
+      case 'pet-taksi-listeleme':
+      case 'kopek-gezdirici-listeleme':
+      case 'veteriner-listeleme':
+      case 'dogrulama-rozeti':
+      case 'isletme-bilgi-beyani':
+      case 'kullanici-yorumlari':
+      case 'icerik-sikayet-kaldirma':
+      case 'reklam-ve-premium':
+      case 'ziyaretci-ve-uye':
+      case 'isletme-yetkilisi':
+      case 'acik-riza-metni':
+      case 'cerez-politikasi':
+      case 'ticari-elektronik-ileti':
+      case 'fikri-mulkiyet-ve-telif':
       case 'legal-kvkk':
       case 'legal-terms':
       case 'legal-privacy':
       case 'legal-cookies':
+        return (
+          <LegalDocument 
+            activeDocSlug={
+              currentView === 'legal-terms' ? 'kullanim-kosullari' :
+              currentView === 'legal-kvkk' || currentView === 'legal-privacy' ? 'ziyaretci-ve-uye' :
+              currentView === 'legal-cookies' ? 'cerez-politikasi' :
+              currentView === 'legal-hub' || currentView === 'hukuki-metinler' || currentView === 'sozlesmeler' ? null :
+              currentView
+            } 
+            onViewChange={handleViewChange} 
+          />
+        );
+
+      // Trust & Methodology sub-pages
+      case 'methodology':
+      case 'trust-how':
+      case 'trust-editorial':
+      case 'trust-correction':
         return (
           <Methodology activeSubView={currentView} />
         );
