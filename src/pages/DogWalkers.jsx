@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { VerifiedBadge, LocationIcon } from '../components/PetIcons';
 
 const MOCK_WALKERS = [
@@ -65,13 +65,48 @@ const MOCK_WALKERS = [
 ];
 
 export default function DogWalkers({ onViewChange }) {
+  const [walkers, setWalkers] = useState(MOCK_WALKERS);
   const [selectedCity, setSelectedCity] = useState('all');
   const [contactModal, setContactModal] = useState(null);
   const [requestSent, setRequestSent] = useState(false);
 
+  // Gezdirici Ol / Başvuru Modal States
+  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+  const [applyForm, setApplyForm] = useState({
+    fullName: '',
+    email: '',
+    phone: '',
+    city: 'İstanbul',
+    district: '',
+    hasDogExperience: '',
+    hourlyRate: '350',
+    bio: ''
+  });
+  const [applyLoading, setApplyLoading] = useState(false);
+  const [applySuccess, setApplySuccess] = useState(false);
+  const [applyError, setApplyError] = useState('');
+
+  // Sadece admin onaylı gezdiricileri sunucudan çek
+  useEffect(() => {
+    const fetchApprovedWalkers = async () => {
+      try {
+        const res = await fetch('/api/dog-walkers');
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            setWalkers(data);
+          }
+        }
+      } catch (err) {
+        console.warn('Gezdiriciler yüklenirken hata oluştu, varsayılan liste kullanılıyor:', err);
+      }
+    };
+    fetchApprovedWalkers();
+  }, []);
+
   const filteredWalkers = selectedCity === 'all' 
-    ? MOCK_WALKERS 
-    : MOCK_WALKERS.filter(w => w.city.toLowerCase() === selectedCity.toLowerCase());
+    ? walkers 
+    : walkers.filter(w => (w.city || '').toLowerCase() === selectedCity.toLowerCase());
 
   const handleRequestSubmit = (e) => {
     e.preventDefault();
@@ -82,13 +117,55 @@ export default function DogWalkers({ onViewChange }) {
     }, 2500);
   };
 
+  const handleApplySubmit = async (e) => {
+    e.preventDefault();
+    setApplyLoading(true);
+    setApplyError('');
+    try {
+      const res = await fetch('/api/dog-walker-applications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(applyForm)
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setApplyError(data.error || 'Başvuru gönderilirken bir hata oluştu.');
+        return;
+      }
+      setApplySuccess(true);
+      setApplyForm({
+        fullName: '',
+        email: '',
+        phone: '',
+        city: 'İstanbul',
+        district: '',
+        hasDogExperience: '',
+        hourlyRate: '350',
+        bio: ''
+      });
+    } catch (err) {
+      setApplyError('Bağlantı hatası oluştu. Lütfen daha sonra tekrar deneyiniz.');
+    } finally {
+      setApplyLoading(false);
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Header */}
       <div className="border-b border-brand-beige pb-6 mb-8 text-left">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-yellow/30 border border-brand-yellow text-brand-navy rounded-full text-xs font-bold mb-3">
-          <span>🦮 patili.co Gezdirici Ağı</span>
+        <div className="flex items-center justify-between flex-wrap gap-3 mb-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-yellow/30 border border-brand-yellow text-brand-navy rounded-full text-xs font-bold">
+            <span>🦮 patili.co Gezdirici Ağı</span>
+          </div>
+          <button
+            onClick={() => { setApplySuccess(false); setApplyError(''); setIsApplyModalOpen(true); }}
+            className="bg-brand-navy hover:bg-brand-navy-hover text-white text-xs font-bold font-title px-4 py-2 rounded-full shadow-xs flex items-center gap-1.5 transition-colors"
+          >
+            <span>🐾</span> Gezdirici Ol (Başvuru Yap)
+          </button>
         </div>
+
         <h1 className="text-3xl md:text-4xl font-bold font-title text-brand-navy">
           Köpek Gezdiricileri & Profesyonel Pet Bakıcıları
         </h1>
@@ -122,7 +199,16 @@ export default function DogWalkers({ onViewChange }) {
         </div>
       </div>
 
-      {/* Şehir Filtresi */}
+      {/* Önemli Bilgilendirme Notu / Disclaimer */}
+      <div className="bg-amber-50/90 border border-amber-200/90 text-amber-950 rounded-2xl p-4 sm:p-5 mb-8 flex items-start gap-3.5 text-left shadow-xs">
+        <span className="text-2xl shrink-0 select-none">⚖️</span>
+        <div className="text-xs sm:text-sm leading-relaxed">
+          <strong className="font-bold text-amber-900">Önemli Bilgilendirme: </strong>
+          patili.co köpek gezdiricilerinden hiçbir komisyon talep etmez ve sorumluluk kabul etmez; yorumlar ve tecrübesine göre karar veriniz.
+        </div>
+      </div>
+
+      {/* Şehir Filtresi ve Hızlı Başvuru Butonu */}
       <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
         <div className="flex items-center gap-2">
           <label className="text-xs font-bold text-brand-navy">Şehir:</label>
@@ -135,10 +221,21 @@ export default function DogWalkers({ onViewChange }) {
             <option value="İstanbul">İstanbul</option>
             <option value="Ankara">Ankara</option>
             <option value="İzmir">İzmir</option>
+            <option value="Antalya">Antalya</option>
+            <option value="Bursa">Bursa</option>
+            <option value="Muğla">Muğla</option>
           </select>
         </div>
-        <div className="text-xs text-gray-500 font-medium">
-          Toplam <strong>{filteredWalkers.length}</strong> doğrulanmış gezdirici listeleniyor
+        <div className="flex items-center gap-3">
+          <div className="text-xs text-gray-500 font-medium">
+            Toplam <strong>{filteredWalkers.length}</strong> onaylı gezdirici listeleniyor
+          </div>
+          <button 
+            onClick={() => { setApplySuccess(false); setApplyError(''); setIsApplyModalOpen(true); }}
+            className="text-xs font-bold text-brand-navy bg-brand-yellow/50 hover:bg-brand-yellow px-3 py-1.5 rounded-full border border-brand-yellow transition-colors"
+          >
+            + Gezdirici Ol
+          </button>
         </div>
       </div>
 
@@ -224,16 +321,185 @@ export default function DogWalkers({ onViewChange }) {
           <span className="text-brand-yellow font-bold text-xs uppercase tracking-wider">Kariyer & Ek Gelir</span>
           <h3 className="font-title font-bold text-2xl mt-1">Köpek Gezdiricisi Olmak İster misiniz?</h3>
           <p className="text-gray-300 text-sm mt-1.5 max-w-xl">
-            Hayvansever misiniz? patili.co gezdirici ağına katılın, mahallenizdeki köpeklerle yürüyerek ek gelir elde edin.
+            Hayvansever misiniz? patili.co gezdirici ağına katılın, mahallenizdeki köpeklerle yürüyerek ek gelir elde edin. Başvurunuz admin onayından sonra sayfada yayınlanır.
           </p>
         </div>
         <button 
-          onClick={() => alert("patili.co Gezdirici Başvuru Formu çok yakında aktif olacaktır. İlginiz için teşekkürler!")}
-          className="bg-brand-yellow hover:bg-brand-yellow-hover text-brand-navy font-bold px-6 py-3 rounded-full text-sm font-title whitespace-nowrap transition-colors"
+          onClick={() => { setApplySuccess(false); setApplyError(''); setIsApplyModalOpen(true); }}
+          className="bg-brand-yellow hover:bg-brand-yellow-hover text-brand-navy font-bold px-6 py-3 rounded-full text-sm font-title whitespace-nowrap transition-colors shadow-sm"
         >
           Gezdirici Başvurusu Yap
         </button>
       </div>
+
+      {/* Gezdirici Ol / Başvuru Modal */}
+      {isApplyModalOpen && (
+        <div className="fixed inset-0 z-50 bg-brand-navy/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border-2 border-brand-navy relative my-8 text-left max-h-[90vh] overflow-y-auto">
+            <button 
+              onClick={() => setIsApplyModalOpen(false)} 
+              className="absolute top-5 right-5 text-gray-400 hover:text-brand-navy font-bold text-xl leading-none"
+            >
+              ✕
+            </button>
+
+            {applySuccess ? (
+              <div className="py-8 text-center space-y-4">
+                <span className="text-5xl block">🎉</span>
+                <h3 className="font-title font-bold text-2xl text-brand-navy">Başvurunuz Alındı!</h3>
+                <p className="text-gray-600 text-sm leading-relaxed max-w-md mx-auto">
+                  Köpek gezdirici profil başvurunuz editörlerimize iletildi. Profil bilgileriniz ve tecrübeniz incelenip onaylandıktan sonra listede yayınlanacaktır.
+                </p>
+                <div className="pt-4">
+                  <button
+                    onClick={() => setIsApplyModalOpen(false)}
+                    className="bg-brand-navy hover:bg-brand-navy-hover text-white px-6 py-2.5 rounded-full text-xs font-bold font-title"
+                  >
+                    Tamam
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={handleApplySubmit} className="space-y-4">
+                <div>
+                  <div className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-brand-yellow/30 text-brand-navy text-3xs font-extrabold rounded-full mb-1">
+                    <span>🦮 Gezdirici Ağı</span>
+                  </div>
+                  <h3 className="font-title font-bold text-2xl text-brand-navy">
+                    Köpek Gezdiricisi Olun
+                  </h3>
+                  <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+                    patili.co köpek gezdiricilerinden <strong>hiçbir komisyon talep etmez</strong>. Başvurunuz admin editörleri tarafından incelenip onaylandıktan sonra profiliniz sayfada yayınlanacaktır.
+                  </p>
+                </div>
+
+                {applyError && (
+                  <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl font-medium">
+                    {applyError}
+                  </div>
+                )}
+
+                <div>
+                  <label className="text-xs font-bold text-brand-navy block mb-1">İsim Soyisim *</label>
+                  <input 
+                    required 
+                    type="text" 
+                    placeholder="Örn: Ayşe Demir" 
+                    value={applyForm.fullName}
+                    onChange={(e) => setApplyForm({ ...applyForm, fullName: e.target.value })}
+                    className="w-full text-sm border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy font-medium" 
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-bold text-brand-navy block mb-1">E-posta Adresi *</label>
+                    <input 
+                      required 
+                      type="email" 
+                      placeholder="ornek@mail.com" 
+                      value={applyForm.email}
+                      onChange={(e) => setApplyForm({ ...applyForm, email: e.target.value })}
+                      className="w-full text-sm border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy font-medium" 
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-brand-navy block mb-1">Telefon Numarası *</label>
+                    <input 
+                      required 
+                      type="tel" 
+                      placeholder="05XX XXX XX XX" 
+                      value={applyForm.phone}
+                      onChange={(e) => setApplyForm({ ...applyForm, phone: e.target.value })}
+                      className="w-full text-sm border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy font-medium" 
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-bold text-brand-navy block mb-1">Hizmet Şehri *</label>
+                    <select 
+                      value={applyForm.city}
+                      onChange={(e) => setApplyForm({ ...applyForm, city: e.target.value })}
+                      className="w-full text-sm border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy font-medium bg-white"
+                    >
+                      <option value="İstanbul">İstanbul</option>
+                      <option value="Ankara">Ankara</option>
+                      <option value="İzmir">İzmir</option>
+                      <option value="Antalya">Antalya</option>
+                      <option value="Bursa">Bursa</option>
+                      <option value="Muğla">Muğla</option>
+                      <option value="Eskişehir">Eskişehir</option>
+                      <option value="Diğer">Diğer</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-brand-navy block mb-1">İlçe / Bölge *</label>
+                    <input 
+                      required 
+                      type="text" 
+                      placeholder="Örn: Kadıköy / Moda" 
+                      value={applyForm.district}
+                      onChange={(e) => setApplyForm({ ...applyForm, district: e.target.value })}
+                      className="w-full text-sm border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy font-medium" 
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold text-brand-navy block mb-1">
+                    Daha önce köpek sahibi oldunuz mu veya gezdirme tecrübeniz var mı? *
+                  </label>
+                  <textarea 
+                    required 
+                    rows="3" 
+                    placeholder="Örn: 4 yıldır köpek sahibiyim. Daha önce komşularımın köpeklerini gezdirdim, büyük ve küçük ırklarla rahat iletişim kurabiliyorum..." 
+                    value={applyForm.hasDogExperience}
+                    onChange={(e) => setApplyForm({ ...applyForm, hasDogExperience: e.target.value })}
+                    className="w-full text-sm border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy font-medium" 
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-bold text-brand-navy block mb-1">Saatlik Ücret Beklentisi (₺)</label>
+                    <input 
+                      type="text" 
+                      placeholder="Örn: 350 ₺" 
+                      value={applyForm.hourlyRate}
+                      onChange={(e) => setApplyForm({ ...applyForm, hourlyRate: e.target.value })}
+                      className="w-full text-sm border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy font-medium" 
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-brand-navy block mb-1">Kısa Tanıtım / Bio</label>
+                    <input 
+                      type="text" 
+                      placeholder="Örn: Pozitif ve enerjik köpek aşığı..." 
+                      value={applyForm.bio}
+                      onChange={(e) => setApplyForm({ ...applyForm, bio: e.target.value })}
+                      className="w-full text-sm border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy font-medium" 
+                    />
+                  </div>
+                </div>
+
+                <div className="bg-brand-cream/60 p-3 rounded-xl border border-brand-beige text-3xs text-gray-600">
+                  🔒 Bilgileriniz güvenle işlenecek olup, editör incelemesinden sonra profiliniz onaylanıp yayına alınacaktır.
+                </div>
+
+                <button 
+                  type="submit" 
+                  disabled={applyLoading}
+                  className="w-full bg-brand-navy hover:bg-brand-navy-hover text-white py-3 rounded-full font-bold font-title text-sm transition-colors shadow-md disabled:opacity-50"
+                >
+                  {applyLoading ? 'Gönderiliyor...' : 'Gezdirici Başvurusunu Tamamla'}
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Contact / Request Modal */}
       {contactModal && (

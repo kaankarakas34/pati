@@ -34,6 +34,11 @@ export default function AdminPanel() {
   const [bizSubmissions, setBizSubmissions] = useState([]);
   const [bizLoading, setBizLoading] = useState(false);
 
+  // Dog Walker Applications ("Köpek Gezdiricileri") State
+  const [dogWalkerApps, setDogWalkerApps] = useState([]);
+  const [dogWalkerLoading, setDogWalkerLoading] = useState(false);
+  const [dogWalkerFilter, setDogWalkerFilter] = useState('all'); // all, pending, approved, rejected
+
   // Ambassador Management State (Only Admins Can Add/Delete)
   const [ambassadorsList, setAmbassadorsList] = useState([]);
   const [ambassadorsLoading, setAmbassadorsLoading] = useState(false);
@@ -111,6 +116,57 @@ export default function AdminPanel() {
       alert(`"${item.businessName}" işletme başvurusu onaylandı!`);
     } catch (err) {
       alert('Onaylama işlemi başarısız oldu.');
+    }
+  };
+
+  const loadDogWalkerApps = async () => {
+    setDogWalkerLoading(true);
+    try {
+      const res = await fetch('/api/admin/dog-walker-applications', {
+        headers: { 'x-admin-token': sessionStorage.getItem('admin_token') || '' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setDogWalkerApps(Array.isArray(data) ? data : []);
+      }
+    } catch (e) {
+      console.warn('Dog walker apps fetch failed', e);
+    } finally {
+      setDogWalkerLoading(false);
+    }
+  };
+
+  const handleUpdateDogWalkerStatus = async (id, status, verified = false) => {
+    try {
+      const res = await fetch(`/api/admin/dog-walker-applications/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-token': sessionStorage.getItem('admin_token') || ''
+        },
+        body: JSON.stringify({ status, verified })
+      });
+      if (res.ok) {
+        setDogWalkerApps(prev => prev.map(w => w.id === id ? { ...w, status, verified } : w));
+        alert(`Gezdirici durumu "${status === 'approved' ? 'Onaylandı (Yayında)' : status === 'rejected' ? 'Reddedildi' : 'Beklemede'}" olarak güncellendi!`);
+      }
+    } catch (err) {
+      alert('Durum güncellenirken hata oluştu.');
+    }
+  };
+
+  const handleDeleteDogWalker = async (id) => {
+    if (!window.confirm('Bu köpek gezdiricisi başvurusunu silmek istediğinize emin misiniz?')) return;
+    try {
+      const res = await fetch(`/api/admin/dog-walker-applications/${id}`, {
+        method: 'DELETE',
+        headers: { 'x-admin-token': sessionStorage.getItem('admin_token') || '' }
+      });
+      if (res.ok) {
+        setDogWalkerApps(prev => prev.filter(w => w.id !== id));
+      }
+    } catch (err) {
+      console.warn('Gezdirici silinemedi', err);
     }
   };
 
@@ -684,6 +740,9 @@ export default function AdminPanel() {
             <button onClick={() => { setActiveSubTab('ads'); setIsAdding(false); }} className={`pb-3 border-b-2 whitespace-nowrap ${activeSubTab === 'ads' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>Reklamlar</button>
             <button onClick={() => { setActiveSubTab('business-submissions'); setIsAdding(false); loadBizSubmissions(); }} className={`pb-3 border-b-2 relative whitespace-nowrap flex items-center gap-1.5 ${activeSubTab === 'business-submissions' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
               <span>🏢</span> İşletme Başvuruları
+            </button>
+            <button onClick={() => { setActiveSubTab('dog-walkers-mgmt'); setIsAdding(false); loadDogWalkerApps(); }} className={`pb-3 border-b-2 relative whitespace-nowrap flex items-center gap-1.5 ${activeSubTab === 'dog-walkers-mgmt' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
+              <span>🦮</span> Gezdirici Başvuruları
             </button>
             <button onClick={() => { setActiveSubTab('ambassadors-mgmt'); setIsAdding(false); loadAmbassadors(); }} className={`pb-3 border-b-2 relative whitespace-nowrap flex items-center gap-1.5 ${activeSubTab === 'ambassadors-mgmt' ? 'border-brand-green text-brand-green' : 'border-transparent text-gray-500'}`}>
               <span>🐾</span> Pati Elçileri
@@ -1757,6 +1816,171 @@ export default function AdminPanel() {
                       </div>
                     </article>
                   ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Tab: Köpek Gezdiricileri Başvuruları */}
+          {activeSubTab === 'dog-walkers-mgmt' && (
+            <div>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+                <div>
+                  <h3 className="font-title font-bold text-lg text-gray-950 flex items-center gap-2">
+                    <span>🦮</span> Köpek Gezdiricileri Başvuruları
+                  </h3>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Gezdirici olmak isteyenlerin başvuruları. Sadece "Onaylandı" durumundaki profiller <a href="/kopek-gezdiricileri" target="_blank" rel="noreferrer" className="text-brand-navy underline font-semibold">/kopek-gezdiricileri</a> sayfasında yayınlanır.
+                  </p>
+                </div>
+                <button 
+                  type="button" 
+                  onClick={loadDogWalkerApps} 
+                  className="border border-brand-navy text-brand-navy px-4 py-2 rounded-xl text-xs font-bold hover:bg-brand-navy-light"
+                >
+                  Listeyi Yenile
+                </button>
+              </div>
+
+              {/* Filtreleme Butonları */}
+              <div className="flex flex-wrap gap-2 mb-6">
+                <button
+                  type="button"
+                  onClick={() => setDogWalkerFilter('all')}
+                  className={`px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${dogWalkerFilter === 'all' ? 'bg-brand-navy text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                >
+                  Tümü ({dogWalkerApps.length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDogWalkerFilter('pending')}
+                  className={`px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${dogWalkerFilter === 'pending' ? 'bg-amber-500 text-white' : 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100'}`}
+                >
+                  ⏳ İnceleme Bekleyenler ({dogWalkerApps.filter(w => w.status === 'pending').length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDogWalkerFilter('approved')}
+                  className={`px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${dogWalkerFilter === 'approved' ? 'bg-emerald-600 text-white' : 'bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100'}`}
+                >
+                  ✓ Yayında / Onaylananlar ({dogWalkerApps.filter(w => w.status === 'approved').length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDogWalkerFilter('rejected')}
+                  className={`px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${dogWalkerFilter === 'rejected' ? 'bg-red-600 text-white' : 'bg-red-50 text-red-800 border border-red-200 hover:bg-red-100'}`}
+                >
+                  ✕ Reddedilenler ({dogWalkerApps.filter(w => w.status === 'rejected').length})
+                </button>
+              </div>
+
+              {dogWalkerLoading ? (
+                <p className="text-center py-10 text-sm text-gray-500">Gezdirici başvuruları yükleniyor...</p>
+              ) : dogWalkerApps.length === 0 ? (
+                <div className="bg-brand-cream border border-brand-beige rounded-2xl p-8 text-center text-gray-500 text-sm">
+                  <span className="text-3xl block mb-2">🦮</span>
+                  Henüz kayıtlı veya yeni bir gezdirici başvurusu bulunmuyor.
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {dogWalkerApps
+                    .filter(w => dogWalkerFilter === 'all' ? true : w.status === dogWalkerFilter)
+                    .map(walker => (
+                      <article key={walker.id} className="border-2 border-brand-navy/15 rounded-3xl bg-white p-6 shadow-xs text-left space-y-4">
+                        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                          <div className="space-y-2">
+                            <div className="flex items-center flex-wrap gap-2">
+                              <h4 className="font-title font-bold text-lg text-brand-navy">{walker.fullName || walker.name}</h4>
+                              <span className={`text-3xs font-bold px-2.5 py-0.5 rounded-full ${
+                                walker.status === 'approved' 
+                                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' 
+                                  : walker.status === 'rejected'
+                                  ? 'bg-red-100 text-red-800 border border-red-300'
+                                  : 'bg-amber-100 text-amber-800 border border-amber-300'
+                              }`}>
+                                {walker.status === 'approved' ? '✓ Yayında (Onaylandı)' : walker.status === 'rejected' ? '✕ Reddedildi' : '⏳ Onay Bekliyor'}
+                              </span>
+                              {walker.verified && (
+                                <span className="bg-blue-100 text-blue-800 text-3xs font-bold px-2 py-0.5 rounded-full">
+                                  ✓ Doğrulanmış Profil
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-xs text-gray-600">
+                              <span>📍 <strong>{walker.district}, {walker.city}</strong></span>
+                              <span>📞 <a href={`tel:${walker.phone}`} className="underline font-semibold text-brand-navy">{walker.phone}</a></span>
+                              <span>✉️ <a href={`mailto:${walker.email}`} className="underline text-brand-navy">{walker.email}</a></span>
+                              <span>💰 Saatlik Ücret: <strong>{walker.hourlyRate}</strong></span>
+                            </div>
+                          </div>
+
+                          <div className="flex flex-wrap items-center gap-2 shrink-0">
+                            {walker.status !== 'approved' && (
+                              <button
+                                type="button"
+                                onClick={() => handleUpdateDogWalkerStatus(walker.id, 'approved', true)}
+                                className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors shadow-xs"
+                              >
+                                ✓ Onayla & Yayına Al
+                              </button>
+                            )}
+                            {walker.status === 'approved' && (
+                              <button
+                                type="button"
+                                onClick={() => handleUpdateDogWalkerStatus(walker.id, 'pending', false)}
+                                className="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-3 py-2 rounded-xl transition-colors shadow-xs"
+                              >
+                                Onayı Kaldır (Beklet)
+                              </button>
+                            )}
+                            {walker.status !== 'rejected' && (
+                              <button
+                                type="button"
+                                onClick={() => handleUpdateDogWalkerStatus(walker.id, 'rejected', false)}
+                                className="border border-red-300 text-red-700 hover:bg-red-50 text-xs font-bold px-3 py-2 rounded-xl transition-colors"
+                              >
+                                Reddet
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteDogWalker(walker.id)}
+                              className="text-red-500 hover:text-red-700 text-xs font-semibold px-2 py-2 hover:underline"
+                            >
+                              Sil
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Deneyim ve Köpek Sahipliği Cevabı */}
+                        <div className="bg-amber-50/70 border border-amber-200/80 rounded-2xl p-4 text-xs space-y-1.5">
+                          <span className="font-bold text-amber-900 block text-2xs uppercase tracking-wider">
+                            🐕 Daha önce köpek sahibi oldunuz mu veya gezdirme tecrübeniz var mı?
+                          </span>
+                          <p className="text-amber-950 font-medium leading-relaxed">
+                            {walker.hasDogExperience || 'Belirtilmedi'}
+                          </p>
+                        </div>
+
+                        {/* Tanıtım / Bio */}
+                        {walker.bio && (
+                          <div className="bg-brand-cream/50 border border-brand-beige rounded-2xl p-4 text-xs space-y-1">
+                            <span className="font-bold text-brand-navy block text-3xs uppercase tracking-wider">
+                              Kısa Tanıtım / Özgeçmiş:
+                            </span>
+                            <p className="text-gray-700 leading-relaxed">
+                              {walker.bio}
+                            </p>
+                          </div>
+                        )}
+
+                        <div className="pt-2 border-t border-brand-beige flex items-center justify-between text-4xs text-gray-400">
+                          <span>Kayıt ID: {walker.id}</span>
+                          <span>Başvuru Tarihi: {walker.createdAt ? new Date(walker.createdAt).toLocaleString('tr-TR') : 'Bilinmiyor'}</span>
+                        </div>
+                      </article>
+                    ))}
                 </div>
               )}
             </div>

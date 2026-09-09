@@ -100,6 +100,95 @@ const ambassadorsList = [
 const businessSubmissions = [];
 const ambassadorApplications = [];
 
+const initialDogWalkers = [
+  {
+    id: 'walker-1',
+    name: 'Caner & Elif Pet Hizmetleri',
+    fullName: 'Caner & Elif Pet Hizmetleri',
+    phone: '0532 000 00 01',
+    email: 'caner.elif@example.com',
+    city: 'İstanbul',
+    district: 'Kadıköy / Moda',
+    rating: 4.9,
+    reviewCount: 48,
+    walkCount: 320,
+    hourlyRate: '350 ₺',
+    services: ['Bireysel Yürüyüş', 'Grup Yürüyüşü', 'Evde Ziyaret & Besleme'],
+    experience: '5 yıl deneyim',
+    hasDogExperience: '5 yıldır köpek sahibiyiz ve profesyonel köpek gezdiriciliği yapıyoruz.',
+    bio: 'Veteriner teknikerliği geçmişimizle köpeklerinizin karakterine uygun güvenli, tempolu yürüyüşler ve tuvalet rutinleri sağlıyoruz. Canlı GPS takibi ve fotoğraf güncellemeleri dahildir.',
+    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=faces',
+    verified: true,
+    status: 'approved',
+    createdAt: new Date('2025-01-10').toISOString()
+  },
+  {
+    id: 'walker-2',
+    name: 'Mert Aksoy (PatiDost)',
+    fullName: 'Mert Aksoy (PatiDost)',
+    phone: '0533 000 00 02',
+    email: 'mert.aksoy@example.com',
+    city: 'İstanbul',
+    district: 'Beşiktaş / Levent',
+    rating: 5.0,
+    reviewCount: 62,
+    walkCount: 510,
+    hourlyRate: '400 ₺',
+    services: ['Bireysel Yürüyüş', 'Temel İtaat Pekiştirme', 'Koşu & Egzersiz'],
+    experience: '4 yıl deneyim',
+    hasDogExperience: '4 yıldır köpek sahibiyim, pozitif pekiştirme sertifikam var.',
+    bio: 'Pozitif pekiştirme ve köpek davranışları sertifikalıyım. Büyük ırk ve enerjik köpekler için tempolu park koşuları ve güvenli yürüyüş seansları sunuyorum.',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=faces',
+    verified: true,
+    status: 'approved',
+    createdAt: new Date('2025-01-15').toISOString()
+  },
+  {
+    id: 'walker-3',
+    name: 'Zeynep Kaya',
+    fullName: 'Zeynep Kaya',
+    phone: '0535 000 00 03',
+    email: 'zeynep.kaya@example.com',
+    city: 'Ankara',
+    district: 'Çankaya / Tunalı',
+    rating: 4.8,
+    reviewCount: 31,
+    walkCount: 195,
+    hourlyRate: '300 ₺',
+    services: ['Bireysel Yürüyüş', 'Yavru Köpek Rutini', 'İlaç Takibi'],
+    experience: '3 yıl deneyim',
+    hasDogExperience: 'Yıllardır ailemizde köpek besliyoruz, yavru köpek bakımında tecrübeliyim.',
+    bio: 'Hassas ve çekingen köpeklerle sabırla iletişim kuruyorum. Seans sonu detaylı rota raporu, tuvalet bilgisi ve fotoğraf paylaşımı yapıyorum.',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=faces',
+    verified: true,
+    status: 'approved',
+    createdAt: new Date('2025-02-01').toISOString()
+  },
+  {
+    id: 'walker-4',
+    name: 'Ege & Pati Ekibi',
+    fullName: 'Ege & Pati Ekibi',
+    phone: '0536 000 00 04',
+    email: 'ege.pati@example.com',
+    city: 'İzmir',
+    district: 'Karşıyaka / Bostanlı',
+    rating: 4.9,
+    reviewCount: 55,
+    walkCount: 420,
+    hourlyRate: '320 ₺',
+    services: ['Sahil Yürüyüşü', 'Grup Sosyalleşme', 'Gündüz Bakımı'],
+    experience: '4 yıl deneyim',
+    hasDogExperience: 'İzmir sahil hattında 4 yıldır düzenli köpek gezdiriyorum.',
+    bio: 'Bostanlı sahil hattında güvenli kayış protokolleriyle düzenli yürüyüşler yapıyoruz. Sosyalleşme odaklı grup turları veya bireysel yürüyüş seçenekleri mevcuttur.',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=faces',
+    verified: true,
+    status: 'approved',
+    createdAt: new Date('2025-02-10').toISOString()
+  }
+];
+
+const dogWalkerApplications = [...initialDogWalkers];
+
 app.post('/api/admin/login', (req, res) => {
   const { username, password } = req.body || {};
   // Check against ambassadors list
@@ -272,6 +361,74 @@ app.patch('/api/ambassador-applications/:id', requireAdmin, (req, res) => {
   if (!appItem) return res.status(404).json({ error: 'Başvuru bulunamadı.' });
   if (status) appItem.status = status;
   res.json({ success: true, application: appItem });
+});
+
+// Köpek Gezdiricileri Public and Admin APIs
+app.get('/api/dog-walkers', (req, res) => {
+  const { city } = req.query || {};
+  let list = dogWalkerApplications.filter(w => w.status === 'approved');
+  if (city && city !== 'all') {
+    list = list.filter(w => (w.city || '').toLowerCase() === city.toLowerCase());
+  }
+  res.json(list);
+});
+
+app.post('/api/dog-walker-applications', async (req, res, next) => {
+  try {
+    const { fullName, email, phone, city, district, hasDogExperience, hourlyRate, bio } = req.body || {};
+    if (!fullName || !email || !phone || !city || !hasDogExperience) {
+      return res.status(400).json({ error: 'Lütfen zorunlu alanları (ad soyad, e-posta, telefon, şehir, tecrübe bilgisi) doldurun.' });
+    }
+
+    const newRecord = {
+      id: randomUUID(),
+      name: normalizeText(fullName, 120),
+      fullName: normalizeText(fullName, 120),
+      email: normalizeText(email, 180).toLowerCase(),
+      phone: normalizeText(phone, 40),
+      city: normalizeText(city, 100),
+      district: normalizeText(district || 'Merkez', 100),
+      hasDogExperience: normalizeText(hasDogExperience, 2000),
+      hourlyRate: hourlyRate ? (String(hourlyRate).includes('₺') ? String(hourlyRate) : `${hourlyRate} ₺`) : '300 ₺',
+      services: ['Bireysel Yürüyüş', 'Günlük Egzersiz'],
+      experience: 'Yeni Başvuru',
+      bio: normalizeText(bio || hasDogExperience, 2000),
+      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=faces',
+      rating: 5.0,
+      reviewCount: 0,
+      walkCount: 0,
+      verified: false,
+      status: 'pending',
+      createdAt: new Date().toISOString()
+    };
+
+    dogWalkerApplications.unshift(newRecord);
+    res.status(201).json({ success: true, id: newRecord.id });
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get('/api/admin/dog-walker-applications', requireAdmin, (req, res) => {
+  res.json(dogWalkerApplications);
+});
+
+app.patch('/api/admin/dog-walker-applications/:id', requireAdmin, (req, res) => {
+  const { id } = req.params;
+  const { status, verified } = req.body || {};
+  const walker = dogWalkerApplications.find(w => w.id === id);
+  if (!walker) return res.status(404).json({ error: 'Gezdirici kaydı bulunamadı.' });
+  if (status) walker.status = status;
+  if (typeof verified === 'boolean') walker.verified = verified;
+  res.json({ success: true, item: walker });
+});
+
+app.delete('/api/admin/dog-walker-applications/:id', requireAdmin, (req, res) => {
+  const { id } = req.params;
+  const idx = dogWalkerApplications.findIndex(w => w.id === id);
+  if (idx === -1) return res.status(404).json({ error: 'Gezdirici kaydı bulunamadı.' });
+  dogWalkerApplications.splice(idx, 1);
+  res.json({ success: true });
 });
 
 // ----------------------------------------------------
