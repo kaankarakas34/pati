@@ -533,10 +533,6 @@ export default function Home({ onViewChange, setSearchFilters }) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
             {/* Sol Kolon: Başlık ve Açıklama (7 Kolon) */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/10 text-brand-c4 rounded-full text-xs font-bold border border-white/15 shadow-sm font-title">
-                <span>patili.co İşletme Ağı</span>
-              </div>
-
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-title text-white leading-tight">
                 İşletmenizi <span className="text-brand-c4 underline decoration-brand-c4/50 decoration-4">patili.co'ya</span> Ekleyin!
               </h2>
