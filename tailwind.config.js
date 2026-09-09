@@ -16,35 +16,50 @@ export default {
       },
       colors: {
         brand: {
+          // Explicit user-provided color hierarchy
+          c1: '#201c33', // Deepest dark purple (text, dark headings, primary buttons)
+          c2: '#44385c', // Muted deep purple (secondary dark, borders, dark icons)
+          c3: '#765c92', // Medium soft purple (accents, interactive, badges)
+          c4: '#b98ad5', // Light lavender (soft pills, borders, highlights)
+          c5: '#ffc1ff', // Softest violet/pink tint (pale accents, subtle glows)
+          
+          // Semantic mappings for compatibility across codebase
+          navy: {
+            DEFAULT: '#201c33',
+            hover: '#191528',
+            light: '#F5F1F8'
+          },
+          purple: {
+            DEFAULT: '#44385c',
+            dark: '#201c33',
+            medium: '#765c92',
+            light: '#b98ad5',
+            pale: '#ffc1ff'
+          },
           green: {
-            DEFAULT: '#2D5A27',
-            dark: '#1E3F20',
-            light: '#EAF2EB',
-            hover: '#244720'
+            DEFAULT: '#44385c',
+            dark: '#201c33',
+            light: '#F5F1F8',
+            hover: '#352b49'
           },
           earth: {
-            DEFAULT: '#C87A53',
-            dark: '#8C4E35',
-            light: '#FAF0EB',
-            hover: '#B56740'
+            DEFAULT: '#765c92',
+            dark: '#44385c',
+            light: '#F5F1F8',
+            hover: '#5e4875'
           },
           orange: {
-            DEFAULT: '#F2994A',
-            light: '#FDF2E9',
-            hover: '#E28732'
+            DEFAULT: '#765c92',
+            light: '#F5F1F8',
+            hover: '#44385c'
           },
-          cream: '#FBFBFB',
-          beige: '#F6F4F1',
-          navy: {
-            DEFAULT: '#002842',
-            hover: '#001a2d',
-            light: '#E5EEFF'
-          },
+          cream: '#F7F4FA', // Subtle pale purple background (not pure white)
+          beige: '#EFEBF3', // Subtle separator/border
           yellow: {
-            DEFAULT: '#FFD100',
-            hover: '#e6bc00'
+            DEFAULT: '#b98ad5',
+            hover: '#a673c4'
           },
-          slate: '#59606D'
+          slate: '#765c92'
         }
       },
       fontFamily: {
