@@ -78,17 +78,16 @@ export default function Home({ onViewChange, setSearchFilters }) {
       {/* Hero Section */}
       <div className="bg-gradient-to-b from-brand-yellow/30 via-brand-beige/50 to-brand-cream py-12 md:py-16 border-b border-brand-navy/10">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white border border-brand-navy/10 rounded-full text-xs font-bold text-brand-navy shadow-sm">
-            <span>🐾 patili.co | Evcil Hayvan Dostu Yaşam & Seyahat Platformu</span>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white border border-brand-navy/10 rounded-full text-xs font-bold text-brand-c2 shadow-xs">
+            <span>🐾 Türkiye'nin En Kapsamlı Pet Friendly Platformu</span>
           </div>
 
           <h1 className="text-3xl md:text-5xl font-bold font-title text-brand-navy leading-tight">
-            Patili Dostunuzla Hayatı Paylaşın,<br />
-            <span className="text-brand-navy underline decoration-brand-yellow decoration-4">Kural Sürprizi Yaşamayın</span>
+            Patili Dostunuzla <span className="text-brand-navy underline decoration-brand-c4 decoration-4">Unutulmaz Anılar</span> Keşfedin 🐾
           </h1>
 
-          <p className="text-gray-700 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-            Türkiye genelindeki evcil hayvan kabul eden otelleri, patili mekanları (kafe, restoran, bar), pet taksileri, pet otelleri ve 7/24 acil veteriner kliniklerini editör doğrulamasıyla tek adreste keşfedin.
+          <p className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+            Türkiye'nin en kapsamlı pet friendly platformunda doğrulanmış otelleri, patili mekanları ve tüm hizmetleri güvenle keşfedin.
           </p>
 
           {/* Quick Filter Bar */}
