@@ -23,7 +23,7 @@ export default function AdminPanel() {
   const [ambassadorName, setAmbassadorName] = useState(
     () => sessionStorage.getItem('admin_ambassador_name') || 'Pati Elçisi'
   );
-  const [loginTab, setLoginTab] = useState('ambassador'); // 'ambassador' or 'admin'
+  const [loginTab, setLoginTab] = useState('admin'); // 'admin' or 'ambassador'
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
@@ -253,34 +253,18 @@ export default function AdminPanel() {
     }
   };
 
-  const handleDemoAmbassadorLogin = () => {
-    sessionStorage.setItem('admin_authenticated', 'true');
-    sessionStorage.setItem('admin_token', 'ambassador-session-token');
-    sessionStorage.setItem('admin_role', 'ambassador');
-    sessionStorage.setItem('admin_ambassador_name', 'Merve & Zeytin (Pati Elçisi)');
-    setIsAuthenticated(true);
-    setUserRole('ambassador');
-    setAmbassadorName('Merve & Zeytin (Pati Elçisi)');
-    setActiveSubTab('experiences');
-    setIsAdding(false);
-    setLoginError('');
-  };
+  const [loginLoading, setLoginLoading] = useState(false);
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setLoginError('');
-
-    // Ambassador direct login check (user enters elci or pati123)
-    if (loginTab === 'ambassador' && (username.toLowerCase() === 'elci' || username.toLowerCase() === 'demo' || password === 'pati123' || password === 'elci123')) {
-      handleDemoAmbassadorLogin();
-      return;
-    }
+    setLoginLoading(true);
 
     try {
       const res = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username: username.trim(), password: password.trim() })
       });
       const data = await res.json();
       if (!res.ok || !data.token) {
@@ -301,11 +285,9 @@ export default function AdminPanel() {
         setActiveSubTab('experiences');
       }
     } catch (err) {
-      if (loginTab === 'ambassador') {
-        handleDemoAmbassadorLogin();
-      } else {
-        setLoginError('Giriş servisine ulaşılamadı.');
-      }
+      setLoginError('Giriş servisine ulaşılamadı. Lütfen sunucu durumunu kontrol edin.');
+    } finally {
+      setLoginLoading(false);
     }
   };
 
@@ -582,24 +564,6 @@ export default function AdminPanel() {
             </p>
           </div>
 
-          {loginTab === 'ambassador' && (
-            <div className="bg-amber-50/70 border border-brand-yellow rounded-2xl p-3.5 text-xs text-brand-navy">
-              <div className="font-bold flex items-center justify-between mb-1">
-                <span>🐾 Hızlı Test / Demo Erişimi:</span>
-                <button
-                  type="button"
-                  onClick={handleDemoAmbassadorLogin}
-                  className="bg-brand-navy hover:bg-brand-navy-hover text-white text-3xs font-extrabold px-3 py-1 rounded-full shadow-2xs transition-colors"
-                >
-                  Tek Tıkla Giriş Yap &rarr;
-                </button>
-              </div>
-              <p className="text-3xs text-gray-600">
-                Kullanıcı Adı: <strong>elci</strong> | Şifre: <strong>pati123</strong>
-              </p>
-            </div>
-          )}
-
           <form onSubmit={handleLoginSubmit} className="space-y-4">
             {loginError && (
               <div className="bg-red-50 border-l-4 border-red-500 p-3 rounded text-xs text-red-700 font-medium">
@@ -613,10 +577,11 @@ export default function AdminPanel() {
                 <input
                   type="text"
                   required
+                  disabled={loginLoading}
                   placeholder={loginTab === 'ambassador' ? 'elci veya e-postanız' : 'Kullanıcı adınız'}
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-3 outline-none focus:border-brand-navy"
+                  className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-3 outline-none focus:border-brand-navy disabled:bg-gray-100"
                 />
               </div>
 
@@ -625,19 +590,28 @@ export default function AdminPanel() {
                 <input
                   type="password"
                   required
+                  disabled={loginLoading}
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-3 outline-none focus:border-brand-navy"
+                  className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-3 outline-none focus:border-brand-navy disabled:bg-gray-100"
                 />
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full bg-brand-navy hover:bg-brand-navy-hover text-white py-3 rounded-full text-sm font-bold font-title transition-colors shadow-md border border-brand-navy/10 mt-2"
+              disabled={loginLoading}
+              className="w-full bg-brand-navy hover:bg-brand-navy-hover text-white py-3 rounded-full text-sm font-bold font-title transition-colors shadow-md border border-brand-navy/10 mt-2 disabled:opacity-50 flex items-center justify-center gap-2"
             >
-              {loginTab === 'ambassador' ? 'Pati Elçisi Olarak Giriş Yap' : 'Yönetici Girişi Yap'}
+              {loginLoading ? (
+                <>
+                  <span className="animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full" />
+                  <span>Giriş Yapılıyor...</span>
+                </>
+              ) : (
+                loginTab === 'ambassador' ? 'Pati Elçisi Olarak Giriş Yap' : 'Yönetici Girişi Yap'
+              )}
             </button>
           </form>
         </div>
@@ -1673,7 +1647,7 @@ export default function AdminPanel() {
                       <input
                         required
                         type="text"
-                        placeholder="Örn: pati123"
+                        placeholder="En az 8 karakterli güçlü şifre"
                         value={ambassadorFormState.password}
                         onChange={e => setAmbassadorFormState({ ...ambassadorFormState, password: e.target.value })}
                         className="w-full text-xs border-2 border-brand-navy/20 rounded-xl p-2.5 outline-none focus:border-brand-navy bg-white font-mono"

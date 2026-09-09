@@ -95,19 +95,7 @@ function isValidHttpUrl(value) {
   }
 }
 
-const ambassadorsList = [
-  {
-    id: 'elci-1',
-    fullName: 'Demo Pati Elçisi',
-    username: 'elci',
-    password: 'pati123',
-    email: 'elci@patili.co',
-    phone: '0555 123 45 67',
-    city: 'İstanbul',
-    notes: 'Varsayılan topluluk temsilcisi',
-    createdAt: new Date().toISOString()
-  }
-];
+const ambassadorsList = [];
 
 const businessSubmissions = [];
 const ambassadorApplications = [];
@@ -203,14 +191,14 @@ const dogWalkerApplications = [...initialDogWalkers];
 
 app.post('/api/admin/login', (req, res) => {
   const { username, password } = req.body || {};
-  // Check against ambassadors list
+  // Check against ambassadors list if any exist
   const matchedAmbassador = ambassadorsList.find(a => a.username === username && a.password === password);
-  if (matchedAmbassador || (username === 'elci' && (password === 'pati123' || password === 'elci123'))) {
+  if (matchedAmbassador) {
     return res.json({
       success: true,
       token: ADMIN_TOKEN || 'ambassador-session-token',
       role: 'ambassador',
-      name: matchedAmbassador ? matchedAmbassador.fullName : 'Pati Elçisi (Topluluk)'
+      name: matchedAmbassador.fullName
     });
   }
 
