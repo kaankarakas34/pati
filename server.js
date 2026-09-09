@@ -14,7 +14,7 @@ import { createApiRouter, limitSubmission, asyncRoute } from './lib/api-router.j
 import { repository } from './db.js';
 import { seoContent, generateCombinationSeoContent } from './src/data/seoContent.js';
 import { findHotelBySlugs, findClusterBySlug, getHotelPath, getVetPath, slugify, PROGRAMMATIC_CLUSTERS } from './lib/seo-slugs.js';
-import { renderHotelPreRenderHtml, renderVetPreRenderHtml, renderHomePreRenderHtml, render404PreRenderHtml, renderCategoryOrClusterPreRenderHtml, renderServicePreRenderHtml } from './lib/seo-prerender.js';
+import { renderHotelPreRenderHtml, renderVetPreRenderHtml, renderHomePreRenderHtml, render404PreRenderHtml, renderCategoryOrClusterPreRenderHtml, renderServicePreRenderHtml, renderGuidePreRenderHtml } from './lib/seo-prerender.js';
 import { getEditorialArticleForCity, getEditorialArticleForCluster, POPULAR_CITIES } from './lib/editorial-guides.js';
 
 dotenv.config();
@@ -825,7 +825,7 @@ app.get('/sitemap.xml', async (req,res,next) => {
     }
     await addCatalog('hotels', getHotelPath);
     await addCatalog('vets', getVetPath);
-    await addCatalog('guides', item => `/rehber/${encodeURIComponent(item.id)}`);
+    await addCatalog('guides', item => `/rehber/${encodeURIComponent(item.slug || item.id)}`);
 
     // Add valid city landing pages that actually have listed hotels
     try {
@@ -1039,7 +1039,14 @@ app.get('/veteriner/:city/:district/:name', async (req, res) => {
 app.get('/rehber/:id', async (req, res) => {
   try {
     const guideId = req.params.id;
-    const guide = await repository.one('guides', guideId);
+    let guide = await repository.one('guides', guideId);
+
+    if (!guide) {
+      const bySlug = await pool.query('SELECT * FROM public.guides WHERE slug = $1 OR id = $1 LIMIT 1', [guideId]);
+      if (bySlug.rows.length) {
+        guide = mapRow(bySlug.rows[0]);
+      }
+    }
 
     if (!guide) {
       return res.status(404).send("Rehber bulunamadı.");
@@ -1047,40 +1054,75 @@ app.get('/rehber/:id', async (req, res) => {
 
     let html = getIndexHtmlTemplate();
 
+    const guideSlug = guide.slug || guide.id;
+    const canonicalUrl = `https://patili.co/rehber/${encodeURIComponent(guideSlug)}`;
+
     // Custom titles
-    const title = escapeHtml(`${guide.title} | Seyahat Rehberi | patili.co`);
+    const title = escapeHtml(`${guide.seoTitle || guide.title} | patili.co`);
     html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
 
-    const desc = escapeHtml(guide.summary);
+    const desc = escapeHtml(guide.seoDesc || guide.summary || '');
     html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${desc}" />`);
 
-    // Injected Article JSON-LD schema
+    // Canonical link
+    html = html.replace(/<link rel="canonical" href=".*?" \/>/, `<link rel="canonical" href="${canonicalUrl}" />`);
+
+    // OpenGraph & Twitter
+    html = html.replace(/<meta property="og:title" content=".*?" \/>/, `<meta property="og:title" content="${title}" />`);
+    html = html.replace(/<meta property="og:description" content=".*?" \/>/, `<meta property="og:description" content="${desc}" />`);
+    html = html.replace(/<meta property="og:url" content=".*?" \/>/, `<meta property="og:url" content="${canonicalUrl}" />`);
+
+    // Injected Article & FAQ JSON-LD schema
     const jsonLd = {
       "@context": "https://schema.org",
       "@type": "NewsArticle",
       "headline": guide.title,
       "description": guide.summary,
       "datePublished": guide.publishedAt,
-      "dateModified": guide.updatedAt,
+      "dateModified": guide.updatedAt || guide.publishedAt,
+      "mainEntityOfPage": canonicalUrl,
       "author": {
         "@type": "Person",
-        "name": guide.author.name,
-        "jobTitle": guide.author.role
+        "name": guide.author?.name || 'patili.co Editör Masası',
+        "jobTitle": guide.author?.role || 'Seyahat Yazarı'
       },
       "publisher": {
         "@type": "Organization",
         "name": "patili.co",
+        "url": "https://patili.co",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://images.unsplash.com/photo-1544568100-847a948585b9?auto=format&fit=crop&w=80&q=80"
+          "url": "https://patili.co/logo.png"
         }
       }
     };
 
-    const schemaScript = `<script type="application/ld+json">\n${serializeJsonLd(jsonLd)}\n</script>`;
-    html = html.replace('</head>', `${schemaScript}\n</head>`);
+    let faqScript = '';
+    if (Array.isArray(guide.faq) && guide.faq.length > 0) {
+      const faqLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": guide.faq.map(item => ({
+          "@type": "Question",
+          "name": item.q,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": item.a
+          }
+        }))
+      };
+      faqScript = `<script type="application/ld+json">\n${serializeJsonLd(faqLd)}\n</script>\n`;
+    }
 
-    res.send(html);
+    const schemaScript = `<script type="application/ld+json">\n${serializeJsonLd(jsonLd)}\n</script>\n${faqScript}`;
+    html = html.replace('</head>', `${schemaScript}</head>`);
+
+    // Inject semantic pre-rendered HTML into <div id="root"></div> for non-JS crawlers
+    const preRenderHtml = renderGuidePreRenderHtml(guide);
+    html = html.replace('<div id="root"></div>', `<div id="root">${preRenderHtml}</div>`);
+
+    res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+    return res.send(html);
 
   } catch (err) {
     res.status(500).send("Bir hata oluştu.");

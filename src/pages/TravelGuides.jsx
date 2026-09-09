@@ -71,44 +71,53 @@ export default function TravelGuides({ guides, onViewChange }) {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredGuides.map(guide => (
-            <div
-              key={guide.id}
-              onClick={() => onViewChange('guide-detail', guide.id)}
-              className="bg-white rounded-3xl overflow-hidden border border-brand-beige hover:shadow-xl transition-all cursor-pointer flex flex-col justify-between"
-            >
-              <div className="p-6 space-y-4">
-                <div className="flex justify-between items-center text-3xs font-bold">
-                  <span className="bg-brand-navy-light text-brand-navy px-2.5 py-1 rounded-full font-bold uppercase">
-                    {guide.category}
-                  </span>
-                  <span className="text-gray-400 font-medium">Güncelleme: {guide.updatedAt}</span>
-                </div>
-                <h3 className="font-title text-lg font-bold text-gray-900 hover:text-brand-navy transition-colors line-clamp-2 leading-snug">
-                  {guide.title}
-                </h3>
-                <p className="text-xs text-gray-600 line-clamp-3 leading-relaxed">
-                  {guide.summary}
-                </p>
-              </div>
-
-              {/* Footer row with author and vet checked indicator */}
-              <div className="px-6 pb-6 pt-3 border-t border-brand-beige flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <img src={guide.author.imageUrl} alt={guide.author.name} className="w-8 h-8 rounded-full object-cover" />
-                  <div className="text-left">
-                    <p className="text-2xs font-bold text-gray-800">{guide.author.name}</p>
-                    <p className="text-4xs text-gray-400">{guide.author.role}</p>
+          {filteredGuides.map(guide => {
+            const guideUrl = `/rehber/${guide.slug || guide.id}`;
+            return (
+              <a
+                key={guide.id}
+                href={guideUrl}
+                onClick={(e) => {
+                  if (!e.ctrlKey && !e.metaKey) {
+                    e.preventDefault();
+                    onViewChange('guide-detail', guide.slug || guide.id);
+                  }
+                }}
+                className="bg-white rounded-3xl overflow-hidden border border-brand-beige hover:shadow-xl transition-all cursor-pointer flex flex-col justify-between block text-left"
+              >
+                <div className="p-6 space-y-4">
+                  <div className="flex justify-between items-center text-3xs font-bold">
+                    <span className="bg-brand-navy-light text-brand-navy px-2.5 py-1 rounded-full font-bold uppercase">
+                      {guide.category}
+                    </span>
+                    <span className="text-gray-400 font-medium">Güncelleme: {guide.updatedAt}</span>
                   </div>
+                  <h3 className="font-title text-lg font-bold text-gray-900 hover:text-brand-navy transition-colors line-clamp-2 leading-snug">
+                    {guide.title}
+                  </h3>
+                  <p className="text-xs text-gray-600 line-clamp-3 leading-relaxed">
+                    {guide.summary}
+                  </p>
                 </div>
-                {guide.vetChecked && (
-                  <span className="text-4xs bg-brand-orange-light text-brand-orange hover:bg-brand-orange hover:text-white px-2 py-0.5 rounded font-bold border border-brand-orange/30">
-                    🩺 Vet Onaylı
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
+
+                {/* Footer row with author and vet checked indicator */}
+                <div className="px-6 pb-6 pt-3 border-t border-brand-beige flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <img src={guide.author.imageUrl} alt={guide.author.name} className="w-8 h-8 rounded-full object-cover" />
+                    <div className="text-left">
+                      <p className="text-2xs font-bold text-gray-800">{guide.author.name}</p>
+                      <p className="text-4xs text-gray-400">{guide.author.role}</p>
+                    </div>
+                  </div>
+                  {guide.vetChecked && (
+                    <span className="text-4xs bg-brand-orange-light text-brand-orange hover:bg-brand-orange hover:text-white px-2 py-0.5 rounded font-bold border border-brand-orange/30">
+                      🩺 Vet Onaylı
+                    </span>
+                  )}
+                </div>
+              </a>
+            );
+          })}
         </div>
       )}
       <CatalogPagination page={page} />

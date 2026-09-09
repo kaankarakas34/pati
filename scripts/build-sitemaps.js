@@ -78,8 +78,8 @@ export async function generateSitemaps(client, emit, { origin, batchSize = 250, 
       for (const row of rows) await add(getVetPath(row), row.modified_at);
     }
     for (const [table, prefix] of [['guides', '/rehber/']]) {
-      for await (const rows of keysetRows(client, table, batchSize, 'id,modified_at::text AS modified_at')) {
-        for (const row of rows) await add(prefix + encodeURIComponent(row.id), row.modified_at);
+      for await (const rows of keysetRows(client, table, batchSize, 'id,slug,modified_at::text AS modified_at')) {
+        for (const row of rows) await add(prefix + encodeURIComponent(row.slug || row.id), row.modified_at);
       }
     }
     // Location pages use the existing hotel location index and a tuple cursor.

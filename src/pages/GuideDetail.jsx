@@ -27,15 +27,16 @@ export default function GuideDetail({ guide, onViewChange }) {
       },
       "publisher": {
         "@type": "Organization",
-        "name": "Patiyle Seyahat",
+        "name": "patili.co",
+        "url": "https://patili.co",
         "logo": {
           "@type": "ImageObject",
-          "url": "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>"
+          "url": "https://patili.co/logo.png"
         }
       },
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": window.location.href
+        "@id": `https://patili.co/rehber/${guide.slug || guide.id}`
       }
     };
 

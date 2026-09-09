@@ -94,6 +94,26 @@ test('All P0 clusters, city landing pages, and service directories return HTTP 2
       path: '/veterinerler',
       expectedStatus: 200,
       mustContain: ['Veteriner Klinikleri & Hayvan Hastaneleri Rehberi']
+    },
+    {
+      path: '/rehber/kopek-dostu-oteller-rehberi-nedir-fiyatlari-nasil-secilir',
+      expectedStatus: 200,
+      mustContain: ['Köpek Dostu Oteller Rehberi', 'Özet & Hızlı Cevap (GEO / VEO)', 'NewsArticle', 'FAQPage']
+    },
+    {
+      path: '/rehber/turkiyenin-en-iyi-kopek-dostu-otelleri-ve-bolge-rehberi',
+      expectedStatus: 200,
+      mustContain: ['Türkiye\'nin En İyi Köpek Dostu Otelleri', 'Bodrum', 'Kaş', 'Çeşme', 'Bolu & Abant']
+    },
+    {
+      path: '/rehber/evcil-hayvan-seyahati-rehberi-ucak-araba-fiyatlar-ve-kurallar',
+      expectedStatus: 200,
+      mustContain: ['Evcil Hayvan Seyahati Rehberi', '8 Kg Ağırlık Kuralı', 'IATA', 'Pet Taksi']
+    },
+    {
+      path: '/otel/istanbul/sile/agva-teras-garden-hotel-bungalow',
+      expectedStatus: 200,
+      mustContain: ['Köpek Dostu Otel mi?', 'Özet & Doğrudan Bilgi (GEO)', 'Hotel', 'Ağva Teras Garden']
     }
   ];
 

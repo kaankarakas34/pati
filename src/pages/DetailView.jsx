@@ -651,6 +651,21 @@ export default function DetailView({
         {/* Tab 1: Editorial */}
         {activeTab === 'editorial' && (
           <div className="space-y-8">
+            {/* GEO / VEO Direct Answer Card */}
+            {!isBoarding && !isUtility && (
+              <div className="bg-brand-navy-light/35 border-2 border-brand-navy/15 rounded-3xl p-5 md:p-6 text-sm">
+                <h4 className="font-title font-bold text-brand-navy text-base mb-2 flex items-center gap-2">
+                  <span>💡</span> {item.name} Köpek Dostu Otel mi? Evcil Hayvan Seyahati Koşulları
+                </h4>
+                <p className="text-gray-800 leading-relaxed font-medium text-xs md:text-sm">
+                  {item.name}, {item.city} {item.district} bölgesinde evcil hayvan (kedi ve köpek) kabul eden doğrulanmış bir tesistir. 
+                  {item.weightLimit > 0 ? ` Maksimum ${item.weightLimit} kg kilo sınırı uygulanmaktadır.` : ' Herhangi bir kilo kısıtlaması aranmamaktadır.'} 
+                  {item.extraFee === 'no' ? ' Evcil hayvan konaklaması tamamen ücretsizdir.' : ` Evcil hayvan için ek ücret: ${item.extraFee}.`} 
+                  Girişte aşı karnesi ibrazı zorunludur.
+                </p>
+              </div>
+            )}
+
             {/* Editorial Summary */}
             <div className="space-y-3">
               <h3 className="font-title text-xl font-bold text-gray-950">Editoryal İnceleme Özeti</h3>
@@ -662,7 +677,7 @@ export default function DetailView({
             {/* Why Chosen */}
             {item.whySelected && (
               <div className="bg-brand-navy-light/35 border-l-4 border-brand-navy p-5 rounded-r-2xl">
-                <h4 className="font-title font-bold text-brand-navy text-base mb-1">Patiyle Seyahat Neden Bu Tesisi Seçti?</h4>
+                <h4 className="font-title font-bold text-brand-navy text-base mb-1">patili.co Neden Bu Tesisi Seçti?</h4>
                 <p className="text-sm text-gray-700 leading-relaxed">{item.whySelected}</p>
               </div>
             )}
