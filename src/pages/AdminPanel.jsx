@@ -551,9 +551,9 @@ export default function AdminPanel() {
           </div>
 
           <div className="text-center space-y-2">
-            <span className="text-4xl block">
-              {loginTab === 'ambassador' ? '⭐🐾' : '🛡️'}
-            </span>
+            <div className="flex justify-center mb-1">
+              <img src="/logo.png" alt="patili.co" className="h-10 w-auto object-contain" />
+            </div>
             <h2 className="font-title text-2xl md:text-3xl font-extrabold text-brand-navy">
               {loginTab === 'ambassador' ? 'Pati Elçisi Girişi' : 'Yönetici Girişi'}
             </h2>

@@ -25,11 +25,12 @@ export default function Layout({ children, currentView, onViewChange }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-20">
             {/* Logo */}
-            <div className="flex items-center cursor-pointer" onClick={() => onViewChange('home')}>
-              <span className="text-2xl font-bold font-title text-brand-navy flex items-center gap-1.5">
-                <span className="text-2xl text-brand-c2">🐾</span>
-                <span>patili<span className="text-brand-c4">.co</span></span>
-              </span>
+            <div className="flex items-center cursor-pointer select-none py-2" onClick={() => onViewChange('home')}>
+              <img
+                src="/logo.png"
+                alt="patili.co"
+                className="h-10 sm:h-12 w-auto object-contain transition-transform hover:scale-105"
+              />
             </div>
 
             {/* Desktop Menu */}
@@ -121,8 +122,41 @@ export default function Layout({ children, currentView, onViewChange }) {
         {children}
       </main>
 
+      {/* Social Media Follow Section */}
+      <section className="mt-14 bg-gradient-to-r from-amber-50/70 via-purple-50/50 to-pink-50/60 border-t border-brand-navy/10 py-4 sm:py-5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+            <div className="flex flex-col sm:flex-row items-center gap-3.5">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white shadow-xs shrink-0">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.09-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+              </div>
+              <div>
+                <div className="flex items-center justify-center sm:justify-start gap-2 flex-wrap">
+                  <span className="font-title font-extrabold text-sm sm:text-base text-brand-navy">Bizi Sosyal Medyada Takip Edin</span>
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-2xs font-extrabold bg-pink-100 text-pink-700 tracking-wide">@patili.co_</span>
+                </div>
+                <p className="text-xs text-gray-600 mt-0.5">
+                  En yeni pati dostu mekanlar, seyahat rehberleri ve topluluk paylaşımları için Instagram'da bize katılın.
+                </p>
+              </div>
+            </div>
+            <a
+              href="https://www.instagram.com/patili.co_/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold text-white bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] hover:opacity-95 hover:scale-[1.02] transition-all whitespace-nowrap shadow-xs"
+            >
+              <span>Instagram'da Takip Et</span>
+              <span>&rarr;</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="bg-brand-navy text-white mt-20">
+      <footer className="bg-brand-navy text-white">
         {/* Newsletter Promo Box */}
         <div className="border-b border-white/10 bg-[#191528]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -153,13 +187,33 @@ export default function Layout({ children, currentView, onViewChange }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo & Info */}
           <div className="space-y-4">
-            <span className="text-xl font-bold font-title text-white flex items-center gap-1.5">
-              <span className="text-brand-c4">🐾</span>
-              <span>patili.co</span>
-            </span>
+            <div className="cursor-pointer inline-block select-none" onClick={() => onViewChange('home')}>
+              <div className="bg-white/95 hover:bg-white transition-colors px-3.5 py-1.5 rounded-2xl inline-flex items-center shadow-xs">
+                <img
+                  src="/logo.png"
+                  alt="patili.co"
+                  className="h-8 sm:h-9 w-auto object-contain"
+                />
+              </div>
+            </div>
             <p className="text-gray-300 text-sm leading-relaxed">
               Türkiye'nin doğrulanmış evcil hayvan dostu otel, mekan (kafe & restoran), pet taksi, pet otel ve sağlık rehberi. Patili dostlarınızla birlikte hayatı kolaylaştıran güvenilir platform.
             </p>
+            <div className="pt-1">
+              <a
+                href="https://www.instagram.com/patili.co_/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-xs text-gray-300 hover:text-white transition-colors group"
+              >
+                <span className="w-5 h-5 rounded-md bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white shrink-0 group-hover:scale-105 transition-transform">
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.09-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                  </svg>
+                </span>
+                <span>Bizi Instagram'da takip edin: <strong className="text-white font-semibold">@patili.co_</strong></span>
+              </a>
+            </div>
             <div className="text-brand-c4 text-xs font-semibold">
               Son Güncelleme: Eylül 2026
             </div>
