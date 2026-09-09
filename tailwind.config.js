@@ -14,6 +14,18 @@ export default {
       boxShadow: {
         '2xs': '0 1px 2px 0 rgba(0, 0, 0, 0.03)',
       },
+      borderRadius: {
+        'none': '0px',
+        'sm': '9999px',
+        'DEFAULT': '9999px',
+        'md': '9999px',
+        'lg': '9999px',
+        'xl': '9999px',
+        '2xl': '2rem',
+        '3xl': '2.5rem',
+        '4xl': '3rem',
+        'full': '9999px',
+      },
       colors: {
         brand: {
           // Explicit user-provided color hierarchy

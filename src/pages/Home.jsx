@@ -92,7 +92,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
           </p>
 
           {/* Quick Filter Bar */}
-          <form onSubmit={handleSearch} className="bg-white p-4 md:p-6 rounded-3xl shadow-xl border-2 border-brand-navy/10 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-3 items-center">
+          <form onSubmit={handleSearch} className="bg-white p-4 md:p-4 md:px-6 rounded-3xl md:rounded-full shadow-xl border-2 border-brand-navy/10 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-3 items-center">
             {/* Destination Input */}
             <div className="flex flex-col text-left px-2 border-b md:border-b-0 md:border-r border-brand-beige pb-2 md:pb-0">
               <label htmlFor="home-destination" className="text-2xs font-bold text-gray-600 uppercase tracking-wider mb-1">Nereye?</label>
@@ -152,7 +152,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
             {/* Submit Button */}
             <button
               type="submit"
-              className="bg-brand-c2 hover:bg-brand-c1 text-white font-bold rounded-2xl flex items-center justify-center gap-2 py-3 px-6 transition-all shadow-md mt-2 md:mt-0 font-title border border-brand-c2/20"
+              className="bg-brand-c2 hover:bg-brand-c1 text-white font-bold rounded-full flex items-center justify-center gap-2 py-3 px-6 transition-all shadow-md mt-2 md:mt-0 font-title border border-brand-c2/20"
             >
               <SearchIcon className="w-4 h-4 text-white" />
               <span>Ara</span>
@@ -171,7 +171,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
             className="bg-white border border-brand-beige hover:border-brand-c3 rounded-3xl p-8 hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
           >
             <div>
-              <div className="w-14 h-14 rounded-2xl bg-brand-cream border border-brand-beige flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
+              <div className="w-14 h-14 rounded-full bg-brand-cream border border-brand-beige flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
                 <HotelIcon className="w-7 h-7 text-brand-c2" />
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold font-title text-brand-c1 group-hover:text-brand-c2 transition-colors">Pati Dostu Oteller</h2>
@@ -191,7 +191,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
             className="bg-white border border-brand-beige hover:border-brand-c3 rounded-3xl p-8 hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
           >
             <div>
-              <div className="w-14 h-14 rounded-2xl bg-brand-cream border border-brand-beige flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
+              <div className="w-14 h-14 rounded-full bg-brand-cream border border-brand-beige flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
                 <DiningIcon className="w-7 h-7 text-brand-c2" />
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold font-title text-brand-c1 group-hover:text-brand-c2 transition-colors">Patili Mekanlar</h2>
@@ -226,7 +226,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
               className="bg-white border border-brand-beige hover:border-brand-c3 rounded-3xl p-6 hover:shadow-md transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
             >
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-brand-cream border border-brand-beige flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                <div className="w-12 h-12 rounded-full bg-brand-cream border border-brand-beige flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
                   <TaxiCarIcon className="w-6 h-6 text-brand-c2" />
                 </div>
                 <h4 className="text-lg font-bold font-title text-brand-c1 group-hover:text-brand-c2 transition-colors">Pet Taksi</h4>
@@ -246,7 +246,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
               className="bg-white border border-brand-beige hover:border-brand-c3 rounded-3xl p-6 hover:shadow-md transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
             >
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-brand-cream border border-brand-beige flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                <div className="w-12 h-12 rounded-full bg-brand-cream border border-brand-beige flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
                   <BoardingHomeIcon className="w-6 h-6 text-brand-c2" />
                 </div>
                 <h4 className="text-lg font-bold font-title text-brand-c1 group-hover:text-brand-c2 transition-colors">Pet Otel</h4>
@@ -266,7 +266,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
               className="bg-white border border-brand-beige hover:border-brand-c3 rounded-3xl p-6 hover:shadow-md transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
             >
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-brand-cream border border-brand-beige flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                <div className="w-12 h-12 rounded-full bg-brand-cream border border-brand-beige flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
                   <DogWalkerIcon className="w-6 h-6 text-brand-c2" />
                 </div>
                 <h4 className="text-lg font-bold font-title text-brand-c1 group-hover:text-brand-c2 transition-colors">Köpek Gezdiriciler</h4>
@@ -286,7 +286,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
               className="bg-white border border-brand-beige hover:border-brand-c3 rounded-3xl p-6 hover:shadow-md transition-all duration-300 cursor-pointer flex flex-col justify-between group text-left"
             >
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-brand-cream border border-brand-beige flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                <div className="w-12 h-12 rounded-full bg-brand-cream border border-brand-beige flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
                   <VetClinicIcon className="w-6 h-6 text-brand-c2" />
                 </div>
                 <h4 className="text-lg font-bold font-title text-brand-c1 group-hover:text-brand-c2 transition-colors">7/24 Veterinerler</h4>
@@ -347,7 +347,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
                   )}
 
                   {/* Suitability Score Badge */}
-                  <div className="absolute bottom-3 right-3 text-xs px-3 py-1 rounded-xl font-black text-white shadow-md bg-brand-navy/90 backdrop-blur-xs flex items-center gap-1.5 border border-white/20">
+                  <div className="absolute bottom-3 right-3 text-xs px-3.5 py-1 rounded-full font-black text-white shadow-md bg-brand-navy/90 backdrop-blur-xs flex items-center gap-1.5 border border-white/20">
                     <StarIcon className="w-3.5 h-3.5 text-brand-c4 fill-current" />
                     <span>Dost Uygunluğu:</span>
                     <span className="text-brand-c4 font-extrabold">
@@ -369,12 +369,12 @@ export default function Home({ onViewChange, setSearchFilters }) {
                   {/* Pet Fee Info Box */}
                   <div className="pt-1">
                     {hotel.extraFee === 'no' ? (
-                      <div className="bg-brand-c2/10 border border-brand-c2/20 text-brand-c2 font-extrabold text-3xs px-3 py-1.5 rounded-xl flex items-center justify-between">
+                      <div className="bg-brand-c2/10 border border-brand-c2/20 text-brand-c2 font-extrabold text-3xs px-3.5 py-1.5 rounded-full flex items-center justify-between">
                         <span>ÜCRETSİZ PET KABULÜ</span>
                         <span>Ek Ücret Alınmıyor</span>
                       </div>
                     ) : (
-                      <div className="bg-brand-cream border border-brand-beige text-brand-c2 font-bold text-3xs px-3 py-1.5 rounded-xl flex items-center justify-between">
+                      <div className="bg-brand-cream border border-brand-beige text-brand-c2 font-bold text-3xs px-3.5 py-1.5 rounded-full flex items-center justify-between">
                         <span>PET ÜCRET POLİTİKASI</span>
                         <span className="font-bold">{hotel.extraFee === 'Teyit bekliyor' || !hotel.extraFee ? 'Tesisle Teyit Edin' : hotel.extraFee}</span>
                       </div>
@@ -509,7 +509,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
                 onClick={() => goToAccWithFilter(collection.filter, collection.title)}
                 className="bg-white p-6 rounded-3xl border-2 border-brand-navy/15 hover:border-brand-navy cursor-pointer hover:shadow-md transition-all flex items-start gap-4"
               >
-                <div className="p-3 bg-brand-c2/10 rounded-2xl shrink-0">
+                <div className="p-3 bg-brand-c2/10 rounded-full shrink-0">
                   {collection.icon}
                 </div>
                 <div>
@@ -542,8 +542,8 @@ export default function Home({ onViewChange, setSearchFilters }) {
 
               {/* 4 Öne Çıkan Fayda Kartı */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
-                <div className="bg-white/10 backdrop-blur-xs border border-white/15 rounded-2xl p-3.5 flex items-start gap-3">
-                  <div className="p-2 bg-brand-c4/20 rounded-xl shrink-0 text-brand-c4">
+                <div className="bg-white/10 backdrop-blur-xs border border-white/15 rounded-3xl p-3.5 flex items-start gap-3">
+                  <div className="p-2 bg-brand-c4/20 rounded-full shrink-0 text-brand-c4">
                     <VerifiedBadge className="w-5 h-5 text-brand-c4" />
                   </div>
                   <div>
@@ -552,8 +552,8 @@ export default function Home({ onViewChange, setSearchFilters }) {
                   </div>
                 </div>
 
-                <div className="bg-white/10 backdrop-blur-xs border border-white/15 rounded-2xl p-3.5 flex items-start gap-3">
-                  <div className="p-2 bg-brand-c4/20 rounded-xl shrink-0 text-brand-c4">
+                <div className="bg-white/10 backdrop-blur-xs border border-white/15 rounded-3xl p-3.5 flex items-start gap-3">
+                  <div className="p-2 bg-brand-c4/20 rounded-full shrink-0 text-brand-c4">
                     <HotelIcon className="w-5 h-5 text-brand-c4" />
                   </div>
                   <div>
@@ -562,8 +562,8 @@ export default function Home({ onViewChange, setSearchFilters }) {
                   </div>
                 </div>
 
-                <div className="bg-white/10 backdrop-blur-xs border border-white/15 rounded-2xl p-3.5 flex items-start gap-3">
-                  <div className="p-2 bg-brand-c4/20 rounded-xl shrink-0 text-brand-c4">
+                <div className="bg-white/10 backdrop-blur-xs border border-white/15 rounded-3xl p-3.5 flex items-start gap-3">
+                  <div className="p-2 bg-brand-c4/20 rounded-full shrink-0 text-brand-c4">
                     <StarIcon className="w-5 h-5 text-brand-c4 fill-current" />
                   </div>
                   <div>
@@ -572,8 +572,8 @@ export default function Home({ onViewChange, setSearchFilters }) {
                   </div>
                 </div>
 
-                <div className="bg-white/10 backdrop-blur-xs border border-white/15 rounded-2xl p-3.5 flex items-start gap-3">
-                  <div className="p-2 bg-brand-c4/20 rounded-xl shrink-0 text-brand-c4">
+                <div className="bg-white/10 backdrop-blur-xs border border-white/15 rounded-3xl p-3.5 flex items-start gap-3">
+                  <div className="p-2 bg-brand-c4/20 rounded-full shrink-0 text-brand-c4">
                     <ArrowRightIcon className="w-5 h-5 text-brand-c4" />
                   </div>
                   <div>
@@ -587,7 +587,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
             {/* Sağ Kolon: CTA Aksiyon Kartı (5 Kolon) */}
             <div className="lg:col-span-5 bg-white text-gray-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-brand-c3/20 space-y-6">
               <div className="space-y-2 text-center">
-                <div className="w-12 h-12 rounded-2xl bg-brand-c2/10 flex items-center justify-center mx-auto mb-2 text-brand-c2">
+                <div className="w-12 h-12 rounded-full bg-brand-c2/10 flex items-center justify-center mx-auto mb-2 text-brand-c2">
                   <HotelIcon className="w-6 h-6 text-brand-c2" />
                 </div>
                 <h3 className="font-title font-bold text-2xl text-brand-navy">
@@ -598,7 +598,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
                 </p>
               </div>
 
-              <div className="space-y-2.5 text-xs text-gray-700 bg-brand-cream/60 p-4 rounded-2xl border border-brand-beige">
+              <div className="space-y-2.5 text-xs text-gray-700 bg-brand-cream/60 p-4 rounded-3xl border border-brand-beige">
                 <div className="flex items-center gap-2">
                   <span className="text-brand-c2 font-bold">✓</span>
                   <span>Otel, Butik Otel, Bungalov, Villa</span>
