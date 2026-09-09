@@ -1,5 +1,5 @@
 # ==============================================================================
-# Robots.txt for Patiyle Seyahat
+# Robots.txt for patili.co
 # Optimized for Web Search, Google AI Overviews, Perplexity, ChatGPT & Gemini RAG
 # ==============================================================================
 
@@ -49,4 +49,4 @@ User-agent: CCBot
 Allow: /
 
 # Sitemaps
-Sitemap: https://www.patiyleseyahat.com/sitemap.xml
+Sitemap: https://patili.co/sitemap.xml

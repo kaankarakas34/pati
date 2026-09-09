@@ -265,7 +265,7 @@ legal holds and policy approval are external operator responsibilities.
 ## Static Sitemaps
 
 ```sh
-node scripts/build-sitemaps.js --site-url https://www.patiyleseyahat.com --batch-size 250 --chunk-size 5000
+node scripts/build-sitemaps.js --site-url https://patili.co --batch-size 250 --chunk-size 5000
 ```
 
 This is an offline build job: it reads PostgreSQL directly with a read-only

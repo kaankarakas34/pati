@@ -1,6 +1,6 @@
 export const methodologyContent = {
   title: "Değerlendirme Metodolojimiz ve Sınıflandırma Kriterleri",
-  description: "patiyleseyahat.com olarak listelediğimiz her tesisin evcil hayvan dostu olma düzeyini objektif ve doğrulanabilir kriterlerle belirliyoruz. Amacımız sadece tesislerin beyanlarına dayanmak değil, hayvan sahiplerine net beklentiler sunmaktır.",
+  description: "patili.co olarak listelediğimiz her tesisin evcil hayvan dostu olma düzeyini objektif ve doğrulanabilir kriterlerle belirliyoruz. Amacımız sadece tesislerin beyanlarına dayanmak değil, hayvan sahiplerine net beklentiler sunmaktır.",
   levels: [
     {
       level: 1,

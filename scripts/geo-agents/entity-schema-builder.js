@@ -8,24 +8,24 @@
 
 export const BRAND_ENTITY = {
   '@type': 'Organization',
-  '@id': 'https://patiyleseyahat.com/#organization',
-  'name': 'Patiyle Seyahat',
-  'url': 'https://patiyleseyahat.com',
+  '@id': 'https://patili.co/#organization',
+  'name': 'patili.co',
+  'url': 'https://patili.co',
   'logo': {
     '@type': 'ImageObject',
-    'url': 'https://patiyleseyahat.com/assets/logo.png',
-    'caption': 'Patiyle Seyahat Doğrulanmış Evcil Hayvan Rehberi'
+    'url': 'https://patili.co/assets/logo.png',
+    'caption': 'patili.co Doğrulanmış Evcil Hayvan Rehberi'
   },
   'description': "Türkiye'nin doğrulanmış evcil hayvan dostu otel, pet oteli, veteriner ve seyahat rehberi platformu.",
   'sameAs': [
     'https://www.wikidata.org/wiki/Special:EntityPage/Q11023', // Pet travel context
-    'https://twitter.com/patiyleseyahat',
-    'https://www.instagram.com/patiyleseyahat'
+    'https://twitter.com/patilico',
+    'https://www.instagram.com/patilico'
   ],
   'contactPoint': {
     '@type': 'ContactPoint',
     'contactType': 'customer support',
-    'email': 'destek@patiyleseyahat.com',
+    'email': 'destek@patili.co',
     'availableLanguage': ['Turkish', 'English']
   }
 };
@@ -61,7 +61,7 @@ export function buildHotelSchema(hotel, canonicalUrl) {
     },
     'priceRange': hotel.priceRange || '₺₺ - ₺₺₺',
     'parentOrganization': {
-      '@id': 'https://patiyleseyahat.com/#organization'
+      '@id': 'https://patili.co/#organization'
     }
   };
 }

@@ -11,7 +11,7 @@ export default function Methodology({ activeSubView }) {
           <div className="space-y-6 text-sm text-gray-700 leading-relaxed">
             <h2 className="font-title text-2xl font-bold text-brand-navy">Nasıl Doğruluyoruz?</h2>
             <p className="font-medium text-base text-gray-800">
-              patiyleseyahat.com'da yer alan her bilgi, editörlerimiz tarafından yerinde denetim veya doğrudan doğrulama süreciyle elde edilir. Platformumuzda otomatik veri çekme (scraping) ve kopyalama işlemleri kesinlikle yapılmaz.
+              patili.co'da yer alan her bilgi, editörlerimiz tarafından yerinde denetim veya doğrudan doğrulama süreciyle elde edilir. Platformumuzda otomatik veri çekme (scraping) ve kopyalama işlemleri kesinlikle yapılmaz.
             </p>
             <h3 className="font-title font-bold text-gray-900 text-lg">Doğrulama Adımlarımız:</h3>
             <ol className="list-decimal pl-5 space-y-3">
@@ -70,7 +70,7 @@ export default function Methodology({ activeSubView }) {
           <div className="space-y-6 text-sm text-gray-755 leading-relaxed">
             <h2 className="font-title text-2xl font-bold text-brand-navy">Reklam ve Sponsorlu İçerik Politikası</h2>
             <p>
-              patiyleseyahat.com gelir modelini seçkin sponsorluklar ve tesis tanıtımları üzerine kurmuştur. Ancak bu ticari ilişkilerin kullanıcılarımızın güvenini zedelemesine asla izin verilmez.
+              patili.co gelir modelini seçkin sponsorluklar ve tesis tanıtımları üzerine kurmuştur. Ancak bu ticari ilişkilerin kullanıcılarımızın güvenini zedelemesine asla izin verilmez.
             </p>
             <h3 className="font-title font-bold text-gray-900 text-base">Sponsorluk Kriterlerimiz:</h3>
             <ul className="list-disc pl-5 space-y-2">
@@ -86,7 +86,7 @@ export default function Methodology({ activeSubView }) {
           <div className="space-y-4 text-xs text-gray-650 leading-relaxed">
             <h2 className="font-title text-xl font-bold text-gray-900">KVKK Aydınlatma Metni</h2>
             <p>
-              6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, patiyleseyahat.com olarak, veri sorumlusu sıfatıyla, kişisel verilerinizin aşağıda açıklanan çerçevede kaydedileceğini, depolanacağını ve işleneceğini bildiririz.
+              6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, patili.co olarak, veri sorumlusu sıfatıyla, kişisel verilerinizin aşağıda açıklanan çerçevede kaydedileceğini, depolanacağını ve işleneceğini bildiririz.
             </p>
             <p>
               <strong>İşlenen Veriler:</strong> E-bülten kaydı için e-posta adresiniz, düzeltme formu için ilettiğiniz mesajlar ve tarayıcı çerez bilgileriniz.
@@ -102,7 +102,7 @@ export default function Methodology({ activeSubView }) {
           <div className="space-y-4 text-xs text-gray-650 leading-relaxed">
             <h2 className="font-title text-xl font-bold text-gray-900">Kullanım Koşulları</h2>
             <p>
-              patiyleseyahat.com web sitesine erişerek veya bültenimize üye olarak bu kullanım koşullarını kabul etmiş sayılırsınız.
+              patili.co web sitesine erişerek veya bültenimize üye olarak bu kullanım koşullarını kabul etmiş sayılırsınız.
             </p>
             <p>
               Sitede yayınlanan tüm özgün editoryal içerikler, otel politikası özetleri ve listeleme tabloları telif haklarıyla korunmaktadır. Kaynak gösterilse dahi başka web sitelerinde izinsiz yayınlanması yasaktır.
@@ -118,7 +118,7 @@ export default function Methodology({ activeSubView }) {
           <div className="space-y-4 text-xs text-gray-650 leading-relaxed">
             <h2 className="font-title text-xl font-bold text-gray-900">Gizlilik Politikası</h2>
             <p>
-              Gizliliğiniz bizim için önemlidir. patiyleseyahat.com olarak ziyaretçilerimizin kişisel verilerinin gizliliğini korumayı taahhüt ederiz.
+              Gizliliğiniz bizim için önemlidir. patili.co olarak ziyaretçilerimizin kişisel verilerinin gizliliğini korumayı taahhüt ederiz.
             </p>
             <p>
               Bülten üyeliği amacıyla topladığımız e-posta adresleri kesinlikle üçüncü şahıslarla paylaşılmaz, satılmaz veya spam amaçlı kullanılmaz. İstediğiniz an bülten aboneliğinden tek tıkla ayrılabilirsiniz.

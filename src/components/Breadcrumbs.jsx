@@ -11,7 +11,7 @@ export default function Breadcrumbs({ items = [], onViewChange }) {
       "@type": "ListItem",
       "position": index + 1,
       "name": item.label,
-      "item": item.url ? `https://www.patiyleseyahat.com${item.url}` : undefined
+      "item": item.url ? `https://patili.co${item.url}` : undefined
     }))
   };
 

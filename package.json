@@ -1,5 +1,5 @@
 {
-  "name": "patiyleseyahat",
+  "name": "patili-co",
   "version": "1.0.0",
   "private": true,
   "files": ["server.js", "db.js", "lib/", "api/", "src/data/", "dist/", "public/", "index.html"],

@@ -28,6 +28,16 @@ app.use((_req,res,next)=>{ res.setHeader('X-Content-Type-Options','nosniff'); ne
 app.use(cors());
 app.use(express.json());
 
+// 301 Canonical Domain Redirect: Ensure patiyleseyahat.com, www.patiyleseyahat.com, and www.patili.co redirect to https://patili.co
+app.use((req, res, next) => {
+  const rawHost = req.headers['x-forwarded-host'] || req.headers.host || '';
+  const host = rawHost.toLowerCase().split(':')[0];
+  if (host === 'patiyleseyahat.com' || host === 'www.patiyleseyahat.com' || host === 'www.patili.co') {
+    return res.redirect(301, `https://patili.co${req.originalUrl || req.url}`);
+  }
+  next();
+});
+
 // Normalize Vercel serverless request path
 app.use((req, res, next) => {
   const forwardedPath = req.query?.__path || req.headers['x-matched-path'] || req.headers['x-vercel-matched-path'];
@@ -602,12 +612,12 @@ function renderHotelSeoPage(res, hotel, complaintsList) {
     // Approved complaints count check
     const approvedComplaints = complaintsList.filter(c => c.targetId === hotel.id && c.status === 'approved');
     const trustScore = Math.max(1.0, (hotel.baseTrustScore || 8) - (hotel.approvedComplaintCount ?? approvedComplaints.length) * 0.5).toFixed(1);
-    const canonicalUrl = `https://www.patiyleseyahat.com${getHotelPath(hotel)}`;
+    const canonicalUrl = `https://patili.co${getHotelPath(hotel)}`;
 
     let html = getIndexHtmlTemplate();
 
     // 1. Inject custom title for search engines
-    const title = escapeHtml(`${hotel.name} | ${hotel.city} Evcil Hayvan Dostu Otel Detayları | Patiyle Seyahat`);
+    const title = escapeHtml(`${hotel.name} | ${hotel.city} Evcil Hayvan Dostu Otel Detayları | patili.co`);
     html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
 
     // 2. Inject custom meta description
@@ -675,18 +685,18 @@ function renderHotelSeoPage(res, hotel, complaintsList) {
 }
 
 const categorySeoPages = {
-  '/evcil-hayvan-dostu-oteller': { title: 'Evcil Hayvan Dostu Oteller | Patiyle Seyahat', description: 'Köpek, kedi ve diğer evcil hayvanları kabul eden otelleri; kilo sınırı, ek ücret ve tesis kurallarıyla karşılaştırın.', content: seoContent.accommodations },
-  '/kedi-kopek-otelleri': { title: 'Kedi ve Köpek Otelleri | Güvenli Pet Bakımı', description: 'Kedi oteli, köpek oteli, gündüz bakım ve ev tipi pet bakım merkezlerini özellikleri ve kabul şartlarıyla inceleyin.', content: seoContent.boardings },
-  '/pet-taksi': { title: 'Pet Taksi ve Evcil Hayvan Transferi | Patiyle Seyahat', description: 'Veteriner, havaalanı, otel ve bakım merkezi ulaşımı için pet taksi ve güvenli evcil hayvan transfer seçeneklerini karşılaştırın.', content: seoContent.taxis },
-  '/veterinerler': { title: '7/24 Acil Veteriner Klinikleri | Patiyle Seyahat', description: 'Yakınınızdaki 7/24 açık acil veteriner kliniklerini, adres ve hizmet olanaklarıyla inceleyin.', content: seoContent.vets },
-  '/evcil-hayvanla-gezilecek-yerler': { title: 'Evcil Hayvanla Gezilecek Yerler | Patiyle Seyahat', description: 'Köpekle gezilecek park, plaj, yürüyüş rotası ve evcil hayvan kabul eden mekanları keşfedin.', content: seoContent.experiences },
-  '/evcil-hayvan-seyahat-rehberi': { title: 'Evcil Hayvan Seyahat Rehberi | Patiyle Seyahat', description: 'Kedi ve köpekle yolculuk, sağlık belgeleri, otel seçimi ve destinasyon hazırlığı için güncel seyahat rehberleri.', content: seoContent.guides },
-  '/otel-zincirleri': { title: 'Türkiye Evcil Hayvan Dostu Otel Zincirleri (Hilton, Radisson vb.) | Patiyle Seyahat', description: 'Hilton, Radisson, Akra, Swissotel gibi otel zincirlerinin evcil hayvan politikaları, kilo sınırları ve aile dostu konaklama imkanları.', content: seoContent.chains }
+  '/evcil-hayvan-dostu-oteller': { title: 'Evcil Hayvan Dostu Oteller | patili.co', description: 'Köpek, kedi ve diğer evcil hayvanları kabul eden otelleri; kilo sınırı, ek ücret ve tesis kurallarıyla karşılaştırın.', content: seoContent.accommodations },
+  '/kedi-kopek-otelleri': { title: 'Kedi ve Köpek Otelleri | Güvenli Pet Bakımı | patili.co', description: 'Kedi oteli, köpek oteli, gündüz bakım ve ev tipi pet bakım merkezlerini özellikleri ve kabul şartlarıyla inceleyin.', content: seoContent.boardings },
+  '/pet-taksi': { title: 'Pet Taksi ve Evcil Hayvan Transferi | patili.co', description: 'Veteriner, havaalanı, otel ve bakım merkezi ulaşımı için pet taksi ve güvenli evcil hayvan transfer seçeneklerini karşılaştırın.', content: seoContent.taxis },
+  '/veterinerler': { title: '7/24 Acil Veteriner Klinikleri | patili.co', description: 'Yakınınızdaki 7/24 açık acil veteriner kliniklerini, adres ve hizmet olanaklarıyla inceleyin.', content: seoContent.vets },
+  '/evcil-hayvanla-gezilecek-yerler': { title: 'Evcil Hayvanla Gezilecek Yerler | patili.co', description: 'Köpekle gezilecek park, plaj, yürüyüş rotası ve evcil hayvan kabul eden mekanları keşfedin.', content: seoContent.experiences },
+  '/evcil-hayvan-seyahat-rehberi': { title: 'Evcil Hayvan Seyahat Rehberi | patili.co', description: 'Kedi ve köpekle yolculuk, sağlık belgeleri, otel seçimi ve destinasyon hazırlığı için güncel seyahat rehberleri.', content: seoContent.guides },
+  '/otel-zincirleri': { title: 'Türkiye Evcil Hayvan Dostu Otel Zincirleri (Hilton, Radisson vb.) | patili.co', description: 'Hilton, Radisson, Akra, Swissotel gibi otel zincirlerinin evcil hayvan politikaları, kilo sınırları ve aile dostu konaklama imkanları.', content: seoContent.chains }
 };
 
 app.get(Object.keys(categorySeoPages), (req, res) => {
   const page = categorySeoPages[req.path];
-  const canonicalUrl = `https://www.patiyleseyahat.com${req.path}`;
+  const canonicalUrl = `https://patili.co${req.path}`;
   const description = page.description;
   const escapedTitle = escapeHtml(page.title);
   const escapedDescription = escapeHtml(description);
@@ -704,12 +714,12 @@ app.get(Object.keys(categorySeoPages), (req, res) => {
         name: page.content.title,
         description,
         url: canonicalUrl,
-        isPartOf: { '@type': 'WebSite', name: 'Patiyle Seyahat', url: 'https://www.patiyleseyahat.com/' }
+        isPartOf: { '@type': 'WebSite', name: 'patili.co', url: 'https://patili.co/' }
       },
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: 'https://www.patiyleseyahat.com/' },
+          { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: 'https://patili.co/' },
           { '@type': 'ListItem', position: 2, name: page.content.title, item: canonicalUrl }
         ]
       },
@@ -767,8 +777,8 @@ app.get('/evcil-hayvan-dostu-oteller/:citySlug', asyncRoute(async (req, res) => 
 
   const cityName = cityHotels[0].city;
   const verifiedHotelCount = cityHotels.filter(hotel => hotel.verified).length;
-  const canonicalUrl = `https://www.patiyleseyahat.com/evcil-hayvan-dostu-oteller/${req.params.citySlug}`;
-  const title = escapeHtml(`${cityName} Evcil Hayvan Dostu Oteller | Patiyle Seyahat`);
+  const canonicalUrl = `https://patili.co/evcil-hayvan-dostu-oteller/${req.params.citySlug}`;
+  const title = escapeHtml(`${cityName} Evcil Hayvan Dostu Oteller | patili.co`);
   const description = escapeHtml(`${cityName} ilinde evcil hayvan kabul eden ${cityHotels.length} oteli; pet politikaları, tesis özellikleri ve konumlarıyla karşılaştırın.`);
   let html = getIndexHtmlTemplate();
 
@@ -794,8 +804,8 @@ app.get('/evcil-hayvan-dostu-oteller/:citySlug', asyncRoute(async (req, res) => 
         url: canonicalUrl,
         isPartOf: {
           '@type': 'WebSite',
-          name: 'Patiyle Seyahat',
-          url: 'https://www.patiyleseyahat.com/'
+          name: 'patili.co',
+          url: 'https://patili.co/'
         }
       },
       {
@@ -805,7 +815,7 @@ app.get('/evcil-hayvan-dostu-oteller/:citySlug', asyncRoute(async (req, res) => 
             '@type': 'ListItem',
             position: 1,
             name: 'Ana Sayfa',
-            item: 'https://www.patiyleseyahat.com/'
+            item: 'https://patili.co/'
           },
           {
             '@type': 'ListItem',
@@ -823,7 +833,7 @@ app.get('/evcil-hayvan-dostu-oteller/:citySlug', asyncRoute(async (req, res) => 
           '@type': 'ListItem',
           position: index + 1,
           name: hotel.name,
-          url: `https://www.patiyleseyahat.com${getHotelPath(hotel)}`
+          url: `https://patili.co${getHotelPath(hotel)}`
         }))
       },
       {
@@ -901,8 +911,8 @@ app.get('/evcil-hayvan-dostu-oteller/:citySlug/:districtSlug', asyncRoute(async 
 
   const cityName = districtHotels[0].city;
   const districtName = districtHotels[0].district;
-  const canonicalUrl = `https://www.patiyleseyahat.com/evcil-hayvan-dostu-oteller/${citySlug}/${districtSlug}`;
-  const title = escapeHtml(`${districtName}, ${cityName} Evcil Hayvan Dostu Oteller | Patiyle Seyahat`);
+  const canonicalUrl = `https://patili.co/evcil-hayvan-dostu-oteller/${citySlug}/${districtSlug}`;
+  const title = escapeHtml(`${districtName}, ${cityName} Evcil Hayvan Dostu Oteller | patili.co`);
   const description = escapeHtml(`${cityName} ${districtName} bölgesinde evcil hayvan kabul eden ${districtHotels.length} oteli; pet politikaları, kilo sınırları ve özellikleri ile karşılaştırın.`);
   let html = getIndexHtmlTemplate();
 
@@ -918,13 +928,13 @@ app.get('/evcil-hayvan-dostu-oteller/:citySlug/:districtSlug', asyncRoute(async 
         name: `${districtName}, ${cityName} Evcil Hayvan Dostu Oteller`,
         description,
         url: canonicalUrl,
-        isPartOf: { '@type': 'WebSite', name: 'Patiyle Seyahat', url: 'https://www.patiyleseyahat.com/' }
+        isPartOf: { '@type': 'WebSite', name: 'patili.co', url: 'https://patili.co/' }
       },
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: 'https://www.patiyleseyahat.com/' },
-          { '@type': 'ListItem', position: 2, name: `${cityName} Otelleri`, item: `https://www.patiyleseyahat.com/evcil-hayvan-dostu-oteller/${citySlug}` },
+          { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: 'https://patili.co/' },
+          { '@type': 'ListItem', position: 2, name: `${cityName} Otelleri`, item: `https://patili.co/evcil-hayvan-dostu-oteller/${citySlug}` },
           { '@type': 'ListItem', position: 3, name: `${districtName} Otelleri`, item: canonicalUrl }
         ]
       },
@@ -936,7 +946,7 @@ app.get('/evcil-hayvan-dostu-oteller/:citySlug/:districtSlug', asyncRoute(async 
           '@type': 'ListItem',
           position: index + 1,
           name: hotel.name,
-          url: `https://www.patiyleseyahat.com${getHotelPath(hotel)}`
+          url: `https://patili.co${getHotelPath(hotel)}`
         }))
       }
     ]
@@ -962,8 +972,8 @@ app.get(clusterLandingPaths, asyncRoute(async (req, res) => {
   const cluster = PROGRAMMATIC_CLUSTERS.find(c => c.slug === slug);
   if (!cluster) return res.status(404).send('Sayfa bulunamadı.');
 
-  const canonicalUrl = `https://www.patiyleseyahat.com/${cluster.slug}`;
-  const title = escapeHtml(cluster.metaTitle || `${cluster.title} | Patiyle Seyahat`);
+  const canonicalUrl = `https://patili.co/${cluster.slug}`;
+  const title = escapeHtml(cluster.metaTitle || `${cluster.title} | patili.co`);
   const description = escapeHtml(cluster.metaDesc || `${cluster.title} seçeneklerini inceleyin.`);
   let html = getIndexHtmlTemplate();
 
@@ -979,12 +989,12 @@ app.get(clusterLandingPaths, asyncRoute(async (req, res) => {
         name: cluster.h1 || cluster.title,
         description,
         url: canonicalUrl,
-        isPartOf: { '@type': 'WebSite', name: 'Patiyle Seyahat', url: 'https://www.patiyleseyahat.com/' }
+        isPartOf: { '@type': 'WebSite', name: 'patili.co', url: 'https://patili.co/' }
       },
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: 'https://www.patiyleseyahat.com/' },
+          { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: 'https://patili.co/' },
           { '@type': 'ListItem', position: 2, name: cluster.title, item: canonicalUrl }
         ]
       }
@@ -1021,8 +1031,8 @@ app.get(PROGRAMMATIC_CLUSTERS.map(c => `/${c.slug}/:citySlug`), asyncRoute(async
   const intentType = cluster.id || cluster.filterKey || cluster.accType || cluster.petType || 'pet-friendly';
   const seoData = generateCombinationSeoContent(cityName, intentType);
 
-  const canonicalUrl = `https://www.patiyleseyahat.com/${cluster.slug}/${citySlug}`;
-  const title = escapeHtml(`${cityName} ${cluster.title} | Patiyle Seyahat`);
+  const canonicalUrl = `https://patili.co/${cluster.slug}/${citySlug}`;
+  const title = escapeHtml(`${cityName} ${cluster.title} | patili.co`);
   const description = escapeHtml(seoData.directAnswer || `${cityName} bölgesinde ${cluster.title.toLowerCase()} seçenekleri: ${cityHotels.length} tesisin evcil hayvan kurallarını inceleyin.`);
   let html = getIndexHtmlTemplate();
 
@@ -1038,13 +1048,13 @@ app.get(PROGRAMMATIC_CLUSTERS.map(c => `/${c.slug}/:citySlug`), asyncRoute(async
         name: `${cityName} ${cluster.title}`,
         description,
         url: canonicalUrl,
-        isPartOf: { '@type': 'WebSite', name: 'Patiyle Seyahat', url: 'https://www.patiyleseyahat.com/' }
+        isPartOf: { '@type': 'WebSite', name: 'patili.co', url: 'https://patili.co/' }
       },
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: 'https://www.patiyleseyahat.com/' },
-          { '@type': 'ListItem', position: 2, name: cluster.title, item: `https://www.patiyleseyahat.com/${cluster.slug}` },
+          { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: 'https://patili.co/' },
+          { '@type': 'ListItem', position: 2, name: cluster.title, item: `https://patili.co/${cluster.slug}` },
           { '@type': 'ListItem', position: 3, name: `${cityName} ${cluster.title}`, item: canonicalUrl }
         ]
       },
@@ -1056,7 +1066,7 @@ app.get(PROGRAMMATIC_CLUSTERS.map(c => `/${c.slug}/:citySlug`), asyncRoute(async
           '@type': 'ListItem',
           position: index + 1,
           name: hotel.name,
-          url: `https://www.patiyleseyahat.com${getHotelPath(hotel)}`
+          url: `https://patili.co${getHotelPath(hotel)}`
         }))
       },
       {
@@ -1101,7 +1111,9 @@ app.get('/sitemap.xml', async (req,res,next) => {
   try {
     const paths = new Set([
       '/', '/evcil-hayvan-dostu-oteller', '/kedi-kopek-otelleri', '/pet-taksi', '/veterinerler',
-      '/evcil-hayvanla-gezilecek-yerler', '/evcil-hayvan-seyahat-rehberi', '/trust-ads', '/otel-zincirleri',
+      '/evcil-hayvanla-gezilecek-yerler', '/patili-mekanlar', '/kopek-gezdiricileri', '/isletme-ekle',
+      '/evcil-hayvan-seyahat-rehberi', '/trust-ads', '/otel-zincirleri',
+      '/hukuki-metinler', '/kullanim-kosullari', '/gizlilik-politikasi', '/kvkk-aydinlatma-metni', '/cerez-politikasi', '/acik-riza-metni',
       ...PROGRAMMATIC_CLUSTERS.map(cluster => '/' + cluster.slug)
     ]);
     async function addCatalog(resource, pathFor) {
@@ -1129,7 +1141,7 @@ app.get('/sitemap.xml', async (req,res,next) => {
     } catch {
       // Ignore fallback if db query fails during sitemap generation
     }
-    const origin = 'https://www.patiyleseyahat.com';
+    const origin = 'https://patili.co';
     const escapeXml = value => String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' })[character]);
     const body = [...paths].map(item => `<url><loc>${escapeXml(origin + item)}</loc></url>`).join('');
     res.set('Cache-Control', 'public, max-age=0, s-maxage=3600').type('application/xml').send(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${body}</urlset>`);
@@ -1151,7 +1163,7 @@ app.get('/robots.txt', (req, res) => {
     'Disallow: /*?*sort=',
     'Disallow: /*?*page=',
     '',
-    'Sitemap: https://www.patiyleseyahat.com/sitemap.xml'
+    'Sitemap: https://patili.co/sitemap.xml'
   ].join('\n'));
 });
 
@@ -1166,16 +1178,16 @@ app.get('/yonetici', (req, res) => {
 
 app.get('/trust-ads', (req, res) => {
   let html = getIndexHtmlTemplate();
-  const title = 'Reklam Başvurusu ve Sponsorluk | Patiyle Seyahat';
-  const description = 'Otel, pet oteli, veteriner, pet taksi ve evcil hayvan markaları için Patiyle Seyahat reklam ve sponsorluk başvurusu.';
+  const title = 'Reklam Başvurusu ve Sponsorluk | patili.co';
+  const description = 'Otel, pet oteli, veteriner, pet taksi ve evcil hayvan markaları için patili.co reklam ve sponsorluk başvurusu.';
   html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
   html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${description}" />`);
   html = html.replace('</head>', `
-    <link rel="canonical" href="https://www.patiyleseyahat.com/trust-ads" />
+    <link rel="canonical" href="https://patili.co/trust-ads" />
     <meta property="og:title" content="${title}" />
     <meta property="og:description" content="${description}" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.patiyleseyahat.com/trust-ads" />
+    <meta property="og:url" content="https://patili.co/trust-ads" />
   </head>`);
   res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
   return res.send(html);
@@ -1245,7 +1257,7 @@ app.get('/veteriner/:city/:district/:name', async (req, res) => {
 
     let html = getIndexHtmlTemplate();
 
-    const title = escapeHtml(`${vet.name} | ${vet.city} 7/24 Acil Nöbetçi Veteriner | Patiyle Seyahat`);
+    const title = escapeHtml(`${vet.name} | ${vet.city} 7/24 Acil Nöbetçi Veteriner | patili.co`);
     html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
 
     const desc = escapeHtml(`${vet.name} 7/24 açık acil veteriner kliniği: ${vet.address || ''}. ${(vet.description || '').slice(0, 130)}...`);
@@ -1289,7 +1301,7 @@ app.get('/rehber/:id', async (req, res) => {
     let html = getIndexHtmlTemplate();
 
     // Custom titles
-    const title = escapeHtml(`${guide.title} | Seyahat Rehberi | Patiyle Seyahat`);
+    const title = escapeHtml(`${guide.title} | Seyahat Rehberi | patili.co`);
     html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
 
     const desc = escapeHtml(guide.summary);
@@ -1310,7 +1322,7 @@ app.get('/rehber/:id', async (req, res) => {
       },
       "publisher": {
         "@type": "Organization",
-        "name": "Patiyle Seyahat",
+        "name": "patili.co",
         "logo": {
           "@type": "ImageObject",
           "url": "https://images.unsplash.com/photo-1544568100-847a948585b9?auto=format&fit=crop&w=80&q=80"
@@ -1336,17 +1348,17 @@ app.get('*', (req, res) => {
     // If requesting root path, inject organization & website schemas
     const path = req.path;
     if (path === '/' || path === '/home') {
-      const title = "Patiyle Seyahat | Türkiye'nin En Kapsamlı Evcil Hayvan Dostu Seyahat Platformu";
+      const title = "patili.co | Türkiye'nin En Kapsamlı Evcil Hayvan Dostu Seyahat & Mekan Rehberi";
       html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
 
-      const desc = "Türkiye genelinde kedi ve köpek kabul eden oteller, pansiyonlar ve bakım merkezleri. Editör onaylı evcil hayvan politikaları ve 10 üzerinden Pati Güven Endeksi.";
+      const desc = "Türkiye genelinde kedi ve köpek kabul eden oteller, mekanlar, pansiyonlar ve bakım merkezleri. Editör onaylı evcil hayvan politikaları ve 10 üzerinden Pati Güven Endeksi.";
       html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${desc}" />`);
       html = html.replace('</head>', `
-        <link rel="canonical" href="https://www.patiyleseyahat.com/" />
+        <link rel="canonical" href="https://patili.co/" />
         <meta property="og:title" content="${title}" />
         <meta property="og:description" content="${desc}" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.patiyleseyahat.com/" />
+        <meta property="og:url" content="https://patili.co/" />
       </head>`);
 
       const jsonLd = {
@@ -1354,12 +1366,12 @@ app.get('*', (req, res) => {
         "@graph": [
           {
             "@type": "WebSite",
-            "name": "Patiyle Seyahat",
-            "url": "https://www.patiyleseyahat.com/",
-            "description": "Evcil hayvan sahipleri için otel arama ve bakım otelleri rehberi.",
+            "name": "patili.co",
+            "url": "https://patili.co/",
+            "description": "Evcil hayvan sahipleri için otel, mekan arama ve bakım otelleri rehberi.",
             "publisher": {
               "@type": "Organization",
-              "name": "Patiyle Seyahat",
+              "name": "patili.co",
               "logo": {
                 "@type": "ImageObject",
                 "url": "https://images.unsplash.com/photo-1544568100-847a948585b9?auto=format&fit=crop&w=80&q=80"
@@ -1394,7 +1406,7 @@ export default app;
 if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
   app.listen(PORT, () => {
     console.log(`==================================================`);
-    console.log(`Patiyle Seyahat Full-Stack REST API & Server listening on port ${PORT}`);
+    console.log(`patili.co Full-Stack REST API & Server listening on port ${PORT}`);
     console.log(`Database connected: ${process.env.DATABASE_URL ? 'DATABASE_URL' : 'local PostgreSQL (Port 5436)'}`);
     console.log(`Dynamic HTML Prerender SEO/GEO engine started.`);
     console.log(`==================================================`);

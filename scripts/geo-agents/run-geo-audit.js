@@ -35,7 +35,7 @@ const sampleHotel = {
   hasGarden: true,
   priceRange: '₺₺₺'
 };
-const hotelSchema = buildHotelSchema(sampleHotel, 'https://patiyleseyahat.com/otel/antalya/muratpasa/lara-pet-resort');
+const hotelSchema = buildHotelSchema(sampleHotel, 'https://patili.co/otel/antalya/muratpasa/lara-pet-resort');
 console.log(`   - Marka Entity Adı: ${BRAND_ENTITY.name} (@id: ${BRAND_ENTITY['@id']})`);
 console.log(`   - Wikidata sameAs Referansı: ${BRAND_ENTITY.sameAs[0]}`);
 console.log(`   - Otel Şeması: @type = ${hotelSchema['@type']}, petsAllowed = ${hotelSchema.petsAllowed}\n`);

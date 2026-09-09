@@ -232,10 +232,10 @@ export default function DetailView({
         "@context": "https://schema.org",
         "@type": "VeterinaryCare",
         "name": item.name,
-        "image": item.imageUrl || "https://patiyleseyahat.com/assets/vet-placeholder.jpg",
+        "image": item.imageUrl || "https://patili.co/assets/vet-placeholder.jpg",
         "telephone": item.phone,
         "email": item.email || "",
-        "url": item.website || "https://patiyleseyahat.com",
+        "url": item.website || "https://patili.co",
         "address": {
           "@type": "PostalAddress",
           "streetAddress": item.address,
