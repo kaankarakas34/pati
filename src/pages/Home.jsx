@@ -91,12 +91,12 @@ export default function Home({ onViewChange, setSearchFilters }) {
           </p>
 
           {/* Quick Filter Bar */}
-          <form onSubmit={handleSearch} className="bg-white p-4 md:p-4 md:px-6 rounded-3xl md:rounded-full shadow-xl border-2 border-brand-navy/10 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-3 items-center">
+          <form onSubmit={handleSearch} className="bg-white p-3 md:py-2.5 md:pl-6 md:pr-2.5 rounded-3xl md:rounded-full shadow-xl border border-brand-beige max-w-3xl mx-auto flex flex-col md:flex-row items-center gap-3">
             {/* Destination Input */}
-            <div className="flex flex-col text-left px-2 border-b md:border-b-0 md:border-r border-brand-beige pb-2 md:pb-0">
-              <label htmlFor="home-destination" className="text-2xs font-bold text-gray-600 uppercase tracking-wider mb-1">Nereye?</label>
+            <div className="flex-1 flex flex-col text-left px-2 w-full md:w-auto border-b md:border-b-0 md:border-r border-brand-beige pb-2 md:pb-0">
+              <label htmlFor="home-destination" className="text-2xs font-bold text-gray-500 uppercase tracking-wider mb-0.5">Nereye?</label>
               <div className="flex items-center gap-2">
-                <LocationIcon className="w-4 h-4 text-brand-navy flex-shrink-0" />
+                <LocationIcon className="w-4 h-4 text-brand-c2 flex-shrink-0" />
                 <input
                   id="home-destination"
                   name="destination"
@@ -111,15 +111,15 @@ export default function Home({ onViewChange, setSearchFilters }) {
             </div>
 
             {/* Pet Type */}
-            <div className="flex flex-col text-left px-2 border-b md:border-b-0 md:border-r border-brand-beige py-2 md:py-0">
-              <label htmlFor="home-pet-type" className="text-2xs font-bold text-gray-600 uppercase tracking-wider mb-1">Patili Dostunuz</label>
+            <div className="flex flex-col text-left px-2 w-full md:w-auto pb-2 md:pb-0 min-w-[170px]">
+              <label htmlFor="home-pet-type" className="text-2xs font-bold text-gray-500 uppercase tracking-wider mb-0.5">Patili Dostunuz</label>
               <select
                 id="home-pet-type"
                 name="petType"
                 aria-label="Patili dostunuzun türünü seçin"
                 value={petType}
                 onChange={(e) => setPetType(e.target.value)}
-                className="bg-transparent border-none py-1 text-sm font-medium text-brand-navy outline-none cursor-pointer focus:ring-0 focus:border-brand-navy"
+                className="bg-transparent border-none py-0 text-sm font-medium text-brand-navy outline-none cursor-pointer focus:ring-0 focus:border-brand-navy"
               >
                 <option value="all">Tüm Evcil Hayvanlar</option>
                 <option value="dog">Köpek</option>
@@ -128,30 +128,10 @@ export default function Home({ onViewChange, setSearchFilters }) {
               </select>
             </div>
 
-            {/* Accommodation Type */}
-            <div className="flex flex-col text-left px-2 border-t md:border-t-0 md:border-l border-brand-beige pt-2 md:pt-0">
-              <label htmlFor="home-acc-type" className="text-2xs font-bold text-gray-600 uppercase tracking-wider mb-1">Konaklama Türü</label>
-              <select
-                id="home-acc-type"
-                name="accType"
-                aria-label="Konaklama türünü seçin"
-                value={accType}
-                onChange={(e) => setAccType(e.target.value)}
-                className="bg-transparent border-none py-1 text-sm font-medium text-brand-navy outline-none cursor-pointer focus:ring-0 focus:border-brand-navy"
-              >
-                <option value="all">Tüm Tesisler</option>
-                <option value="Otel">Otel</option>
-                <option value="Butik Otel">Butik Otel</option>
-                <option value="Bungalov">Bungalov</option>
-                <option value="Villa">Villa</option>
-                <option value="Glamping tesisi">Glamping</option>
-              </select>
-            </div>
-
             {/* Submit Button */}
             <button
               type="submit"
-              className="bg-brand-c2 hover:bg-brand-c1 text-white font-bold rounded-full flex items-center justify-center gap-2 py-3 px-6 transition-all shadow-md mt-2 md:mt-0 font-title border border-brand-c2/20"
+              className="bg-brand-c2 hover:bg-brand-c1 text-white font-bold rounded-full flex items-center justify-center gap-2 py-3 px-7 transition-all shadow-md w-full md:w-auto font-title"
             >
               <SearchIcon className="w-4 h-4 text-white" />
               <span>Ara</span>
@@ -229,9 +209,6 @@ export default function Home({ onViewChange, setSearchFilters }) {
                   <TaxiCarIcon className="w-6 h-6 text-brand-c2" />
                 </div>
                 <h4 className="text-lg font-bold font-title text-brand-c1 group-hover:text-brand-c2 transition-colors">Pet Taksi</h4>
-                <p className="text-gray-600 mt-2 text-xs leading-relaxed">
-                  Veteriner, havaalanı, otel ve şehirler arası güvenli, klimalı ve kafesli evcil hayvan transferi.
-                </p>
               </div>
               <span className="text-brand-c2 font-bold flex items-center gap-1.5 mt-5 group-hover:translate-x-1 transition-transform text-xs">
                 <span>Taksileri İncele</span>
@@ -249,9 +226,6 @@ export default function Home({ onViewChange, setSearchFilters }) {
                   <BoardingHomeIcon className="w-6 h-6 text-brand-c2" />
                 </div>
                 <h4 className="text-lg font-bold font-title text-brand-c1 group-hover:text-brand-c2 transition-colors">Pet Otel</h4>
-                <p className="text-gray-600 mt-2 text-xs leading-relaxed">
-                  Siz tatildeyken kedi ve köpekleriniz için 7/24 uzman gözetimli, kafessiz konforlu bakım merkezleri.
-                </p>
               </div>
               <span className="text-brand-c2 font-bold flex items-center gap-1.5 mt-5 group-hover:translate-x-1 transition-transform text-xs">
                 <span>Pet Otelleri Gör</span>
@@ -269,9 +243,6 @@ export default function Home({ onViewChange, setSearchFilters }) {
                   <DogWalkerIcon className="w-6 h-6 text-brand-c2" />
                 </div>
                 <h4 className="text-lg font-bold font-title text-brand-c1 group-hover:text-brand-c2 transition-colors">Köpek Gezdiriciler</h4>
-                <p className="text-gray-600 mt-2 text-xs leading-relaxed">
-                  Günlük düzenli yürüyüş, tuvalet ve sosyalleşme için referanslı ve doğrulanmış gezdiriciler.
-                </p>
               </div>
               <span className="text-brand-c2 font-bold flex items-center gap-1.5 mt-5 group-hover:translate-x-1 transition-transform text-xs">
                 <span>Gezdirici Bul</span>
@@ -289,9 +260,6 @@ export default function Home({ onViewChange, setSearchFilters }) {
                   <VetClinicIcon className="w-6 h-6 text-brand-c2" />
                 </div>
                 <h4 className="text-lg font-bold font-title text-brand-c1 group-hover:text-brand-c2 transition-colors">7/24 Veterinerler</h4>
-                <p className="text-gray-600 mt-2 text-xs leading-relaxed">
-                  Seyahatinizde acil durumlar için nöbetçi veteriner klinikleri, iletişim numaraları ve acil müdahale.
-                </p>
               </div>
               <span className="text-brand-c2 font-bold flex items-center gap-1.5 mt-5 group-hover:translate-x-1 transition-transform text-xs">
                 <span>Nöbetçi Klinik Bul</span>
