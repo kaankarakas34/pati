@@ -14,7 +14,7 @@ export function useCatalog(resource,filters={},admin=false,enabled=true,allPages
     const timer=setTimeout(async()=>{
       const params=new URLSearchParams({envelope:'true',limit:allPages?'100':'24'});
       for(const [name,value] of Object.entries(filters)) {
-        for(const item of Array.isArray(value)?value:[value]) if(item!==undefined&&item!==null&&item!==''&&item!=='all')params.append(name,String(item));
+        for(const item of Array.isArray(value)?value:[value]) if(item!==undefined&&item!==null&&item!==''&&item!==false&&item!=='all')params.append(name,String(item));
       }
       if(cursor&&!allPages)params.set('cursor',cursor);
       try {

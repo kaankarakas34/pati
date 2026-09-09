@@ -10,6 +10,7 @@ import { seoContent } from '../data/seoContent';
 import PetTaxiAdBanner from '../components/PetTaxiAdBanner';
 
 export default function Home({ onViewChange, setSearchFilters }) {
+  const [activeTab, setActiveTab] = useState('hotel'); // 'hotel' | 'venue'
   const [destination, setDestination] = useState('');
   const [petType, setPetType] = useState('all');
   const [accType, setAccType] = useState('all');
@@ -39,6 +40,10 @@ export default function Home({ onViewChange, setSearchFilters }) {
 
   const handleSearch = (e) => {
     e.preventDefault();
+    if (activeTab === 'venue') {
+      onViewChange('experiences');
+      return;
+    }
     setSearchFilters({
       destination,
       petType,
@@ -90,19 +95,52 @@ export default function Home({ onViewChange, setSearchFilters }) {
             Türkiye'nin en kapsamlı pet friendly platformunda doğrulanmış otelleri, patili mekanları ve tüm hizmetleri güvenle keşfedin.
           </p>
 
+          {/* Search Type Tabs (Otel / Mekan) */}
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <div className="inline-flex p-1 bg-white/80 backdrop-blur-xs border border-brand-beige rounded-full shadow-xs">
+              <button
+                type="button"
+                onClick={() => setActiveTab('hotel')}
+                className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
+                  activeTab === 'hotel'
+                    ? 'bg-brand-c2 text-white shadow-sm'
+                    : 'text-brand-c3 hover:text-brand-c1 hover:bg-brand-cream/60'
+                }`}
+              >
+                <HotelIcon className={`w-4 h-4 ${activeTab === 'hotel' ? 'text-white' : 'text-brand-c3'}`} />
+                <span>Otel & Konaklama</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab('venue')}
+                className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
+                  activeTab === 'venue'
+                    ? 'bg-brand-c2 text-white shadow-sm'
+                    : 'text-brand-c3 hover:text-brand-c1 hover:bg-brand-cream/60'
+                }`}
+              >
+                <DiningIcon className={`w-4 h-4 ${activeTab === 'venue' ? 'text-white' : 'text-brand-c3'}`} />
+                <span>Patili Mekan</span>
+              </button>
+            </div>
+          </div>
+
           {/* Quick Filter Bar */}
           <form onSubmit={handleSearch} className="bg-white p-3 md:py-2.5 md:pl-6 md:pr-2.5 rounded-3xl md:rounded-full shadow-xl border border-brand-beige max-w-3xl mx-auto flex flex-col md:flex-row items-center gap-3">
             {/* Destination Input */}
             <div className="flex-1 flex flex-col text-left px-2 w-full md:w-auto border-b md:border-b-0 md:border-r border-brand-beige pb-2 md:pb-0">
-              <label htmlFor="home-destination" className="text-2xs font-bold text-gray-500 uppercase tracking-wider mb-0.5">Nereye?</label>
+              <label htmlFor="home-destination" className="text-2xs font-bold text-gray-500 uppercase tracking-wider mb-0.5">
+                {activeTab === 'hotel' ? 'Nereye?' : 'Hangi Şehir veya Mekan?'}
+              </label>
               <div className="flex items-center gap-2">
                 <LocationIcon className="w-4 h-4 text-brand-c2 flex-shrink-0" />
                 <input
                   id="home-destination"
                   name="destination"
-                  aria-label="Nereye seyahat etmek istiyorsunuz?"
+                  aria-label={activeTab === 'hotel' ? 'Nereye seyahat etmek istiyorsunuz?' : 'Hangi mekanda vakit geçirmek istiyorsunuz?'}
                   type="text"
-                  placeholder="İl, ilçe veya otel adı..."
+                  placeholder={activeTab === 'hotel' ? 'İl, ilçe veya otel adı...' : 'İl, ilçe, kafe, restoran veya plaj adı...'}
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
                   className="w-full bg-transparent border-none p-0 text-sm font-medium focus:ring-0 text-brand-navy placeholder-gray-400 outline-none"
@@ -131,10 +169,10 @@ export default function Home({ onViewChange, setSearchFilters }) {
             {/* Submit Button */}
             <button
               type="submit"
-              className="bg-brand-c2 hover:bg-brand-c1 text-white font-bold rounded-full flex items-center justify-center gap-2 py-3 px-7 transition-all shadow-md w-full md:w-auto font-title"
+              className="bg-brand-c2 hover:bg-brand-c1 text-white font-bold rounded-full flex items-center justify-center gap-2 py-3 px-7 transition-all shadow-md w-full md:w-auto font-title cursor-pointer"
             >
               <SearchIcon className="w-4 h-4 text-white" />
-              <span>Ara</span>
+              <span>{activeTab === 'hotel' ? 'Otel Ara' : 'Mekan Ara'}</span>
             </button>
           </form>
         </div>
