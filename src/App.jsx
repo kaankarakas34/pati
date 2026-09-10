@@ -21,7 +21,7 @@ import AdApplication from './pages/AdApplication';
 import BusinessApplication from './pages/BusinessApplication';
 import LegalDocument from './pages/LegalDocument';
 import { LEGAL_DOCUMENTS } from './data/legalDocuments';
-import { getHotelPath, getVetPath } from '../lib/seo-slugs';
+import { getHotelPath, getVetPath, getBoardingPath } from '../lib/seo-slugs';
 
 const CATEGORY_SEO = {
   'legal-hub': {
@@ -100,6 +100,7 @@ function App() {
   const [detailRecord, setDetailRecord] = useState(null);
   const [hotelSlugs, setHotelSlugs] = useState(null);
   const [vetSlugs, setVetSlugs] = useState(null);
+  const [boardingSlugs, setBoardingSlugs] = useState(null);
 
   // Routing state
   const [currentView, setCurrentView] = useState('loading');
@@ -144,7 +145,7 @@ function App() {
     const categoryMeta = CATEGORY_SEO[currentView];
     const canonicalPath = hotel ? getHotelPath(hotel)
       : vet ? getVetPath(vet)
-      : boarding ? `/bakim/${boarding.id}`
+      : boarding ? getBoardingPath(boarding)
       : taxi ? `/taksi/${taxi.id}`
       : cityLanding ? window.location.pathname
       : categoryMeta?.path || window.location.pathname;
@@ -156,7 +157,7 @@ function App() {
       : vet
       ? `${vet.name} - 7/24 Acil Nöbetçi Veteriner ${vet.district}, ${vet.city} | patili.co`
       : boarding
-      ? `${boarding.name} - Kedi & Köpek Oteli ${boarding.district}, ${boarding.city} | patili.co`
+      ? `${boarding.name} - ${boarding.district ? `${boarding.district}, ` : ''}${boarding.city} Pet Oteli & Pansiyonu | patili.co`
       : taxi
       ? `${taxi.name} - Evcil Hayvan Taksi ${taxi.city} | patili.co`
       : cityLanding
@@ -375,6 +376,13 @@ function App() {
           : null);
         setCurrentView('accommodation-detail');
         setSelectedItemId(segments.length === 2 ? segments[1] : null);
+      } else if (path.startsWith('/kedi-kopek-oteli/')) {
+        const segments = path.split('/').filter(Boolean).map(segment => decodeURIComponent(segment));
+        setBoardingSlugs(segments.length === 4
+          ? { citySlug: segments[1], districtSlug: segments[2], nameSlug: segments[3] }
+          : null);
+        setCurrentView('boarding-detail');
+        setSelectedItemId(segments.length === 2 ? segments[1] : null);
       } else if (path.startsWith('/bakim/')) {
         const id = path.split('/bakim/')[1];
         setCurrentView('boarding-detail');
@@ -432,6 +440,7 @@ function App() {
     setDetailRecord(null);
     setHotelSlugs(null);
     setVetSlugs(null);
+    setBoardingSlugs(null);
     if (id) {
       setSelectedItemId(id);
       const cleanPath = preferredPath || (view === 'accommodation-detail' ? `/otel/${encodeURIComponent(id)}`
@@ -497,7 +506,7 @@ function App() {
       case 'vet-detail': {
         const resource = { 'accommodation-detail': 'hotels', 'boarding-detail': 'boardings', 'taxi-detail': 'taxis', 'vet-detail': 'vets' }[currentView];
         return (
-          <DetailLoader key={JSON.stringify([resource, selectedItemId, hotelSlugs, vetSlugs])} resource={resource} id={selectedItemId} hotelSlugs={hotelSlugs} vetSlugs={vetSlugs} onLoad={setDetailRecord}>
+          <DetailLoader key={JSON.stringify([resource, selectedItemId, hotelSlugs, vetSlugs, boardingSlugs])} resource={resource} id={selectedItemId} hotelSlugs={hotelSlugs} vetSlugs={vetSlugs} boardingSlugs={boardingSlugs} onLoad={setDetailRecord}>
             {item => <DetailView key={item.id} item={item}
               isBoarding={resource === 'boardings'} isTaxi={resource === 'taxis'} isVet={resource === 'vets'}
               addComplaint={addComplaint} addCorrection={addCorrection} onViewChange={handleViewChange} />}

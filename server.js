@@ -13,8 +13,8 @@ import { getIndexHtmlTemplate } from './lib/html-template.js';
 import { createApiRouter, limitSubmission, asyncRoute } from './lib/api-router.js';
 import { repository } from './db.js';
 import { seoContent, generateCombinationSeoContent } from './src/data/seoContent.js';
-import { findHotelBySlugs, findClusterBySlug, getHotelPath, getVetPath, slugify, PROGRAMMATIC_CLUSTERS } from './lib/seo-slugs.js';
-import { renderHotelPreRenderHtml, renderVetPreRenderHtml, renderHomePreRenderHtml, render404PreRenderHtml, renderCategoryOrClusterPreRenderHtml, renderServicePreRenderHtml, renderGuidePreRenderHtml } from './lib/seo-prerender.js';
+import { findHotelBySlugs, findClusterBySlug, getHotelPath, getVetPath, getBoardingPath, slugify, PROGRAMMATIC_CLUSTERS } from './lib/seo-slugs.js';
+import { renderHotelPreRenderHtml, renderVetPreRenderHtml, renderBoardingPreRenderHtml, renderHomePreRenderHtml, render404PreRenderHtml, renderCategoryOrClusterPreRenderHtml, renderServicePreRenderHtml, renderGuidePreRenderHtml } from './lib/seo-prerender.js';
 import { getEditorialArticleForCity, getEditorialArticleForCluster, POPULAR_CITIES } from './lib/editorial-guides.js';
 
 dotenv.config();
@@ -909,10 +909,18 @@ app.get('/otel/:id', asyncRoute(async (req, res) => {
   return redirectToLocalPath(res, getHotelPath(hotel));
 }));
 
-// 301 redirect individual boarding IDs to main category page (eliminates thin/dummy ID pages)
-app.get('/bakim/:id', (req, res) => {
-  return res.redirect(301, '/kedi-kopek-otelleri');
-});
+// 301 redirect individual boarding IDs to canonical SEO path
+app.get('/bakim/:id', asyncRoute(async (req, res) => {
+  try {
+    const boarding = await repository.one('boardings', req.params.id);
+    if (!boarding) {
+      return res.redirect(301, '/kedi-kopek-otelleri');
+    }
+    return res.redirect(301, getBoardingPath(boarding));
+  } catch {
+    return res.redirect(301, '/kedi-kopek-otelleri');
+  }
+}));
 
 // 301 redirect individual taxi IDs to main taxi category
 app.get('/taksi/:id', (req, res) => {
@@ -1014,6 +1022,117 @@ app.get('/veteriner/:city/:district/:name', async (req, res) => {
 
     // 5. Inject semantic pre-rendered HTML into root div
     const preRenderHtml = renderVetPreRenderHtml(vet, relatedVets);
+    html = html.replace('<div id="root"></div>', `<div id="root">${preRenderHtml}</div>`);
+
+    res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+    return res.send(html);
+  } catch (err) {
+    res.status(500).send("Bir hata oluştu.");
+  }
+});
+
+// Intercept Pet Boarding / Pet Oteli page request for SEO & GEO
+app.get('/kedi-kopek-oteli/:city/:district/:name', async (req, res) => {
+  try {
+    const result = await repository.page('boardings', {
+      citySlug: req.params.city,
+      districtSlug: req.params.district,
+      nameSlug: req.params.name,
+      limit: 1
+    }, true);
+    const boarding = result.data?.[0];
+
+    if (!boarding) {
+      return res.status(404).send("Pet oteli veya bakım merkezi bulunamadı.");
+    }
+
+    let relatedBoardings = [];
+    try {
+      const relatedResult = await repository.page('boardings', { citySlug: req.params.city, limit: 6 }, true);
+      relatedBoardings = (relatedResult.data || []).filter(b => b.id !== boarding.id).slice(0, 3);
+    } catch {}
+
+    let html = getIndexHtmlTemplate();
+
+    // 1. Inject SERP-optimized title with regional SEO keywords
+    const title = escapeHtml(`${boarding.name} - ${boarding.district ? `${boarding.district}, ` : ''}${boarding.city} Pet Oteli & Pansiyonu | patili.co`);
+    html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
+
+    // 2. Inject concise meta description with regional keywords
+    const desc = escapeHtml(`${boarding.name} ${boarding.city} ${boarding.district} ${boarding.category?.toLowerCase() || 'pet oteli'}: Bireysel odalar, 7/24 gözetim, açık oyun alanları, kamera ve güvenli kedi-köpek pansiyon hizmeti.`);
+    html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${desc}" />`);
+
+    const canonicalUrl = `https://patili.co${getBoardingPath(boarding)}`;
+
+    // Regional keywords for meta tags
+    const regionalKeywords = [
+      `${boarding.city} pet oteli`,
+      `${boarding.district} pet oteli`,
+      `${boarding.city} kedi oteli`,
+      `${boarding.city} köpek pansiyonu`,
+      `${boarding.district} kedi pansiyonu`,
+      `${boarding.city} evcil hayvan bakım evi`,
+      `${boarding.name}`,
+      `${boarding.category?.toLowerCase() || 'pet oteli'}`
+    ].join(', ');
+
+    // 3. Inject OpenGraph & Twitter tags + SEO Keywords
+    const ogTags = `
+      <link rel="canonical" href="${canonicalUrl}" />
+      <meta name="keywords" content="${escapeHtml(regionalKeywords)}" />
+      <meta property="og:title" content="${title}" />
+      <meta property="og:description" content="${desc}" />
+      <meta property="og:type" content="business.business" />
+      <meta property="og:url" content="${canonicalUrl}" />
+      ${boarding.imageUrl ? `<meta property="og:image" content="${escapeHtml(boarding.imageUrl)}" />` : ''}
+      <meta name="twitter:card" content="summary_large_image" />
+    `;
+    html = html.replace('</head>', `${ogTags}\n</head>`);
+
+    // 4. Inject JSON-LD Schema (PetGroomingOrBoarding + BreadcrumbList)
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "PetGroomingOrBoarding",
+          "@id": `${canonicalUrl}#business`,
+          "name": boarding.name,
+          "description": boarding.description || `${boarding.name} ${boarding.city} pet oteli ve bakım merkezi`,
+          "image": boarding.imageUrl,
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": boarding.district,
+            "addressRegion": boarding.city,
+            "addressCountry": "TR"
+          },
+          "telephone": boarding.phone || '',
+          "url": canonicalUrl,
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": (Number(boarding.baseTrustScore || 9.0) / 2).toFixed(1),
+            "bestRating": "5",
+            "worstRating": "1",
+            "ratingCount": "12"
+          },
+          "priceRange": "₺₺"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Ana Sayfa", "item": "https://patili.co/" },
+            { "@type": "ListItem", "position": 2, "name": "Kedi ve Köpek Otelleri", "item": "https://patili.co/kedi-kopek-otelleri" },
+            { "@type": "ListItem", "position": 3, "name": `${boarding.city} Pet Otelleri`, "item": `https://patili.co/kedi-kopek-otelleri?city=${slugify(boarding.city || '')}` },
+            { "@type": "ListItem", "position": 4, "name": boarding.name, "item": canonicalUrl }
+          ]
+        }
+      ]
+    };
+
+    const schemaScript = `<script type="application/ld+json">\n${serializeJsonLd(jsonLd)}\n</script>`;
+    html = html.replace('</head>', `${schemaScript}\n</head>`);
+
+    // 5. Inject semantic pre-rendered HTML into root div
+    const preRenderHtml = renderBoardingPreRenderHtml(boarding, relatedBoardings);
     html = html.replace('<div id="root"></div>', `<div id="root">${preRenderHtml}</div>`);
 
     res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { DogIcon, CatIcon, VerifiedBadge, LocationIcon } from '../components/PetIcons';
 import SeoContentSection from '../components/SeoContentSection';
 import { seoContent } from '../data/seoContent';
+import { getBoardingPath } from '../../lib/seo-slugs';
 
 export default function Boardings({ boardings, onViewChange }) {
   // Local filters state
@@ -158,14 +159,19 @@ export default function Boardings({ boardings, onViewChange }) {
               {filteredBoardings.map(boarding => (
                 <div
                   key={boarding.id}
-                  onClick={() => onViewChange('boarding-detail', boarding.id)}
-                  className="bg-white rounded-3xl overflow-hidden shadow-xs border-2 border-brand-navy/10 hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col md:flex-row text-left"
+                  onClick={() => onViewChange('boarding-detail', boarding.id, getBoardingPath(boarding))}
+                  className="bg-white rounded-3xl overflow-hidden shadow-xs border-2 border-brand-navy/10 hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col md:flex-row text-left group"
                 >
                   {/* Image */}
                   <div className="md:w-1/3 h-52 md:h-auto bg-gray-200 relative">
-                    <img src={boarding.imageUrl} alt={boarding.name} className="w-full h-full object-cover" />
+                    <img
+                      src={boarding.imageUrl || 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=800&q=80'}
+                      alt={`${boarding.name} - ${boarding.city} Pet Oteli`}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
                     {/* Camera Badge Overlay */}
-                    {boarding.features.includes('Canlı kamera') && (
+                    {boarding.features?.includes('Canlı kamera') && (
                       <span className="absolute bottom-3 left-3 bg-red-600 text-white text-3xs font-extrabold px-2 py-0.5 rounded uppercase tracking-wider flex items-center gap-1 shadow-md">
                         <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
                         Canlı Yayın
@@ -176,49 +182,76 @@ export default function Boardings({ boardings, onViewChange }) {
                   {/* Body Content */}
                   <div className="md:w-2/3 p-6 flex flex-col justify-between space-y-4">
                     <div className="space-y-2">
-                      <div className="flex justify-between items-start">
+                      <div className="flex justify-between items-start flex-wrap gap-2">
                         <span className="text-2xs font-bold text-brand-navy uppercase tracking-wider bg-brand-earth-light px-2.5 py-0.5 rounded-md">
                           {boarding.category}
                         </span>
-                        <div className="flex items-center text-xs text-white bg-brand-navy px-2.5 py-1 rounded-full text-3xs">
-                          <VerifiedBadge className="w-3.5 h-3.5 mr-0.5" /> Doğrulandı
+                        <div className="flex items-center gap-1.5">
+                          {boarding.baseTrustScore && (
+                            <span className="text-3xs font-black bg-brand-yellow/30 text-brand-earth-dark px-2 py-0.5 rounded-full">
+                              ★ {boarding.baseTrustScore} / 10
+                            </span>
+                          )}
+                          <div className="flex items-center text-xs text-white bg-brand-navy px-2.5 py-1 rounded-full text-3xs">
+                            <VerifiedBadge className="w-3.5 h-3.5 mr-0.5" /> Doğrulandı
+                          </div>
                         </div>
                       </div>
 
                       <h3 className="font-title text-xl font-bold text-gray-900 group-hover:text-brand-navy transition-colors">
-                        {boarding.name}
+                        <a
+                          href={getBoardingPath(boarding)}
+                          onClick={(e) => { e.preventDefault(); onViewChange('boarding-detail', boarding.id, getBoardingPath(boarding)); }}
+                          className="hover:underline"
+                        >
+                          {boarding.name}
+                        </a>
                       </h3>
                       
-                      <p className="text-xs text-gray-500 flex items-center gap-1">
-                        <LocationIcon className="w-3.5 h-3.5 text-brand-navy" /> {boarding.city}, {boarding.district}
-                      </p>
+                      <div className="flex items-center gap-3 text-xs text-gray-500 flex-wrap">
+                        <p className="flex items-center gap-1">
+                          <LocationIcon className="w-3.5 h-3.5 text-brand-navy" /> {boarding.city}, {boarding.district}
+                        </p>
+                        {boarding.phone && (
+                          <span className="text-brand-navy font-semibold flex items-center gap-1">
+                            📞 {boarding.phone}
+                          </span>
+                        )}
+                      </div>
 
                       <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed">{boarding.description}</p>
                     </div>
 
                     {/* Features list & details */}
                     <div className="flex flex-wrap gap-1.5 pt-3 border-t border-brand-beige items-center justify-between">
-                      <div className="flex flex-wrap gap-1">
-                        {boarding.features.slice(0, 3).map((feat, i) => (
-                          <span key={i} className="text-3xs bg-brand-beige px-2.5 py-1 rounded-full text-brand-navy font-bold text-3xs">
+                      <div className="flex flex-wrap gap-1 items-center">
+                        {(boarding.features || []).slice(0, 3).map((feat, i) => (
+                          <span key={i} className="text-3xs bg-brand-beige px-2.5 py-1 rounded-full text-brand-navy font-bold">
                             {feat}
                           </span>
                         ))}
-                        {boarding.features.length > 3 && (
-                          <span className="text-3xs bg-brand-beige px-2.5 py-1 rounded-full text-brand-navy/60 font-bold text-3xs">
-                            +{boarding.features.length - 3} daha
+                        {(boarding.features || []).length > 3 && (
+                          <span className="text-3xs bg-brand-beige px-2.5 py-1 rounded-full text-brand-navy/60 font-bold">
+                            +{(boarding.features || []).length - 3} daha
                           </span>
                         )}
+                        <span className="text-3xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded font-medium ml-1">
+                          #{boarding.city.toLowerCase()}-pet-oteli
+                        </span>
                       </div>
                       
                       <div className="flex items-center gap-3">
                         <div className="text-right">
-                          <span className="text-3xs text-gray-400 block font-light">Başlangıç fiyatı</span>
-                          <span className="text-sm font-bold text-brand-navy">{boarding.price}</span>
+                          <span className="text-3xs text-gray-400 block font-light">Fiyat Durumu</span>
+                          <span className="text-xs font-bold text-brand-navy">{boarding.price}</span>
                         </div>
-                        <button className="bg-brand-navy hover:bg-brand-navy-hover text-white transition-colors px-5 py-2.5 rounded-full text-xs font-bold border border-brand-navy/10 font-title transition-colors">
+                        <a
+                          href={getBoardingPath(boarding)}
+                          onClick={(e) => { e.preventDefault(); onViewChange('boarding-detail', boarding.id, getBoardingPath(boarding)); }}
+                          className="bg-brand-navy hover:bg-brand-navy-hover text-white transition-colors px-5 py-2.5 rounded-full text-xs font-bold border border-brand-navy/10 font-title"
+                        >
                           Detayları İncele &rarr;
-                        </button>
+                        </a>
                       </div>
                     </div>
                   </div>

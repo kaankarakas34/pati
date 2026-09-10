@@ -4,7 +4,7 @@ import AdBanner from '../components/AdBanner';
 import { useCatalog } from '../lib/useCatalog';
 import CatalogPagination from '../components/CatalogPagination';
 import Breadcrumbs from '../components/Breadcrumbs';
-import { slugify, getHotelPath, getVetPath } from '../../lib/seo-slugs';
+import { slugify, getHotelPath, getVetPath, getBoardingPath } from '../../lib/seo-slugs';
 
 function uniqueItems(items) {
   return Array.from(new Set(items.filter(Boolean)));
@@ -358,8 +358,9 @@ export default function DetailView({
     : isVet ? { label: '7/24 Acil Veterinerler', view: 'vets', id: null, url: '/veterinerler' }
     : isBoarding ? { label: 'Kedi & Köpek Otelleri', view: 'boardings', id: null, url: '/kedi-kopek-otelleri' }
     : { label: 'Pet Dostu Oteller', view: 'accommodations', id: null, url: '/evcil-hayvan-dostu-oteller' },
+    item.city && isBoarding ? { label: `${item.city} Pet Otelleri`, view: 'boardings', id: null, url: `/kedi-kopek-otelleri?city=${slugify(item.city)}` } : null,
     item.city && !isUtility && !isBoarding ? { label: `${item.city} Otelleri`, view: 'accommodations', id: null, url: `/evcil-hayvan-dostu-oteller/${slugify(item.city)}` } : null,
-    { label: item.name, view: null, id: item.id, url: isTaxi ? `/taksi/${item.id}` : isVet ? getVetPath(item) : isBoarding ? `/bakim/${item.id}` : getHotelPath(item) }
+    { label: item.name, view: null, id: item.id, url: isTaxi ? `/taksi/${item.id}` : isVet ? getVetPath(item) : isBoarding ? getBoardingPath(item) : getHotelPath(item) }
   ].filter(Boolean);
 
   return (
@@ -579,16 +580,47 @@ export default function DetailView({
               <span className="text-4xs text-gray-400 font-normal">Son Doğrulama: {item.lastVerified}</span>
               <span className="text-4xs text-gray-400 font-normal">Kaynak: {item.infoSource}</span>
             </div>
-            <a
-              href={item.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`w-full block text-center font-bold py-3 rounded-full text-sm font-title shadow-sm transition-colors text-white border-2 border-brand-navy ${
-                'bg-brand-navy hover:bg-brand-navy-hover'
-              }`}
-            >
-              {isBoarding ? 'İşletmeyle İletişime Geç' : 'Resmi Web Sitesinden Rezervasyon Yap'}
-            </a>
+            {isBoarding ? (
+              <div className="space-y-2">
+                {item.phone && (
+                  <a
+                    href={`tel:${item.phone}`}
+                    className="w-full block text-center font-bold py-3 rounded-full text-sm font-title shadow-sm transition-colors text-white bg-green-700 hover:bg-green-800 border-2 border-green-700 flex items-center justify-center gap-2"
+                  >
+                    <span>📞</span> Hemen Ara: {item.phone}
+                  </a>
+                )}
+                {item.website && (
+                  <a
+                    href={item.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full block text-center font-bold py-2.5 rounded-full text-xs font-title shadow-sm transition-colors text-white bg-brand-navy hover:bg-brand-navy-hover border-2 border-brand-navy"
+                  >
+                    🌐 Resmi Web Sitesini Ziyaret Et
+                  </a>
+                )}
+                {item.bookingLinks?.google_maps && (
+                  <a
+                    href={item.bookingLinks.google_maps}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full block text-center font-bold py-2.5 rounded-full text-xs font-title shadow-sm transition-colors text-gray-750 bg-gray-100 hover:bg-gray-200 border border-gray-300"
+                  >
+                    📍 Google Haritalar'da Gör & Yol Tarifi
+                  </a>
+                )}
+              </div>
+            ) : (
+              <a
+                href={item.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`w-full block text-center font-bold py-3 rounded-full text-sm font-title shadow-sm transition-colors text-white border-2 border-brand-navy bg-brand-navy hover:bg-brand-navy-hover`}
+              >
+                Resmi Web Sitesinden Rezervasyon Yap
+              </a>
+            )}
             
             <button
               onClick={() => setFeedbackOpen(true)}
@@ -651,7 +683,7 @@ export default function DetailView({
         {/* Tab 1: Editorial */}
         {activeTab === 'editorial' && (
           <div className="space-y-8">
-            {/* GEO / VEO Direct Answer Card */}
+            {/* GEO / VEO Direct Answer Card for Hotels */}
             {!isBoarding && !isUtility && (
               <div className="bg-brand-navy-light/35 border-2 border-brand-navy/15 rounded-3xl p-5 md:p-6 text-sm">
                 <h4 className="font-title font-bold text-brand-navy text-base mb-2 flex items-center gap-2">
@@ -663,6 +695,45 @@ export default function DetailView({
                   {item.extraFee === 'no' ? ' Evcil hayvan konaklaması tamamen ücretsizdir.' : ` Evcil hayvan için ek ücret: ${item.extraFee}.`} 
                   Girişte aşı karnesi ibrazı zorunludur.
                 </p>
+              </div>
+            )}
+
+            {/* GEO / VEO Direct Answer Card for Boardings */}
+            {isBoarding && (
+              <div className="bg-brand-navy-light/35 border-2 border-brand-navy/15 rounded-3xl p-5 md:p-6 text-sm space-y-4">
+                <div>
+                  <h4 className="font-title font-bold text-brand-navy text-base mb-2 flex items-center gap-2">
+                    <span>💡</span> {item.name} Güvenilir Pet Oteli mi? Konaklama ve Bakım Koşulları
+                  </h4>
+                  <p className="text-gray-800 leading-relaxed font-medium text-xs md:text-sm">
+                    <strong>{item.name}</strong>, {item.city} ili {item.district} bölgesinde profesyonel kedi ve köpek konaklama, pansiyon ve gündüz bakım hizmeti sunan doğrulanmış bir evcil hayvan bakım merkezidir. 
+                    Tesis {item.cameraSupport ? '7/24 canlı kamera takibi' : 'düzenli fotoğraf ve video bilgilendirmesi'} sağlamakta olup hijyenik bireysel odalar, açık hava oyun alanları ve uzman personel gözetimi sunulmaktadır.
+                    Girişte güncel aşı karnesi ve parazit uygulamalarının ibrazı zorunludur.
+                  </p>
+                </div>
+
+                {/* Regional SEO Keywords Cloud */}
+                <div className="pt-3 border-t border-brand-navy/15">
+                  <span className="text-3xs font-extrabold text-gray-500 uppercase tracking-wider block mb-2">
+                    📍 Bölgesel Arama Terimleri ve Hizmet Alanı:
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {[
+                      `${item.city} pet oteli`,
+                      `${item.district} pet oteli`,
+                      `${item.city} kedi oteli`,
+                      `${item.city} köpek pansiyonu`,
+                      `${item.district} kedi & köpek bakımı`,
+                      `${item.city} pet pansiyon`,
+                      `en iyi ${item.city} pet otelleri`,
+                      `${item.city} evcil hayvan kreşi`
+                    ].map((tag, i) => (
+                      <span key={i} className="text-3xs bg-white text-brand-navy border border-brand-navy/20 px-2 py-0.5 rounded font-semibold">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
 
