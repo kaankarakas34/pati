@@ -11,11 +11,12 @@ import { getPublicUrl } from './lib/public-http.js'; // guardvibe-ignore VG678 -
 import { sendServerError, redirectToLocalPath, handleRequestError } from './lib/http-responses.js';
 import { getIndexHtmlTemplate } from './lib/html-template.js';
 import { createApiRouter, limitSubmission, asyncRoute } from './lib/api-router.js';
-import { repository } from './db.js';
+import { repository, pool } from './db.js';
 import { seoContent, generateCombinationSeoContent } from './src/data/seoContent.js';
 import { findHotelBySlugs, findClusterBySlug, getHotelPath, getVetPath, getBoardingPath, slugify, PROGRAMMATIC_CLUSTERS } from './lib/seo-slugs.js';
 import { renderHotelPreRenderHtml, renderVetPreRenderHtml, renderBoardingPreRenderHtml, renderHomePreRenderHtml, render404PreRenderHtml, renderCategoryOrClusterPreRenderHtml, renderServicePreRenderHtml, renderGuidePreRenderHtml } from './lib/seo-prerender.js';
 import { getEditorialArticleForCity, getEditorialArticleForCluster, POPULAR_CITIES } from './lib/editorial-guides.js';
+import { boardingSeoMetadata, boardingStructuredData } from './lib/boarding-seo.js';
 
 dotenv.config();
 
@@ -813,6 +814,7 @@ app.get('/sitemap.xml', async (req,res,next) => {
     }
     await addCatalog('hotels', getHotelPath);
     await addCatalog('vets', getVetPath);
+    await addCatalog('boardings', getBoardingPath);
     await addCatalog('guides', item => `/rehber/${encodeURIComponent(item.slug || item.id)}`);
 
     // Add valid city landing pages that actually have listed hotels
@@ -1054,81 +1056,41 @@ app.get('/kedi-kopek-oteli/:city/:district/:name', async (req, res) => {
 
     let html = getIndexHtmlTemplate();
 
-    // 1. Inject SERP-optimized title with regional SEO keywords
-    const title = escapeHtml(`${boarding.name} - ${boarding.district ? `${boarding.district}, ` : ''}${boarding.city} Pet Oteli & Pansiyonu | patili.co`);
+    const seo = boardingSeoMetadata(boarding);
+    const title = escapeHtml(seo.title);
     html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
 
-    // 2. Inject concise meta description with regional keywords
-    const desc = escapeHtml(`${boarding.name} ${boarding.city} ${boarding.district} ${boarding.category?.toLowerCase() || 'pet oteli'}: Bireysel odalar, 7/24 gözetim, açık oyun alanları, kamera ve güvenli kedi-köpek pansiyon hizmeti.`);
+    const desc = escapeHtml(seo.description);
     html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${desc}" />`);
 
     const canonicalUrl = `https://patili.co${getBoardingPath(boarding)}`;
+    html = html.replace(/<link rel="canonical" href=".*?" \/>/, `<link rel="canonical" href="${canonicalUrl}" />`);
+    html = html.replace(/<meta property="og:image" content=".*?" \/>/, `<meta property="og:image" content="${escapeHtml(seo.image)}" />`);
 
-    // Regional keywords for meta tags
-    const regionalKeywords = [
-      `${boarding.city} pet oteli`,
-      `${boarding.district} pet oteli`,
-      `${boarding.city} kedi oteli`,
-      `${boarding.city} köpek pansiyonu`,
-      `${boarding.district} kedi pansiyonu`,
-      `${boarding.city} evcil hayvan bakım evi`,
-      `${boarding.name}`,
-      `${boarding.category?.toLowerCase() || 'pet oteli'}`
-    ].join(', ');
-
-    // 3. Inject OpenGraph & Twitter tags + SEO Keywords
     const ogTags = `
-      <link rel="canonical" href="${canonicalUrl}" />
-      <meta name="keywords" content="${escapeHtml(regionalKeywords)}" />
       <meta property="og:title" content="${title}" />
       <meta property="og:description" content="${desc}" />
       <meta property="og:type" content="business.business" />
       <meta property="og:url" content="${canonicalUrl}" />
-      ${boarding.imageUrl ? `<meta property="og:image" content="${escapeHtml(boarding.imageUrl)}" />` : ''}
       <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="${title}" />
+      <meta name="twitter:description" content="${desc}" />
+      <meta name="twitter:image" content="${escapeHtml(seo.image)}" />
     `;
     html = html.replace('</head>', `${ogTags}\n</head>`);
 
-    // 4. Inject JSON-LD Schema (PetGroomingOrBoarding + BreadcrumbList)
-    const jsonLd = {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "PetGroomingOrBoarding",
-          "@id": `${canonicalUrl}#business`,
-          "name": boarding.name,
-          "description": boarding.description || `${boarding.name} ${boarding.city} pet oteli ve bakım merkezi`,
-          "image": boarding.imageUrl,
-          "address": {
-            "@type": "PostalAddress",
-            "addressLocality": boarding.district,
-            "addressRegion": boarding.city,
-            "addressCountry": "TR"
-          },
-          "telephone": boarding.phone || '',
-          "url": canonicalUrl,
-          "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": (Number(boarding.baseTrustScore || 9.0) / 2).toFixed(1),
-            "bestRating": "5",
-            "worstRating": "1",
-            "ratingCount": "12"
-          },
-          "priceRange": "₺₺"
-        },
-        {
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Ana Sayfa", "item": "https://patili.co/" },
-            { "@type": "ListItem", "position": 2, "name": "Kedi ve Köpek Otelleri", "item": "https://patili.co/kedi-kopek-otelleri" },
-            { "@type": "ListItem", "position": 3, "name": `${boarding.city} Pet Otelleri`, "item": `https://patili.co/kedi-kopek-otelleri?city=${slugify(boarding.city || '')}` },
-            { "@type": "ListItem", "position": 4, "name": boarding.name, "item": canonicalUrl }
-          ]
-        }
-      ]
-    };
+    let reviewSummary = { reviewCount: 0, ratingValue: null };
+    try {
+      const ratingResult = await pool.query(`SELECT count(*)::int AS review_count, round(avg(rating)::numeric, 1)::float AS rating_value
+        FROM public.reviews WHERE target_id = $1 AND status = 'approved'`, [boarding.id]);
+      reviewSummary = {
+        reviewCount: Number(ratingResult.rows[0]?.review_count || 0),
+        ratingValue: ratingResult.rows[0]?.rating_value == null ? null : Number(ratingResult.rows[0].rating_value)
+      };
+    } catch {}
 
-    const schemaScript = `<script type="application/ld+json">\n${serializeJsonLd(jsonLd)}\n</script>`;
+    const jsonLd = boardingStructuredData(boarding, { canonicalUrl, ...reviewSummary });
+    const schemaScript = `<script id="boarding-jsonld" type="application/ld+json">\n${serializeJsonLd(jsonLd)}\n</script>`;
     html = html.replace('</head>', `${schemaScript}\n</head>`);
 
     // 5. Inject semantic pre-rendered HTML into root div

@@ -5,15 +5,16 @@ import { createRepository } from './lib/repository.js';
 import { restrictPoolRole } from './lib/role-pool.js';
 
 const connection = databaseConfig(process.env.DATABASE_URL);
-const max = Number(process.env.DATABASE_POOL_MAX || 3);
+const max = Number(process.env.DATABASE_POOL_MAX || (process.env.VERCEL ? 1 : 3));
 if (!Number.isInteger(max) || max < 1 || max > 20) throw new Error('DATABASE_POOL_MAX must be between 1 and 20.');
 const rawPool = new pg.Pool({
-  ...connection, max, idleTimeoutMillis: 10000, connectionTimeoutMillis: 5000,
+  ...connection, max, idleTimeoutMillis: process.env.VERCEL ? 5000 : 10000, connectionTimeoutMillis: 5000,
   statement_timeout: 15000, query_timeout: 16000,
-  application_name: 'pati-api'
+  application_name: 'pati-api', allowExitOnIdle: true
 });
 rawPool.on('error', error => console.error('Database pool error:', error.code));
-export const pool = restrictPoolRole(rawPool);
+const transactionPooling = new URL(connection.connectionString || 'postgresql://localhost').port === '6543';
+export const pool = restrictPoolRole(rawPool, 'pati_api', { transactionPooling });
 export const repository = createRepository(pool);
 export async function checkDatabaseConnection() {
   const result = await pool.query('SELECT current_database() AS database, NOW() AS checked_at');

@@ -5,6 +5,7 @@ import { useCatalog } from '../lib/useCatalog';
 import CatalogPagination from '../components/CatalogPagination';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { slugify, getHotelPath, getVetPath, getBoardingPath } from '../../lib/seo-slugs';
+import { boardingFaqs, boardingSeoMetadata, boardingStructuredData } from '../../lib/boarding-seo';
 
 function uniqueItems(items) {
   return Array.from(new Set(items.filter(Boolean)));
@@ -217,14 +218,18 @@ export default function DetailView({
   const galleryImages = Array.from(new Set([item.imageUrl, ...(item.galleryImages || [])].filter(Boolean))).slice(0, 6);
   const selectedGalleryImage = galleryImages[Math.min(selectedGalleryIndex, galleryImages.length - 1)] || item.imageUrl;
   const amenityGroups = makeAmenityGroups(item, isBoarding, isVet);
+  const boardingMeta = isBoarding ? boardingSeoMetadata(item) : null;
+  const boardingQuestions = isBoarding ? boardingFaqs(item) : [];
+  const boardingReviewCount = isBoarding ? reviews.length : 0;
+  const boardingRatingValue = boardingReviewCount > 0
+    ? Number((reviews.reduce((sum, review) => sum + Number(review.rating || 0), 0) / boardingReviewCount).toFixed(1))
+    : null;
 
   // SEO/GEO/VEO JSON-LD Schema Generator
   useEffect(() => {
-    // Clean old script if exists
-    const oldScript = document.getElementById('jsonld-schema');
-    if (oldScript) {
-      oldScript.remove();
-    }
+    const schemaId = isBoarding ? 'boarding-jsonld' : 'jsonld-schema';
+    const staleSchemaId = isBoarding ? 'jsonld-schema' : 'boarding-jsonld';
+    document.getElementById(staleSchemaId)?.remove();
 
     // Generate JSON-LD object
     let jsonLd = {};
@@ -256,7 +261,13 @@ export default function DetailView({
         ],
         "priceRange": "$$"
       };
-    } else if (isBoarding || isTaxi) {
+    } else if (isBoarding) {
+      jsonLd = boardingStructuredData(item, {
+        canonicalUrl: `https://patili.co${getBoardingPath(item)}`,
+        reviewCount: boardingReviewCount,
+        ratingValue: boardingRatingValue
+      });
+    } else if (isTaxi) {
       jsonLd = {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
@@ -273,7 +284,7 @@ export default function DetailView({
         },
         "description": item.description,
         "priceRange": "$$",
-        "additionalType": isBoarding ? "https://schema.org/AnimalShelter" : "https://schema.org/TaxiService"
+        "additionalType": "https://schema.org/TaxiService"
       };
     } else {
       // Hotel Schema
@@ -305,7 +316,7 @@ export default function DetailView({
     }
 
     // Embed FAQ to support VEO/Voice search directly
-    if (item.faq && item.faq.length > 0) {
+    if (!isBoarding && item.faq && item.faq.length > 0) {
       jsonLd.mainEntity = item.faq.map(qna => ({
         "@type": "Question",
         "name": qna.q,
@@ -318,20 +329,20 @@ export default function DetailView({
     }
 
     // Create script element
-    const script = document.createElement('script');
-    script.id = 'jsonld-schema';
+    const script = document.getElementById(schemaId) || document.createElement('script');
+    script.id = schemaId;
     script.type = 'application/ld+json';
-    script.innerHTML = JSON.stringify(jsonLd);
-    document.head.appendChild(script);
+    script.textContent = JSON.stringify(jsonLd);
+    if (!script.isConnected) document.head.appendChild(script);
 
     // Cleanup on unmount
     return () => {
-      const scriptToRemove = document.getElementById('jsonld-schema');
+      const scriptToRemove = document.getElementById(schemaId);
       if (scriptToRemove) {
         scriptToRemove.remove();
       }
     };
-  }, [item, isBoarding, isTaxi, isVet, trustScore]);
+  }, [item, isBoarding, isTaxi, isVet, trustScore, boardingReviewCount, boardingRatingValue]);
 
   const handleSubmitFeedback = async (event) => {
     event.preventDefault();
@@ -703,37 +714,29 @@ export default function DetailView({
               <div className="bg-brand-navy-light/35 border-2 border-brand-navy/15 rounded-3xl p-5 md:p-6 text-sm space-y-4">
                 <div>
                   <h4 className="font-title font-bold text-brand-navy text-base mb-2 flex items-center gap-2">
-                    <span>💡</span> {item.name} Güvenilir Pet Oteli mi? Konaklama ve Bakım Koşulları
+                    <span>💡</span> {item.name} hakkında hızlı cevap
                   </h4>
                   <p className="text-gray-800 leading-relaxed font-medium text-xs md:text-sm">
-                    <strong>{item.name}</strong>, {item.city} ili {item.district} bölgesinde profesyonel kedi ve köpek konaklama, pansiyon ve gündüz bakım hizmeti sunan doğrulanmış bir evcil hayvan bakım merkezidir. 
-                    Tesis {item.cameraSupport ? '7/24 canlı kamera takibi' : 'düzenli fotoğraf ve video bilgilendirmesi'} sağlamakta olup hijyenik bireysel odalar, açık hava oyun alanları ve uzman personel gözetimi sunulmaktadır.
-                    Girişte güncel aşı karnesi ve parazit uygulamalarının ibrazı zorunludur.
+                    Kayıtlara göre <strong>{item.name}</strong>, {boardingMeta.location} konumunda {String(item.category || 'evcil hayvan konaklama tesisi').toLocaleLowerCase('tr-TR')} kategorisinde listelenir. {boardingMeta.acceptedPets}. {item.cameraSupport ? 'Kamera desteği bulunur.' : 'Kamera desteği kayıtta belirtilmemiştir.'}
                   </p>
                 </div>
-
-                {/* Regional SEO Keywords Cloud */}
-                <div className="pt-3 border-t border-brand-navy/15">
-                  <span className="text-3xs font-extrabold text-gray-500 uppercase tracking-wider block mb-2">
-                    📍 Bölgesel Arama Terimleri ve Hizmet Alanı:
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {[
-                      `${item.city} pet oteli`,
-                      `${item.district} pet oteli`,
-                      `${item.city} kedi oteli`,
-                      `${item.city} köpek pansiyonu`,
-                      `${item.district} kedi & köpek bakımı`,
-                      `${item.city} pet pansiyon`,
-                      `en iyi ${item.city} pet otelleri`,
-                      `${item.city} evcil hayvan kreşi`
-                    ].map((tag, i) => (
-                      <span key={i} className="text-3xs bg-white text-brand-navy border border-brand-navy/20 px-2 py-0.5 rounded font-semibold">
-                        #{tag}
-                      </span>
+                <dl className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-brand-navy/15 text-xs">
+                  <div><dt className="font-bold text-brand-navy">Konaklama modeli</dt><dd className="text-gray-700">{item.boardingModel || 'İşletmeyle doğrulayın'}</dd></div>
+                  <div><dt className="font-bold text-brand-navy">Fiyat</dt><dd className="text-gray-700">{item.price || 'İşletmeyle görüşün'}</dd></div>
+                  <div><dt className="font-bold text-brand-navy">Veteriner desteği</dt><dd className="text-gray-700">{item.accreditedVet || 'Kayıtta belirtilmemiştir'}</dd></div>
+                  <div><dt className="font-bold text-brand-navy">Bilgi kaynağı</dt><dd className="text-gray-700">{item.infoSource || 'İşletme ve açık kaynak kayıtları'}</dd></div>
+                </dl>
+                <section aria-labelledby="boarding-faq-heading" className="pt-3 border-t border-brand-navy/15">
+                  <h4 id="boarding-faq-heading" className="font-title font-bold text-brand-navy text-sm mb-3">Sık sorulan sorular</h4>
+                  <div className="space-y-3">
+                    {boardingQuestions.map(faq => (
+                      <div key={faq.question}>
+                        <h5 className="font-bold text-gray-900 text-xs">{faq.question}</h5>
+                        <p className="text-gray-700 text-xs mt-1">{faq.answer}</p>
+                      </div>
                     ))}
                   </div>
-                </div>
+                </section>
               </div>
             )}
 

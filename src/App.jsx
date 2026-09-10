@@ -22,6 +22,7 @@ import BusinessApplication from './pages/BusinessApplication';
 import LegalDocument from './pages/LegalDocument';
 import { LEGAL_DOCUMENTS } from './data/legalDocuments';
 import { getHotelPath, getVetPath, getBoardingPath } from '../lib/seo-slugs';
+import { boardingSeoMetadata } from '../lib/boarding-seo';
 
 const CATEGORY_SEO = {
   'legal-hub': {
@@ -143,6 +144,7 @@ function App() {
       ? searchFilters.destination
       : null;
     const categoryMeta = CATEGORY_SEO[currentView];
+    const boardingMeta = boarding ? boardingSeoMetadata(boarding) : null;
     const canonicalPath = hotel ? getHotelPath(hotel)
       : vet ? getVetPath(vet)
       : boarding ? getBoardingPath(boarding)
@@ -157,7 +159,7 @@ function App() {
       : vet
       ? `${vet.name} - 7/24 Acil Nöbetçi Veteriner ${vet.district}, ${vet.city} | patili.co`
       : boarding
-      ? `${boarding.name} - ${boarding.district ? `${boarding.district}, ` : ''}${boarding.city} Pet Oteli & Pansiyonu | patili.co`
+      ? boardingMeta.title
       : taxi
       ? `${taxi.name} - Evcil Hayvan Taksi ${taxi.city} | patili.co`
       : cityLanding
@@ -171,7 +173,7 @@ function App() {
       : vet
       ? `${vet.name}, ${vet.district}/${vet.city} bölgesinde 7/24 acil servis ve veteriner desteği sunmaktadır. Adres: ${vet.address}.`
       : boarding
-      ? `${boarding.name}, ${boarding.district}/${boarding.city} kedi ve köpek bakım konaklama hizmetleri.`
+      ? boardingMeta.description
       : taxi
       ? `${taxi.name}, ${taxi.city} şehir içi ve şehirler arası pet transfer hizmetleri.`
       : cityLanding
@@ -217,6 +219,24 @@ function App() {
       document.head.appendChild(ogUrlMeta);
     }
     ogUrlMeta.setAttribute('content', canonicalUrl);
+
+    const socialImage = boardingMeta?.image || hotel?.imageUrl || vet?.imageUrl || taxi?.imageUrl || 'https://patili.co/logo.png';
+    const socialTags = [
+      ['property', 'og:image', socialImage],
+      ['name', 'twitter:card', 'summary_large_image'],
+      ['name', 'twitter:title', title],
+      ['name', 'twitter:description', description],
+      ['name', 'twitter:image', socialImage]
+    ];
+    for (const [attribute, key, content] of socialTags) {
+      let meta = document.querySelector(`meta[${attribute}="${key}"]`);
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute(attribute, key);
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', content);
+    }
 
     // Robots Meta
     let robotsMeta = document.querySelector('meta[name="robots"]');

@@ -64,9 +64,11 @@ export async function generateSitemaps(client, emit, { origin, batchSize = 250, 
   try {
     await client.query("SET LOCAL TIME ZONE 'UTC'");
     // Duplicate canonical URLs are an operator decision, never silently collapsed.
-    const duplicate = await client.query(`SELECT 1 FROM public.hotels
-      GROUP BY city_slug,district_slug,name_slug HAVING count(*) > 1 LIMIT 1`);
-    if (duplicate.rows.length) throw new Error('Duplicate hotel slugs; run preflight and reconcile before building.');
+    for (const table of ['hotels', 'boardings']) {
+      const duplicate = await client.query(format(`SELECT 1 FROM public.%I
+        GROUP BY city_slug,district_slug,name_slug HAVING count(*) > 1 LIMIT 1`, table));
+      if (duplicate.rows.length) throw new Error(`Duplicate ${table} slugs; run preflight and reconcile before building.`);
+    }
     for (const path of new Set(staticPaths)) await add(path);
     for await (const rows of keysetRows(client, 'hotels', batchSize, 'id,name,city,district,city_slug,district_slug,name_slug,modified_at::text AS modified_at')) {
       for (const row of rows) {
@@ -77,8 +79,11 @@ export async function generateSitemaps(client, emit, { origin, batchSize = 250, 
     for await (const rows of keysetRows(client, 'vets', batchSize, 'id,name,city,district,modified_at::text AS modified_at')) {
       for (const row of rows) await add(getVetPath(row), row.modified_at);
     }
-    for await (const rows of keysetRows(client, 'boardings', batchSize, 'id,name,city,district,modified_at::text AS modified_at')) {
-      for (const row of rows) await add(getBoardingPath(row), row.modified_at);
+    for await (const rows of keysetRows(client, 'boardings', batchSize, 'id,name,city,district,city_slug,district_slug,name_slug,modified_at::text AS modified_at')) {
+      for (const row of rows) {
+        if (['city', 'district', 'name'].some(field => !row[`${field}_slug`] || row[`${field}_slug`] !== slugify(row[field]))) throw new Error('Boarding canonical URL and database slug disagree; reconcile slug normalization before publishing.');
+        await add(getBoardingPath(row), row.modified_at);
+      }
     }
     for (const [table, prefix] of [['guides', '/rehber/']]) {
       for await (const rows of keysetRows(client, table, batchSize, 'id,slug,modified_at::text AS modified_at')) {

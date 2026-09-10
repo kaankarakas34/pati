@@ -20,6 +20,9 @@ test('remote PostgreSQL always verifies certificates, including URL overrides', 
   const supabase = databaseConfig('postgresql://postgres.project@aws-0-ap-southeast-2.pooler.supabase.com:5432/postgres', {});
   assert.match(supabase.ssl.ca, /BEGIN CERTIFICATE/);
   assert.equal(supabase.ssl.rejectUnauthorized, true);
+  assert.equal(new URL(supabase.connectionString).port, '5432');
+  assert.equal(new URL(databaseConfig('postgresql://postgres.project@aws-0-ap-southeast-2.pooler.supabase.com:5432/postgres', { VERCEL: '1' }).connectionString).port, '6543');
+  assert.equal(new URL(databaseConfig('postgresql://postgres.project@aws-0-ap-southeast-2.pooler.supabase.com:5432/postgres', { VERCEL: '1', DATABASE_POOL_MODE: 'session' }).connectionString).port, '5432');
   assert.equal(databaseConfig('postgresql://user@localhost:5436/db', {}).ssl, false);
   assert.equal(databaseConfig(undefined, {}).password, undefined);
   assert.throws(() => databaseConfig('https://example.com/db', {}));
