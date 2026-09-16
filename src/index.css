@@ -33,3 +33,34 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #44385c;
 }
+
+/* Paw Walking Animation (CodePen MKrQXa style) */
+@keyframes pawAnimation {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  8% {
+    opacity: 0.95;
+    transform: scale(1.04);
+  }
+  16% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  48% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+.animate-paw {
+  animation: pawAnimation 2.4s ease-in-out infinite;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+

@@ -8,6 +8,8 @@ import { slugify, getHotelPath } from '../../lib/seo-slugs';
 import SeoContentSection from '../components/SeoContentSection';
 import { seoContent } from '../data/seoContent';
 import PetTaxiAdBanner from '../components/PetTaxiAdBanner';
+import PawAnimationDivider from '../components/PawAnimationDivider';
+
 
 export default function Home({ onViewChange, setSearchFilters }) {
   const [activeTab, setActiveTab] = useState('hotel'); // 'hotel' | 'venue'
@@ -181,6 +183,11 @@ export default function Home({ onViewChange, setSearchFilters }) {
             </button>
           </form>
         </div>
+      </div>
+
+      {/* Full-width continuous paw animation (CodePen MKrQXa style) */}
+      <div className="-mt-8 -mb-4">
+        <PawAnimationDivider />
       </div>
 
       {/* 2 Ana Odak ve 4 Hizmet Kutusu */}
