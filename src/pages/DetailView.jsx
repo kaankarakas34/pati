@@ -1078,45 +1078,59 @@ export default function DetailView({
         <CatalogPagination page={reviewPage} />
 
         {reviewSubmitted ? (
-          <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 p-4 rounded-2xl text-sm font-medium">
+          <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 p-4 rounded-2xl text-sm font-medium w-full">
             ✅ Yorumunuz başarıyla alındı. Editör onayından sonra yayınlanacaktır.
           </div>
         ) : (
-          <form onSubmit={handleSubmitReview} className="space-y-3 max-w-xl bg-white p-6 rounded-3xl border-2 border-brand-navy/10 shadow-xs">
-            <h3 className="font-title font-bold text-base text-brand-navy">Deneyiminizi Paylaşın</h3>
+          <form onSubmit={handleSubmitReview} className="space-y-4 w-full bg-white p-6 md:p-8 rounded-3xl border-2 border-brand-navy/10 shadow-xs">
+            <div className="flex items-center justify-between">
+              <h3 className="font-title font-bold text-base md:text-lg text-brand-navy">Deneyiminizi Paylaşın</h3>
+              <span className="text-3xs text-gray-400 font-medium hidden sm:inline">Deneyiminiz diğer patili dostlara rehber olsun</span>
+            </div>
             
-            <label className="block text-xs font-bold text-gray-700">
-              Adınız & Soyadınız
-              <input required maxLength={120} value={reviewAuthor} onChange={event => setReviewAuthor(event.target.value)} className="block w-full border-2 border-brand-navy/20 rounded-xl p-2.5 text-sm mt-1 outline-none focus:border-brand-navy" placeholder="Örn: Mert Kaya" />
-            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+              <div className="sm:col-span-3">
+                <label className="block text-xs font-bold text-gray-700">
+                  Adınız & Soyadınız
+                  <input required maxLength={120} value={reviewAuthor} onChange={event => setReviewAuthor(event.target.value)} className="block w-full border-2 border-brand-navy/20 rounded-xl p-2.5 text-sm mt-1 outline-none focus:border-brand-navy" placeholder="Örn: Mert Kaya" />
+                </label>
+              </div>
 
-            <label className="block text-xs font-bold text-gray-700">
-              Puanınız (1–10)
-              <input required type="number" min={1} max={10} step={1} value={reviewRating} onChange={event => setReviewRating(event.target.value)} className="block w-28 border-2 border-brand-navy/20 rounded-xl p-2 text-sm mt-1 outline-none focus:border-brand-navy" />
-            </label>
+              <div className="sm:col-span-1">
+                <label className="block text-xs font-bold text-gray-700">
+                  Puanınız (1–10)
+                  <input required type="number" min={1} max={10} step={1} value={reviewRating} onChange={event => setReviewRating(event.target.value)} className="block w-full border-2 border-brand-navy/20 rounded-xl p-2.5 text-sm mt-1 outline-none focus:border-brand-navy" />
+                </label>
+              </div>
+            </div>
 
-            <label htmlFor="review-text" className="block text-xs font-bold text-gray-700">
-              Yorumunuz & Patili Dostunuzla Deneyiminiz
-            </label>
-            <textarea id="review-text" required maxLength={2000} rows={4} value={reviewText} onChange={event => setReviewText(event.target.value)} className="block w-full border-2 border-brand-navy/20 rounded-xl p-2.5 text-sm mt-1 outline-none focus:border-brand-navy" placeholder="Oteldeki pet olanakları, ek ücret politikası veya bahçe imkanları nasıldı?" />
-
-            <div className="flex items-center gap-2 pt-1">
-              <input
-                type="checkbox"
-                id="ambassador-badge-opt"
-                checked={isAmbassadorPost}
-                onChange={e => setIsAmbassadorPost(e.target.checked)}
-                className="rounded text-brand-navy cursor-pointer"
-              />
-              <label htmlFor="ambassador-badge-opt" className="text-xs font-medium text-brand-navy cursor-pointer flex items-center gap-1">
-                <span>⭐🐾</span> Pati Elçisi rozetiyle gönder (Üst sırada öne çıkar)
+            <div>
+              <label htmlFor="review-text" className="block text-xs font-bold text-gray-700">
+                Yorumunuz & Patili Dostunuzla Deneyiminiz
               </label>
+              <textarea id="review-text" required maxLength={2000} rows={4} value={reviewText} onChange={event => setReviewText(event.target.value)} className="block w-full border-2 border-brand-navy/20 rounded-xl p-2.5 text-sm mt-1 outline-none focus:border-brand-navy resize-y" placeholder="Oteldeki pet olanakları, ek ücret politikası veya bahçe imkanları nasıldı?" />
+            </div>
+
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="ambassador-badge-opt"
+                  checked={isAmbassadorPost}
+                  onChange={e => setIsAmbassadorPost(e.target.checked)}
+                  className="rounded text-brand-navy cursor-pointer"
+                />
+                <label htmlFor="ambassador-badge-opt" className="text-xs font-medium text-brand-navy cursor-pointer flex items-center gap-1">
+                  <span>⭐🐾</span> Pati Elçisi rozetiyle gönder (Üst sırada öne çıkar)
+                </label>
+              </div>
+
+              <button disabled={submitting} type="submit" className="bg-brand-navy hover:bg-brand-navy-hover text-white rounded-full px-7 py-2.5 text-xs font-bold font-title disabled:opacity-50 transition-colors shadow-xs w-full sm:w-auto cursor-pointer">
+                {submitting ? 'Gönderiliyor...' : 'Yorumu Gönder'}
+              </button>
             </div>
 
             {submissionError && <p role="alert" className="text-xs text-red-600 font-bold">{submissionError}</p>}
-            <button disabled={submitting} type="submit" className="bg-brand-navy hover:bg-brand-navy-hover text-white rounded-full px-6 py-2.5 text-xs font-bold font-title disabled:opacity-50 transition-colors shadow-xs">
-              {submitting ? 'Gönderiliyor...' : 'Yorumu Gönder'}
-            </button>
           </form>
         )}
       </section>
