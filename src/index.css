@@ -64,3 +64,25 @@
   will-change: opacity, transform;
 }
 
+/* Paw Clap/Stomp Animation (CodePen passionpenguin style) */
+@keyframes pawStomp {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  30% {
+    transform: translateY(-8px) rotate(-14deg) scale(1.18);
+  }
+  65% {
+    transform: translateY(3px) rotate(6deg) scale(0.9);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+}
+
+.animate-paw-stomp {
+  animation: pawStomp 360ms cubic-bezier(0.25, 0.1, 0.61, 1.4) forwards;
+  will-change: transform;
+}
+
+

@@ -9,6 +9,7 @@ import SeoContentSection from '../components/SeoContentSection';
 import { seoContent } from '../data/seoContent';
 import PetTaxiAdBanner from '../components/PetTaxiAdBanner';
 import PawAnimationDivider from '../components/PawAnimationDivider';
+import PawButton from '../components/PawButton';
 
 
 export default function Home({ onViewChange, setSearchFilters }) {
@@ -174,13 +175,11 @@ export default function Home({ onViewChange, setSearchFilters }) {
             </div>
 
             {/* Submit Button */}
-            <button
+            <PawButton
               type="submit"
-              className="bg-brand-c2 hover:bg-brand-c1 text-white font-bold rounded-full flex items-center justify-center gap-2 py-3 px-7 transition-all shadow-md w-full md:w-auto font-title cursor-pointer"
-            >
-              <SearchIcon className="w-4 h-4 text-white" />
-              <span>{activeTab === 'hotel' ? 'Otel Ara' : 'Mekan Ara'}</span>
-            </button>
+              variant="search"
+              text={activeTab === 'hotel' ? 'Otel Ara' : 'Mekan Ara'}
+            />
           </form>
         </div>
       </div>
@@ -214,10 +213,9 @@ export default function Home({ onViewChange, setSearchFilters }) {
                 Türkiye'nin dört bir yanındaki kedi ve köpek kabul eden otelleri; kilo sınırı, pet ücreti ve bahçe imkanlarıyla karşılaştırın.
               </p>
             </div>
-            <span className="text-brand-c2 font-bold flex items-center gap-2 mt-6 group-hover:translate-x-1 transition-transform text-sm sm:text-base">
-              <span>Otelleri İncele</span>
-              <ArrowRightIcon className="w-4 h-4 text-brand-c2" />
-            </span>
+            <div className="mt-6">
+              <PawButton variant="link" text="Otelleri İncele" className="text-sm sm:text-base" />
+            </div>
           </a>
 
           {/* Ana Odak 2: Patili Mekanlar (Kafe, Restoran & Bar) */}
@@ -240,10 +238,9 @@ export default function Home({ onViewChange, setSearchFilters }) {
                 Dostunuzla keyifle vakit geçirebileceğiniz kedi ve köpek dostu kafe, restoran, meyhane ve barları keşfedin.
               </p>
             </div>
-            <span className="text-brand-c2 font-bold flex items-center gap-2 mt-6 group-hover:translate-x-1 transition-transform text-sm sm:text-base">
-              <span>Mekanları Keşfet</span>
-              <ArrowRightIcon className="w-4 h-4 text-brand-c2" />
-            </span>
+            <div className="mt-6">
+              <PawButton variant="link" text="Mekanları Keşfet" className="text-sm sm:text-base" />
+            </div>
           </a>
         </div>
 
@@ -278,10 +275,9 @@ export default function Home({ onViewChange, setSearchFilters }) {
                 </div>
                 <h4 className="text-lg font-bold font-title text-brand-c1 group-hover:text-brand-c2 transition-colors">Pet Taksi</h4>
               </div>
-              <span className="text-brand-c2 font-bold flex items-center gap-1.5 mt-5 group-hover:translate-x-1 transition-transform text-xs">
-                <span>Taksileri İncele</span>
-                <ArrowRightIcon className="w-3.5 h-3.5 text-brand-c2" />
-              </span>
+              <div className="mt-5">
+                <PawButton variant="link" text="Taksileri İncele" className="text-xs" />
+              </div>
             </a>
 
             {/* Kutu 2: Pet Otel */}
@@ -301,10 +297,9 @@ export default function Home({ onViewChange, setSearchFilters }) {
                 </div>
                 <h4 className="text-lg font-bold font-title text-brand-c1 group-hover:text-brand-c2 transition-colors">Pet Otel</h4>
               </div>
-              <span className="text-brand-c2 font-bold flex items-center gap-1.5 mt-5 group-hover:translate-x-1 transition-transform text-xs">
-                <span>Pet Otelleri Gör</span>
-                <ArrowRightIcon className="w-3.5 h-3.5 text-brand-c2" />
-              </span>
+              <div className="mt-5">
+                <PawButton variant="link" text="Pet Otelleri Gör" className="text-xs" />
+              </div>
             </a>
 
             {/* Kutu 3: Köpek Gezdiriciler */}
@@ -324,10 +319,9 @@ export default function Home({ onViewChange, setSearchFilters }) {
                 </div>
                 <h4 className="text-lg font-bold font-title text-brand-c1 group-hover:text-brand-c2 transition-colors">Köpek Gezdiriciler</h4>
               </div>
-              <span className="text-brand-c2 font-bold flex items-center gap-1.5 mt-5 group-hover:translate-x-1 transition-transform text-xs">
-                <span>Gezdirici Bul</span>
-                <ArrowRightIcon className="w-3.5 h-3.5 text-brand-c2" />
-              </span>
+              <div className="mt-5">
+                <PawButton variant="link" text="Gezdirici Bul" className="text-xs" />
+              </div>
             </a>
 
             {/* Kutu 4: 7-24 Veterinerler */}
@@ -347,10 +341,9 @@ export default function Home({ onViewChange, setSearchFilters }) {
                 </div>
                 <h4 className="text-lg font-bold font-title text-brand-c1 group-hover:text-brand-c2 transition-colors">7/24 Veterinerler</h4>
               </div>
-              <span className="text-brand-c2 font-bold flex items-center gap-1.5 mt-5 group-hover:translate-x-1 transition-transform text-xs">
-                <span>Nöbetçi Klinik Bul</span>
-                <ArrowRightIcon className="w-3.5 h-3.5 text-brand-c2" />
-              </span>
+              <div className="mt-5">
+                <PawButton variant="link" text="Nöbetçi Klinik Bul" className="text-xs" />
+              </div>
             </a>
           </div>
         </div>
