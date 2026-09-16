@@ -175,11 +175,13 @@ export default function Home({ onViewChange, setSearchFilters }) {
             </div>
 
             {/* Submit Button */}
-            <PawButton
+            <button
               type="submit"
-              variant="search"
-              text={activeTab === 'hotel' ? 'Otel Ara' : 'Mekan Ara'}
-            />
+              className="bg-brand-c2 hover:bg-brand-c1 text-white font-bold rounded-full flex items-center justify-center gap-2 py-3 px-7 transition-all shadow-md w-full md:w-auto font-title cursor-pointer"
+            >
+              <SearchIcon className="w-4 h-4 text-white" />
+              <span>{activeTab === 'hotel' ? 'Otel Ara' : 'Mekan Ara'}</span>
+            </button>
           </form>
         </div>
       </div>
