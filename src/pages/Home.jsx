@@ -83,7 +83,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
       {preview.error && <div className="text-center pt-4"><p role="alert">{preview.error}</p><button className="underline" onClick={() => setAttempt(value => value + 1)}>Tekrar dene</button></div>}
       {!preview.loading && !preview.error && !featuredHotels.length && <p className="text-center pt-4">Henüz otel bulunmuyor.</p>}
       {/* Hero Section */}
-      <div className="bg-gradient-to-b from-brand-yellow/30 via-brand-beige/50 to-brand-cream py-12 md:py-16 border-b border-brand-navy/10">
+      <div className="bg-gradient-to-b from-brand-yellow/30 via-brand-beige/50 to-brand-cream py-12 md:py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white border border-brand-navy/10 rounded-full text-xs font-bold text-brand-c2 shadow-xs">
             <span>🐾 Türkiye'nin En Kapsamlı Pet Friendly Platformu</span>

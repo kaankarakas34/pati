@@ -2,42 +2,52 @@ import React, { useState, useEffect, useRef } from 'react';
 
 /**
  * PawAnimationDivider
- * Continuous walking paw prints animation inspired by https://codepen.io/motionimaging/pen/MKrQXa
- * Spans the full screen width with an endless walking trail from left to right.
+ * Single continuous paw walk animation inspired by https://codepen.io/motionimaging/pen/MKrQXa
+ * A single animal walks from the left edge of the screen across to the right edge,
+ * with footsteps sequentially appearing and fading out, then looping continuously.
  */
 export default function PawAnimationDivider({
   className = '',
   pawColor = 'text-brand-c3',
-  stepX = 38,
-  periodSteps = 12,
-  periodDuration = 2.4
+  stepX = 40,
+  stepDuration = 0.16, // seconds per step
+  footprintLifetime = 1.1, // how long each paw print stays visible (seconds)
+  pauseAfterWalk = 0.5 // brief pause after reaching the right edge before starting again
 }) {
   const containerRef = useRef(null);
-  const [pawCount, setPawCount] = useState(50); // Sensible desktop default for initial render
+  const [containerWidth, setContainerWidth] = useState(1280);
 
   useEffect(() => {
-    function updateCount() {
+    function updateWidth() {
       if (containerRef.current) {
-        const width = containerRef.current.offsetWidth || window.innerWidth;
-        const needed = Math.ceil(width / stepX) + 4;
-        setPawCount(Math.max(12, needed));
+        const w = containerRef.current.offsetWidth || window.innerWidth || 1280;
+        setContainerWidth(w);
       }
     }
 
-    updateCount();
+    updateWidth();
 
     if (typeof ResizeObserver !== 'undefined' && containerRef.current) {
-      const ro = new ResizeObserver(() => updateCount());
+      const ro = new ResizeObserver(() => updateWidth());
       ro.observe(containerRef.current);
       return () => ro.disconnect();
     }
 
-    window.addEventListener('resize', updateCount);
-    return () => window.removeEventListener('resize', updateCount);
-  }, [stepX]);
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
 
-  const stepDuration = periodDuration / periodSteps;
-  const paws = Array.from({ length: pawCount }, (_, i) => i);
+  // Calculate total steps needed to cover from left edge (0) to right edge
+  const totalSteps = Math.max(8, Math.ceil(containerWidth / stepX) + 2);
+  const totalWalkTime = totalSteps * stepDuration;
+  const totalDuration = totalWalkTime + pauseAfterWalk;
+
+  // Calculate keyframe percentages for footprint fade in and fade out
+  const fadeStartPct = Math.max(0.5, Number(((0.08 / totalDuration) * 100).toFixed(2)));
+  const fadeMidPct = Math.max(1, Number(((0.25 / totalDuration) * 100).toFixed(2)));
+  const fadeEndPct = Math.min(99, Number(((footprintLifetime / totalDuration) * 100).toFixed(2)));
+
+  const paws = Array.from({ length: totalSteps }, (_, i) => i);
 
   return (
     <div
@@ -46,16 +56,39 @@ export default function PawAnimationDivider({
       aria-hidden="true"
       className={`relative w-full h-14 overflow-hidden select-none pointer-events-none ${className}`}
       style={{
-        maskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)',
-        WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)'
+        maskImage: 'linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%)',
+        WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%)'
       }}
     >
+      <style>{`
+        @keyframes singlePawTrackAnim {
+          0% {
+            opacity: 0;
+            transform: scale(0.92);
+          }
+          ${fadeStartPct}% {
+            opacity: 0.95;
+            transform: scale(1.04);
+          }
+          ${fadeMidPct}% {
+            opacity: 0.85;
+            transform: scale(1);
+          }
+          ${fadeEndPct}% {
+            opacity: 0;
+            transform: scale(0.95);
+          }
+          100% {
+            opacity: 0;
+            transform: scale(0.92);
+          }
+        }
+      `}</style>
+
       <div className="absolute inset-0 w-full h-full">
         {paws.map((i) => {
           const isEven = i % 2 === 0;
-          const stepInPeriod = i % periodSteps;
-          // Negative delay ensures steady-state immediate playback without initial wait
-          const delay = (stepInPeriod * stepDuration) - periodDuration;
+          const delay = i * stepDuration;
 
           return (
             <div
@@ -68,13 +101,18 @@ export default function PawAnimationDivider({
               }}
             >
               <div
-                className={`w-full h-full animate-paw ${pawColor}`}
+                className={`w-full h-full ${pawColor}`}
                 style={{
+                  opacity: 0,
+                  animationName: 'singlePawTrackAnim',
+                  animationDuration: `${totalDuration.toFixed(3)}s`,
+                  animationTimingFunction: 'ease-in-out',
                   animationDelay: `${delay.toFixed(3)}s`,
-                  animationDuration: `${periodDuration}s`
+                  animationIterationCount: 'infinite',
+                  willChange: 'opacity, transform'
                 }}
               >
-                {/* Authentic Paw SVG vector from CodePen MKrQXa */}
+                {/* CodePen MKrQXa SVG Paw */}
                 <svg
                   viewBox="0 0 249 209.32"
                   className="w-full h-full fill-current drop-shadow-xs"
