@@ -87,8 +87,13 @@ export default function Home({ onViewChange, setSearchFilters }) {
             <span>🐾 Türkiye'nin En Kapsamlı Pet Friendly Platformu</span>
           </div>
 
-          <h1 className="text-3xl md:text-5xl font-bold font-title text-brand-navy leading-tight">
-            Patili Dostunuzla <span className="text-brand-navy underline decoration-brand-c4 decoration-4">Unutulmaz Anılar</span> Keşfedin 🐾
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold font-title text-brand-navy leading-tight">
+            <span className="block text-4xl md:text-6xl font-extrabold text-brand-navy tracking-tight mb-2">
+              Patili.co
+            </span>
+            <span className="block text-xl md:text-3xl lg:text-4xl font-semibold text-brand-c2">
+              “Onunla hayat, <span className="text-brand-navy underline decoration-brand-c4 decoration-4 font-bold">onunla seyahat.</span>” 🐾
+            </span>
           </h1>
 
           <p className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
