@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { EditIcon, PlusIcon, CheckIcon } from '../components/PetIcons';
 import CatalogPagination from '../components/CatalogPagination';
 import { useAdminCollection } from '../lib/useAdminCollection';
@@ -37,6 +37,7 @@ export default function AdminPanel() {
   // Dog Walker Applications ("Köpek Gezdiricileri") State
   const [dogWalkerApps, setDogWalkerApps] = useState([]);
   const [dogWalkerLoading, setDogWalkerLoading] = useState(false);
+  const [dogWalkerError, setDogWalkerError] = useState('');
   const [dogWalkerFilter, setDogWalkerFilter] = useState('all'); // all, pending, approved, rejected
 
   // Ambassador Management State (Only Admins Can Add/Delete)
@@ -53,12 +54,13 @@ export default function AdminPanel() {
     notes: ''
   });
 
+  const isCustomTab = ['dog-walkers-mgmt', 'ambassadors-mgmt', 'business-submissions'].includes(activeSubTab);
   const resource = activeSubTab === 'complaints-inbox' ? 'complaints' : activeSubTab;
   const isFeedback = ['reviews', 'corrections', 'complaints'].includes(resource);
   const collection = useAdminCollection(resource, resource === 'hotels' ? {
     q: hotelSearch.trim(),
     verified: hotelVerificationFilter === 'all' ? undefined : String(hotelVerificationFilter === 'verified')
-  } : isFeedback ? { status: feedbackStatus } : {}, isAuthenticated);
+  } : isFeedback ? { status: feedbackStatus } : {}, isAuthenticated && !isCustomTab);
   const hotels = resource === 'hotels' ? collection.items : [];
   const boardings = resource === 'boardings' ? collection.items : [];
   const guides = resource === 'guides' ? collection.items : [];
@@ -121,6 +123,7 @@ export default function AdminPanel() {
 
   const loadDogWalkerApps = async () => {
     setDogWalkerLoading(true);
+    setDogWalkerError('');
     try {
       const res = await fetch('/api/admin/dog-walker-applications', {
         headers: { 'x-admin-token': sessionStorage.getItem('admin_token') || '' }
@@ -128,13 +131,29 @@ export default function AdminPanel() {
       if (res.ok) {
         const data = await res.json();
         setDogWalkerApps(Array.isArray(data) ? data : []);
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        setDogWalkerError(errData.error || 'Gezdirici başvuruları yüklenemedi.');
       }
     } catch (e) {
       console.warn('Dog walker apps fetch failed', e);
+      setDogWalkerError('Sunucu bağlantı hatası oluştu. Lütfen bağlantınızı kontrol edin.');
     } finally {
       setDogWalkerLoading(false);
     }
   };
+
+  // Reaktif veri yükleme: Sekme değiştiğinde veya oturum açıldığında verileri otomatik çek
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    if (activeSubTab === 'dog-walkers-mgmt') {
+      loadDogWalkerApps();
+    } else if (activeSubTab === 'business-submissions') {
+      loadBizSubmissions();
+    } else if (activeSubTab === 'ambassadors-mgmt') {
+      loadAmbassadors();
+    }
+  }, [activeSubTab, isAuthenticated]);
 
   const handleUpdateDogWalkerStatus = async (id, status, verified = false) => {
     try {
@@ -1848,12 +1867,24 @@ export default function AdminPanel() {
                 </button>
               </div>
 
+              {dogWalkerError && (
+                <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-2xl text-xs mb-6 flex justify-between items-center">
+                  <span>⚠️ {dogWalkerError}</span>
+                  <button type="button" onClick={loadDogWalkerApps} className="underline font-bold text-red-800 hover:text-red-950">Tekrar Dene</button>
+                </div>
+              )}
+
               {dogWalkerLoading ? (
                 <p className="text-center py-10 text-sm text-gray-500">Gezdirici başvuruları yükleniyor...</p>
               ) : dogWalkerApps.length === 0 ? (
                 <div className="bg-brand-cream border border-brand-beige rounded-2xl p-8 text-center text-gray-500 text-sm">
                   <span className="text-3xl block mb-2">🦮</span>
                   Henüz kayıtlı veya yeni bir gezdirici başvurusu bulunmuyor.
+                </div>
+              ) : dogWalkerApps.filter(w => dogWalkerFilter === 'all' ? true : w.status === dogWalkerFilter).length === 0 ? (
+                <div className="bg-brand-cream border border-brand-beige rounded-2xl p-8 text-center text-gray-500 text-sm">
+                  <span className="text-3xl block mb-2">🔍</span>
+                  Seçilen filtrede ({dogWalkerFilter === 'pending' ? 'İnceleme Bekleyen' : dogWalkerFilter === 'approved' ? 'Yayında / Onaylanan' : 'Reddedilen'}) başvuru bulunmamaktadır.
                 </div>
               ) : (
                 <div className="space-y-6">

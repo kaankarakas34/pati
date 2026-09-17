@@ -57,3 +57,113 @@ export async function saveAdApplication(a) {
     [a.id,a.businessName,a.businessType,a.contactName,a.email,a.phone,a.website||null,a.city,a.message||null]);
   return result.rows[0];
 }
+
+function mapDogWalkerRow(row) {
+  if (!row) return null;
+  return {
+    id: row.id,
+    name: row.name,
+    fullName: row.full_name || row.name,
+    email: row.email,
+    phone: row.phone,
+    city: row.city,
+    district: row.district,
+    hasDogExperience: row.has_dog_experience,
+    hourlyRate: row.hourly_rate,
+    services: typeof row.services === 'string' ? JSON.parse(row.services) : (row.services || ['Bireysel Yürüyüş', 'Günlük Egzersiz']),
+    experience: row.experience,
+    bio: row.bio,
+    avatar: row.avatar,
+    rating: Number(row.rating || 5.0),
+    reviewCount: Number(row.review_count || 0),
+    walkCount: Number(row.walk_count || 0),
+    verified: Boolean(row.verified),
+    status: row.status,
+    createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : row.created_at
+  };
+}
+
+export async function saveDogWalkerApplication(w) {
+  const query = `
+    INSERT INTO public.dog_walker_applications (
+      id, name, full_name, email, phone, city, district,
+      has_dog_experience, hourly_rate, services, experience,
+      bio, avatar, rating, review_count, walk_count, verified, status, created_at
+    ) VALUES (
+      $1, $2, $3, $4, $5, $6, $7,
+      $8, $9, $10, $11,
+      $12, $13, $14, $15, $16, $17, $18, $19
+    )
+    ON CONFLICT (id) DO UPDATE SET
+      status = EXCLUDED.status,
+      verified = EXCLUDED.verified
+    RETURNING *
+  `;
+  const values = [
+    String(w.id),
+    String(w.name || w.fullName || ''),
+    String(w.fullName || w.name || ''),
+    String(w.email || ''),
+    String(w.phone || ''),
+    String(w.city || ''),
+    String(w.district || 'Merkez'),
+    String(w.hasDogExperience || ''),
+    String(w.hourlyRate || '350 ₺'),
+    JSON.stringify(w.services || ['Bireysel Yürüyüş', 'Günlük Egzersiz']),
+    String(w.experience || 'Yeni Başvuru'),
+    String(w.bio || ''),
+    String(w.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=faces'),
+    Number(w.rating || 5.0),
+    Number(w.reviewCount || 0),
+    Number(w.walkCount || 0),
+    Boolean(w.verified),
+    String(w.status || 'pending'),
+    w.createdAt || new Date().toISOString()
+  ];
+  const result = await pool.query(query, values);
+  return mapDogWalkerRow(result.rows[0]);
+}
+
+export async function getDogWalkerApplications(filter = {}) {
+  let query = `SELECT * FROM public.dog_walker_applications`;
+  const where = [];
+  const values = [];
+  if (filter.status && filter.status !== 'all') {
+    values.push(filter.status);
+    where.push(`status = $${values.length}`);
+  }
+  if (filter.city && filter.city !== 'all') {
+    values.push(filter.city.toLowerCase());
+    where.push(`LOWER(city) = $${values.length}`);
+  }
+  if (where.length) {
+    query += ` WHERE ` + where.join(' AND ');
+  }
+  query += ` ORDER BY created_at DESC`;
+  const result = await pool.query(query, values);
+  return result.rows.map(mapDogWalkerRow);
+}
+
+export async function updateDogWalkerApplication(id, { status, verified }) {
+  const sets = [];
+  const values = [];
+  if (status !== undefined) {
+    values.push(status);
+    sets.push(`status = $${values.length}`);
+  }
+  if (typeof verified === 'boolean') {
+    values.push(verified);
+    sets.push(`verified = $${values.length}`);
+  }
+  if (sets.length === 0) return null;
+  values.push(String(id));
+  const query = `UPDATE public.dog_walker_applications SET ${sets.join(', ')} WHERE id = $${values.length} RETURNING *`;
+  const result = await pool.query(query, values);
+  return result.rows[0] ? mapDogWalkerRow(result.rows[0]) : null;
+}
+
+export async function deleteDogWalkerApplication(id) {
+  const result = await pool.query(`DELETE FROM public.dog_walker_applications WHERE id = $1 RETURNING id`, [String(id)]);
+  return result.rowCount > 0;
+}
+

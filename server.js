@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import { randomUUID } from 'crypto';
 import dotenv from 'dotenv';
 
-import { getComplaints, getAdApplications, saveAdApplication } from './db.js';
+import { getComplaints, getAdApplications, saveAdApplication, saveDogWalkerApplication, getDogWalkerApplications, updateDogWalkerApplication, deleteDogWalkerApplication } from './db.js';
 import { matchesSecret } from './lib/admin-security.js';
 import { getPublicUrl } from './lib/public-http.js'; // guardvibe-ignore VG678 -- outbound fetch; responses use global nosniff.
 import { sendServerError, redirectToLocalPath, handleRequestError } from './lib/http-responses.js';
@@ -373,8 +373,18 @@ app.patch('/api/ambassador-applications/:id', requireAdmin, (req, res) => {
 });
 
 // Köpek Gezdiricileri Public and Admin APIs
-app.get('/api/dog-walkers', (req, res) => {
+app.get('/api/dog-walkers', async (req, res) => {
   const { city } = req.query || {};
+  try {
+    const dbWalkers = await getDogWalkerApplications({ status: 'approved', city }).catch(() => null);
+    if (dbWalkers && dbWalkers.length > 0) {
+      return res.json(dbWalkers);
+    }
+  } catch (err) {
+    console.warn('[DogWalker] Error querying approved dog walkers from DB:', err.message);
+  }
+
+  // Fallback to in-memory/default mock walkers
   let list = dogWalkerApplications.filter(w => w.status === 'approved');
   if (city && city !== 'all') {
     list = list.filter(w => (w.city || '').toLowerCase() === city.toLowerCase());
@@ -411,7 +421,16 @@ app.post('/api/dog-walker-applications', async (req, res, next) => {
       createdAt: new Date().toISOString()
     };
 
+    // Save to PostgreSQL DB for serverless persistence
+    try {
+      await saveDogWalkerApplication(newRecord);
+    } catch (dbErr) {
+      console.warn('[DogWalker] DB save warning:', dbErr.message);
+    }
+
+    // Keep in-memory cache updated as well
     dogWalkerApplications.unshift(newRecord);
+
     sendDogWalkerEmail(newRecord).catch(err => {
       console.error('[EmailService] Gezdirici mail bildirim hatası:', err.message);
     });
@@ -421,13 +440,39 @@ app.post('/api/dog-walker-applications', async (req, res, next) => {
   }
 });
 
-app.get('/api/admin/dog-walker-applications', requireAdmin, (req, res) => {
+app.get('/api/admin/dog-walker-applications', requireAdmin, async (req, res) => {
+  try {
+    const dbApps = await getDogWalkerApplications().catch(() => null);
+    if (dbApps && dbApps.length > 0) {
+      const existingIds = new Set(dbApps.map(a => a.id));
+      const fallbackItems = dogWalkerApplications.filter(w => !existingIds.has(w.id));
+      return res.json([...dbApps, ...fallbackItems]);
+    }
+  } catch (err) {
+    console.warn('[DogWalker] Admin fetch from DB failed, returning in-memory:', err.message);
+  }
   res.json(dogWalkerApplications);
 });
 
-app.patch('/api/admin/dog-walker-applications/:id', requireAdmin, (req, res) => {
+app.patch('/api/admin/dog-walker-applications/:id', requireAdmin, async (req, res) => {
   const { id } = req.params;
   const { status, verified } = req.body || {};
+
+  try {
+    const updated = await updateDogWalkerApplication(id, { status, verified }).catch(() => null);
+    if (updated) {
+      const idx = dogWalkerApplications.findIndex(w => w.id === id);
+      if (idx !== -1) {
+        dogWalkerApplications[idx] = { ...dogWalkerApplications[idx], ...updated };
+      } else {
+        dogWalkerApplications.unshift(updated);
+      }
+      return res.json({ success: true, item: updated });
+    }
+  } catch (err) {
+    console.warn('[DogWalker] DB update failed:', err.message);
+  }
+
   const walker = dogWalkerApplications.find(w => w.id === id);
   if (!walker) return res.status(404).json({ error: 'Gezdirici kaydı bulunamadı.' });
   if (status) walker.status = status;
@@ -435,11 +480,19 @@ app.patch('/api/admin/dog-walker-applications/:id', requireAdmin, (req, res) => 
   res.json({ success: true, item: walker });
 });
 
-app.delete('/api/admin/dog-walker-applications/:id', requireAdmin, (req, res) => {
+app.delete('/api/admin/dog-walker-applications/:id', requireAdmin, async (req, res) => {
   const { id } = req.params;
+
+  try {
+    await deleteDogWalkerApplication(id).catch(() => null);
+  } catch (err) {
+    console.warn('[DogWalker] DB delete failed:', err.message);
+  }
+
   const idx = dogWalkerApplications.findIndex(w => w.id === id);
-  if (idx === -1) return res.status(404).json({ error: 'Gezdirici kaydı bulunamadı.' });
-  dogWalkerApplications.splice(idx, 1);
+  if (idx !== -1) {
+    dogWalkerApplications.splice(idx, 1);
+  }
   res.json({ success: true });
 });
 
