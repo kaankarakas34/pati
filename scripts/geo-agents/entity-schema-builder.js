@@ -25,7 +25,7 @@ export const BRAND_ENTITY = {
   'contactPoint': {
     '@type': 'ContactPoint',
     'contactType': 'customer support',
-    'email': 'destek@patili.co',
+    'email': 'info@patili.co',
     'availableLanguage': ['Turkish', 'English']
   }
 };

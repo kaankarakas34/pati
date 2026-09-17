@@ -214,6 +214,17 @@ export default function Layout({ children, currentView, onViewChange }) {
                 <span>Bizi Instagram'da takip edin: <strong className="text-white font-semibold">@patili.co_</strong></span>
               </a>
             </div>
+            <div className="pt-1">
+              <a
+                href="mailto:info@patili.co"
+                className="inline-flex items-center gap-2 text-xs text-gray-300 hover:text-white transition-colors group"
+              >
+                <span className="w-5 h-5 rounded-md bg-brand-c4/20 border border-brand-c4/30 flex items-center justify-center text-brand-c4 shrink-0 group-hover:scale-105 transition-transform">
+                  ✉️
+                </span>
+                <span>İletişim & Başvuru: <strong className="text-brand-c4 font-semibold hover:underline">info@patili.co</strong></span>
+              </a>
+            </div>
             <div className="text-brand-c4 text-xs font-semibold">
               Son Güncelleme: Eylül 2026
             </div>
@@ -527,7 +538,7 @@ export default function Layout({ children, currentView, onViewChange }) {
 
         {/* Copyright */}
         <div className="bg-[#120f1e] py-6 border-t border-white/10 text-center text-xs text-gray-400">
-          <p>© 2026 patili.co. Tüm hakları saklıdır. Hiçbir içerik izinsiz kopyalanamaz.</p>
+          <p>© 2026 patili.co. Tüm hakları saklıdır. İletişim: <a href="mailto:info@patili.co" className="text-brand-c4 hover:underline">info@patili.co</a></p>
         </div>
       </footer>
     </div>

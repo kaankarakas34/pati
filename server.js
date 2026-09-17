@@ -17,6 +17,7 @@ import { findHotelBySlugs, findClusterBySlug, getHotelPath, getVetPath, getBoard
 import { renderHotelPreRenderHtml, renderVetPreRenderHtml, renderBoardingPreRenderHtml, renderHomePreRenderHtml, render404PreRenderHtml, renderCategoryOrClusterPreRenderHtml, renderServicePreRenderHtml, renderGuidePreRenderHtml } from './lib/seo-prerender.js';
 import { getEditorialArticleForCity, getEditorialArticleForCluster, POPULAR_CITIES } from './lib/editorial-guides.js';
 import { boardingSeoMetadata, boardingStructuredData } from './lib/boarding-seo.js';
+import { sendBusinessSubmissionEmail, sendDogWalkerEmail, sendAdApplicationEmail, sendAmbassadorEmail } from './lib/email-service.js';
 
 dotenv.config();
 
@@ -298,6 +299,9 @@ app.post('/api/business-submissions', async (req, res, next) => {
     };
 
     businessSubmissions.unshift(submission);
+    sendBusinessSubmissionEmail(submission).catch(err => {
+      console.error('[EmailService] İşletme mail bildirim hatası:', err.message);
+    });
     res.status(201).json({ success: true, id: submission.id });
   } catch (err) {
     next(err);
@@ -345,6 +349,9 @@ app.post('/api/ambassador-applications', async (req, res, next) => {
       createdAt: new Date().toISOString()
     };
     ambassadorApplications.unshift(record);
+    sendAmbassadorEmail(record).catch(err => {
+      console.error('[EmailService] Elçi mail bildirim hatası:', err.message);
+    });
     res.status(201).json({ success: true, id: record.id });
   } catch (err) {
     next(err);
@@ -404,6 +411,9 @@ app.post('/api/dog-walker-applications', async (req, res, next) => {
     };
 
     dogWalkerApplications.unshift(newRecord);
+    sendDogWalkerEmail(newRecord).catch(err => {
+      console.error('[EmailService] Gezdirici mail bildirim hatası:', err.message);
+    });
     res.status(201).json({ success: true, id: newRecord.id });
   } catch (err) {
     next(err);
@@ -469,6 +479,9 @@ app.post('/api/ad-applications', async (req, res, next) => {
     }
 
     const data = await saveAdApplication(application);
+    sendAdApplicationEmail(application).catch(err => {
+      console.error('[EmailService] Reklam mail bildirim hatası:', err.message);
+    });
     res.status(201).json({ success: true, id: data.id });
   } catch (err) {
     next(err);

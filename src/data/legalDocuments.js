@@ -538,7 +538,7 @@ Kullanıcı kendi içeriğinin hukuka uygunluğundan sorumludur. Patili.co’nun
 ### BÖLÜM 12.1: BİLDİRİM KANALLARI
 - Her yorum yanında “Bildir” düğmesi
 - Her işletme profilinde “Bilgi yanlış / işletme kapalı / pet politikası değişti” bağlantısı
-- Hukuki bildirimler için **destek@patili.co**
+- Hukuki bildirimler için **info@patili.co**
 - KVKK başvuruları için ayrı **kvkk@patili.co** kanalı
 - Acil fiziksel tehlike bildirimlerinin kamu acil hizmetlerinin yerine geçmediğini belirten uyarı
 
