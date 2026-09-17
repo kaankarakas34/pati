@@ -187,6 +187,48 @@ const initialDogWalkers = [
     verified: true,
     status: 'approved',
     createdAt: new Date('2025-02-10').toISOString()
+  },
+  {
+    id: 'walker-gurcan-tatas',
+    name: 'Gürcan Tataş',
+    fullName: 'Gürcan Tataş',
+    phone: '05324008960',
+    email: 'gurcantatas@gmail.com',
+    city: 'İzmir',
+    district: 'Menderes Gaziemir',
+    rating: 5.0,
+    reviewCount: 0,
+    walkCount: 0,
+    hourlyRate: '1000 ₺',
+    services: ['Bireysel Yürüyüş', 'Günlük Egzersiz'],
+    experience: 'Yeni Başvuru',
+    hasDogExperience: 'Büyük ve küçük ırk köpek sahibi oldum. İyi iletişim kurarım mutlu olurlar.',
+    bio: 'Çok çeşit köpek besledim hep enerjimiz iyiydi. Beni özleme garantisi veriyorum.',
+    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=faces',
+    verified: false,
+    status: 'pending',
+    createdAt: '2026-09-17T11:29:38+03:00'
+  },
+  {
+    id: 'walker-khatira-ismayilova',
+    name: 'Khatira ismayilova',
+    fullName: 'Khatira ismayilova',
+    phone: '5526119181',
+    email: 'xatiraismayilova81@gmail.com',
+    city: 'İstanbul',
+    district: 'Eyüp Rami',
+    rating: 5.0,
+    reviewCount: 0,
+    walkCount: 0,
+    hourlyRate: '350 ₺',
+    services: ['Bireysel Yürüyüş', 'Günlük Egzersiz'],
+    experience: 'Yeni Başvuru',
+    hasDogExperience: 'Eski Benimde köpek vardı bahçede Sımdı yoktu ama köpek gezdirmek severim hem kendım yürüyüşe yaparım ve gezdiririm',
+    bio: 'Küçük olsun',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=faces',
+    verified: false,
+    status: 'pending',
+    createdAt: '2026-09-17T11:20:00+03:00'
   }
 ];
 
