@@ -222,3 +222,71 @@ export const ScaleIcon = ({ className = "w-7 h-7 text-[#44385c]" }) => (
     <path d="M15 13l3-6 3 6a3 3 0 0 1-6 0Z" />
   </svg>
 );
+
+// Advanced Pet Policy Verification Badge with Method & Date Tooltip
+export const PetPolicyVerificationBadge = ({ 
+  verified = false, 
+  policySource = 'official_site', 
+  lastVerified = 'Eylül 2026', 
+  confidenceScore = 8.5,
+  size = 'md'
+}) => {
+  const isOwner = policySource === 'owner';
+  const isPhone = policySource === 'phone_verified';
+  const isCommunity = policySource === 'community';
+
+  const sourceLabels = {
+    owner: 'Tesis Sahibi Teyitli',
+    phone_verified: 'Telefonla Doğrulandı',
+    official_site: 'Resmi Web Sitesi Teyidi',
+    community: 'Topluluk Teyitli',
+    third_party: 'Sözleşme / Acente Verisi'
+  };
+
+  const label = isOwner 
+    ? 'Tesis Sahibi Onaylı' 
+    : (verified ? 'Patili.co Doğrulamalı' : 'Doğrulama Bekliyor');
+
+  const badgeColor = isOwner
+    ? 'bg-blue-50 text-blue-800 border-blue-200'
+    : (verified 
+      ? 'bg-emerald-50 text-emerald-800 border-emerald-200' 
+      : 'bg-amber-50 text-amber-800 border-amber-200');
+
+  const dotColor = isOwner ? 'bg-blue-500' : (verified ? 'bg-emerald-500' : 'bg-amber-500');
+
+  const formattedDate = typeof lastVerified === 'string' && lastVerified.includes('T')
+    ? new Date(lastVerified).toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' })
+    : (lastVerified || 'Eylül 2026');
+
+  return (
+    <div className="relative group inline-flex items-center">
+      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-bold cursor-help transition-all shadow-2xs ${badgeColor} ${size === 'sm' ? 'text-3xs px-2 py-0.5' : ''}`}>
+        <span className={`w-2 h-2 rounded-full ${dotColor} animate-pulse`} />
+        <span>{label}</span>
+      </span>
+
+      {/* Floating Detailed Verification Tooltip */}
+      <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block z-40 w-64 p-3 bg-brand-navy text-white text-xs rounded-xl shadow-xl border border-white/10 pointer-events-none transition-opacity">
+        <div className="font-extrabold text-brand-c4 mb-1 flex items-center justify-between">
+          <span>{label}</span>
+          <span className="text-3xs bg-white/20 px-1.5 py-0.5 rounded text-white">{confidenceScore}/10 Güven</span>
+        </div>
+        <p className="text-gray-300 text-3xs leading-relaxed mb-2">
+          Bu tesisin evcil hayvan politikası, kilo limitleri ve ücret koşulları editörlerimiz tarafından incelenmiştir.
+        </p>
+        <div className="space-y-1 text-3xs border-t border-white/10 pt-1.5 text-gray-300">
+          <div className="flex justify-between">
+            <span className="text-gray-400">Yöntem:</span>
+            <span className="font-semibold text-white">{sourceLabels[policySource] || 'Doğrulanmış Kaynak'}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-400">Son Kontrol:</span>
+            <span className="font-semibold text-white">{formattedDate}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+

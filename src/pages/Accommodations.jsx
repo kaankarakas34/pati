@@ -1,7 +1,7 @@
 import { useCatalog } from '../lib/useCatalog';
 import CatalogPagination from '../components/CatalogPagination';
 import React, { useState, useEffect } from 'react';
-import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon } from '../components/PetIcons';
+import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon, PetPolicyVerificationBadge } from '../components/PetIcons';
 import AdBanner from '../components/AdBanner';
 import { slugify, getHotelPath } from '../../lib/seo-slugs';
 import SeoContentSection from '../components/SeoContentSection';
@@ -79,6 +79,30 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
   const confirmedNoFeeHotels = verifiedCityHotels.filter(hotel => hotel.extraFee === 'no');
   const confirmedNoLimitHotels = verifiedCityHotels.filter(hotel => hotel.weightLimit === 0);
 
+  // Sorting state
+  const [sortBy, setSortBy] = useState('recommended');
+
+  // Quick filter helpers
+  const isQuickDog = selectedPet === 'dog';
+  const isQuickCat = selectedPet === 'cat';
+  const isQuickBigDog = weightLimitFilter === 'no-limit';
+  const isQuickGarden = selectedFeatures.includes('Bahçesi bulunan');
+  const isQuickBeach = selectedFeatures.includes('Pet plajı bulunan');
+
+  // Sort hotels
+  const sortedHotels = [...filteredHotels].sort((a, b) => {
+    if (sortBy === 'trust') {
+      return (b.baseTrustScore || 8) - (a.baseTrustScore || 8);
+    }
+    if (sortBy === 'verified') {
+      return (new Date(b.lastVerified || 0)) - (new Date(a.lastVerified || 0));
+    }
+    if (sortBy === 'weight') {
+      return (b.weightLimit || 999) - (a.weightLimit || 999);
+    }
+    return 0; // recommended
+  });
+
   const intentType = selectedPet === 'cat' ? 'kedi-kabul' : selectedPet === 'dog' ? 'kopek-kabul' : 'pet-friendly';
   const pageSeoContent = searchFilters.cityLanding
     ? generateCombinationSeoContent(searchFilters.destination, intentType)
@@ -87,20 +111,86 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Page Header */}
-      <div className="border-b border-brand-beige pb-6 mb-8 text-left">
-        <h1 className="text-3xl font-bold font-title text-brand-navy">
-          {searchFilters.cityLanding
-            ? `${searchFilters.destination} Evcil Hayvan Dostu Oteller`
-            : 'Evcil Hayvan Dostu Oteller'}
-        </h1>
-        <p className="text-gray-600 text-sm mt-1.5">
-          {searchFilters.cityLanding
-            ? `${searchFilters.destination} ilindeki evcil hayvan kabul eden otel, butik otel, bungalov ve diğer konaklama seçenekleri (${filteredHotels.length} tesis listeleniyor)`
-            : searchFilters.filterTitle
-            ? `Özel Seçki: ${searchFilters.filterTitle} (${filteredHotels.length} Tesis listeleniyor)`
-            : `Dostlarınızla birlikte kalabileceğiniz doğrulanmış konaklama tesisleri (${filteredHotels.length} Tesis listeleniyor)`
-          }
-        </p>
+      <div className="border-b border-brand-beige pb-6 mb-6 text-left">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold font-title text-brand-navy">
+              {searchFilters.cityLanding
+                ? `${searchFilters.destination} Evcil Hayvan Dostu Oteller`
+                : 'Evcil Hayvan Dostu Oteller'}
+            </h1>
+            <p className="text-gray-600 text-sm mt-1.5">
+              {searchFilters.cityLanding
+                ? `${searchFilters.destination} ilindeki evcil hayvan kabul eden otel, butik otel, bungalov ve diğer konaklama seçenekleri (${filteredHotels.length} tesis listeleniyor)`
+                : searchFilters.filterTitle
+                ? `Özel Seçki: ${searchFilters.filterTitle} (${filteredHotels.length} Tesis listeleniyor)`
+                : `Dostlarınızla birlikte kalabileceğiniz doğrulanmış konaklama tesisleri (${filteredHotels.length} Tesis listeleniyor)`
+              }
+            </p>
+          </div>
+
+          {/* Sorting Dropdown */}
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="text-xs font-bold text-gray-500">Sırala:</span>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="text-xs font-semibold border-2 border-brand-navy/20 rounded-xl px-3 py-2 bg-white text-brand-navy outline-none cursor-pointer focus:border-brand-navy"
+            >
+              <option value="recommended">⭐ Önerilen Sıralama</option>
+              <option value="trust">🛡️ Pet Güven Skoru</option>
+              <option value="verified">✓ En Son Doğrulanan</option>
+              <option value="weight">⚖️ Kilo Limiti (Yüksek)</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Quick Filter Facet Chips (Enuygun / Otelz Style) */}
+        <div className="flex items-center gap-2 overflow-x-auto pt-4 pb-1 no-scrollbar text-xs">
+          <button
+            onClick={() => { setSelectedPet('all'); setWeightLimitFilter('all'); setExtraFeeOnly(false); setSelectedFeatures([]); }}
+            className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap ${selectedPet === 'all' && weightLimitFilter === 'all' && !extraFeeOnly && selectedFeatures.length === 0 ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+          >
+            Tümü
+          </button>
+          <button
+            onClick={() => setSelectedPet(selectedPet === 'dog' ? 'all' : 'dog')}
+            className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedPet === 'dog' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+          >
+            <span>🐶</span> Köpek Kabul Eden
+          </button>
+          <button
+            onClick={() => setSelectedPet(selectedPet === 'cat' ? 'all' : 'cat')}
+            className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedPet === 'cat' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+          >
+            <span>🐱</span> Kedi Kabul Eden
+          </button>
+          <button
+            onClick={() => setWeightLimitFilter(weightLimitFilter === 'no-limit' ? 'all' : 'no-limit')}
+            className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${weightLimitFilter === 'no-limit' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+          >
+            <span>⚖️</span> Büyük Köpek (Kilo Sınırsız)
+          </button>
+          <button
+            onClick={() => setExtraFeeOnly(!extraFeeOnly)}
+            className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${extraFeeOnly ? 'bg-emerald-700 text-white shadow-xs' : 'bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100'}`}
+          >
+            <span>🟢</span> Ücretsiz Pet
+          </button>
+          <button
+            onClick={() => handleFeatureToggle('Bahçesi bulunan')}
+            className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedFeatures.includes('Bahçesi bulunan') ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+          >
+            <span>🌿</span> Bahçeli / Çim Alan
+          </button>
+          <button
+            onClick={() => handleFeatureToggle('Pet plajı bulunan')}
+            className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedFeatures.includes('Pet plajı bulunan') ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+          >
+            <span>🏖️</span> Plaj Erişimi
+          </button>
+        </div>
+
         {searchFilters.filterTitle && (
           <button 
             onClick={resetFilters}
@@ -260,11 +350,11 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {filteredHotels.map((hotel, index) => (
+              {sortedHotels.map((hotel, index) => (
                 <div
                   key={hotel.id}
                   onClick={() => onViewChange('accommodation-detail', hotel.id)}
-                  className="bg-white rounded-3xl overflow-hidden shadow-xs border border-brand-beige hover:shadow-xl transition-all duration-200 cursor-pointer flex flex-col justify-between"
+                  className="bg-white rounded-3xl overflow-hidden shadow-xs border border-brand-beige hover:shadow-xl transition-all duration-200 cursor-pointer flex flex-col justify-between group"
                 >
                   <div>
                     {/* Hotel Image Area */}
@@ -272,7 +362,7 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
                       <img
                         src={hotel.imageUrl?.includes('images.unsplash.com') ? hotel.imageUrl.replace(/w=\d+/, 'w=400').replace(/q=\d+/, 'q=70') : hotel.imageUrl}
                         alt={hotel.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         loading={index < 2 ? "eager" : "lazy"}
                         fetchPriority={index < 2 ? "high" : "low"}
                         decoding="async"
@@ -282,17 +372,20 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
                         }}
                       />
                       
-                      {/* Verification Badge (Only if verified) */}
-                      {hotel.verified !== false && (
-                        <div className="absolute top-3 left-3 bg-brand-navy text-white text-3xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1 shadow-sm">
-                          <VerifiedBadge className="w-3.5 h-3.5 text-white" />
-                          <span>Doğrulanmış Tesis</span>
-                        </div>
-                      )}
+                      {/* Dynamic Pet Policy Verification Badge */}
+                      <div className="absolute top-3 left-3">
+                        <PetPolicyVerificationBadge 
+                          verified={hotel.verified !== false}
+                          policySource={hotel.policySource || (hotel.verified ? 'phone_verified' : 'official_site')}
+                          lastVerified={hotel.lastVerified}
+                          confidenceScore={(hotel.baseTrustScore || 8.5).toFixed(1)}
+                          size="sm"
+                        />
+                      </div>
                       
                       {/* Suitability Score Badge */}
                       <div className="absolute bottom-3 right-3 text-xs px-3 py-1 rounded-xl font-black text-white shadow-md bg-brand-navy/90 backdrop-blur-xs flex items-center gap-1 border border-white/20">
-                        <span>⭐ Dost Uygunluğu:</span>
+                        <span>⭐ Pet Skoru:</span>
                         <span className="text-brand-yellow font-extrabold">
                           {(hotel.baseTrustScore || (hotel.suitability === 3 ? 9.5 : hotel.suitability === 2 ? 8.5 : 7.2)).toFixed(1)} / 10
                         </span>
@@ -302,26 +395,26 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
                     {/* Hotel Specs content */}
                     <div className="p-5 text-left space-y-3">
                       <div className="flex justify-between items-center text-xs text-gray-500 font-medium">
-                        <span>{hotel.type}</span>
+                        <span className="font-semibold text-brand-navy bg-brand-navy/5 px-2 py-0.5 rounded-md">{hotel.type || 'Konaklama'}</span>
                         <span className="flex items-center gap-1">
                           <LocationIcon className="w-3.5 h-3.5 text-brand-earth" /> {hotel.city}, {hotel.district}
                         </span>
                       </div>
 
-                      <h3 className="font-title text-lg font-bold text-gray-900 line-clamp-1">
+                      <h3 className="font-title text-lg font-bold text-gray-900 line-clamp-1 group-hover:text-brand-c1 transition-colors">
                         <a href={getHotelPath(hotel)} className="hover:underline">{hotel.name}</a>
                       </h3>
                       <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">{hotel.description}</p>
 
                       {/* Pet Fee Info Box */}
-                      <div className="pt-2">
+                      <div className="pt-1">
                         {hotel.extraFee === 'no' ? (
                           <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold text-xs px-3.5 py-2 rounded-2xl flex items-center justify-between">
                             <span className="flex items-center gap-1.5">
-                              <span>🟢</span> ÜCRETSİZ PET KABULÜ
+                              <span>🟢</span> ÜCRETSİZ PET KONAKLAMASI
                             </span>
                             <span className="bg-emerald-700 text-white px-2.5 py-0.5 rounded-lg text-3xs font-extrabold">
-                              Ek Ücret Alınmıyor
+                              Ek Ücret Yok
                             </span>
                           </div>
                         ) : (
@@ -340,10 +433,10 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
                       <div className="flex items-center justify-between pt-2 border-t border-brand-beige text-xs">
                         <div className="flex items-center gap-1.5 text-gray-600">
                           <span className="text-2xs text-gray-700 font-bold">Kabul:</span>
-                          {hotel.allowedPets.includes('dog') && <DogIcon className="w-4 h-4 text-brand-navy" title="Köpek" />}
-                          {hotel.allowedPets.includes('cat') && <CatIcon className="w-4 h-4 text-amber-600" title="Kedi" />}
-                          {hotel.allowedPets.includes('bird') && <BirdIcon className="w-4 h-4 text-sky-600" title="Kuş" />}
-                          {hotel.allowedPets.includes('other') && <OtherIcon className="w-4 h-4 text-purple-600" title="Diğer Dostlar" />}
+                          {(hotel.allowedPets || ['dog', 'cat']).includes('dog') && <DogIcon className="w-4 h-4 text-brand-navy" title="Köpek" />}
+                          {(hotel.allowedPets || ['dog', 'cat']).includes('cat') && <CatIcon className="w-4 h-4 text-amber-600" title="Kedi" />}
+                          {(hotel.allowedPets || []).includes('bird') && <BirdIcon className="w-4 h-4 text-sky-600" title="Kuş" />}
+                          {(hotel.allowedPets || []).includes('other') && <OtherIcon className="w-4 h-4 text-purple-600" title="Diğer" />}
                         </div>
 
                         <span className="text-3xs bg-brand-navy-light px-2.5 py-1 rounded-full text-brand-navy font-extrabold">
@@ -351,10 +444,20 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
                         </span>
                       </div>
 
-                      {/* Features summary tags */}
-                      <div className="flex flex-wrap gap-1 pt-1">
-                        {hotel.features.slice(0, 3).map((feat, idx) => (
-                          <span key={idx} className="text-3xs bg-brand-beige text-brand-navy px-2.5 py-1 rounded-full font-bold">
+                      {/* Pet Policy Quick Highlights (Odada Yalnız Kalma / Bahçe / Plaj) */}
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {hotel.canLeaveInRoomAlone && (
+                          <span className="text-3xs bg-blue-50 text-blue-800 border border-blue-200 px-2 py-0.5 rounded-md font-bold">
+                            🚪 Odada Yalnız Kalabilir
+                          </span>
+                        )}
+                        {(hotel.weightLimit === 0 || hotel.weightLimit >= 20) && (
+                          <span className="text-3xs bg-purple-50 text-purple-800 border border-purple-200 px-2 py-0.5 rounded-md font-bold">
+                            🐕‍🦺 Büyük Irk Uygun
+                          </span>
+                        )}
+                        {(hotel.features || []).slice(0, 2).map((feat, idx) => (
+                          <span key={idx} className="text-3xs bg-brand-beige text-brand-navy px-2 py-0.5 rounded-md font-bold">
                             {feat}
                           </span>
                         ))}
@@ -366,9 +469,9 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
                   <div className="p-4 text-right border-t border-brand-beige/50 mt-2 bg-brand-cream/20">
                     <a
                       href={getHotelPath(hotel)}
-                      className="block w-full text-center bg-brand-navy hover:bg-brand-navy-hover text-white transition-colors py-2.5 rounded-full text-xs font-bold border border-brand-navy/10 font-title"
+                      className="block w-full text-center bg-brand-navy hover:bg-brand-navy-hover text-white transition-colors py-2.5 rounded-full text-xs font-bold border border-brand-navy/10 font-title shadow-xs"
                     >
-                      Tesis Detaylarını İncele &rarr;
+                      Pet Politikasını & Detayları Gör &rarr;
                     </a>
                   </div>
                 </div>

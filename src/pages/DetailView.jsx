@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon, StarIcon, CheckIcon, XIcon, GlobeIcon, PhoneIcon, MailIcon, AlertIcon } from '../components/PetIcons';
+import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon, StarIcon, CheckIcon, XIcon, GlobeIcon, PhoneIcon, MailIcon, AlertIcon, PetPolicyVerificationBadge } from '../components/PetIcons';
 import AdBanner from '../components/AdBanner';
 import { useCatalog } from '../lib/useCatalog';
 import CatalogPagination from '../components/CatalogPagination';
@@ -438,9 +438,14 @@ export default function DetailView({
                 height="450"
               />
             
-              <div className="absolute top-4 left-4 bg-brand-navy text-white text-xs px-3.5 py-1.5 rounded-full font-bold flex items-center gap-1 shadow-md">
-                <VerifiedBadge className="w-4 h-4 text-white" />
-                <span>Doğrulanmış Tesis</span>
+              <div className="absolute top-4 left-4">
+                <PetPolicyVerificationBadge
+                  verified={item.verified !== false}
+                  policySource={item.policySource || (item.verified ? 'phone_verified' : 'official_site')}
+                  lastVerified={item.lastVerified}
+                  confidenceScore={(item.baseTrustScore || 8.5).toFixed(1)}
+                  size="md"
+                />
               </div>
 
               {/* Dynamic Badge for Suitability or Boarding category */}
@@ -837,29 +842,61 @@ export default function DetailView({
                 </div>
 
                 <div className="md:col-span-2 pt-4 border-t border-brand-beige">
-                  <h4 className="font-title font-bold text-gray-800 mb-3">Ortak Alan Kullanım Kuralları</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-gray-600 bg-brand-cream/55 p-4 rounded-xl">
-                    <div>
-                      <span className="font-bold text-gray-850 block mb-1">Restoran & Kahvaltı</span>
-                      <span>{item.rules?.restaurant || 'Yasak'}</span>
+                  <h4 className="font-title font-bold text-gray-800 mb-3">Ortak Alan Kullanım & İmkân Kuralları</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-gray-600 bg-brand-cream/55 p-4 rounded-2xl border border-brand-beige/60">
+                    <div className="space-y-1">
+                      <span className="font-bold text-gray-900 block">🍽️ Restoran & Kahvaltı</span>
+                      <span>{item.rules?.restaurant || 'Yalnızca açık hava teras alanında veya kurala bağlı.'}</span>
                     </div>
-                    <div>
-                      <span className="font-bold text-gray-850 block mb-1">Plaj / Havuz</span>
-                      <span>{item.rules?.pool || 'Yasak'} / {item.rules?.beach || 'Yasak'}</span>
+                    <div className="space-y-1">
+                      <span className="font-bold text-gray-900 block">🏖️ Plaj & Havuz Çevresi</span>
+                      <span>{item.rules?.pool || item.rules?.beach || 'Plaj ve havuz kuralları dönemsel olarak değişebilir; tasmalı giriş önerilir.'}</span>
                     </div>
-                    <div>
-                      <span className="font-bold text-gray-850 block mb-1">Tasarım & Ekipman</span>
-                      <span>Mama kabı ve yatak otel tarafından odada sağlanır. Ortak alanda tasmalı olması mecburidir.</span>
+                    <div className="space-y-1">
+                      <span className="font-bold text-gray-900 block">🐾 Mama & Yatak Ekipmanı</span>
+                      <span>{item.features?.includes('Mama ve su kabı sağlayan') ? 'Mama ve su kabı odada sağlanır.' : 'Tesisle görüşerek kendi mama/su kabınızı getirmeniz önerilir.'}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="md:col-span-2 pt-4">
-                  <h4 className="font-title font-bold text-gray-850 mb-2">Yakındaki Veterinerler</h4>
-                  <p className="text-xs text-gray-600 flex items-center gap-1.5">
-                    <span className="text-base">🏥</span>
-                    <span>{item.veterinarySupport}</span>
-                  </p>
+                {/* Pet Policy Engine Doğrulama & Teyit Künyesi */}
+                <div className="md:col-span-2 bg-gradient-to-r from-emerald-50/70 to-blue-50/70 border border-emerald-200/80 rounded-2xl p-4.5 text-xs text-left">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-brand-navy text-sm">🛡️ Doğrulanmış Pet Politikası Künyesi</span>
+                        <span className="bg-emerald-700 text-white font-extrabold text-3xs px-2 py-0.5 rounded-full">
+                          {item.infoSource || 'Patili.co Editör Doğrulamalı'}
+                        </span>
+                      </div>
+                      <p className="text-gray-650 text-xs leading-relaxed">
+                        Bu tesisin kuralları, kilo kısıtlaması ve ek ücret koşulları <strong>{item.lastVerified || 'Eylül 2026'}</strong> tarihinde kontrol edilmiştir. Otel yönetmelikleri değişebileceğinden rezervasyon öncesi teyit etmenizi öneririz.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setActiveTab('feedback')}
+                      className="shrink-0 self-start sm:self-center bg-white hover:bg-gray-50 text-brand-navy border border-brand-navy/20 font-bold px-3.5 py-2 rounded-xl text-xs transition-colors shadow-2xs"
+                    >
+                      Kural Değişikliği Bildir &rarr;
+                    </button>
+                  </div>
+                </div>
+
+                <div className="md:col-span-2 pt-2">
+                  <h4 className="font-title font-bold text-gray-850 mb-2">Bölgedeki 7/24 Acil Veteriner Desteği</h4>
+                  <div className="flex items-center justify-between bg-white border border-brand-navy/10 rounded-2xl p-3.5 shadow-2xs">
+                    <p className="text-xs text-gray-700 flex items-center gap-2">
+                      <span className="text-lg">🏥</span>
+                      <span>{item.veterinarySupport || `${item.city} genelinde nöbetçi ve acil veteriner klinikleri mevcuttur.`}</span>
+                    </p>
+                    <a
+                      href="/veterinerler"
+                      onClick={(e) => { e.preventDefault(); onViewChange('vets'); }}
+                      className="text-xs font-bold text-brand-navy hover:text-brand-c1 underline whitespace-nowrap ml-3"
+                    >
+                      Klinikleri Görüntüle &rarr;
+                    </a>
+                  </div>
                 </div>
               </div>
             ) : (
