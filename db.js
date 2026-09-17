@@ -1,5 +1,6 @@
 import pg from 'pg';
 import 'dotenv/config';
+import { readFileSync } from 'node:fs';
 import { databaseConfig } from './lib/database-config.js';
 import { createRepository } from './lib/repository.js';
 import { restrictPoolRole } from './lib/role-pool.js';
@@ -38,7 +39,10 @@ export const deletePetTaxi = (id,version) => repository.remove('pet_taxis',id,ve
 export const getVets = async (query = {}) => (await repository.page('vets',query)).data;
 export const saveVet = payload => repository.save('vets',payload);
 export const deleteVet = (id,version) => repository.remove('vets',id,version);
-export const getExperiences = async (query = {}) => (await repository.page('experiences',query)).data;
+export const getExperiences = async (query = {}) => {
+  await ensureExperiencesTableAndSeed().catch(() => {});
+  return (await repository.page('experiences',query)).data;
+};
 export const saveExperience = payload => repository.save('experiences',payload);
 export const deleteExperience = (id,version) => repository.remove('experiences',id,version);
 export const getAds = async (query = {}) => (await repository.page('ads',query)).data;
@@ -129,6 +133,87 @@ async function ensureDogWalkerTable() {
     tableEnsured = true;
   } catch (err) {
     console.warn('[DB] ensureDogWalkerTable warning:', err.message);
+  }
+}
+
+let expTableEnsured = false;
+export async function ensureExperiencesTableAndSeed() {
+  if (expTableEnsured) return;
+  try {
+    await rawPool.query(`
+      CREATE TABLE IF NOT EXISTS public.experiences (
+        id VARCHAR(100) PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        category VARCHAR(100) NOT NULL,
+        city VARCHAR(100) NOT NULL,
+        district VARCHAR(100) NOT NULL,
+        image_url VARCHAR(2000) NOT NULL,
+        pet_policy TEXT NOT NULL,
+        allowed_pets JSONB NOT NULL,
+        features JSONB NOT NULL,
+        description TEXT NOT NULL,
+        address TEXT,
+        phone VARCHAR(255),
+        website VARCHAR(2000),
+        map_url VARCHAR(2000),
+        best_time TEXT,
+        rules TEXT,
+        verified BOOLEAN DEFAULT TRUE,
+        base_trust_score NUMERIC(3,1) NOT NULL,
+        verification_note VARCHAR(255) DEFAULT 'Doğrulandı',
+        last_verified DATE DEFAULT CURRENT_DATE,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        version INT DEFAULT 1,
+        modified_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+      DO $$ BEGIN
+        IF EXISTS (SELECT FROM pg_roles WHERE rolname = 'pati_api') THEN
+          GRANT SELECT,INSERT,UPDATE,DELETE ON public.experiences TO pati_api;
+        END IF;
+      END $$;
+    `);
+    const countRes = await rawPool.query('SELECT COUNT(*)::int as count FROM public.experiences');
+    if (countRes.rows[0]?.count === 0) {
+      const items = JSON.parse(readFileSync(new URL('./data/experiences.json', import.meta.url), 'utf8'));
+      for (const item of items) {
+        await rawPool.query(`
+          INSERT INTO public.experiences (
+            id, name, category, city, district, image_url,
+            pet_policy, allowed_pets, features, description,
+            address, phone, website, map_url, best_time, rules,
+            verified, base_trust_score, verification_note, last_verified
+          ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8::jsonb,$9::jsonb,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20::date)
+          ON CONFLICT (id) DO UPDATE SET
+            name = EXCLUDED.name,
+            category = EXCLUDED.category,
+            city = EXCLUDED.city,
+            district = EXCLUDED.district,
+            image_url = EXCLUDED.image_url,
+            pet_policy = EXCLUDED.pet_policy,
+            allowed_pets = EXCLUDED.allowed_pets,
+            features = EXCLUDED.features,
+            description = EXCLUDED.description,
+            address = EXCLUDED.address,
+            phone = EXCLUDED.phone,
+            website = EXCLUDED.website,
+            map_url = EXCLUDED.map_url,
+            best_time = EXCLUDED.best_time,
+            rules = EXCLUDED.rules,
+            verified = EXCLUDED.verified,
+            base_trust_score = EXCLUDED.base_trust_score,
+            verification_note = EXCLUDED.verification_note,
+            last_verified = EXCLUDED.last_verified
+        `, [
+          item.id, item.name, item.category, item.city, item.district, item.imageUrl,
+          item.petPolicy, JSON.stringify(item.allowedPets), JSON.stringify(item.features), item.description,
+          item.address, item.phone, item.website, item.mapUrl, item.bestTime, item.rules,
+          item.verified, item.baseTrustScore, item.lastVerified, item.lastVerified
+        ]);
+      }
+    }
+    expTableEnsured = true;
+  } catch (err) {
+    // Database connection may not be running; repository static fallback will be used
   }
 }
 

@@ -117,6 +117,23 @@ export default function Experiences() {
                     </span>
                   </div>
 
+                  {item.galleryImages && item.galleryImages.length > 1 && (
+                    <div className="flex gap-2 px-5 pt-3 overflow-x-auto pb-1 scrollbar-thin">
+                      {item.galleryImages.slice(0, 4).map((img, idx) => (
+                        <img
+                          key={idx}
+                          src={img}
+                          alt={`${item.name} fotoğraf ${idx + 1}`}
+                          className="w-16 h-12 rounded-lg object-cover border border-brand-beige shadow-xs flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                          onClick={() => {
+                            item.imageUrl = img;
+                            setExpandedId(current => current === item.id ? current : item.id);
+                          }}
+                        />
+                      ))}
+                    </div>
+                  )}
+
                   <div className="p-5 space-y-3">
                     <div className="flex justify-between items-center text-xs text-gray-500 font-medium">
                       <span className="flex items-center gap-1">
@@ -127,13 +144,35 @@ export default function Experiences() {
                     <h2 className="font-title text-lg font-bold text-gray-900">{item.name}</h2>
                     <p className="text-xs text-gray-600 line-clamp-3 leading-relaxed">{item.description}</p>
 
+                    {item.address && (
+                      <div className="text-xs text-gray-600 flex items-start gap-1.5 bg-brand-cream/50 p-2.5 rounded-xl border border-brand-beige/60">
+                        <span className="text-sm leading-none">📍</span>
+                        <span className="leading-snug">{item.address}</span>
+                      </div>
+                    )}
+
+                    {item.petPolicy && (
+                      <div className="text-xs text-emerald-800 bg-emerald-50/80 p-2.5 rounded-xl border border-emerald-200/80 flex items-start gap-1.5">
+                        <span className="text-sm leading-none">🐾</span>
+                        <div>
+                          <strong className="font-bold">Pati Politikası: </strong>
+                          <span className="leading-snug">{item.petPolicy}</span>
+                        </div>
+                      </div>
+                    )}
+
                     <div className="flex items-center gap-2 pt-2 border-t border-brand-beige">
                       <span className="text-2xs text-gray-400">Uygun:</span>
                       {renderPetIcons(item.allowedPets)}
+                      {item.phone && (
+                        <a href={`tel:${item.phone}`} className="ml-auto text-xs font-semibold text-brand-navy hover:underline flex items-center gap-1">
+                          📞 {item.phone}
+                        </a>
+                      )}
                     </div>
 
                     <div className="flex flex-wrap gap-1.5">
-                      {(item.features || []).slice(0, 4).map(feature => (
+                      {(item.features || []).slice(0, 5).map(feature => (
                         <span key={feature} className="text-3xs bg-brand-beige text-brand-navy px-2.5 py-1 rounded-full font-bold">
                           {feature}
                         </span>
@@ -145,25 +184,32 @@ export default function Experiences() {
                         {expandedId === item.id ? 'Detayları Kapat' : 'Detayları Gör'}
                       </button>
                       {item.mapUrl && (
-                        <a href={item.mapUrl} target="_blank" rel="noopener noreferrer" className="flex-1 text-center bg-brand-navy text-white px-4 py-2.5 rounded-full text-xs font-bold font-title">
+                        <a href={item.mapUrl} target="_blank" rel="noopener noreferrer" className="flex-1 text-center bg-brand-navy text-white px-4 py-2.5 rounded-full text-xs font-bold font-title hover:bg-brand-navy-hover transition-colors">
                           Haritada Aç
                         </a>
                       )}
                       {item.website && (
-                        <a href={item.website} target="_blank" rel="noopener noreferrer" className="flex-1 text-center border-2 border-brand-navy text-brand-navy px-4 py-2 rounded-full text-xs font-bold font-title">
+                        <a href={item.website} target="_blank" rel="noopener noreferrer" className="flex-1 text-center border-2 border-brand-navy text-brand-navy px-4 py-2 rounded-full text-xs font-bold font-title hover:bg-brand-navy hover:text-white transition-colors">
                           Web Sitesi
                         </a>
                       )}
                     </div>
-                    {expandedId === item.id && <DetailLoader resource="experiences" id={item.id}>
-                      {detail => <div className="space-y-3 text-sm">
-                        <p>{detail.description}</p>
-                        {detail.petPolicy && <p><strong>Pet politikası:</strong> {detail.petPolicy}</p>}
-                        {detail.rules && <p>{detail.rules}</p>}
-                        {detail.mapUrl && <a className="block underline" href={detail.mapUrl} target="_blank" rel="noopener noreferrer">Haritada Aç</a>}
-                        {detail.website && <a className="block underline" href={detail.website} target="_blank" rel="noopener noreferrer">Web Sitesi</a>}
-                      </div>}
-                    </DetailLoader>}
+                    {expandedId === item.id && (
+                      <div className="space-y-3 pt-3 border-t border-brand-beige text-xs text-gray-700 bg-brand-cream/30 p-3.5 rounded-2xl">
+                        {item.rules && (
+                          <div className="space-y-1">
+                            <strong className="text-brand-navy font-bold">Kurallar & Bilgiler:</strong>
+                            <p className="leading-relaxed">{item.rules}</p>
+                          </div>
+                        )}
+                        {item.bestTime && (
+                          <div className="space-y-1">
+                            <strong className="text-brand-navy font-bold">Önerilen Ziyaret Zamanı:</strong>
+                            <p className="leading-relaxed">{item.bestTime}</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </article>
               ))}
