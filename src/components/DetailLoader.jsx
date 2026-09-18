@@ -11,9 +11,19 @@ export default function DetailLoader({ resource, id, hotelSlugs, vetSlugs, board
     setState({ key: requestKey, item: null, error: '' });
     async function read(path) {
       const response = await fetch(path, { signal: controller.signal });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Kayit yuklenemedi.');
-      return data;
+      if (!response.ok) {
+        let errText = 'Kayıt yüklenemedi.';
+        try {
+          const errJson = await response.json();
+          if (errJson?.error) errText = errJson.error;
+        } catch {}
+        throw new Error(errText);
+      }
+      try {
+        return await response.json();
+      } catch {
+        throw new Error('Geçersiz sunucu yanıtı.');
+      }
     }
     async function load() {
       try {

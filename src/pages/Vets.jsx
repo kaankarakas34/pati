@@ -21,8 +21,21 @@ export default function Vets({ onViewChange }) {
     setCitiesError('');
     fetch('/api/locations', { signal: controller.signal })
       .then(async response => {
-        const data = await response.json();
-        if (!response.ok || !Array.isArray(data)) throw new Error(data.error || 'Şehirler yüklenemedi.');
+        if (!response.ok) {
+          let errText = 'Şehirler yüklenemedi.';
+          try {
+            const errJson = await response.json();
+            if (errJson?.error) errText = errJson.error;
+          } catch {}
+          throw new Error(errText);
+        }
+        let data;
+        try {
+          data = await response.json();
+        } catch {
+          throw new Error('Şehirler yüklenemedi.');
+        }
+        if (!Array.isArray(data)) throw new Error('Şehirler yüklenemedi.');
         if (!controller.signal.aborted) setCities(data.map(location => location.city));
       })
       .catch(error => { if (!controller.signal.aborted) setCitiesError(error.message); });

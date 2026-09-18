@@ -25,8 +25,20 @@ export function useCatalog(resource,filters={},admin=false,enabled=true,allPages
           const response=await fetch(`/api/${admin?'admin/':''}${resource}?${params}`,{
             signal:controller.signal, headers:admin?{'x-admin-token':sessionStorage.getItem('admin_token')||''}:{}
           });
-          const page=await response.json();
-          if(!response.ok)throw new Error(page.error || 'Kayitlar yuklenemedi.');
+          if(!response.ok) {
+            let errText='Kayıtlar yüklenemedi.';
+            try {
+              const errJson=await response.json();
+              if(errJson?.error) errText=errJson.error;
+            } catch {}
+            throw new Error(errText);
+          }
+          let page;
+          try {
+            page=await response.json();
+          } catch {
+            throw new Error('Geçersiz sunucu yanıtı.');
+          }
           if(!Array.isArray(page.data))throw new Error('Gecersiz liste yaniti.');
           items.push(...page.data);
           nextCursor=page.nextCursor;

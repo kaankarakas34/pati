@@ -30,8 +30,21 @@ export default function Wizard({ onViewChange }) {
     }
     fetch(`/api/${answers.intent === 'together' ? 'hotels' : 'boardings'}?${params}`, { signal: controller.signal })
       .then(async response => {
-        const page = await response.json();
-        if (!response.ok || !Array.isArray(page.data)) throw new Error(page.error || 'Sonuçlar yüklenemedi.');
+        if (!response.ok) {
+          let errText = 'Sonuçlar yüklenemedi.';
+          try {
+            const errJson = await response.json();
+            if (errJson?.error) errText = errJson.error;
+          } catch {}
+          throw new Error(errText);
+        }
+        let page;
+        try {
+          page = await response.json();
+        } catch {
+          throw new Error('Sonuçlar yüklenemedi.');
+        }
+        if (!Array.isArray(page.data)) throw new Error('Sonuçlar yüklenemedi.');
         if (!controller.signal.aborted) setCandidates({ items: page.data, loading: false, error: '' });
       })
       .catch(error => { if (!controller.signal.aborted) setCandidates({ items: [], loading: false, error: error.message }); });
