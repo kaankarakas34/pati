@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { VerifiedBadge, LocationIcon } from '../components/PetIcons';
+import { VerifiedBadge, LocationIcon, DogWalkerIcon } from '../components/PetIcons';
 
 const MOCK_WALKERS = [
   {
@@ -14,7 +14,6 @@ const MOCK_WALKERS = [
     services: ['Bireysel Yürüyüş', 'Grup Yürüyüşü', 'Evde Ziyaret & Besleme'],
     experience: '5 yıl deneyim',
     bio: 'Veteriner teknikerliği geçmişimizle köpeklerinizin karakterine uygun güvenli, tempolu yürüyüşler ve tuvalet rutinleri sağlıyoruz. Canlı GPS takibi ve fotoğraf güncellemeleri dahildir.',
-    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=faces',
     verified: true
   },
   {
@@ -29,7 +28,6 @@ const MOCK_WALKERS = [
     services: ['Bireysel Yürüyüş', 'Temel İtaat Pekiştirme', 'Koşu & Egzersiz'],
     experience: '4 yıl deneyim',
     bio: 'Pozitif pekiştirme ve köpek davranışları sertifikalıyım. Büyük ırk ve enerjik köpekler için tempolu park koşuları ve güvenli yürüyüş seansları sunuyorum.',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=faces',
     verified: true
   },
   {
@@ -44,7 +42,6 @@ const MOCK_WALKERS = [
     services: ['Bireysel Yürüyüş', 'Yavru Köpek Rutini', 'İlaç Takibi'],
     experience: '3 yıl deneyim',
     bio: 'Hassas ve çekingen köpeklerle sabırla iletişim kuruyorum. Seans sonu detaylı rota raporu, tuvalet bilgisi ve fotoğraf paylaşımı yapıyorum.',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=faces',
     verified: true
   },
   {
@@ -59,7 +56,6 @@ const MOCK_WALKERS = [
     services: ['Sahil Yürüyüşü', 'Grup Sosyalleşme', 'Gündüz Bakımı'],
     experience: '4 yıl deneyim',
     bio: 'Bostanlı sahil hattında güvenli kayış protokolleriyle düzenli yürüyüşler yapıyoruz. Sosyalleşme odaklı grup turları veya bireysel yürüyüş seçenekleri mevcuttur.',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=faces',
     verified: true
   }
 ];
@@ -249,11 +245,9 @@ export default function DogWalkers({ onViewChange }) {
             <div className="space-y-4">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-center gap-3.5">
-                  <img 
-                    src={walker.avatar} 
-                    alt={walker.name} 
-                    className="w-14 h-14 rounded-full object-cover border-2 border-brand-yellow shadow-xs"
-                  />
+                  <div className="w-12 h-12 rounded-2xl bg-brand-cream border border-brand-beige flex items-center justify-center text-brand-navy shrink-0 shadow-xs">
+                    <DogWalkerIcon className="w-6 h-6 text-brand-navy" />
+                  </div>
                   <div>
                     <h2 className="font-title font-bold text-lg text-brand-navy flex items-center gap-1.5">
                       {walker.name}

@@ -247,7 +247,7 @@ export async function saveDogWalkerApplication(w) {
     JSON.stringify(w.services || ['Bireysel Yürüyüş', 'Günlük Egzersiz']),
     String(w.experience || 'Yeni Başvuru'),
     String(w.bio || ''),
-    String(w.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=faces'),
+    w.avatar ? String(w.avatar) : null,
     Number(w.rating || 5.0),
     Number(w.reviewCount || 0),
     Number(w.walkCount || 0),

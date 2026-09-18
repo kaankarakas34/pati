@@ -120,7 +120,7 @@ const initialDogWalkers = [
     experience: '5 yıl deneyim',
     hasDogExperience: '5 yıldır köpek sahibiyiz ve profesyonel köpek gezdiriciliği yapıyoruz.',
     bio: 'Veteriner teknikerliği geçmişimizle köpeklerinizin karakterine uygun güvenli, tempolu yürüyüşler ve tuvalet rutinleri sağlıyoruz. Canlı GPS takibi ve fotoğraf güncellemeleri dahildir.',
-    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=faces',
+    avatar: null,
     verified: true,
     status: 'approved',
     createdAt: new Date('2025-01-10').toISOString()
@@ -141,7 +141,7 @@ const initialDogWalkers = [
     experience: '4 yıl deneyim',
     hasDogExperience: '4 yıldır köpek sahibiyim, pozitif pekiştirme sertifikam var.',
     bio: 'Pozitif pekiştirme ve köpek davranışları sertifikalıyım. Büyük ırk ve enerjik köpekler için tempolu park koşuları ve güvenli yürüyüş seansları sunuyorum.',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=faces',
+    avatar: null,
     verified: true,
     status: 'approved',
     createdAt: new Date('2025-01-15').toISOString()
@@ -162,7 +162,7 @@ const initialDogWalkers = [
     experience: '3 yıl deneyim',
     hasDogExperience: 'Yıllardır ailemizde köpek besliyoruz, yavru köpek bakımında tecrübeliyim.',
     bio: 'Hassas ve çekingen köpeklerle sabırla iletişim kuruyorum. Seans sonu detaylı rota raporu, tuvalet bilgisi ve fotoğraf paylaşımı yapıyorum.',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=faces',
+    avatar: null,
     verified: true,
     status: 'approved',
     createdAt: new Date('2025-02-01').toISOString()
@@ -183,7 +183,7 @@ const initialDogWalkers = [
     experience: '4 yıl deneyim',
     hasDogExperience: 'İzmir sahil hattında 4 yıldır düzenli köpek gezdiriyorum.',
     bio: 'Bostanlı sahil hattında güvenli kayış protokolleriyle düzenli yürüyüşler yapıyoruz. Sosyalleşme odaklı grup turları veya bireysel yürüyüş seçenekleri mevcuttur.',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=faces',
+    avatar: null,
     verified: true,
     status: 'approved',
     createdAt: new Date('2025-02-10').toISOString()
@@ -204,7 +204,7 @@ const initialDogWalkers = [
     experience: 'Yeni Başvuru',
     hasDogExperience: 'Büyük ve küçük ırk köpek sahibi oldum. İyi iletişim kurarım mutlu olurlar.',
     bio: 'Çok çeşit köpek besledim hep enerjimiz iyiydi. Beni özleme garantisi veriyorum.',
-    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=faces',
+    avatar: null,
     verified: false,
     status: 'pending',
     createdAt: '2026-09-17T11:29:38+03:00'
@@ -225,7 +225,7 @@ const initialDogWalkers = [
     experience: 'Yeni Başvuru',
     hasDogExperience: 'Eski Benimde köpek vardı bahçede Sımdı yoktu ama köpek gezdirmek severim hem kendım yürüyüşe yaparım ve gezdiririm',
     bio: 'Küçük olsun',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=faces',
+    avatar: null,
     verified: false,
     status: 'pending',
     createdAt: '2026-09-17T11:20:00+03:00'
@@ -454,7 +454,7 @@ app.post('/api/dog-walker-applications', async (req, res, next) => {
       services: ['Bireysel Yürüyüş', 'Günlük Egzersiz'],
       experience: 'Yeni Başvuru',
       bio: normalizeText(bio || hasDogExperience, 2000),
-      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=faces',
+      avatar: null,
       rating: 5.0,
       reviewCount: 0,
       walkCount: 0,
@@ -979,6 +979,8 @@ app.get('/sitemap.xml', async (req,res,next) => {
     await addCatalog('vets', getVetPath);
     await addCatalog('boardings', getBoardingPath);
     await addCatalog('guides', item => `/rehber/${encodeURIComponent(item.slug || item.id)}`);
+    paths.add('/blog/evcil-hayvan-kabul-eden-oteller');
+    paths.add('/blog/kedi-kopek-kabul-eden-oteller');
 
     // Add valid city landing pages that actually have listed hotels
     try {
@@ -989,7 +991,9 @@ app.get('/sitemap.xml', async (req,res,next) => {
       }
       for (const citySlug of verifiedCities) {
         paths.add(`/evcil-hayvan-dostu-oteller/${citySlug}`);
+        paths.add(`/${citySlug}/evcil-hayvan-dostu-oteller`);
       }
+      paths.add('/sapanca/evcil-hayvan-dostu-bungalovlar');
     } catch {
       // Ignore fallback if db query fails during sitemap generation
     }
@@ -1268,7 +1272,7 @@ app.get('/kedi-kopek-oteli/:city/:district/:name', async (req, res) => {
 });
 
 // Intercept Travel Guide Detail page request for SEO & GEO crawling injection
-app.get('/rehber/:id', async (req, res) => {
+app.get(['/rehber/:id', '/blog/:id'], async (req, res) => {
   try {
     const guideId = req.params.id;
     let guide = getFlagshipGuideBySlug(guideId);
@@ -1293,8 +1297,9 @@ app.get('/rehber/:id', async (req, res) => {
 
     let html = getIndexHtmlTemplate();
 
+    const isBlog = req.path.startsWith('/blog/');
     const guideSlug = guide.slug || guide.id;
-    const canonicalUrl = `https://patili.co/rehber/${encodeURIComponent(guideSlug)}`;
+    const canonicalUrl = `https://patili.co/${isBlog ? 'blog' : 'rehber'}/${encodeURIComponent(guideSlug)}`;
 
     // Custom titles
     const title = escapeHtml(`${guide.seoTitle || guide.title} | patili.co`);
@@ -1379,6 +1384,7 @@ const VALID_SPA_ROUTES = new Set([
   '/kopek-gezdiricileri',
   '/isletme-ekle',
   '/evcil-hayvan-seyahat-rehberi',
+  '/blog',
   '/trust-ads',
   '/otel-zincirleri',
   '/sihirbaz',
@@ -1544,15 +1550,26 @@ app.get('*', async (req, res) => {
     // Intercept Accommodation Category, Cluster and Regional Hub Pages
     const isClusterRoute = PROGRAMMATIC_CLUSTERS.some(c => path === '/' + c.slug || path.startsWith('/' + c.slug + '/'));
     const isAccomRoute = path === '/evcil-hayvan-dostu-oteller' || path.startsWith('/evcil-hayvan-dostu-oteller/');
+    const isSemanticCityRoute = /^\/([a-z0-9-]+)\/evcil-hayvan-dostu-(oteller|bungalovlar)\/?$/.test(path);
 
-    if (isAccomRoute || isClusterRoute) {
+    if (isAccomRoute || isClusterRoute || isSemanticCityRoute) {
       let html = getIndexHtmlTemplate();
       const segments = path.split('/').filter(Boolean);
 
       let cluster = null;
       let citySlug = null;
 
-      if (isAccomRoute) {
+      if (isSemanticCityRoute) {
+        const match = path.match(/^\/([a-z0-9-]+)\/evcil-hayvan-dostu-(oteller|bungalovlar)\/?$/);
+        citySlug = match[1];
+        if (match[2] === 'bungalovlar') {
+          cluster = findClusterBySlug('evcil-hayvan-dostu-bungalovlar') || {
+            slug: 'evcil-hayvan-dostu-bungalovlar',
+            title: 'Evcil Hayvan Dostu Bungalovlar',
+            accType: 'Bungalov'
+          };
+        }
+      } else if (isAccomRoute) {
         citySlug = segments[1] || null;
       } else {
         const clusterSlug = segments[0];

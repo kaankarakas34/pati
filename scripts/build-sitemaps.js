@@ -15,7 +15,13 @@ const header = '<?xml version="1.0" encoding="UTF-8"?>\n';
 const staticPaths = [
   '/', '/evcil-hayvan-dostu-oteller', '/kedi-kopek-otelleri', '/pet-taksi', '/veterinerler',
   '/evcil-hayvanla-gezilecek-yerler', '/evcil-hayvan-seyahat-rehberi', '/trust-ads', '/otel-zincirleri',
-  '/kedi-kabul-eden-oteller', '/kopek-kabul-eden-oteller', ...PROGRAMMATIC_CLUSTERS.map(c => '/' + c.slug)
+  '/kedi-kabul-eden-oteller', '/kopek-kabul-eden-oteller',
+  '/blog/evcil-hayvan-kabul-eden-oteller', '/blog/kedi-kopek-kabul-eden-oteller',
+  '/antalya/evcil-hayvan-dostu-oteller', '/mugla/evcil-hayvan-dostu-oteller', '/izmir/evcil-hayvan-dostu-oteller',
+  '/aydin/evcil-hayvan-dostu-oteller', '/balikesir/evcil-hayvan-dostu-oteller', '/canakkale/evcil-hayvan-dostu-oteller',
+  '/istanbul/evcil-hayvan-dostu-oteller', '/sapanca/evcil-hayvan-dostu-oteller', '/sapanca/evcil-hayvan-dostu-bungalovlar',
+  '/bolu/evcil-hayvan-dostu-oteller', '/nevsehir/evcil-hayvan-dostu-oteller',
+  ...PROGRAMMATIC_CLUSTERS.map(c => '/' + c.slug)
 ];
 export function xmlEscape(value) {
   return String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' })[c]);

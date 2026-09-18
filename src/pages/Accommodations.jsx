@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { DogIcon, CatIcon, BirdIcon, OtherIcon, VerifiedBadge, LocationIcon, PetPolicyVerificationBadge } from '../components/PetIcons';
 import AdBanner from '../components/AdBanner';
 import { slugify, getHotelPath } from '../../lib/seo-slugs';
+import { CUSTOM_CITY_CONTENT } from '../../lib/editorial-guides';
 import SeoContentSection from '../components/SeoContentSection';
 import { seoContent, generateCombinationSeoContent } from '../data/seoContent';
 
@@ -103,8 +104,30 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
     return 0; // recommended
   });
 
+  const customCity = searchFilters.citySlug ? CUSTOM_CITY_CONTENT[searchFilters.citySlug] : null;
+
   const intentType = selectedPet === 'cat' ? 'kedi-kabul' : selectedPet === 'dog' ? 'kopek-kabul' : 'pet-friendly';
-  const pageSeoContent = searchFilters.cityLanding
+  const pageSeoContent = customCity
+    ? {
+        id: `${searchFilters.citySlug}-seo`,
+        title: customCity.h1,
+        directAnswer: customCity.directAnswer,
+        paragraphs: customCity.paragraphs,
+        highlights: [
+          `${searchFilters.destination} genelinde doğrulanmış pet politikaları`,
+          'Kilo sınırı, ek ücret ve bahçe kullanım şartları',
+          'Acil veteriner kliniklerine ve sahil/park rotalarına yakınlık',
+          'Kedi ve köpekler için oda içi kurallar ve balkon güvenliği'
+        ],
+        faqs: customCity.faqs,
+        links: [
+          { href: '/blog/evcil-hayvan-kabul-eden-oteller', label: 'Türkiye Evcil Hayvan Kabul Eden Oteller Rehberi' },
+          { href: '/blog/kedi-kopek-kabul-eden-oteller', label: 'Kedi ve Köpek Kabul Eden Oteller Rehberi' },
+          { href: '/evcil-hayvan-dostu-oteller', label: 'Tüm Evcil Hayvan Dostu Oteller' },
+          { href: '/kedi-kopek-otelleri', label: 'Kedi ve Köpek Otelleri' }
+        ]
+      }
+    : searchFilters.cityLanding
     ? generateCombinationSeoContent(searchFilters.destination, intentType)
     : seoContent.accommodations;
 
@@ -127,6 +150,25 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
                 : `Dostlarınızla birlikte kalabileceğiniz doğrulanmış konaklama tesisleri (${filteredHotels.length} Tesis listeleniyor)`
               }
             </p>
+
+            {/* Trust & Policy Verification Banner */}
+            <div className="mt-3 p-3.5 bg-amber-50/90 border border-amber-200/80 rounded-2xl text-xs text-amber-900 flex items-start gap-2.5">
+              <span className="text-base leading-none shrink-0">⚠️</span>
+              <div className="leading-relaxed">
+                <strong className="font-bold">Önemli Hatırlatma:</strong> Otellerin evcil hayvan kabul politikaları, kilo sınırları ve ek ücret tarifeleri sezonluk olarak değişebilir. Rezervasyon yapmadan önce evcil hayvanınızın türünü, kilosunu ve sayısını belirterek güncel kuralları doğrudan işletmeden teyit ediniz.
+              </div>
+            </div>
+
+            {/* Flagship Guides Link Pills */}
+            <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
+              <span className="font-bold text-gray-500">📖 Öne Çıkan Rehberler:</span>
+              <a href="/blog/evcil-hayvan-kabul-eden-oteller" className="px-3 py-1 bg-brand-cream border border-brand-yellow/60 rounded-full font-bold text-brand-navy hover:bg-brand-yellow transition-colors">
+                Türkiye Evcil Hayvan Kabul Eden Oteller Rehberi &rarr;
+              </a>
+              <a href="/blog/kedi-kopek-kabul-eden-oteller" className="px-3 py-1 bg-brand-cream border border-brand-yellow/60 rounded-full font-bold text-brand-navy hover:bg-brand-yellow transition-colors">
+                Kedi & Köpek Kabul Eden Oteller &rarr;
+              </a>
+            </div>
           </div>
 
           {/* Sorting Dropdown */}

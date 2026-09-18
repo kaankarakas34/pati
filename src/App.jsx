@@ -279,7 +279,7 @@ function App() {
       } else if (path === '/kedi-kopek-otelleri' || path === '/boardings') {
         setCurrentView('boardings');
         if (path !== CATEGORY_SEO.boardings.path) window.history.replaceState(null, '', CATEGORY_SEO.boardings.path);
-      } else if (path === '/evcil-hayvan-seyahat-rehberi' || path === '/guides') {
+      } else if (path === '/evcil-hayvan-seyahat-rehberi' || path === '/guides' || path === '/blog' || path === '/blog/') {
         setCurrentView('guides');
         if (path !== CATEGORY_SEO.guides.path) window.history.replaceState(null, '', CATEGORY_SEO.guides.path);
       } else if (path === '/patili-mekanlar' || path === '/evcil-hayvanla-gezilecek-yerler' || path === '/gezilecek-yerler' || path === '/experiences') {
@@ -353,6 +353,28 @@ function App() {
           cityLanding: true
         });
         setCurrentView('accommodations');
+      } else if (/^\/([a-z0-9-]+)\/evcil-hayvan-dostu-(oteller|bungalovlar)\/?$/.test(path)) {
+        const match = path.match(/^\/([a-z0-9-]+)\/evcil-hayvan-dostu-(oteller|bungalovlar)\/?$/);
+        const citySlug = match[1];
+        const typeMatch = match[2];
+        const accType = typeMatch === 'bungalovlar' ? 'Bungalov' : 'all';
+        const filterTitle = typeMatch === 'bungalovlar' ? 'Evcil Hayvan Dostu Bungalovlar' : null;
+        const cityName = citySlug.split('-').map(part => part.charAt(0).toLocaleUpperCase('tr-TR') + part.slice(1)).join(' ');
+
+        setSearchFilters({
+          destination: cityName,
+          citySlug,
+          districtSlug: null,
+          petType: 'all',
+          accType,
+          suitability: 'all',
+          weightLimit: 'all',
+          extraFeeOnly: false,
+          features: [],
+          filterTitle: filterTitle ? `${cityName} ${filterTitle}` : null,
+          cityLanding: true
+        });
+        setCurrentView('accommodations');
       } else if (path === '/her-sey-dahil-evcil-hayvan-dostu-oteller') {
         setSearchFilters(current => ({ ...current, destination: '', petType: 'all', accType: 'all', cityLanding: false, citySlug: null, districtSlug: null, filterTitle: 'Her Şey Dahil Evcil Hayvan Kabul Eden Oteller' }));
         setCurrentView('accommodations');
@@ -408,7 +430,11 @@ function App() {
         setCurrentView('boarding-detail');
         setSelectedItemId(id);
       } else if (path.startsWith('/rehber/')) {
-        const id = path.split('/rehber/')[1];
+        const id = path.split('/rehber/')[1].replace(/\/$/, '');
+        setCurrentView('guide-detail');
+        setSelectedItemId(id);
+      } else if (path.startsWith('/blog/')) {
+        const id = path.split('/blog/')[1].replace(/\/$/, '');
         setCurrentView('guide-detail');
         setSelectedItemId(id);
       } else if (path.startsWith('/taksi/')) {
