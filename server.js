@@ -1697,6 +1697,34 @@ app.get('*', async (req, res) => {
       return res.send(html);
     }
 
+    // Intercept Pet Otelleri & Kedi-Köpek Pansiyonları directory
+    if (path === '/kedi-kopek-otelleri' || path === '/pet-otelleri' || path === '/pet-pansiyonlari') {
+      let html = getIndexHtmlTemplate();
+      const title = "Türkiye Kedi ve Köpek Otelleri | Güvenli Pet Pansiyonu Rehberi | patili.co";
+      const desc = "Türkiye genelindeki 131 doğrulanmış kedi ve köpek otelini tüm fotoğrafları, telefonları ve adresleriyle karşılaştırın. 7/24 kamera, kafessiz odalar ve veteriner desteği.";
+      html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
+      html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${desc}" />`);
+      html = html.replace('</head>', `
+        <link rel="canonical" href="https://patili.co/kedi-kopek-otelleri" />
+        <meta property="og:title" content="${title}" />
+        <meta property="og:description" content="${desc}" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://patili.co/kedi-kopek-otelleri" />
+      </head>`);
+
+      let boardingsSample = [];
+      try {
+        const boardingsResult = await repository.page('boardings', { limit: 12 });
+        boardingsSample = boardingsResult.data || [];
+      } catch {}
+
+      const preRenderHtml = renderServicePreRenderHtml({ serviceType: 'pet-otelleri', items: boardingsSample });
+      html = html.replace('<div id="root"></div>', `<div id="root">${preRenderHtml}</div>`);
+
+      res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+      return res.send(html);
+    }
+
     // Intercept General Veterinerler directory
     if (path === '/veterinerler') {
       let html = getIndexHtmlTemplate();

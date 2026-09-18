@@ -311,7 +311,7 @@ function App() {
         setSearchFilters(current => ({ ...current, destination: '', cityLanding: false, citySlug: null, districtSlug: null }));
         setCurrentView('accommodations');
         if (path !== CATEGORY_SEO.accommodations.path) window.history.replaceState(null, '', CATEGORY_SEO.accommodations.path);
-      } else if (path === '/kedi-kopek-otelleri' || path === '/boardings') {
+      } else if (path === '/kedi-kopek-otelleri' || path === '/boardings' || path === '/pet-otelleri' || path === '/pet-pansiyonlari') {
         setCurrentView('boardings');
         if (path !== CATEGORY_SEO.boardings.path) window.history.replaceState(null, '', CATEGORY_SEO.boardings.path);
       } else if (path === '/evcil-hayvan-seyahat-rehberi' || path === '/guides' || path === '/blog' || path === '/blog/') {

@@ -377,6 +377,39 @@ export const seoContent = {
     ]
   },
 
+  boardings: {
+    id: 'boardings-seo',
+    title: 'Türkiye Kedi ve Köpek Otelleri: Güvenli Pet Pansiyonu Rehberi',
+    directAnswer: 'Pet otelleri ve kedi-köpek pansiyonları; seyahat, tatil, taşınma veya iş yoğunluğu dönemlerinde evcil hayvanların güvenle konaklamasını, 7/24 uzman gözetimini, bireysel hijyenik odalarda barınmasını ve veteriner kontrolünde bakımını sağlayan profesyonel tesislerdir. Türkiye genelindeki pet otellerine kabul için güncel aşı karnesi, kuduz aşısı ve parazit uygulamalarının tamamlanmış olması yasal bir zorunluluktur.',
+    paragraphs: [
+      'Evcil hayvan sahipleri için tatile çıkarken, iş seyahatine giderken veya acil durumlarda can dostlarını emanet edecek güvenilir bir yer bulmak en büyük sorumlulukların başında gelir. Günümüzde evcil hayvan pansiyonculuğu, amatör ev bakıcılığının ötesine geçerek profesyonel standartlara kavuşmuştur. Türkiye genelinde ve büyükşehirlerin popüler ilçelerinde hizmet veren doğrudan pet otelleri; kedi ve köpeklerin türlerine, ırk özelliklerine ve karakter yapılarına özel olarak tasarlanmış alanlarda konaklama imkanı sunmaktadır.',
+      'Köpek otelleri seçilirken tesisin açık ve kapalı alan dengesi büyük önem taşır. Enerjik köpek ırkları için etrafı yüksek güvenlikli çitlerle çevrili geniş çim oyun bahçeleri, günlük yürüyüş parkurları ve sosyalleşme saatleri fiziksel ve zihinsel sağlık açısından gereklidir. Diğer köpeklerle iyi anlaşan sosyal köpekler kontrollü grup oyunlarına dahil edilirken; reaktif, çekingen veya yaşlı köpekler için bireysel egzersiz seansları ve sakin dinlenme odaları tahsis edilir. Kedi otellerinde ise temel prensip tam bir sessizlik ve izolasyondur. Kediler yabancı ortamlarda köpek havlaması ve ani seslerden yoğun stres yaşayabileceğinden, kedi pansiyonları köpeklerden tamamen bağımsız, çok katlı tırmalama kuleleri, tüneller ve havalandırmalı süitlerle donatılmış bölümlerde hizmet vermelidir.',
+      'Pet otellerinde sağlık ve hijyen standartları en kritik güvenlik unsurudur. Güvenilir tüm pet otelleri, misafir kabulünden önce resmi aşı karnesini titizlikle inceler. Kuduz, karma, bordetella ve lösemi gibi temel aşıları güncel olmayan ya da iç-dış parazit tedavisi yapılmamış evcil hayvanların tesise kabulü hem kendi sağlıkları hem de diğer misafirler için kesinlikle uygun değildir. Ayrıca profesyonel tesislerin acil durumlar için anlaşmalı bir veteriner hekim kliniği bulunmalı ve 7/24 sağlık protokolü hazır olmalıdır.',
+      'Teknolojik olanaklar da günümüz pet pansiyonlarında hayvan sahiplerinin içini rahatlatan en önemli faktörlerdendir. Canlı kamera (IP kamera) altyapısına sahip oteller, cep telefonu uygulaması üzerinden dostunuzu günün her saati canlı izleme fırsatı sunar. Bunun yanı sıra bakıcılar tarafından her gün paylaşılan yüksek çözünürlüklü fotoğraflar, oyun videoları ve öğün-tuvalet takip raporları şeffaf bir bakım sürecini garanti eder.',
+      'Rezervasyon yapmadan önce işletmenin fiziksel koşullarının yerinde görülmesi veya doğrulanmış Google fotoğraflarının incelenmesi, personelin hayvan davranışları konusundaki yetkinliğinin sorgulanması ve dostunuzun alışkın olduğu mamasının kendi kabında teslim edilmesi önerilir. Patili.co üzerinde Türkiye genelindeki doğrulanmış pet otellerini telefon, adres, canlı konum ve gerçek misafir puanlarıyla karşılaştırarak en doğru seçimi yapabilirsiniz.'
+    ],
+    highlights: [
+      'Geniş açık bahçeli ve oyun alanlı köpek pansiyonları',
+      'Köpek sesinden izole, bağımsız havalandırmalı kedi süitleri',
+      '7/24 canlı kamera erişimi ve günlük fotoğraf/video paylaşımı',
+      'Anlaşmalı veteriner klinik desteği ve düzenli sağlık kontrolü',
+      'Doğrulanmış adres, telefon ve doğrudan rezervasyon imkanı'
+    ],
+    faqs: [
+      { question: 'Pet oteline bırakırken hangi aşılar zorunludur?', answer: 'Kuduz, karma aşılar ile iç ve dış parazit uygulamalarının güncel olması ve aşı karnesinin ibraz edilmesi zorunludur.' },
+      { question: 'Köpeğim pet otelinde diğer köpeklerle kavga eder mi?', answer: 'Tesisler ilk kabulde mizaç testi yapar; agresif veya uyumsuz köpekler ortak bahçeye çıkarılmaz, bireysel oyun saatleri uygulanır.' },
+      { question: 'Kedi otellerinde köpek sesinden kedi strese girer mi?', answer: 'Nitelikli kedi otelleri tamamen bağımsız binalarda veya ses yalıtımlı özel katlarda hizmet vererek köpek temasını ve sesini sıfırlar.' },
+      { question: 'Pet oteli fiyatları neye göre belirlenir?', answer: 'Hayvanın türü, ırkı, kalış süresi, özel süit seçimi ve canlı kamera gibi ek hizmetlere göre gecelik olarak belirlenir.' }
+    ],
+    links: [
+      { href: '/kedi-kopek-otelleri', label: 'Tüm Pet Otelleri' },
+      { href: '/kopek-otelleri', label: 'Köpek Otelleri' },
+      { href: '/kedi-otelleri', label: 'Kedi Otelleri' },
+      { href: '/veterinerler', label: 'Anlaşmalı Veterinerler' },
+      { href: '/pet-taksi', label: 'Pet Taksi Transferi' }
+    ]
+  },
+
   taxis: {
     id: 'taxis-seo',
     title: 'Pet Taksi: Güvenli Şehir İçi ve Şehirler Arası Hayvan Transferi',
