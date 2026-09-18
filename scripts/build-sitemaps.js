@@ -14,9 +14,12 @@ import { BLOG_ARTICLES } from '../src/data/blogArticles.js';
 const namespace = 'http://www.sitemaps.org/schemas/sitemap/0.9';
 const header = '<?xml version="1.0" encoding="UTF-8"?>\n';
 const staticPaths = [
-  '/', '/evcil-hayvan-dostu-oteller', '/kedi-kopek-otelleri', '/kopek-parklari', '/patili-mekanlar', '/kopek-gezdiricileri', '/pet-taksi', '/veterinerler',
-  '/evcil-hayvanla-gezilecek-yerler', '/evcil-hayvan-seyahat-rehberi', '/trust-ads', '/otel-zincirleri',
+  '/', '/evcil-hayvan-dostu-oteller', '/kedi-kopek-otelleri', '/kopek-otelleri', '/kedi-otelleri',
+  '/kopek-parklari', '/kopek-plajlari', '/patili-mekanlar', '/kopek-gezdiricileri', '/pet-taksi', '/veterinerler',
+  '/7-24-veterinerler', '/acil-veterinerler', '/hayvan-hastaneleri',
+  '/evcil-hayvanla-gezilecek-yerler', '/evcil-hayvan-seyahat-rehberi', '/isletme-ekle', '/trust-ads', '/otel-zincirleri',
   '/kedi-kabul-eden-oteller', '/kopek-kabul-eden-oteller',
+  '/hukuki-metinler', '/kullanim-kosullari', '/gizlilik-politikasi', '/kvkk-aydinlatma-metni', '/cerez-politikasi', '/acik-riza-metni',
   '/blog',
   '/blog/evcil-hayvan-kabul-eden-oteller', '/blog/kedi-kopek-kabul-eden-oteller',
   ...BLOG_ARTICLES.map(a => '/blog/' + a.slug),

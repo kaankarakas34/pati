@@ -19,6 +19,7 @@ import { getEditorialArticleForCity, getEditorialArticleForCluster, POPULAR_CITI
 import { getFlagshipGuideBySlug } from './lib/flagship-guides.js';
 import { boardingSeoMetadata, boardingStructuredData } from './lib/boarding-seo.js';
 import { sendBusinessSubmissionEmail, sendDogWalkerEmail, sendAdApplicationEmail, sendAmbassadorEmail } from './lib/email-service.js';
+import { BLOG_ARTICLES } from './src/data/blogArticles.js';
 
 dotenv.config();
 
@@ -1129,11 +1130,21 @@ app.use('/sitemaps', express.static(path.join(__dirname,'public','sitemaps'), { 
 app.get('/sitemap.xml', async (req,res,next) => {
   try {
     const paths = new Set([
-      '/', '/evcil-hayvan-dostu-oteller', '/kedi-kopek-otelleri', '/pet-taksi', '/veterinerler',
+      '/', '/evcil-hayvan-dostu-oteller', '/kedi-kopek-otelleri', '/kopek-otelleri', '/kedi-otelleri',
+      '/kopek-parklari', '/kopek-plajlari',
+      '/pet-taksi', '/veterinerler', '/7-24-veterinerler', '/acil-veterinerler', '/hayvan-hastaneleri',
       '/evcil-hayvanla-gezilecek-yerler', '/patili-mekanlar', '/kopek-gezdiricileri', '/isletme-ekle',
       '/evcil-hayvan-seyahat-rehberi', '/trust-ads', '/otel-zincirleri',
+      '/kedi-kabul-eden-oteller', '/kopek-kabul-eden-oteller',
       '/hukuki-metinler', '/kullanim-kosullari', '/gizlilik-politikasi', '/kvkk-aydinlatma-metni', '/cerez-politikasi', '/acik-riza-metni',
-      ...PROGRAMMATIC_CLUSTERS.map(cluster => '/' + cluster.slug)
+      '/blog',
+      '/blog/evcil-hayvan-kabul-eden-oteller', '/blog/kedi-kopek-kabul-eden-oteller',
+      ...BLOG_ARTICLES.map(article => '/blog/' + article.slug),
+      ...PROGRAMMATIC_CLUSTERS.map(cluster => '/' + cluster.slug),
+      '/antalya/evcil-hayvan-dostu-oteller', '/mugla/evcil-hayvan-dostu-oteller', '/izmir/evcil-hayvan-dostu-oteller',
+      '/aydin/evcil-hayvan-dostu-oteller', '/balikesir/evcil-hayvan-dostu-oteller', '/canakkale/evcil-hayvan-dostu-oteller',
+      '/istanbul/evcil-hayvan-dostu-oteller', '/sapanca/evcil-hayvan-dostu-oteller', '/sapanca/evcil-hayvan-dostu-bungalovlar',
+      '/bolu/evcil-hayvan-dostu-oteller', '/nevsehir/evcil-hayvan-dostu-oteller'
     ]);
     async function addCatalog(resource, pathFor) {
       let cursor;

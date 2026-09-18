@@ -1,4 +1,4 @@
-﻿import 'dotenv/config';
+import 'dotenv/config';
 import axios from 'axios';
 
 const HOST = process.env.SITE_HOST || 'patili.co';
@@ -10,10 +10,20 @@ const DEFAULT_URLS = [
   `https://${HOST}/`,
   `https://${HOST}/evcil-hayvan-dostu-oteller`,
   `https://${HOST}/kedi-kopek-otelleri`,
+  `https://${HOST}/kopek-otelleri`,
+  `https://${HOST}/kedi-otelleri`,
+  `https://${HOST}/kopek-parklari`,
+  `https://${HOST}/kopek-plajlari`,
   `https://${HOST}/veterinerler`,
+  `https://${HOST}/7-24-veterinerler`,
+  `https://${HOST}/acil-veterinerler`,
+  `https://${HOST}/hayvan-hastaneleri`,
   `https://${HOST}/pet-taksi`,
+  `https://${HOST}/patili-mekanlar`,
+  `https://${HOST}/kopek-gezdiricileri`,
   `https://${HOST}/evcil-hayvanla-gezilecek-yerler`,
   `https://${HOST}/evcil-hayvan-seyahat-rehberi`,
+  `https://${HOST}/blog`,
   `https://${HOST}/kedi-kabul-eden-oteller`,
   `https://${HOST}/kopek-kabul-eden-oteller`
 ];
