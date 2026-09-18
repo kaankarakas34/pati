@@ -810,3 +810,6 @@ export const EDITORIAL_CHECKLIST = [
   'İçerikte “köpek dostu” ile “özel köpek parkı” birbirine karıştırılmadı mı?',
   'Son doğrulama tarihi sayfaya işlendi mi?'
 ];
+
+export const DOG_WALKING_GUIDES = DOG_WALKING_LOCATIONS;
+

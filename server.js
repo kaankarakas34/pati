@@ -1495,8 +1495,8 @@ app.get(['/rehber/:id', '/blog/:id'], async (req, res) => {
       "mainEntityOfPage": canonicalUrl,
       "author": {
         "@type": "Person",
-        "name": guide.author?.name || 'patili.co Editör Masası',
-        "jobTitle": guide.author?.role || 'Seyahat Yazarı'
+        "name": (typeof guide.author === 'string' ? guide.author : guide.author?.name) || 'patili.co Editör Masası',
+        "jobTitle": (typeof guide.author === 'object' && guide.author?.role ? guide.author.role : 'Uzman Araştırma ve İçerik Kurulu')
       },
       "publisher": {
         "@type": "Organization",
@@ -1516,10 +1516,10 @@ app.get(['/rehber/:id', '/blog/:id'], async (req, res) => {
         "@type": "FAQPage",
         "mainEntity": guide.faq.map(item => ({
           "@type": "Question",
-          "name": item.q,
+          "name": item.question || item.q,
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": item.a
+            "text": item.answer || item.a
           }
         }))
       };
