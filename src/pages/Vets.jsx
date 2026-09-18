@@ -11,6 +11,7 @@ export default function Vets({ onViewChange }) {
   const [selectedCity, setSelectedCity] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [hasICU, setHasICU] = useState(false);
+  const [activePreset, setActivePreset] = useState('all');
 
   const [cities, setCities] = useState([]);
   const [citiesError, setCitiesError] = useState('');
@@ -35,12 +36,39 @@ export default function Vets({ onViewChange }) {
     setSelectedCity('all');
     setSearchQuery('');
     setHasICU(false);
+    setActivePreset('all');
+  };
+
+  const handlePresetClick = (preset) => {
+    if (activePreset === preset) {
+      resetFilters();
+      return;
+    }
+    setActivePreset(preset);
+    if (preset === 'all') {
+      resetFilters();
+    } else if (preset === '247') {
+      setHasICU(false);
+      setSearchQuery('');
+    } else if (preset === 'icu') {
+      setHasICU(true);
+      setSearchQuery('');
+    } else if (preset === 'hospital') {
+      setHasICU(false);
+      setSearchQuery('Hastanesi');
+    } else if (preset === 'cat') {
+      setHasICU(false);
+      setSearchQuery('Kedi');
+    } else if (preset === 'exotic') {
+      setHasICU(false);
+      setSearchQuery('Egzotik');
+    }
   };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Page Header */}
-      <div className="border-b border-brand-beige pb-6 mb-8 text-left flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div className="border-b border-brand-beige pb-6 mb-6 text-left flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-red-100 text-red-700 rounded-full text-3xs font-extrabold mb-2">
             <span>🚨 7/24 NÖBETÇİ VE ACİL SERVİS KLİNİKLERİ</span>
@@ -53,6 +81,46 @@ export default function Vets({ onViewChange }) {
         <div className="bg-brand-navy text-white text-xs font-bold px-4 py-2 rounded-2xl whitespace-nowrap self-start md:self-auto shadow-xs">
           <span>🏥 {filteredVets.length} Nöbetçi Klinik Listeleniyor</span>
         </div>
+      </div>
+
+      {/* Preset Filter Chips */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-6 no-scrollbar text-xs">
+        <button
+          onClick={() => handlePresetClick('all')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap ${activePreset === 'all' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          Tüm Klinikler
+        </button>
+        <button
+          onClick={() => handlePresetClick('247')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${activePreset === '247' ? 'bg-red-600 text-white shadow-xs' : 'bg-red-50 text-red-700 border border-red-200 hover:bg-red-100'}`}
+        >
+          <span>🕒</span> 7/24 Açık Nöbetçi
+        </button>
+        <button
+          onClick={() => handlePresetClick('icu')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${activePreset === 'icu' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🚨</span> Yoğun Bakım (ICU)
+        </button>
+        <button
+          onClick={() => handlePresetClick('hospital')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${activePreset === 'hospital' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🏥</span> Hayvan Hastaneleri
+        </button>
+        <button
+          onClick={() => handlePresetClick('cat')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${activePreset === 'cat' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🐱</span> Kedi Kliniği
+        </button>
+        <button
+          onClick={() => handlePresetClick('exotic')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${activePreset === 'exotic' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🦜</span> Egzotik & Kuş
+        </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -213,7 +281,7 @@ export default function Vets({ onViewChange }) {
         </section>
       </div>
       <CatalogPagination page={page} />
-      <SeoContentSection content={seoContent.vets || {}} />
+      <SeoContentSection content={(activePreset === '247' || activePreset === 'icu') ? (seoContent.vets247 || seoContent.vets) : (seoContent.vets || {})} />
     </div>
   );
 }

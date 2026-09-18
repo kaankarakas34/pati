@@ -1,6 +1,7 @@
 import React from 'react';
 
-export default function SeoContentSection({ content }) {
+export default function SeoContentSection({ content: propContent, data }) {
+  const content = propContent || data;
   if (!content) return null;
 
   // Generate dynamic FAQPage JSON-LD

@@ -79,6 +79,41 @@ const CATEGORY_SEO = {
     path: '/otel-zincirleri',
     title: 'Türkiye Evcil Hayvan Dostu Otel Zincirleri (Hilton, Radisson vb.) | patili.co',
     description: 'Hilton, Radisson, Akra, Swissotel gibi otel zincirlerinin evcil hayvan politikaları, kilo sınırları ve aile dostu konaklama imkanları.'
+  },
+  'vets-247': {
+    path: '/7-24-veterinerler',
+    title: '7/24 Açık Nöbetçi Veteriner Klinikleri & Acil Servis | patili.co',
+    description: 'Gece açık nöbetçi veterinerler, 7/24 acil servis, cerrahi ve yoğun bakım donanımlı hayvan hastaneleri rehberi.'
+  },
+  'vets-emergency': {
+    path: '/acil-veterinerler',
+    title: 'Acil Veteriner Klinikleri & Nöbetçi Veterinerler | patili.co',
+    description: 'Acil müdahale, cerrahi operasyon ve ambulans hizmeti sunan nöbetçi veteriner klinikleri iletişim bilgileri.'
+  },
+  'animal-hospitals': {
+    path: '/hayvan-hastaneleri',
+    title: 'Hayvan Hastaneleri | Tam Donanımlı Cerrahi & Tanı Merkezleri | patili.co',
+    description: 'Tomografi, MR, dijital röntgen ve yoğun bakım üniteleri bulunan tam teşekküllü hayvan hastaneleri.'
+  },
+  'dog-boardings': {
+    path: '/kopek-otelleri',
+    title: 'Köpek Otelleri & Güvenli Köpek Pansiyonları | patili.co',
+    description: 'Açık oyun bahçeli, kafessiz konaklama ve 7/24 kameralı doğrulanmış köpek otelleri ve pansiyonları.'
+  },
+  'cat-boardings': {
+    path: '/kedi-otelleri',
+    title: 'Kedi Otelleri & Butik Kedi Pansiyonları | patili.co',
+    description: 'Köpeklerden izole sessiz süitler, çok katlı kedi kuleleri ve veteriner gözetiminde kedi otelleri.'
+  },
+  'dog-parks': {
+    path: '/kopek-parklari',
+    title: 'Köpek Parkları & Tasmasız Egzersiz Alanları | patili.co',
+    description: 'Güvenli çitlerle çevrili, çeviklik parkurları ve su istasyonu bulunan resmi köpek parkları rehberi.'
+  },
+  'dog-beaches': {
+    path: '/kopek-plajlari',
+    title: 'Köpek Kabul Eden Plajlar & Köpek Dostu Koylar | patili.co',
+    description: 'Ege ve Akdeniz sahilinde patili dostunuzla birlikte denize girebileceğiniz köpek dostu plajlar ve koylar.'
   }
 };
 
@@ -452,6 +487,14 @@ function App() {
         setCurrentView('taxis');
       } else if (path === '/veterinerler') {
         setCurrentView('vets');
+      } else if (path === '/7-24-veterinerler' || path === '/acil-veterinerler') {
+        setCurrentView('vets');
+      } else if (path === '/hayvan-hastaneleri') {
+        setCurrentView('vets');
+      } else if (path === '/kopek-otelleri' || path === '/kedi-otelleri') {
+        setCurrentView('boardings');
+      } else if (path === '/kopek-parklari' || path === '/kopek-plajlari') {
+        setCurrentView('experiences');
       } else if (path === '/isletme-ekle' || path === '/add-business') {
         setCurrentView('add-business');
         if (path !== CATEGORY_SEO['add-business'].path) window.history.replaceState(null, '', CATEGORY_SEO['add-business'].path);

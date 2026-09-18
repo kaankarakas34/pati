@@ -40,7 +40,7 @@ export default function Boardings({ boardings, onViewChange }) {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Header */}
-      <div className="border-b border-brand-beige pb-6 mb-8 text-left">
+      <div className="border-b border-brand-beige pb-6 mb-6 text-left">
         <h1 className="text-3xl font-bold font-title text-brand-navy">Kedi ve Köpek Otelleri</h1>
         <p className="text-gray-600 text-sm mt-1.5">
           Seyahatiniz sırasında gözünüz arkada kalmadan kedi veya köpeğinizi emanet edebileceğiniz doğrulanmış pet otellerini karşılaştırın.
@@ -51,6 +51,52 @@ export default function Boardings({ boardings, onViewChange }) {
             <strong>Güven Güvencesi:</strong> Listelenen tüm tesisler yerinde incelenmiş, resmi ruhsatları kontrol edilmiş ve acil sağlık prosedürleri doğrulanmış işletmelerdir. <strong>İnsan otelleri bu arama sonuçlarında asla gösterilmez.</strong>
           </span>
         </div>
+      </div>
+
+      {/* Preset Filter Chips */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-6 no-scrollbar text-xs">
+        <button
+          onClick={resetFilters}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap ${categoryFilter === 'all' && !cameraRequired && !noCageRequired && !staff247Required && !vetRequired ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          Tüm Tesisler
+        </button>
+        <button
+          onClick={() => setCategoryFilter(categoryFilter === 'Köpek otelleri' ? 'all' : 'Köpek otelleri')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${categoryFilter === 'Köpek otelleri' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🐶</span> Köpek Otelleri
+        </button>
+        <button
+          onClick={() => setCategoryFilter(categoryFilter === 'Kedi otelleri' ? 'all' : 'Kedi otelleri')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${categoryFilter === 'Kedi otelleri' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🐱</span> Kedi Otelleri
+        </button>
+        <button
+          onClick={() => setCameraRequired(!cameraRequired)}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${cameraRequired ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>📹</span> Canlı Kamera
+        </button>
+        <button
+          onClick={() => setNoCageRequired(!noCageRequired)}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${noCageRequired ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🏡</span> Kafessiz
+        </button>
+        <button
+          onClick={() => setStaff247Required(!staff247Required)}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${staff247Required ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🕒</span> 7/24 Personel
+        </button>
+        <button
+          onClick={() => setVetRequired(!vetRequired)}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${vetRequired ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🏥</span> Veteriner Destekli
+        </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">

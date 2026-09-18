@@ -31,6 +31,40 @@ export default function Taxis({ taxis = [], onViewChange }) {
         </p>
       </div>
 
+      {/* Preset Filter Chips */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-4 no-scrollbar text-xs">
+        <button
+          onClick={() => { setSelectedCity(''); setSelectedPet('all'); }}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap ${selectedPet === 'all' && !selectedCity ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          Tüm Transferler
+        </button>
+        <button
+          onClick={() => setSelectedPet(selectedPet === 'dog' ? 'all' : 'dog')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedPet === 'dog' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🐶</span> Köpek Transfer
+        </button>
+        <button
+          onClick={() => setSelectedPet(selectedPet === 'cat' ? 'all' : 'cat')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedPet === 'cat' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🐱</span> Kedi Transfer
+        </button>
+        <button
+          onClick={() => setSelectedCity(selectedCity === 'İstanbul' ? '' : 'İstanbul')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedCity === 'İstanbul' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🏙️</span> Şehir İçi Transfer
+        </button>
+        <button
+          onClick={() => setSelectedCity(selectedCity === 'Şehirler Arası' ? '' : 'Şehirler Arası')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedCity === 'Şehirler Arası' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🛣️</span> Şehirler Arası
+        </button>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Sidebar Filters */}
         <aside className="space-y-6 bg-white p-6 rounded-3xl border-2 border-brand-navy/10 shadow-sm text-left">

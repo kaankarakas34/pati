@@ -129,6 +129,20 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
       }
     : searchFilters.cityLanding
     ? generateCombinationSeoContent(searchFilters.destination, intentType)
+    : selectedAccType === 'Bungalov'
+    ? seoContent.bungalows
+    : selectedAccType === 'Villa'
+    ? seoContent.villas
+    : selectedPet === 'dog'
+    ? seoContent.dogFriendlyHotels
+    : selectedPet === 'cat'
+    ? seoContent.catFriendlyHotels
+    : weightLimitFilter === 'no-limit'
+    ? seoContent.largeDogHotels
+    : extraFeeOnly
+    ? seoContent.freePetHotels
+    : selectedFeatures.includes('Bahçesi bulunan')
+    ? seoContent.accommodations
     : seoContent.accommodations;
 
   return (
@@ -230,6 +244,18 @@ export default function Accommodations({ hotels, onViewChange, searchFilters, se
             className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedFeatures.includes('Pet plajı bulunan') ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
           >
             <span>🏖️</span> Plaj Erişimi
+          </button>
+          <button
+            onClick={() => setSelectedAccType(selectedAccType === 'Bungalov' ? 'all' : 'Bungalov')}
+            className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedAccType === 'Bungalov' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+          >
+            <span>🏡</span> Bungalov
+          </button>
+          <button
+            onClick={() => setSelectedAccType(selectedAccType === 'Villa' ? 'all' : 'Villa')}
+            className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedAccType === 'Villa' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+          >
+            <span>🏊</span> Villa
           </button>
         </div>
 

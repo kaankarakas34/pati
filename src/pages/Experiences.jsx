@@ -35,7 +35,7 @@ export default function Experiences() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div className="border-b border-brand-beige pb-6 mb-8 text-left">
+      <div className="border-b border-brand-beige pb-6 mb-6 text-left">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-yellow/30 border border-brand-yellow text-brand-navy rounded-full text-xs font-bold mb-3">
           <span>🍽️ patili.co Mekan Rehberi</span>
         </div>
@@ -43,6 +43,46 @@ export default function Experiences() {
         <p className="text-gray-600 text-sm mt-1.5 max-w-3xl">
           Evcil hayvanınızla keyifle oturabileceğiniz kedi ve köpek dostu kafe, restoran, meyhane, plaj ve yürüyüş rotalarını keşfedin.
         </p>
+      </div>
+
+      {/* Preset Filter Chips */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-6 no-scrollbar text-xs">
+        <button
+          onClick={() => { setSelectedCategory('all'); setSelectedPet('all'); }}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap ${selectedCategory === 'all' && selectedPet === 'all' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          Tüm Mekanlar
+        </button>
+        <button
+          onClick={() => setSelectedCategory(selectedCategory === 'Kafe & Restoran' ? 'all' : 'Kafe & Restoran')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedCategory === 'Kafe & Restoran' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>☕</span> Kafe & Restoranlar
+        </button>
+        <button
+          onClick={() => setSelectedCategory(selectedCategory === 'Plaj & Sahil' ? 'all' : 'Plaj & Sahil')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedCategory === 'Plaj & Sahil' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🏖️</span> Köpek Plajları & Sahil
+        </button>
+        <button
+          onClick={() => setSelectedCategory(selectedCategory === 'Rota & Aktivite' ? 'all' : 'Rota & Aktivite')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedCategory === 'Rota & Aktivite' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🌳</span> Park & Doğa Rotaları
+        </button>
+        <button
+          onClick={() => setSelectedPet(selectedPet === 'dog' ? 'all' : 'dog')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedPet === 'dog' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🐶</span> Köpek Dostu
+        </button>
+        <button
+          onClick={() => setSelectedPet(selectedPet === 'cat' ? 'all' : 'cat')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedPet === 'cat' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🐱</span> Kedi Dostu
+        </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -218,7 +258,7 @@ export default function Experiences() {
         </section>
       </div>
       <CatalogPagination page={page} />
-      <SeoContentSection content={seoContent.experiences} />
+      <SeoContentSection content={selectedCategory === 'Plaj & Sahil' ? (seoContent.parksAndBeaches || seoContent.places) : (seoContent.places || {})} />
     </div>
   );
 }

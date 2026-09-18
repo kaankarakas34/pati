@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { VerifiedBadge, LocationIcon, DogWalkerIcon } from '../components/PetIcons';
+import SeoContentSection from '../components/SeoContentSection';
+import { seoContent } from '../data/seoContent';
 
 const MOCK_WALKERS = [
   {
@@ -63,6 +65,7 @@ const MOCK_WALKERS = [
 export default function DogWalkers({ onViewChange }) {
   const [walkers, setWalkers] = useState(MOCK_WALKERS);
   const [selectedCity, setSelectedCity] = useState('all');
+  const [selectedService, setSelectedService] = useState('all');
   const [contactModal, setContactModal] = useState(null);
   const [requestSent, setRequestSent] = useState(false);
 
@@ -100,9 +103,11 @@ export default function DogWalkers({ onViewChange }) {
     fetchApprovedWalkers();
   }, []);
 
-  const filteredWalkers = selectedCity === 'all' 
-    ? walkers 
-    : walkers.filter(w => (w.city || '').toLowerCase() === selectedCity.toLowerCase());
+  const filteredWalkers = walkers.filter(w => {
+    const cityMatch = selectedCity === 'all' || (w.city || '').toLowerCase() === selectedCity.toLowerCase();
+    const serviceMatch = selectedService === 'all' || (w.services && w.services.some(s => s.toLowerCase().includes(selectedService.toLowerCase())));
+    return cityMatch && serviceMatch;
+  });
 
   const handleRequestSubmit = (e) => {
     e.preventDefault();
@@ -202,6 +207,40 @@ export default function DogWalkers({ onViewChange }) {
           <strong className="font-bold text-amber-900">Önemli Bilgilendirme: </strong>
           patili.co köpek gezdiricilerinden hiçbir komisyon talep etmez ve sorumluluk kabul etmez; yorumlar ve tecrübesine göre karar veriniz.
         </div>
+      </div>
+
+      {/* Preset Filter Chips */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-4 no-scrollbar text-xs">
+        <button
+          onClick={() => { setSelectedCity('all'); setSelectedService('all'); }}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap ${selectedCity === 'all' && selectedService === 'all' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          Tüm Gezdiriciler
+        </button>
+        <button
+          onClick={() => setSelectedService(selectedService === 'Bireysel' ? 'all' : 'Bireysel')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedService === 'Bireysel' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🚶‍♂️</span> Bireysel Yürüyüş
+        </button>
+        <button
+          onClick={() => setSelectedService(selectedService === 'Grup' ? 'all' : 'Grup')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedService === 'Grup' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🐕‍🦺</span> Grup Sosyalleşme
+        </button>
+        <button
+          onClick={() => setSelectedService(selectedService === 'Koşu' ? 'all' : 'Koşu')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedService === 'Koşu' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>🏃</span> Koşu & Egzersiz
+        </button>
+        <button
+          onClick={() => setSelectedService(selectedService === 'İlaç' ? 'all' : 'İlaç')}
+          className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${selectedService === 'İlaç' ? 'bg-brand-navy text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+        >
+          <span>💊</span> İlaç Takibi
+        </button>
       </div>
 
       {/* Şehir Filtresi ve Hızlı Başvuru Butonu */}
@@ -558,6 +597,9 @@ export default function DogWalkers({ onViewChange }) {
           </div>
         </div>
       )}
+
+      {/* Detailed Turkish SEO & GEO Content Section (>= 300 words) */}
+      <SeoContentSection content={seoContent.dogWalkers || {}} />
     </div>
   );
 }
