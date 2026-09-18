@@ -264,6 +264,11 @@ export default function Layout({ children, currentView, onViewChange }) {
                   7/24 Acil Veterinerler
                 </button>
               </li>
+              <li>
+                <button onClick={() => onViewChange('dog-parks')} className="hover:text-white transition-colors">
+                  Köpek Parkları & Yürüyüş Rotaları
+                </button>
+              </li>
             </ul>
           </div>
 

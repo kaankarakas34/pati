@@ -13,7 +13,7 @@ import { boundedInteger, isMain, keysetRows } from './database-preflight.js';
 const namespace = 'http://www.sitemaps.org/schemas/sitemap/0.9';
 const header = '<?xml version="1.0" encoding="UTF-8"?>\n';
 const staticPaths = [
-  '/', '/evcil-hayvan-dostu-oteller', '/kedi-kopek-otelleri', '/pet-taksi', '/veterinerler',
+  '/', '/evcil-hayvan-dostu-oteller', '/kedi-kopek-otelleri', '/kopek-parklari', '/patili-mekanlar', '/kopek-gezdiricileri', '/pet-taksi', '/veterinerler',
   '/evcil-hayvanla-gezilecek-yerler', '/evcil-hayvan-seyahat-rehberi', '/trust-ads', '/otel-zincirleri',
   '/kedi-kabul-eden-oteller', '/kopek-kabul-eden-oteller',
   '/blog/evcil-hayvan-kabul-eden-oteller', '/blog/kedi-kopek-kabul-eden-oteller',

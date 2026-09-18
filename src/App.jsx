@@ -17,6 +17,7 @@ import Taxis from './pages/Taxis';
 import Vets from './pages/Vets';
 import Experiences from './pages/Experiences';
 import DogWalkers from './pages/DogWalkers';
+import DogParks from './pages/DogParks';
 import AdApplication from './pages/AdApplication';
 import BusinessApplication from './pages/BusinessApplication';
 import LegalDocument from './pages/LegalDocument';
@@ -323,6 +324,9 @@ function App() {
       } else if (path === '/kopek-gezdiricileri' || path === '/dog-walkers') {
         setCurrentView('dog-walkers');
         if (path !== CATEGORY_SEO['dog-walkers'].path) window.history.replaceState(null, '', CATEGORY_SEO['dog-walkers'].path);
+      } else if (path === '/kopek-parklari' || path === '/dog-parks' || path.startsWith('/kopek-parklari/')) {
+        setCurrentView('dog-parks');
+        if (path !== CATEGORY_SEO['dog-parks'].path && !path.startsWith('/kopek-parklari/')) window.history.replaceState(null, '', CATEGORY_SEO['dog-parks'].path);
       } else if (
         path.startsWith('/evcil-hayvan-dostu-oteller/') ||
         path.startsWith('/evcil-hayvan-kabul-eden-oteller/') ||
@@ -621,6 +625,13 @@ function App() {
       case 'wizard':
         return (
           <Wizard
+            onViewChange={handleViewChange}
+          />
+        );
+
+      case 'dog-parks':
+        return (
+          <DogParks
             onViewChange={handleViewChange}
           />
         );

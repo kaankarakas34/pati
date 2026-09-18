@@ -1697,6 +1697,28 @@ app.get('*', async (req, res) => {
       return res.send(html);
     }
 
+    // Intercept Köpek Parkları & Yürüyüş Rotaları directory
+    if (path === '/kopek-parklari' || path.startsWith('/kopek-parklari/') || path === '/dog-parks') {
+      let html = getIndexHtmlTemplate();
+      const title = "İstanbul, Ankara, İzmir & Antalya Köpek Parkları ve Yürüyüş Rotaları | patili.co";
+      const desc = "İstanbul, Ankara, İzmir ve Antalya'da doğrulanmış 32 köpek parkı, evcil hayvan parkuru ve tasmalı yürüyüş rotası. İlçe bazlı adresler, Google Haritalar yol tarifleri ve saha kuralları.";
+      html = html.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
+      html = html.replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${desc}" />`);
+      html = html.replace('</head>', `
+        <link rel="canonical" href="https://patili.co/kopek-parklari" />
+        <meta property="og:title" content="${title}" />
+        <meta property="og:description" content="${desc}" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://patili.co/kopek-parklari" />
+      </head>`);
+
+      const preRenderHtml = renderServicePreRenderHtml({ serviceType: 'kopek-parklari' });
+      html = html.replace('<div id="root"></div>', `<div id="root">${preRenderHtml}</div>`);
+
+      res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+      return res.send(html);
+    }
+
     // Intercept Pet Otelleri & Kedi-Köpek Pansiyonları directory
     if (path === '/kedi-kopek-otelleri' || path === '/pet-otelleri' || path === '/pet-pansiyonlari') {
       let html = getIndexHtmlTemplate();
