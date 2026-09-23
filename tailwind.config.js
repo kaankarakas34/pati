@@ -28,55 +28,61 @@ export default {
       },
       colors: {
         brand: {
-          // Explicit user-provided color hierarchy
-          c1: '#201c33', // Deepest dark purple (text, dark headings, primary buttons)
-          c2: '#44385c', // Muted deep purple (secondary dark, borders, dark icons)
-          c3: '#765c92', // Medium soft purple (accents, interactive, badges)
-          c4: '#b98ad5', // Light lavender (soft pills, borders, highlights)
-          c5: '#ffc1ff', // Softest violet/pink tint (pale accents, subtle glows)
+          // Explicit user-provided color hierarchy: #723a8d #38a7e7 #f16a40 #bdc52a #3c2f4b
+          dark: '#3c2f4b',      // Deep eggplant dark (main text, bold headers, dark buttons)
+          purple: '#723a8d',    // Brand purple (rich accent, hero car, highlights)
+          blue: '#38a7e7',      // Cheerful sky cyan/blue
+          coral: '#f16a40',     // Warm coral orange
+          lime: '#bdc52a',      // Lime yellow-green
+          lavender: '#EDE8F8',  // Soft hero lavender backdrop
+          cream: '#F8F6FD',     // Clean soft page background
+          beige: '#E8E1F3',     // Border tone
+
+          // Pastels for bubble chips
+          softblue: '#EBF7FD',
+          softcoral: '#FEF2EF',
+          softlime: '#F7F9E8',
+          softpurple: '#F3EEFB',
+
+          // Compatibility mappings for existing classes
+          c1: '#3c2f4b',
+          c2: '#723a8d',
+          c3: '#38a7e7',
+          c4: '#bdc52a',
+          c5: '#f16a40',
           
-          // Semantic mappings for compatibility across codebase
           navy: {
-            DEFAULT: '#201c33',
-            hover: '#191528',
-            light: '#F5F1F8'
-          },
-          purple: {
-            DEFAULT: '#44385c',
-            dark: '#201c33',
-            medium: '#765c92',
-            light: '#b98ad5',
-            pale: '#ffc1ff'
+            DEFAULT: '#3c2f4b',
+            hover: '#2c2237',
+            light: '#F3EEFB'
           },
           green: {
-            DEFAULT: '#44385c',
-            dark: '#201c33',
-            light: '#F5F1F8',
-            hover: '#352b49'
+            DEFAULT: '#bdc52a',
+            dark: '#3c2f4b',
+            light: '#F7F9E8',
+            hover: '#a8b024'
           },
           earth: {
-            DEFAULT: '#765c92',
-            dark: '#44385c',
-            light: '#F5F1F8',
-            hover: '#5e4875'
+            DEFAULT: '#723a8d',
+            dark: '#3c2f4b',
+            light: '#EDE8F8',
+            hover: '#5c2d73'
           },
           orange: {
-            DEFAULT: '#765c92',
-            light: '#F5F1F8',
-            hover: '#44385c'
+            DEFAULT: '#f16a40',
+            light: '#FEF2EF',
+            hover: '#d95329'
           },
-          cream: '#F7F4FA', // Subtle pale purple background (not pure white)
-          beige: '#EFEBF3', // Subtle separator/border
           yellow: {
-            DEFAULT: '#b98ad5',
-            hover: '#a673c4'
+            DEFAULT: '#bdc52a',
+            hover: '#a8b024'
           },
-          slate: '#765c92'
+          slate: '#723a8d'
         }
       },
       fontFamily: {
-        sans: ['"Quicksand"', 'sans-serif'],
-        title: ['"Quicksand"', 'sans-serif'],
+        sans: ['"Nunito"', '"Quicksand"', 'sans-serif'],
+        title: ['"Fredoka"', '"Quicksand"', 'sans-serif'],
       }
     },
   },

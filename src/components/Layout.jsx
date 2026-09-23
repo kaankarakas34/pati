@@ -13,41 +13,42 @@ export default function Layout({ children, currentView, onViewChange }) {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col font-sans bg-brand-cream selection:bg-brand-yellow selection:text-brand-navy">
+    <div className="min-h-screen flex flex-col font-sans bg-brand-cream selection:bg-brand-purple selection:text-white">
       {/* Top Header Promo */}
-      <div className="bg-brand-navy text-white text-xs py-2.5 px-4 text-center flex items-center justify-center gap-2 font-medium tracking-wide border-b border-white/10">
-        <ShieldCheckIcon className="w-4 h-4 text-brand-yellow" />
+      <div className="bg-brand-purple text-white text-xs py-2 px-4 text-center flex items-center justify-center gap-2 font-bold tracking-wide shadow-xs">
+        <span className="inline-block animate-bounce">🐾</span>
         <span>Türkiye'nin ilk %100 doğrulanmış evcil hayvan seyahat, mekan ve hizmet platformu</span>
       </div>
 
-      {/* Main Navbar */}
-      <nav className="bg-white border-b border-brand-beige sticky top-0 z-40 shadow-sm">
+      {/* Main Navbar - Playful Rounded Style */}
+      <nav className="bg-white/95 backdrop-blur-md border-b border-brand-beige sticky top-0 z-40 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-20">
+          <div className="flex justify-between items-center h-20">
             {/* Logo */}
-            <div className="flex items-center cursor-pointer select-none py-2" onClick={() => onViewChange('home')}>
-              <img
-                src="/logo.png"
-                alt="patili.co"
-                className="h-10 sm:h-12 w-auto object-contain transition-transform hover:scale-105"
-              />
+            <div className="flex items-center cursor-pointer select-none py-2 group" onClick={() => onViewChange('home')}>
+              <div className="flex items-center gap-2">
+                <span className="text-2xl text-brand-purple transition-transform group-hover:rotate-12 group-hover:scale-110 duration-200">🐾</span>
+                <span className="font-title font-extrabold text-2xl sm:text-3xl text-brand-dark tracking-tight">
+                  Patili<span className="text-brand-purple">.co</span>
+                </span>
+              </div>
             </div>
 
             {/* Desktop Menu */}
-            <div className="hidden md:flex items-center space-x-1">
+            <div className="hidden lg:flex items-center space-x-1 font-title">
               {menuItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => onViewChange(item.id)}
-                  className={`px-4 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-1.5 ${
+                  className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
                     currentView === item.id || 
                     (item.id === 'guides' && currentView === 'guide-detail') || 
                     (item.id === 'accommodations' && currentView === 'accommodation-detail') || 
                     (item.id === 'vets' && currentView === 'vet-detail') ||
                     (item.id === 'experiences' && currentView === 'experiences') ||
                     (item.id === 'dog-walkers' && currentView === 'dog-walkers')
-                      ? 'bg-brand-navy text-white font-bold'
-                      : 'text-gray-700 hover:text-brand-navy hover:bg-brand-navy-light'
+                      ? 'bg-brand-dark text-white shadow-sm'
+                      : 'text-brand-dark/80 hover:text-brand-purple hover:bg-brand-lavender/60'
                   }`}
                 >
                   <span>{item.label}</span>
@@ -56,27 +57,28 @@ export default function Layout({ children, currentView, onViewChange }) {
 
               <button
                 onClick={() => onViewChange('add-business')}
-                className="ml-3 px-4 py-2 bg-brand-c2 hover:bg-brand-c1 text-white rounded-full text-xs font-bold border border-brand-c2 shadow-xs flex items-center gap-1.5 transition-all hover:scale-105 font-title"
+                className="ml-3 px-6 py-2.5 bg-brand-dark hover:bg-brand-purple text-white rounded-full text-sm font-bold shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 font-title flex items-center gap-1.5 cursor-pointer"
               >
                 <span>İşletmeni Ekle</span>
+                <span className="text-xs">✨</span>
               </button>
             </div>
 
             {/* Mobile menu button */}
-            <div className="flex items-center md:hidden">
+            <div className="flex items-center lg:hidden">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="text-gray-500 hover:text-brand-navy focus:outline-none p-2 rounded-md hover:bg-brand-beige"
-                aria-expanded="false"
+                className="text-brand-dark hover:text-brand-purple focus:outline-none p-2 rounded-xl hover:bg-brand-lavender/50 transition-colors"
+                aria-expanded={mobileMenuOpen}
               >
                 <span className="sr-only">Menüyü aç</span>
                 {mobileMenuOpen ? (
                   <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 ) : (
                   <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 6h16M4 12h16M4 18h16" />
                   </svg>
                 )}
               </button>
@@ -86,7 +88,7 @@ export default function Layout({ children, currentView, onViewChange }) {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-t border-brand-beige shadow-inner py-3 px-4 space-y-1">
+          <div className="lg:hidden bg-white border-t border-brand-beige shadow-lg py-4 px-4 space-y-2 font-title">
             {menuItems.map((item) => (
               <button
                 key={item.id}
@@ -94,13 +96,14 @@ export default function Layout({ children, currentView, onViewChange }) {
                   onViewChange(item.id);
                   setMobileMenuOpen(false);
                 }}
-                className={`w-full text-left px-4 py-2.5 rounded-xl text-base font-bold transition-all flex items-center justify-between ${
+                className={`w-full text-left px-4 py-2.5 rounded-2xl text-base font-bold transition-all flex items-center justify-between ${
                   currentView === item.id
-                    ? 'bg-brand-navy text-white font-bold'
-                    : 'text-gray-700 hover:bg-brand-navy-light'
+                    ? 'bg-brand-dark text-white'
+                    : 'text-brand-dark hover:bg-brand-lavender/50'
                 }`}
               >
                 <span>{item.label}</span>
+                <span className="text-xs opacity-60">🐾</span>
               </button>
             ))}
             <button
@@ -108,7 +111,7 @@ export default function Layout({ children, currentView, onViewChange }) {
                 onViewChange('add-business');
                 setMobileMenuOpen(false);
               }}
-              className="w-full text-left px-4 py-3 rounded-xl text-base font-bold bg-brand-c2 text-white border border-brand-c2 mt-2 flex items-center justify-between shadow-xs font-title"
+              className="w-full text-left px-4 py-3 rounded-2xl text-base font-bold bg-brand-dark hover:bg-brand-purple text-white mt-2 flex items-center justify-between shadow-md transition-colors"
             >
               <span>İşletmeni Ekle</span>
               <span>&rarr;</span>
