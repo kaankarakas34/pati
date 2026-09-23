@@ -1,8 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ShieldCheckIcon } from './PetIcons';
 
 export default function Layout({ children, currentView, onViewChange }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const root = document.querySelector('#root');
+    const selector = 'h1, h2, h3, h4, h5, h6, main p, footer p';
+    const reveal = new IntersectionObserver((entries) => {
+      entries.forEach(({ target, isIntersecting }) => {
+        if (!isIntersecting) return;
+        target.classList.add('is-visible');
+        reveal.unobserve(target);
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px 40px 0px' });
+    let frame = 0;
+    const scan = () => {
+      root?.querySelectorAll(selector).forEach((element) => {
+        if (element.classList.contains('bubble-copy')) return;
+        element.classList.add('bubble-copy');
+        reveal.observe(element);
+      });
+    };
+    scan();
+    const changes = new MutationObserver(() => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(scan);
+    });
+    if (root) changes.observe(root, { childList: true, subtree: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      changes.disconnect();
+      reveal.disconnect();
+    };
+  }, []);
 
   const menuItems = [
     { id: 'home', label: 'Ana Sayfa' },
@@ -15,13 +47,13 @@ export default function Layout({ children, currentView, onViewChange }) {
   return (
     <div className="min-h-screen flex flex-col font-sans bg-brand-cream selection:bg-brand-purple selection:text-white">
       {/* Top Header Promo */}
-      <div className="bg-brand-purple text-white text-xs py-2 px-4 text-center flex items-center justify-center gap-2 font-bold tracking-wide shadow-xs">
+      <div className={`${currentView === 'home' ? 'hidden' : 'flex'} bg-brand-purple text-white text-xs py-2 px-4 text-center items-center justify-center gap-2 font-bold tracking-wide shadow-xs`}>
         <span className="inline-block animate-bounce">🐾</span>
         <span>Türkiye'nin ilk %100 doğrulanmış evcil hayvan seyahat, mekan ve hizmet platformu</span>
       </div>
 
       {/* Main Navbar - Playful Rounded Style */}
-      <nav className="bg-white/95 backdrop-blur-md border-b border-brand-beige sticky top-0 z-40 shadow-xs">
+      <nav className={`${currentView === 'home' ? 'bg-[#f0eaff]/95 border-transparent' : 'bg-white/95 border-brand-beige'} backdrop-blur-md border-b sticky top-0 z-40 shadow-xs`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             {/* Logo */}
