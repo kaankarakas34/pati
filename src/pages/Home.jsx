@@ -74,7 +74,7 @@ const FALLBACK_FEATURED_HOTELS = [
   }
 ];
 
-export default function Home({ onViewChange, setSearchFilters }) {
+export default function Home({ onViewChange, setSearchFilters, setVenueSearch }) {
   const [activeTab, setActiveTab] = useState('hotel'); // 'hotel' | 'venue'
   const [destination, setDestination] = useState('');
   const [travelDates, setTravelDates] = useState('');
@@ -148,6 +148,7 @@ export default function Home({ onViewChange, setSearchFilters }) {
   const handleSearch = (e) => {
     e.preventDefault();
     if (activeTab === 'venue') {
+      setVenueSearch(destination.trim());
       onViewChange('experiences');
       return;
     }

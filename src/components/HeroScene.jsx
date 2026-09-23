@@ -12,9 +12,10 @@ function Palm({ className }) {
 }
 
 // Each scenic piece remains independent so the mascots and scenery can be moved separately.
-export default function HeroScene() {
+export default function HeroScene({ activeTab = 'hotel' }) {
+  const isVenue = activeTab === 'venue';
   return (
-    <div className="hero-scene" aria-hidden="true">
+    <div className={`hero-scene${isVenue ? ' hero-scene--venue' : ''}`} aria-hidden="true">
       <div className="hero-scene__sun" />
       <div className="hero-scene__cloud hero-scene__cloud--one" />
       <div className="hero-scene__cloud hero-scene__cloud--two" />
@@ -29,8 +30,11 @@ export default function HeroScene() {
         <div className="hero-scene__window" />
         <div className="hero-scene__window" />
         <div className="hero-scene__door" />
-        <div className="hero-scene__sign">🐾<span>HOTEL</span></div>
+        <div className="hero-scene__awning" />
+        <div className="hero-scene__sign">🐾<span>{isVenue ? 'KAFE' : 'OTEL'}</span></div>
       </div>
+      <div className="hero-scene__cafe-table"><span className="hero-scene__cafe-cup" /></div>
+      <div className="hero-scene__cafe-stool" />
       <div className="hero-scene__rail" />
       <span className="hero-scene__spark hero-scene__spark--one">✦</span>
       <span className="hero-scene__spark hero-scene__spark--two">✦</span>

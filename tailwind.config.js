@@ -81,8 +81,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['"Nunito"', '"Quicksand"', 'sans-serif'],
-        title: ['"Fredoka"', '"Quicksand"', 'sans-serif'],
+        sans: ['"Patili Nunito"', 'sans-serif'],
+        title: ['"Patili Baloo 2"', '"Patili Nunito"', 'sans-serif'],
       }
     },
   },

@@ -7,8 +7,8 @@ import SeoContentSection from '../components/SeoContentSection';
 import { seoContent } from '../data/seoContent';
 import { slugify } from '../../lib/seo-slugs';
 
-export default function Experiences() {
-  const [selectedCity, setSelectedCity] = useState('');
+export default function Experiences({ initialSearch = '' }) {
+  const [selectedCity, setSelectedCity] = useState(initialSearch);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedPet, setSelectedPet] = useState('all');
   const [expandedId, setExpandedId] = useState(null);

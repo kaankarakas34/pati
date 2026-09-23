@@ -156,6 +156,7 @@ function App() {
     features: [],
     filterTitle: null
   });
+  const [venueSearch, setVenueSearch] = useState('');
 
   // Scroll to top on view changes
   useEffect(() => {
@@ -581,6 +582,7 @@ function App() {
           <Home
             onViewChange={handleViewChange}
             setSearchFilters={setSearchFilters}
+            setVenueSearch={setVenueSearch}
           />
         );
 
@@ -693,7 +695,7 @@ function App() {
       case 'taxis':
         return <Taxis onViewChange={handleViewChange} />;
       case 'experiences':
-        return <Experiences />;
+        return <Experiences initialSearch={venueSearch} />;
       case 'dog-walkers':
         return <DogWalkers onViewChange={handleViewChange} />;
       case 'vets':
