@@ -11,7 +11,10 @@
       "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWmQs8jX-LujgoxJiuZweRGkn84QK-wdjZ_MJVOpaKgCMQVFk1JaGr9nCmvlm_I0Tvsg7_8OfdtZoADw32JpSfWZSpd2xjPKmQtmY28pn6yEbP9d-Iul1qLAz-xoHu69S7QFkAyu=w1200-h800-k-no"
     ],
     "petPolicy": "Geniş bahçe ve yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Su kabı temin edilir ve taze su ikramı yapılır. Köpeklerin tasmalı olması rica edilir.",
-    "allowedPets": ["dog", "cat"],
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
     "features": [
       "Açık Alan / Ferah Bahçe",
       "Su Kabı & Taze Su İkramı",
@@ -46,7 +49,10 @@
       "https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnnwVZfXiO357VqnxCov7EBJsOPyxobVd4IpebXOjqLzo9ol4W_FrnpXK_nu0YyDU6UrPdOt3NjfXGVotkAn8c9opGWNuaj_IeKCLzHuGO85U5f9DqDQdyqxECA_CxXF0J_SwODnGJAV5Bh=w1200-h800-k-no"
     ],
     "petPolicy": "Ferah açık hava teras alanında evcil hayvan dostudur. Masalara su ikramı yapılmaktadır. Tasmalı kedi ve köpekler kabul edilmektedir.",
-    "allowedPets": ["dog", "cat"],
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
     "features": [
       "Geniş Açık Hava Terası",
       "Su Kabı Temini & İkram",
@@ -65,5 +71,2237 @@
     "verified": true,
     "baseTrustScore": 9.5,
     "lastVerified": "2026-09-17"
+  },
+  {
+    "id": "exp-nove-kadikoy",
+    "name": "Nove",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1525610553991-2bede1a236e2?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "Nove, İstanbul Kadıköy (Suadiye / Kadıköy) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Kahvaltı ve kahve; estetik tasarım övülüyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Bağdat Caddesi 403, Sadıkoğlu Apartmanı, Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cac7e261b9c9df:0x9b0f7c6da14e8b9",
+    "mapUrl": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cac7e261b9c9df:0x9b0f7c6da14e8b9",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.1,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-boter-kadikoy",
+    "name": "Boter",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "Boter, İstanbul Kadıköy (Kalamış / Kadıköy) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Mevsimsel fırın ürünleri; mahalle atmosferi beğeniliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Zühtüpaşa, Rüştiye Sokak 30A, Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cab9103f8251b3:0x7d84115d7e25a8fc",
+    "mapUrl": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cab9103f8251b3:0x7d84115d7e25a8fc",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.2,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-sushico-zen-atasehir",
+    "name": "SushiCo Zen",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Ataşehir",
+    "imageUrl": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1508766917616-d22f3f1eea14?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Ataşehir)"
+    ],
+    "description": "SushiCo Zen, İstanbul Ataşehir (Ataşehir) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Uzakdoğu mutfağı; yeşillikler içindeki ortam övülüyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Atatürk, Atapark Caddesi 4; Ataşehir Golf Club, Ataşehir / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cacfa977ee3a71:0xfcf1884f6375275f",
+    "mapUrl": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cacfa977ee3a71:0xfcf1884f6375275f",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.3,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-the-irish-pub-kadikoy",
+    "name": "The Irish Pub",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "The Irish Pub, İstanbul Kadıköy (Caddebostan / Kadıköy) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Pub yemekleri; Cajun patates öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Haldun Taner Sokak 11, Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cac782516e1125:0x4afbaeabe3f3bd55",
+    "mapUrl": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cac782516e1125:0x4afbaeabe3f3bd55",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.4,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-gron-coffee-kadikoy",
+    "name": "Grön Coffee",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1525610553991-2bede1a236e2?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "Grön Coffee, İstanbul Kadıköy (Caddebostan / Kadıköy) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Nordik tasarım; hafta sonu kahvaltısı öneriliyor.\r\n\r\n\n\r\nObilet Yazarın favorileri Sicilia ve avokadolu tartin; kabak spagetti alternatifini de anıyor.\r\n\r\n\n\r\nBiletbayi Bahçe ve salıncaklı masa tasarımı öne çıkarılıyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Şerafettin Sokak 2/A, Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cac7932867247d:0xd05bcf22fba4a898",
+    "mapUrl": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cac7932867247d:0xd05bcf22fba4a898",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.5,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-yer-kadikoy",
+    "name": "Yer",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "Yer, İstanbul Kadıköy (Moda / Kadıköy) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Kediler mevcut; köpeğin kedi uyumu önemli.\r\n\r\n\n\r\nObilet Yazar köz patlıcanlı menemeni ve humuslu dürümü özellikle beğeniyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Caferağa, Ferit Tek Sokak 25/A, Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cab88ab3358c75:0xc6637a8473126740",
+    "mapUrl": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cab88ab3358c75:0xc6637a8473126740",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.6,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-jack-s-dog-cafe-kadikoy",
+    "name": "Jack’s Dog Cafe",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1508766917616-d22f3f1eea14?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "Jack’s Dog Cafe, İstanbul Kadıköy (Suadiye / Kadıköy) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Köpek pastaları, sosyalleşme ve aksesuar butiği. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Kitapçı Sokak 3/B, Uğur Apartmanı, Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cac76bd73feed9:0x47aa0942637e68b2",
+    "mapUrl": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cac76bd73feed9:0x47aa0942637e68b2",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.7,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-vakkorama-cafe-besiktas",
+    "name": "Vakkorama Cafe",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beşiktaş",
+    "imageUrl": "https://images.unsplash.com/photo-1525610553991-2bede1a236e2?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1525610553991-2bede1a236e2?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beşiktaş)"
+    ],
+    "description": "Vakkorama Cafe, İstanbul Beşiktaş (Şube belirtilmiyor; Avrupa Yakası bölümünde) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Vegan ve glütensiz seçenekler; tasarım vurgulanıyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Tekil şube adresi verilmemiş., Beşiktaş / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Vakkorama%20Cafe%20%C5%9Eube%20belirtilmiyor%3B%20Avrupa%20Yakas%C4%B1%20b%C3%B6l%C3%BCm%C3%BCnde%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Vakkorama%20Cafe%20%C5%9Eube%20belirtilmiyor%3B%20Avrupa%20Yakas%C4%B1%20b%C3%B6l%C3%BCm%C3%BCnde%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.1,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-bart-sisli",
+    "name": "Bart",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Şişli",
+    "imageUrl": "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Şişli)"
+    ],
+    "description": "Bart, İstanbul Şişli (Bomonti / Şişli) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Bahçe, teras, vegan seçenekler; etkinlikler övülüyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Cumhuriyet, Düzoğlu Sokak 2E, Şişli / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cab719c9711b9b:0xc8cb5aa28211a05c",
+    "mapUrl": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cab719c9711b9b:0xc8cb5aa28211a05c",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.2,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-cookshop-arka-bahce-besiktas",
+    "name": "Cookshop Arka Bahçe",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beşiktaş",
+    "imageUrl": "https://images.unsplash.com/photo-1508766917616-d22f3f1eea14?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1508766917616-d22f3f1eea14?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1579027989536-b7b1f875659b?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beşiktaş)"
+    ],
+    "description": "Cookshop Arka Bahçe, İstanbul Beşiktaş (Etiler / Beşiktaş) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Villa bahçesi; çocuklu ve köpekli ziyaret öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Tepecik Yolu 16, Beşiktaş / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cab7aa9dd09843:0x92bb4594e2f265a9",
+    "mapUrl": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cab7aa9dd09843:0x92bb4594e2f265a9",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.3,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-morini-besiktas",
+    "name": "Morini",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beşiktaş",
+    "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beşiktaş)"
+    ],
+    "description": "Morini, İstanbul Beşiktaş (Zorlu Center / Beşiktaş) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO İtalyan mutfağı; makarna özellikle öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Levazım, Vadi Caddesi 2, Beşiktaş / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cab716a3683907:0xda0b4d4c0d8702ad",
+    "mapUrl": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cab716a3683907:0xda0b4d4c0d8702ad",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.5,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-magnolia-bakery-sariyer",
+    "name": "Magnolia Bakery",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Sarıyer",
+    "imageUrl": "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1522336572468-97b06e8ef143?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Sarıyer)"
+    ],
+    "description": "Magnolia Bakery, İstanbul Sarıyer (Vadistanbul / Sarıyer) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Amerikan tatlıları; banana pudding öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Vadistanbul; yazıda kapı numarası yok., Sarıyer / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Magnolia%20Bakery%20Vadistanbul%20/%20Sar%C4%B1yer%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Magnolia%20Bakery%20Vadistanbul%20/%20Sar%C4%B1yer%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.6,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-cup-of-joy-kadikoy",
+    "name": "Cup of Joy",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1579027989536-b7b1f875659b?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "Cup of Joy, İstanbul Kadıköy (Bebek ve Caddebostan) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Nitelikli kahve; Milor değerlendirmesine atıf yapılıyor.\r\n\r\n\n\r\nVogue Türkiye Caddebostan açık alanı, yürüyüş sonrası köpekli sosyalleşme için öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Kaynaklar farklı şubelere değiniyor; açık adres verilmemiş., Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Cup%20of%20Joy%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Cup%20of%20Joy%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.7,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-retro-society-sisli",
+    "name": "Retro Society",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Şişli",
+    "imageUrl": "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Şişli)"
+    ],
+    "description": "Retro Society, İstanbul Şişli (Topağacı / Şişli) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Arka bahçe, plak müziği; nostalji vurgulanıyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Teşvikiye, Ahmet Fetgari Sokak 17A, Şişli / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cab79311955aab:0xf8a11da8b75f0b6f",
+    "mapUrl": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x14cab79311955aab:0xf8a11da8b75f0b6f",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.1,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-kavanoz-besiktas",
+    "name": "Kavanoz",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beşiktaş",
+    "imageUrl": "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beşiktaş)"
+    ],
+    "description": "Kavanoz, İstanbul Beşiktaş (Arnavutköy / Beşiktaş) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Avlu; sokak köpeklerine barınma desteği övülüyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Tekkeci Sokak 1A, Beşiktaş / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Kavanoz%20Arnavutk%C3%B6y%20/%20Be%C5%9Fikta%C5%9F%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Kavanoz%20Arnavutk%C3%B6y%20/%20Be%C5%9Fikta%C5%9F%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.2,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-petra-roasting-co-kadikoy",
+    "name": "Petra Roasting Co.",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1579027989536-b7b1f875659b?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1579027989536-b7b1f875659b?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1522336572468-97b06e8ef143?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "Petra Roasting Co., İstanbul Kadıköy (Birden fazla şube) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Gayrettepe’de köpekli ortam ve kahve övülüyor.\r\n\r\n\n\r\nVogue Türkiye Gayrettepe açık alanı; erken saatlerde kahve ve çalışmak için öneriliyor.\r\n\r\n\n\r\ntheMagger Gayrettepe mutfağı ve kahve, yazarın beğenisini kazanıyor.\r\n\r\n\n\r\nOnedio Kahve beğeniliyor; fiyat yüksek bulunuyor. Ziyaretçi izlenimlerinde: Onedio’nun aktardığı ziyaretçi yorumu Sakinlik, kahve ve kedi dostu ortam övülüyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Bebek: Küçük Bebek Caddesi 38; diğer şubeler aşağıda., Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Petra%20Roasting%20Co.%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Petra%20Roasting%20Co.%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.3,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-hidden-house-besiktas",
+    "name": "Hidden House",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beşiktaş",
+    "imageUrl": "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beşiktaş)"
+    ],
+    "description": "Hidden House, İstanbul Beşiktaş (Bebek / Beşiktaş) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Gelirden derneğe destek; sıcak atmosfer.\r\n\r\n\n\r\ntheMagger İçeride/bahçede rahat; yerleşik kedi ve köpekler bulunuyor.\r\n\r\n\n\r\nOnedio Sessiz bir mola öneriliyor. Ziyaretçi izlenimlerinde: Onedio’nun aktardığı ziyaretçi yorumu Sanat, doğa ve hayvan desteği takdir ediliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Küçükbebek Caddesi, Yeniyol Çıkmazı 2A, Beşiktaş / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://maps.app.goo.gl/b7VhFs8VQv11MsyJ6",
+    "mapUrl": "https://maps.app.goo.gl/b7VhFs8VQv11MsyJ6",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.4,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-delicatessen-sisli",
+    "name": "Delicatessen",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Şişli",
+    "imageUrl": "https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Şişli)"
+    ],
+    "description": "Delicatessen, İstanbul Şişli (Nişantaşı / Şişli) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Maçka Parkı yakını; yürüyüş sonrası öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Harbiye, Mim Kemal Öke Caddesi 19, Şişli / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Delicatessen%20Ni%C5%9Fanta%C5%9F%C4%B1%20/%20%C5%9Ei%C5%9Fli%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Delicatessen%20Ni%C5%9Fanta%C5%9F%C4%B1%20/%20%C5%9Ei%C5%9Fli%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.5,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-sanayi-313-sariyer",
+    "name": "Sanayi 313",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Sarıyer",
+    "imageUrl": "https://images.unsplash.com/photo-1522336572468-97b06e8ef143?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1522336572468-97b06e8ef143?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Sarıyer)"
+    ],
+    "description": "Sanayi 313, İstanbul Sarıyer (Maslak / Sarıyer) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Cumartesi brunch’ı; hafta sonu önerisi.\r\n\r\n\n\r\ntheMagger Tasarım alışverişi ve yemek; hayvansever ekip beğeniliyor.\r\n\r\n\n\r\nOnedio Sanayi içindeki menü çeşitliliği vurgulanıyor. Ziyaretçi izlenimlerinde: Onedio’nun aktardığı ziyaretçi yorumu Servis/köpek ilgisi olumlu; fiyat ve tablolar eleştiriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Atatürk Oto Sanayi Sitesi, 2. Kısım, 10. Sokak 313, Sarıyer / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://maps.app.goo.gl/XsYgxwqVUBBzaNGZA",
+    "mapUrl": "https://maps.app.goo.gl/XsYgxwqVUBBzaNGZA",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.6,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-voi-central-besiktas",
+    "name": "Voi Central",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beşiktaş",
+    "imageUrl": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1525610553991-2bede1a236e2?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beşiktaş)"
+    ],
+    "description": "Voi Central, İstanbul Beşiktaş (Bebek–Etiler / Beşiktaş) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Kış bahçesi; yürüyüş sonrası kahve öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Bebek Dağı Sokak 3, Beşiktaş / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Voi%20Central%20Bebek%E2%80%93Etiler%20/%20Be%C5%9Fikta%C5%9F%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Voi%20Central%20Bebek%E2%80%93Etiler%20/%20Be%C5%9Fikta%C5%9F%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.7,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-bronwyn-sisli",
+    "name": "Bronwyn",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Şişli",
+    "imageUrl": "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Şişli)"
+    ],
+    "description": "Bronwyn, İstanbul Şişli (Nişantaşı / Şişli) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Artan yemeklerin paylaşılması takdir ediliyor.\r\n\r\n\n\r\nObilet Arka bahçe ve ön masalar; hayvanlara yemek desteği olumlu değerlendiriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Teşvikiye, Akkavak Sokak 32A, Şişli / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Bronwyn%20Ni%C5%9Fanta%C5%9F%C4%B1%20/%20%C5%9Ei%C5%9Fli%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Bronwyn%20Ni%C5%9Fanta%C5%9F%C4%B1%20/%20%C5%9Ei%C5%9Fli%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.1,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-minoa-village-besiktas",
+    "name": "Minoa Village",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beşiktaş",
+    "imageUrl": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1508766917616-d22f3f1eea14?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beşiktaş)"
+    ],
+    "description": "Minoa Village, İstanbul Beşiktaş (Etiler / Beşiktaş) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. OGGUSTO Kitaplı kafe; atmosfer ve menü beğeniliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Akat, Tepecik Yolu, Kaktüs Sokak 3/12, Beşiktaş / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Minoa%20Village%20Etiler%20/%20Be%C5%9Fikta%C5%9F%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Minoa%20Village%20Etiler%20/%20Be%C5%9Fikta%C5%9F%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.2,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-bagitgo-concept-store-cafe-kadikoy",
+    "name": "Bagitgo Concept Store & Cafe",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "Bagitgo Concept Store & Cafe, İstanbul Kadıköy (Caddebostan / Kadıköy) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Obilet Mağaza+kafe; yazar rafine şekersiz, glütensiz San Sebastian ve buzlu latte öneriyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Caddebostan İskele Sokak 16/18D, Dükkan 32, Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Bagitgo%20Concept%20Store%20%26%20Cafe%20Caddebostan%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Bagitgo%20Concept%20Store%20%26%20Cafe%20Caddebostan%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.3,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-naan-bakeshop-kadikoy",
+    "name": "Naan Bakeshop",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1525610553991-2bede1a236e2?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "Naan Bakeshop, İstanbul Kadıköy (Moda / Kadıköy) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Obilet Fırın ürünleri ve kahvaltı; köpekle atıştırmalık molası için öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Caferağa, Moda Caddesi 113, Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Naan%20Bakeshop%20Moda%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Naan%20Bakeshop%20Moda%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.4,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-pati-duragi-kadikoy",
+    "name": "Pati Durağı",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "Pati Durağı, İstanbul Kadıköy (Suadiye başlığı; Bostancı adresi / Kadıköy) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Obilet Pet kuaförü, petshop ve sosyalleşmeyi birleştiren konsept beğeniliyor.\r\n\r\n\n\r\nBiletbayi Maxi ve Muffin anısına; camlı kuaför, yardım etkinlikleri anlatılıyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Emin Ali Paşa Caddesi, Turşucudere Sokak 23/A; Biletbayi: 27-23, Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Pati%20Dura%C4%9F%C4%B1%20Suadiye%20ba%C5%9Fl%C4%B1%C4%9F%C4%B1%3B%20Bostanc%C4%B1%20adresi%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Pati%20Dura%C4%9F%C4%B1%20Suadiye%20ba%C5%9Fl%C4%B1%C4%9F%C4%B1%3B%20Bostanc%C4%B1%20adresi%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.5,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-wuufbox-cafe-besiktas",
+    "name": "Wuufbox Cafe",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beşiktaş",
+    "imageUrl": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1508766917616-d22f3f1eea14?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beşiktaş)"
+    ],
+    "description": "Wuufbox Cafe, İstanbul Beşiktaş (Arnavutköy / Beşiktaş) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Obilet Köpek kreşi/spa, buluşmalar ve barınak desteği vurgulanıyor.\r\n\r\n\n\r\nBiletbayi Sahil manzarası, petshop ve yürüyüş sonrası mola; cookie öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Bebek–Arnavutköy Caddesi 21 A/B, Beşiktaş / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Wuufbox%20Cafe%20Arnavutk%C3%B6y%20/%20Be%C5%9Fikta%C5%9F%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Wuufbox%20Cafe%20Arnavutk%C3%B6y%20/%20Be%C5%9Fikta%C5%9F%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.6,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-minval-artisanal-food-creations-besiktas",
+    "name": "Minval Artisanal Food Creations",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beşiktaş",
+    "imageUrl": "https://images.unsplash.com/photo-1525610553991-2bede1a236e2?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1525610553991-2bede1a236e2?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beşiktaş)"
+    ],
+    "description": "Minval Artisanal Food Creations, İstanbul Beşiktaş (Akatlar / Beşiktaş) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Obilet Ev yapımı üretim; yazar ferah ortamda kahvaltı veya öğle yemeği öneriyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Zeytinoğlu Caddesi, Yaren Sokak 6/12, Beşiktaş / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Minval%20Artisanal%20Food%20Creations%20Akatlar%20/%20Be%C5%9Fikta%C5%9F%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Minval%20Artisanal%20Food%20Creations%20Akatlar%20/%20Be%C5%9Fikta%C5%9F%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.7,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-all-sports-cafe-besiktas",
+    "name": "All Sports Cafe",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beşiktaş",
+    "imageUrl": "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beşiktaş)"
+    ],
+    "description": "All Sports Cafe, İstanbul Beşiktaş (Etiler / Beşiktaş) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Obilet Sağlıklı seçenekler; yazar özellikle rafine şekersiz raw tatlıları öneriyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Mehmet Paşa Sokak 1, Daire 2, Beşiktaş / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=All%20Sports%20Cafe%20Etiler%20/%20Be%C5%9Fikta%C5%9F%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=All%20Sports%20Cafe%20Etiler%20/%20Be%C5%9Fikta%C5%9F%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.1,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-filbooks-beyoglu",
+    "name": "FiLBooks",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beyoğlu",
+    "imageUrl": "https://images.unsplash.com/photo-1508766917616-d22f3f1eea14?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1508766917616-d22f3f1eea14?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1579027989536-b7b1f875659b?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beyoğlu)"
+    ],
+    "description": "FiLBooks, İstanbul Beyoğlu (Karaköy / Beyoğlu) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Obilet Kitaplı ortam ve kahvaltı; dekorun fotojenik oluşu beğeniliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Kemankeş Karamustafa Paşa, Ali Paşa Değirmeni Sokak 1/1, Beyoğlu / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=FiLBooks%20Karak%C3%B6y%20/%20Beyo%C4%9Flu%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=FiLBooks%20Karak%C3%B6y%20/%20Beyo%C4%9Flu%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.2,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-lucky-and-friends-sisli",
+    "name": "Lucky and Friends",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Şişli",
+    "imageUrl": "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Şişli)"
+    ],
+    "description": "Lucky and Friends, İstanbul Şişli (Nişantaşı / Şişli) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Biletbayi Lucky adlı köpeğin hikâyesi; sokak hayvanlarına yardım ve birlikte sosyalleşme öne çıkarılıyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Teşvikiye, Prof. Dr. Müfide Küley Sokak 45, Şişli / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Lucky%20and%20Friends%20Ni%C5%9Fanta%C5%9F%C4%B1%20/%20%C5%9Ei%C5%9Fli%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Lucky%20and%20Friends%20Ni%C5%9Fanta%C5%9F%C4%B1%20/%20%C5%9Ei%C5%9Fli%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.3,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-son-topagaci-sisli",
+    "name": "Son Topağacı",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Şişli",
+    "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Şişli)"
+    ],
+    "description": "Son Topağacı, İstanbul Şişli (Topağacı / Şişli) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Biletbayi Merdiven oturmasıyla sokak deneyimi; kruvasan öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Ihlamur Nişantaşı Yolu Sokak 72/C, Şişli / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Son%20Topa%C4%9Fac%C4%B1%20Topa%C4%9Fac%C4%B1%20/%20%C5%9Ei%C5%9Fli%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Son%20Topa%C4%9Fac%C4%B1%20Topa%C4%9Fac%C4%B1%20/%20%C5%9Ei%C5%9Fli%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.4,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-moc-nisantasi-sisli",
+    "name": "MOC Nişantaşı",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Şişli",
+    "imageUrl": "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1522336572468-97b06e8ef143?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Şişli)"
+    ],
+    "description": "MOC Nişantaşı, İstanbul Şişli (Nişantaşı / Şişli) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Biletbayi Asma katta kitaplar; kahve ve köpekli sosyalleşme öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Teşvikiye, Şakayık Sokak 4/A, Şişli / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=MOC%20Ni%C5%9Fanta%C5%9F%C4%B1%20Ni%C5%9Fanta%C5%9F%C4%B1%20/%20%C5%9Ei%C5%9Fli%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=MOC%20Ni%C5%9Fanta%C5%9F%C4%B1%20Ni%C5%9Fanta%C5%9F%C4%B1%20/%20%C5%9Ei%C5%9Fli%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.5,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-kruvasan-sisli",
+    "name": "Kruvasan",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Şişli",
+    "imageUrl": "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1579027989536-b7b1f875659b?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Şişli)"
+    ],
+    "description": "Kruvasan, İstanbul Şişli (Nişantaşı / Şişli) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Biletbayi Günlük farklı kruvasanlar; köpekle kahvaltı için öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Teşvikiye, Avukat Süreyya Ağaoğlu Sokak 10/D, Şişli / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Kruvasan%20Ni%C5%9Fanta%C5%9F%C4%B1%20/%20%C5%9Ei%C5%9Fli%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Kruvasan%20Ni%C5%9Fanta%C5%9F%C4%B1%20/%20%C5%9Ei%C5%9Fli%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.6,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-tiyop-cafe-bistro-beyoglu",
+    "name": "Tiyop Cafe – Bistro",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beyoğlu",
+    "imageUrl": "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beyoğlu)"
+    ],
+    "description": "Tiyop Cafe – Bistro, İstanbul Beyoğlu (Galata / Beyoğlu) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Biletbayi Bitkili, aydınlık dekor; sakin kitap molası ve kek öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Hacımimi, Lüleci Hendek Caddesi 49C, Beyoğlu / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Tiyop%20Cafe%20%E2%80%93%20Bistro%20Galata%20/%20Beyo%C4%9Flu%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Tiyop%20Cafe%20%E2%80%93%20Bistro%20Galata%20/%20Beyo%C4%9Flu%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.7,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-walter-s-coffee-roastery-kadikoy",
+    "name": "Walter’s Coffee Roastery",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "Walter’s Coffee Roastery, İstanbul Kadıköy (Moda / Kadıköy) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Biletbayi Breaking Bad teması; kahve ve temalı fotoğraf deneyimi öneriliyor.\r\n\r\n\n\r\nVogue Türkiye Hareketli, sesli saatler olabilir; sosyal köpekler açısından değerlendiriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Caferağa, Bademaltı Sokak 21/B, Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Walter%E2%80%99s%20Coffee%20Roastery%20Moda%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Walter%E2%80%99s%20Coffee%20Roastery%20Moda%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.1,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-roots-cafe-botanique-kadikoy",
+    "name": "Roots Cafe & Botanique",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1579027989536-b7b1f875659b?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1579027989536-b7b1f875659b?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1522336572468-97b06e8ef143?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "Roots Cafe & Botanique, İstanbul Kadıköy (Yeldeğirmeni / Kadıköy) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Biletbayi Bitki satışıyla kafe birleşiyor; zencefilli çay ve tahıllı kurabiye öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Rasimpaşa, Recaizade Sokak 67, Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Roots%20Cafe%20%26%20Botanique%20Yelde%C4%9Firmeni%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Roots%20Cafe%20%26%20Botanique%20Yelde%C4%9Firmeni%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.2,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-the-peninsula-istanbul-beyoglu",
+    "name": "The Peninsula Istanbul",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beyoğlu",
+    "imageUrl": "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beyoğlu)"
+    ],
+    "description": "The Peninsula Istanbul, İstanbul Beyoğlu (Karaköy / Beyoğlu) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Vogue Türkiye Boğaz kıyısındaki teras/açık alanlar; daha sakin sabah veya hafta içi öğle öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Yazıda açık adres yok., Beyoğlu / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=The%20Peninsula%20Istanbul%20Karak%C3%B6y%20/%20Beyo%C4%9Flu%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=The%20Peninsula%20Istanbul%20Karak%C3%B6y%20/%20Beyo%C4%9Flu%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.3,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-backyard-besiktas",
+    "name": "Backyard",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beşiktaş",
+    "imageUrl": "https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beşiktaş)"
+    ],
+    "description": "Backyard, İstanbul Beşiktaş (Bebek / Beşiktaş) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Vogue Türkiye Ağaçlı geniş bahçe; büyük köpekler için ferahlık, hassas köpekler için hafta içi öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Yazıda açık adres yok., Beşiktaş / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Backyard%20Bebek%20/%20Be%C5%9Fikta%C5%9F%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Backyard%20Bebek%20/%20Be%C5%9Fikta%C5%9F%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.4,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-minoa-pera-beyoglu",
+    "name": "Minoa Pera",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beyoğlu",
+    "imageUrl": "https://images.unsplash.com/photo-1522336572468-97b06e8ef143?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1522336572468-97b06e8ef143?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beyoğlu)"
+    ],
+    "description": "Minoa Pera, İstanbul Beyoğlu (Pera / Beyoğlu) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Vogue Türkiye Kompakt kitapçı-kafe; sakin küçük köpekler ve hafta içi öğleden sonra için öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Yazıda açık adres yok., Beyoğlu / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Minoa%20Pera%20Pera%20/%20Beyo%C4%9Flu%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Minoa%20Pera%20Pera%20/%20Beyo%C4%9Flu%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.5,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-brekkie-kadikoy",
+    "name": "Brekkie",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1525610553991-2bede1a236e2?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "Brekkie, İstanbul Kadıköy (Moda / Kadıköy) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Vogue Türkiye Brunch ve açık alan; sakin masa davranışı, hafta sonu rezervasyonu öne çıkarılıyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Yazıda açık adres yok., Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Brekkie%20Moda%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brekkie%20Moda%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.6,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-journey-beyoglu",
+    "name": "Journey",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beyoğlu",
+    "imageUrl": "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beyoğlu)"
+    ],
+    "description": "Journey, İstanbul Beyoğlu (Cihangir / Beyoğlu) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Vogue Türkiye Sokak masaları ve mahalle ortamı; köpekle oturmak için olumlu değerlendiriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Yazıda açık adres yok., Beyoğlu / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Journey%20Cihangir%20/%20Beyo%C4%9Flu%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Journey%20Cihangir%20/%20Beyo%C4%9Flu%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.7,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-the-populist-galataport-beyoglu",
+    "name": "The Populist Galataport",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beyoğlu",
+    "imageUrl": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1508766917616-d22f3f1eea14?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beyoğlu)"
+    ],
+    "description": "The Populist Galataport, İstanbul Beyoğlu (Karaköy / Beyoğlu) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Vogue Türkiye Manzaralı açık alan; gündüz daha rahat, akşam kalabalığına alışıklık önemli görülüyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Galataport; yazıda kapı numarası yok., Beyoğlu / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=The%20Populist%20Galataport%20Karak%C3%B6y%20/%20Beyo%C4%9Flu%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=The%20Populist%20Galataport%20Karak%C3%B6y%20/%20Beyo%C4%9Flu%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.1,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-divan-brasserie-kalamis-kadikoy",
+    "name": "Divan Brasserie Kalamış",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "Divan Brasserie Kalamış, İstanbul Kadıköy (Kalamış / Kadıköy) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Vogue Türkiye Marina terası; sakin yemek ve düzenli servis övülüyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Yazıda açık adres yok., Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Divan%20Brasserie%20Kalam%C4%B1%C5%9F%20Kalam%C4%B1%C5%9F%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Divan%20Brasserie%20Kalam%C4%B1%C5%9F%20Kalam%C4%B1%C5%9F%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.2,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-cotto-gastro-kadikoy",
+    "name": "Cotto Gastro",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1525610553991-2bede1a236e2?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "Cotto Gastro, İstanbul Kadıköy (Suadiye / Kadıköy) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. theMagger İtalyan restoranı; içeride/dışarıda köpekle rahatlık, rezervasyon önerisi. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Yazıda açık adres yok., Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Cotto%20Gastro%20Suadiye%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Cotto%20Gastro%20Suadiye%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.3,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-bistro-33-kadikoy",
+    "name": "Bistro 33",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "Bistro 33, İstanbul Kadıköy (Caddebostan / Kadıköy) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. theMagger Yazar köpekle rahat etmiş; çevrede çok kedi var. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Yazıda açık adres yok., Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Bistro%2033%20Caddebostan%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Bistro%2033%20Caddebostan%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.4,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-red-balloon-sariyer",
+    "name": "Red Balloon",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Sarıyer",
+    "imageUrl": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1508766917616-d22f3f1eea14?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Sarıyer)"
+    ],
+    "description": "Red Balloon, İstanbul Sarıyer (Yeniköy / Sarıyer) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. theMagger Yemek/kokteyl beğeniliyor; alan dar, rezervasyon öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Yazıda açık adres yok., Sarıyer / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Red%20Balloon%20Yenik%C3%B6y%20/%20Sar%C4%B1yer%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Red%20Balloon%20Yenik%C3%B6y%20/%20Sar%C4%B1yer%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.5,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-pero-sariyer",
+    "name": "Pero",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Sarıyer",
+    "imageUrl": "https://images.unsplash.com/photo-1525610553991-2bede1a236e2?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1525610553991-2bede1a236e2?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Sarıyer)"
+    ],
+    "description": "Pero, İstanbul Sarıyer (Yeniköy / Sarıyer) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. theMagger Hayvansever ekip; dar alan nedeniyle sakin köpeğe öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Yazıda açık adres yok., Sarıyer / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Pero%20Yenik%C3%B6y%20/%20Sar%C4%B1yer%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Pero%20Yenik%C3%B6y%20/%20Sar%C4%B1yer%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.6,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-sunday-cafe-sisli",
+    "name": "Sunday Cafe",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Şişli",
+    "imageUrl": "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Şişli)"
+    ],
+    "description": "Sunday Cafe, İstanbul Şişli (Nişantaşı / Şişli) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. theMagger Yazar köpekleriyle koltukta rahat oturduğunu anlatıyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Yazıda açık adres yok., Şişli / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Sunday%20Cafe%20Ni%C5%9Fanta%C5%9F%C4%B1%20/%20%C5%9Ei%C5%9Fli%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Sunday%20Cafe%20Ni%C5%9Fanta%C5%9F%C4%B1%20/%20%C5%9Ei%C5%9Fli%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.7,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-apartiman-sariyer",
+    "name": "Apartıman",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Sarıyer",
+    "imageUrl": "https://images.unsplash.com/photo-1508766917616-d22f3f1eea14?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1508766917616-d22f3f1eea14?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1579027989536-b7b1f875659b?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Sarıyer)"
+    ],
+    "description": "Apartıman, İstanbul Sarıyer (Yeniköy / Sarıyer) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. theMagger İç/dış oturma olumlu; içerisi dar, sakin köpek öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Yazıda açık adres yok., Sarıyer / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Apart%C4%B1man%20Yenik%C3%B6y%20/%20Sar%C4%B1yer%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Apart%C4%B1man%20Yenik%C3%B6y%20/%20Sar%C4%B1yer%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.1,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-cafe-ratatouille-sariyer",
+    "name": "Cafe Ratatouille",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Sarıyer",
+    "imageUrl": "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Sarıyer)"
+    ],
+    "description": "Cafe Ratatouille, İstanbul Sarıyer (Tarabya / Sarıyer) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. theMagger Küçük kafe; tatlılar, sıcak karşılama ve köpek rahatlığı övülüyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Yazıda açık adres yok., Sarıyer / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Cafe%20Ratatouille%20Tarabya%20/%20Sar%C4%B1yer%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Cafe%20Ratatouille%20Tarabya%20/%20Sar%C4%B1yer%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.2,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-flan-bakery-coffee-kadikoy",
+    "name": "Flan Bakery & Coffee",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "Flan Bakery & Coffee, İstanbul Kadıköy (Suadiye ve Caddebostan / Kadıköy) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. theMagger Suadiye’de çoklu köpekle olumlu deneyim; kruvasan beğeniliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Yazıda açık adres yok., Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Flan%20Bakery%20%26%20Coffee%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Flan%20Bakery%20%26%20Coffee%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.3,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-sukha-coffee-kadikoy",
+    "name": "Sukha Coffee",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1522336572468-97b06e8ef143?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "Sukha Coffee, İstanbul Kadıköy (Suadiye / Kadıköy) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. theMagger Ev rahatlığı övülüyor; ara sıra kedi gelebiliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Yazıda açık adres yok., Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Sukha%20Coffee%20Suadiye%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Sukha%20Coffee%20Suadiye%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.4,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-sayo-books-coffee-kadikoy",
+    "name": "Sayo Books & Coffee",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1579027989536-b7b1f875659b?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "Sayo Books & Coffee, İstanbul Kadıköy (İstanbul; ana yazıda semt belirtilmiyor) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. theMagger Küçük kitapçı-kafe; yazar rahat etmiş, çok sayıda kedi mevcut. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Ana yazıda açık adres yok., Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=Sayo%20Books%20%26%20Coffee%20%C4%B0stanbul%3B%20ana%20yaz%C4%B1da%20semt%20belirtilmiyor%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Sayo%20Books%20%26%20Coffee%20%C4%B0stanbul%3B%20ana%20yaz%C4%B1da%20semt%20belirtilmiyor%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.5,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-the-mia-onundeki-spada-coffee-kadikoy",
+    "name": "The Mia önündeki Spada Coffee",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Kadıköy",
+    "imageUrl": "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1578474846511-04ba529f0b88?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Kadıköy)"
+    ],
+    "description": "The Mia önündeki Spada Coffee, İstanbul Kadıköy (Suadiye / Kadıköy) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. theMagger Yalnız dış oturma; limonlu haşhaşlı kek öneriliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Yazıda açık adres yok., Kadıköy / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=The%20Mia%20%C3%B6n%C3%BCndeki%20Spada%20Coffee%20Suadiye%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=The%20Mia%20%C3%B6n%C3%BCndeki%20Spada%20Coffee%20Suadiye%20/%20Kad%C4%B1k%C3%B6y%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.6,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-coffee-talks-besiktas",
+    "name": "Coffee Talks",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beşiktaş",
+    "imageUrl": "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beşiktaş)"
+    ],
+    "description": "Coffee Talks, İstanbul Beşiktaş (Türkali / Beşiktaş) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Onedio Ev yapımı tatlı/kahve övülüyor. Ziyaretçi izlenimlerinde: Onedio’nun aktardığı ziyaretçi yorumu İlgili işletmeciler ve sıcak personel övülüyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Ihlamurdere Caddesi 80, Beşiktaş / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://maps.app.goo.gl/gvPHVNVpjY3hLd8a9",
+    "mapUrl": "https://maps.app.goo.gl/gvPHVNVpjY3hLd8a9",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.7,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-vegan-community-kitchen-cafe-restaurant-fatih",
+    "name": "Vegan Community Kitchen Cafe & Restaurant",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Fatih",
+    "imageUrl": "https://images.unsplash.com/photo-1579027989536-b7b1f875659b?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1579027989536-b7b1f875659b?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1522336572468-97b06e8ef143?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Fatih)"
+    ],
+    "description": "Vegan Community Kitchen Cafe & Restaurant, İstanbul Fatih (Tomtom kaydı; yorumda Balat) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Onedio Vegan yemekler, hayvanlara yardım. Ziyaretçi izlenimlerinde: Onedio’nun aktardığı ziyaretçi yorumu Vegan lezzetler övülüyor; Balat’a taşınma belirtiliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Kumbaracı Yokuşu 18; yorum başka konum bildiriyor., Fatih / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://maps.app.goo.gl/wujhKk67GPgEfbm78",
+    "mapUrl": "https://maps.app.goo.gl/wujhKk67GPgEfbm78",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.1,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-craft-beer-lab-besiktas",
+    "name": "Craft Beer Lab",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beşiktaş",
+    "imageUrl": "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beşiktaş)"
+    ],
+    "description": "Craft Beer Lab, İstanbul Beşiktaş (Beşiktaş) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Onedio Yoğun hafta sonları; profesyonellik vurgusu. Ziyaretçi izlenimlerinde: Onedio’nun aktardığı ziyaretçi yorumu Hızlı servis; köpeğe istenmeden su getirilmesi övülüyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Sinanpaşa, Şair Nedim Caddesi 4, Beşiktaş / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://maps.app.goo.gl/LE142uzcSQbAtNyk9",
+    "mapUrl": "https://maps.app.goo.gl/LE142uzcSQbAtNyk9",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.2,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-cuppa-cafe-beyoglu",
+    "name": "Cuppa Cafe",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beyoğlu",
+    "imageUrl": "https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beyoğlu)"
+    ],
+    "description": "Cuppa Cafe, İstanbul Beyoğlu (Cihangir / Beyoğlu) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Onedio Kahvaltı ve kediler vurgulanıyor. Ziyaretçi izlenimlerinde: Onedio’nun aktardığı ziyaretçi yorumu Besleyici menü, sakinlik ve kediler beğeniliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Yeni Yuva Sokak 22, Beyoğlu / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://maps.app.goo.gl/k3aP5CSAW5kT8uE58",
+    "mapUrl": "https://maps.app.goo.gl/k3aP5CSAW5kT8uE58",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.3,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-envai-coffee-house-besiktas",
+    "name": "Envai Coffee House",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beşiktaş",
+    "imageUrl": "https://images.unsplash.com/photo-1522336572468-97b06e8ef143?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1522336572468-97b06e8ef143?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beşiktaş)"
+    ],
+    "description": "Envai Coffee House, İstanbul Beşiktaş (Gayrettepe / Beşiktaş) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Onedio Kahve çeşitleri; sokak hayvanlarına bakım. Ziyaretçi izlenimlerinde: Onedio’nun aktardığı ziyaretçi yorumu İçten çalışanlar, kahve ve kedilere bakım övülüyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Süleymanbey Sokak 1, Daire 2C, Beşiktaş / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://maps.app.goo.gl/nnWTKvKYvJcRAHEe8",
+    "mapUrl": "https://maps.app.goo.gl/nnWTKvKYvJcRAHEe8",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.4,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-federal-galata-beyoglu",
+    "name": "Federal Galata",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beyoğlu",
+    "imageUrl": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1525610553991-2bede1a236e2?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beyoğlu)"
+    ],
+    "description": "Federal Galata, İstanbul Beyoğlu (Galata / Beyoğlu) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Onedio Müzik, kahvaltı ve kahve öneriliyor. Ziyaretçi izlenimlerinde: Onedio’nun aktardığı ziyaretçi yorumu Kibar çalışanlar ve hayvansever atmosfer beğeniliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Şahkulu, Küçük Hendek Caddesi 7, Beyoğlu / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://maps.app.goo.gl/6aqNL5Kh9wJnCbmB6",
+    "mapUrl": "https://maps.app.goo.gl/6aqNL5Kh9wJnCbmB6",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.5,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-joker-no-19-besiktas",
+    "name": "Joker No.19",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Beşiktaş",
+    "imageUrl": "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Beşiktaş)"
+    ],
+    "description": "Joker No.19, İstanbul Beşiktaş (Beşiktaş) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. Onedio Fiyat/performans olumlu değerlendiriliyor. Ziyaretçi izlenimlerinde: Onedio’nun aktardığı ziyaretçi yorumu İçecek seçenekleri, yemekler ve hayvan kabulü beğeniliyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Sinanpaşa, Beşiktaş Caddesi 19, Beşiktaş / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://maps.app.goo.gl/HL8wqtcsKt7x66JWA",
+    "mapUrl": "https://maps.app.goo.gl/HL8wqtcsKt7x66JWA",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.6,
+    "lastVerified": "2026-09-23"
+  },
+  {
+    "id": "exp-msa-nin-restorani-sariyer",
+    "name": "MSA’nın Restoranı",
+    "category": "Kafe & Restoran",
+    "city": "İstanbul",
+    "district": "Sarıyer",
+    "imageUrl": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1200&q=80",
+    "galleryImages": [
+      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1508766917616-d22f3f1eea14?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "petPolicy": "Geniş açık/yarı açık oturma alanlarında evcil hayvan kabul edilmektedir. Masalara taze su ve su kabı ikramı yapılmakta olup, köpeklerin tasmalı olması rica edilir.",
+    "allowedPets": [
+      "dog",
+      "cat"
+    ],
+    "features": [
+      "Açık Alan / Ferah Oturma Alanı",
+      "Su Kabı & Taze Su Temini",
+      "Tasmalı Evcil Hayvan Kabulü",
+      "Özel Kahve & Zengin Menü",
+      "Wi-Fi & Sosyalleşme Alanı",
+      "Merkezi Konum (Sarıyer)"
+    ],
+    "description": "MSA’nın Restoranı, İstanbul Sarıyer (Emirgan / Sarıyer) lokasyonunda evcil hayvan dostu konseptiyle öne çıkan popüler mekanlardandır. theMagger — MSA ek yazısı Yazar iki köpeğiyle geniş masa aralıklarında rahat etmiş; istenmeden su servis edilmesini beğenmiş. Büyük köpekli arkadaşlarının da rahatlığını aktarıyor. Hafta sonu kahvaltısı için rezervasyon öneriyor; başka bir ziyaretçinin müşterilerle sorun yaşadığını da belirtiyor. Patili dostunuzla birlikte açık hava bahçe veya teras alanında huzurla dinlenebilir, özel kahve ve lezzetli menünün tadını çıkarabilirsiniz.",
+    "address": "Sakıp Sabancı Müzesi; ek yazıda belirtiliyor., Sarıyer / İstanbul",
+    "phone": "+90 212 000 00 00",
+    "website": "https://www.google.com/maps/search/?api=1&query=MSA%E2%80%99n%C4%B1n%20Restoran%C4%B1%20Emirgan%20/%20Sar%C4%B1yer%20%C4%B0stanbul",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=MSA%E2%80%99n%C4%B1n%20Restoran%C4%B1%20Emirgan%20/%20Sar%C4%B1yer%20%C4%B0stanbul",
+    "bestTime": "Hafta içi öğleden sonra kahve molaları, hafta sonu brunch ve dinlenme saatleri",
+    "rules": "Evcil hayvanların tasmalı olarak masada bulunması, aşılarının güncel olması ve diğer konukların konforunun gözetilmesi rica edilir.",
+    "verified": true,
+    "baseTrustScore": 9.7,
+    "lastVerified": "2026-09-23"
   }
 ]

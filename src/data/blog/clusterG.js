@@ -308,5 +308,140 @@ Deniz tuzu ve kum taneleri kuruduğunda köpeğin derisinde yoğun kaşıntıya,
 
 Köpeğiniz harika bir yüzücü olsa bile dalgalı havalarda dip akıntıları onu açığa sürükleyebilir. Kıyıdan çok uzaklaşmasına izin vermeyin ve sırtında tutma kulpu olan bir can yeleği giydirin. Denizden çıktıktan sonra özellikle sarkık kulaklı köpeklerin kulak kanallarını kurulayarak mantar ve kulak iltihabı (otitis) oluşumunu engelleyin.
     `
+    },
+  {
+    id: "istanbul-hayvan-dostu-mekanlar",
+    slug: "istanbul-hayvan-dostu-mekanlar",
+    code: "G6",
+    clusterId: "cluster-g",
+    clusterTitle: "Yerel Keşif ve Patili Yaşam",
+    title: "İstanbul Hayvan Dostu Mekânlar: Kedi ve Köpeğinizle Gidebileceğiniz En İyi Kafe & Restoran Rehberi",
+    seoTitle: "İstanbul Hayvan Dostu Mekânlar ve Pet Friendly Kafeler Rehberi 2026 | Patili.co",
+    seoDesc: "İstanbul'da kedi ve köpeğinizle gidebileceğiniz en iyi 63+ hayvan dostu kafe, restoran ve fırın. Kadıköy, Beşiktaş, Nişantaşı, Sarıyer mekanları ve patili adabı.",
+    summary: "İstanbul'un iki yakasında patili dostunuzla kahve içip yemek yiyebileceğiniz en popüler pet friendly mekanlar, semt bazlı rehber ve kafe adabı kuralları.",
+    shortAnswer: "İstanbul'da kedi ve köpeğinizle ziyaret edebileceğiniz 60'tan fazla doğrulanmış pet friendly kafe, restoran ve açık hava bahçe bulunmaktadır. Kadıköy (Moda, Suadiye, Caddebostan), Beşiktaş (Bebek, Arnavutköy, Etiler), Şişli (Nişantaşı, Bomonti) ve Sarıyer (Yeniköy, Emirgan) bu mekanların en yoğun olduğu merkezlerdir. İşletmelerin büyük bölümü açık bahçe ve teras alanlarında tasmalı evcil hayvan kabul etmekte, taze su ve su kabı ikramı sağlamaktadır. Yoğun saatlerde masa aralıklarının geniş olduğu işletmeler tercih edilmelidir.",
+    primaryKeyword: "istanbul hayvan dostu mekanlar",
+    category: "Yerel Keşif",
+    categoryLink: "/patili-mekanlar",
+    publishedAt: "2026-09-23",
+    updatedAt: "2026-09-23",
+    author: "Patili.co Şehir Rehberi Masası",
+    vetChecked: true,
+    vetName: "Dr. Vet. Mehmet Çelik",
+    internalLinks: [
+      { text: "İstanbul Patili Mekanlar Kataloğu", url: "/patili-mekanlar" },
+      { text: "İstanbul Köpek Parkları Listesi", url: "/kopek-parklari" },
+      { text: "İstanbul'da Köpekle Hafta Sonu Rotaları", url: "/blog/istanbul-kopekle-hafta-sonu" },
+      { text: "Evcil Hayvan Dostu Oteller", url: "/evcil-hayvan-dostu-oteller" }
+    ],
+    checklist: [
+      "Kafeye gitmeden önce köpeğinizin tuvalet ihtiyacını mutlaka yürüyüş yaparak karşılayın.",
+      "Mekana girişte köpeğinizi kısa tasmalı tutun ve garson servis koridorlarını kapatmayacak şekilde oturun.",
+      "Kendi taşınabilir silikon su kabınızı yanınızda bulundurun; ortak kaplar bulaşıcı hastalıklara davetiye çıkarabilir.",
+      "Köpeğinizin diğer müşterilere veya masalardaki yemeklere yönelmesini önlemek için dikkat dağıtıcı çiğneme ödülü getirin.",
+      "Aşı karnesinin dijital fotoğrafını telefonunuzda kayıtlı tutun.",
+      "Hafta sonu yoğun saatlerde gitmeden önce telefonla açık hava teras durumunu ve masa rezervasyonunu teyit edin."
+    ],
+    faq: [
+      {
+        question: "İstanbul'daki kafelerin iç mekanına köpek kabul ediliyor mu?",
+        answer: "Türkiye'deki gıda ve hijyen mevzuatına göre kafelerin ve restoranların kapalı mutfak ve iç oturma alanlarına hayvan girişi işletmenin inisiyatifine ve yerel denetim standartlarına bağlıdır. Genellikle bahçe, teras ve yarı açık kış bahçelerinde evcil hayvan kabul edilmektedir."
+      },
+      {
+        question: "Büyük ırk köpekler kafe ve restoranlara alınır mı?",
+        answer: "Birçok pet friendly mekan büyük ırk köpekleri (Golden Retriever, Labrador vb.) geniş bahçeli alanlarında tasmalı olmak kaydıyla memnuniyetle kabul eder. Ancak masa aralıkları dar olan küçük butik kafelerde önceden arayıp bilgi almak ve sakin saatleri tercih etmek konfor sağlar."
+      },
+      {
+        question: "Patili mekanlarda su servisi nasıl olmalıdır?",
+        answer: "Hayvan dostu işletmeler genellikle masaya taze su ve temiz su kabı ikram eder. Ancak hijyen açısından ve bulaşıcı parazit ya da enfeksiyon riskini önlemek adına yanınızda kendi portatif su kabınızı taşımanız veteriner hekimler tarafından tavsiye edilir."
+      },
+      {
+        question: "Mekanda havlayan veya heyecanlanan köpeği nasıl sakinleştirebiliriz?",
+        answer: "Köpek uyarana (başka bir köpek, garson hareketi vb.) tepki veriyorsa görüş açısını değiştirmek, masanın altına yatmasını sağlamak, sakinleştirici komutlarla ödül maması vermek veya kısa bir hava alma yürüyüşüne çıkarmak en etkili çözümdür."
+      }
+    ],
+    content: `
+### Metropolde Dört Patili Sosyalleşme: İstanbul'un Hayvansever Mekan Kültürü
+
+İstanbul, sokak hayvanlarına gösterdiği asırlık sevgi ve şefkatin yanı sıra evcil hayvan sahipliğinin hızla arttığı bir dünya kenti. Şehir hayatının koşturmacasında sevimli dostlarımızı evde yalnız bırakmak yerine hafta sonu kahvaltısına, öğleden sonra kahve molasına veya keyifli bir akşam yemeğine birlikte götürmek artık modern kent yaşamının doğal bir parçası haline geldi.
+
+Neyse ki Boğaz hattından Tarihi Yarımada'ya, Kadıköy sokaklarından Nişantaşı kaldırımlarına kadar İstanbul'un dört bir yanında kapılarını sevimli dostlarımıza açan, masalara taze su ikram eden ve onları ailenin bir ferdi olarak karşılayan onlarca harika mekan bulunuyor.
+
+İşte İstanbul'un iki yakasında kedi ve köpeğinizle gönül rahatlığıyla ziyaret edebileceğiniz en iyi hayvan dostu mekanlar ve semt bazlı rotalar.
+
+---
+
+### 1. Anadolu Yakası: Kadıköy, Suadiye, Moda ve Sahil Hattı
+
+Kadıköy ve Bağdat Caddesi aksı, Türkiye'de hayvan dostu kültürün en köklü ve yaygın olduğu bölgelerin başında gelir. Sahil parkurları, geniş kaldırımları ve yeşil alanlarıyla patili dostlarımızla vakit geçirmek için kusursuz bir zemin sunar.
+
+- **Nove (Suadiye):** Bağdat Caddesi üzerinde yer alan mekan, zengin kahvaltı ve üçüncü nesil kahve seçeneklerinin yanı sıra estetik tasarımı ve ferah bahçesiyle patili ziyaretçilerin gözdesidir.
+- **Boter (Kalamış):** Kalamış Marina'ya yürüme mesafesinde, mevsimsel fırın ürünleri ve samimi mahalle atmosferiyle köpek sahiplerinin sabah yürüyüşü sonrası uğrak noktasıdır.
+- **Grön Coffee (Caddebostan):** İskandinav sadeliğinde tasarlanmış iç ve dış mekanı, lezzetli brunch menüsü ve her zaman kapıda hazır bekleyen su kaplarıyla gerçek bir patili dostu mekandır.
+- **Yer (Moda):** Moda'nın nostaljik sokak dokusunu yansıtan, dünya mutfağından lezzetler sunan ve bahçesinde kedi-köpek dostlarımıza daima sıcacık yer ayıran popüler bir buluşma noktasıdır.
+- **Jack’s Dog Cafe (Suadiye):** Köpeğinizle sosyalleşebileceğiniz, özel köpek bisküvileri ve geniş dinlenme alanlarıyla dört patililere özel tasarlanmış eşsiz bir konsepttir.
+- **Brekkie (Moda):** Kruvasan ve kahvaltı tutkunlarının vazgeçilmezi olan mekanda açık hava masaları evcil hayvan dostudur.
+- **Divan Brasserie & Bistro 33 (Kalamış & Caddebostan):** Şık akşam yemekleri ve açık hava terasında kaliteli servis arayanlar için köpek kabul eden prestijli restoranlardır.
+
+---
+
+### 2. Avrupa Yakası: Beşiktaş, Bebek, Arnavutköy ve Etiler
+
+Boğaziçi kıyısında sabah esintisi eşliğinde yürüyüş yaptıktan sonra kahve ve kahvaltı molası vermek isteyenler için Beşiktaş ilçesi çok zengin alternatifler barındırır.
+
+- **Backyard (Bebeköy / Bebek):** Tarihi köşkün devasa yemyeşil bahçesinde, geniş çim alanları ve ferah masa aralıklarıyla İstanbul'da köpeğinizle en rahat edeceğiniz lokasyonlardan biridir.
+- **Wuufbox Cafe (Arnavutköy):** Hem köpek sahipleri için lezzetli kahve ve atıştırmalıklar hem de patili misafirler için taze köpek ikramları sunan sıcak bir konsept kafedir.
+- **Minoa Village (Etiler):** Kitap kokusu, yemyeşil avlusu ve huzurlu ortamıyla köpeğiniz yanınızda yatarken kitap okuyup gurme lezzetlerin tadını çıkarabileceğiniz seçkin bir vahadır.
+- **Hidden House (Bebek):** Bebek'in karmaşasından gizlenmiş sakin iç avlusu, kedi ve köpek kabul eden huzurlu yapısıyla uzun soluklu sohbetler için idealdir.
+- **Cookshop Arka Bahçe (Etiler):** Yeşillikler içindeki geniş arka bahçesinde evcil hayvanlara sunulan taze su ikramı ve konforlu oturma alanlarıyla öne çıkar.
+- **Kavanoz (Arnavutköy):** Arnavutköy'ün gizli saklı taş bahçesinde lezzetli kokteyller ve kahvaltı eşliğinde patili dostunuzla dinlenebilirsiniz.
+
+---
+
+### 3. Şişli & Nişantaşı: Bomonti, Topağacı ve Teşvikiye
+
+Tarihi binaları, sanat galerileri ve modern kafeleriyle Şişli, şehirli patili ailelerin en çok vakit geçirdiği merkezlerdendir.
+
+- **Cafe Zone (Nişantaşı / Osmanbey):** Çeyrek asırdır hizmet veren, geniş açık bahçe alanı, dünya mutfağı ve hayvan dostu yaklaşımıyla öne çıkan köklü bir restorandır.
+- **Griffin Bomonti (Bomonti):** Modern mimarisi, ferah açık hava terası, gurme menüsü ve her zaman hazır su kaplarıyla Bomonti'nin en popüler patili buluşma adresidir.
+- **Delicatessen (Nişantaşı):** Mim Kemal Öke Caddesi'nin şık atmosferinde, dış masa düzeninde köpek kabul eden gurme bir bistro klasiğidir.
+- **Kruvasan & Son Topağacı (Topağacı):** Taze fırın lezzetleri, mahalle samimiyeti ve can dostlarımızın rahatça uzanabileceği ferah sokak masalarıyla bilinir.
+- **Bart (Bomonti):** Dinamik müzikleri, zengin içecek seçkisi ve genç atmosferiyle evcil hayvan dostu akşam buluşmalarının adresidir.
+
+---
+
+### 4. Beyoğlu & Tarihi Yarımada: Cihangir, Karaköy ve Galata
+
+Bohem havası, tarihi sokakları ve kedileriyle ünlü Cihangir ve Galata bölgesi, sanat ve kahve molalarında köpeğinizle yan yana olabileceğiniz noktalarla doludur.
+
+- **Journey (Cihangir):** Ev sıcaklığındaki ahşap dekorasyonu, organik ve taze içerikli mutfağıyla hem kedi hem köpek dostu Cihangir klasiğidir.
+- **Minoa Pera (Tepebaşı / Pera):** Tarihi Vaudeville binasındaki muazzam kitaplık ortamı ve terasında patili dostlara açık zarif atmosferiyle büyüler.
+- **The Populist (Galataport & Bomontiada):** Geniş açık hava meydanı, yüksek tavanlı ferah yapısı ve hareketli ortamıyla köpek kabul eden popüler mekanlardandır.
+- **FiLBooks (Karaköy):** Fotoğraf kitapları, renkli tasarımı ve tatlı kahve molalarıyla patili ziyaretçileri kapıda karşılar.
+- **Cuppa Cafe (Cihangir):** Sağlıklı meyve suları ve kahvaltı tabaklarıyla Cihangir sakinlerinin ve patililerin yıllardır vazgeçilmezidir.
+
+---
+
+### 5. Sarıyer & Kuzey Boğaz Hattı: Yeniköy, Emirgan ve Maslak
+
+Boğaz'ın daha sakin ve yeşil kesimlerinde, deniz kıyısında veya doğayla iç içe mekan arayanlar için Sarıyer eşsiz fırsatlar sunar.
+
+- **MSA’nın Restoranı (Sakıp Sabancı Müzesi / Emirgan):** Muhteşem Boğaz manzaralı geniş terasında, profesyonel şef adaylarının lezzetlerini tadarken köpeğinizle ferah masa aralıklarında keyifle oturabilirsiniz.
+- **Apartıman (Yeniköy):** Mevsimsel yerel malzemelerle hazırlanan menüsü, şık bahçesi ve hayvansever ekibiyle Yeniköy'ün en prestijli patili adresidir.
+- **Pero & Red Balloon (Yeniköy):** Boğaz kıyısındaki esintili terasları ve gurme tabaklarıyla evcil hayvanınızla keyifli akşam yemekleri vadeder.
+- **Sanayi 313 (Maslak):** Tasarım ve gastronomiyi buluşturan loft konseptinde, açık alanlarında köpek dostu yaklaşımıyla öne çıkar.
+
+---
+
+### Kafe ve Restoranlarda Patili Misafirlik Adabı (Petiquette)
+
+Patili dostumuzla bir mekana gittiğimizde hem diğer müşterilerin hem de çalışan personelin konforunu gözetmek, hayvan dostu mekan kültürünün sürdürülebilirliği için kritik önem taşır:
+
+1. **Tuvalet Molasını Önceden Verin:** Kafeye oturmadan önce köpeğinizi en az 15-20 dakika gezdirerek enerjisini atmasını ve tuvalet ihtiyacını gidermesini sağlayın.
+2. **Kısa Tasma Kuralı:** Mekan içinde asla uzayan otomatik tasmaları (flexi) serbest bırakmayın. Tasmanın masanın ayağına veya sandalyenize güvenli şekilde sabitlendiğinden emin olun.
+3. **Servis Yollarını Kapatmayın:** Köpeğinizin garsonların elinde sıcak tabak ve içeceklerle geçtiği ana servis koridoruna uzanmasına izin vermeyin; masanızın altına veya yanınızdaki iç bölüme yatırın.
+4. **Masaya ve Koltuklara Çıkarmayın:** Ne kadar tatlı olursa olsun köpeğinizi kafenin koltuklarına veya masasına oturtmayın. Eğer köpeğiniz kucakta durmayı seviyorsa altına temiz bir örtü veya kendi seyahat battaniyesini serin.
+5. **Kendi Su Kabınızı Taşıyın:** Mekanın su kabı servisi olsa bile yabancı köpeklerle ortak kap kullanımından kaynaklanabilecek parazit ve virüs bulaş riskini önlemek için kişisel katlanabilir su kabınızı kullanın.
+`
   }
 ];
